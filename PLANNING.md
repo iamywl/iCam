@@ -130,7 +130,12 @@
 
 ---
 
-## 5. 결론 및 향후 계획
+## 5. 구현 현황 및 개발 로드맵
 
-1. **Phase 1 (현재)**: 웹 인터랙티브 프로토타입에서 6대 카메라 기종 전환 및 실시간 배경 컬러 변환, 리얼 Y2K 색감 구현.
-2. **Phase 2 (승인 후)**: iOS 네이티브 Swift / SwiftUI / AVFoundation으로 전환하여 하드웨어 햅틱 및 온디바이스 Vision 배경 분리 엔진 탑재.
+1. **Phase 1 (완료)**: 웹 인터랙티브 MVP 프로토타입에서 6대 카메라 기종 전환, 실시간 배경 컬러 변환, 리얼 Y2K 색감 구현 및 CI/CD 자동화 완료.
+2. **Phase 2 (완료)**: **아이폰 네이티브 어플리케이션(`iCam/`) 구축 완료**:
+   - **모듈형 필터 엔진 (`FilterModule`)**: OCP 기반 `CameraFilter` / `OpticalFilter` 프로토콜 분리 및 `FilterRegistry` 플러그인 아키텍처 완성.
+   - **6대 기종 전용 필터 팩 분리**: Canon IXY, Sony Handycam, Sony Cyber-shot, Fuji Instax, 시현하다, Passport ID 각 4종 및 탈부착 광학 렌즈 5종 완비.
+   - **온디바이스 Vision 세그멘테이션 & 실시간 파이프라인**: Apple Vision `VNGeneratePersonSegmentationRequest` 기반 실시간 인물 누끼 및 배경 치환 엔진 구축.
+   - **SwiftUI 3:4 픽셀 퍼펙트 뷰파인더 & 전용 OSD**: 각 카메라별 맞춤 OSD 및 하드웨어 햅틱 피드백 연동.
+   - **전수 자동화 테스트 (45/45 Passed)**: `swift run iCamTestRunner` 및 CI/CD 파이프라인 탑재.

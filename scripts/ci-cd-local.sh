@@ -18,9 +18,14 @@ echo ""
 echo "[Step 1/3] 🧪 Running Prototype Integrity Test Suite..."
 python3 scripts/test-prototype.py
 
-# 2. Check HTTP Server & Port Status
+# 2. Native iOS Swift Core & Modular Filter Engine Test
 echo ""
-echo "[Step 2/3] 🌐 Verifying Local Server Status..."
+echo "[Step 2/4] 🍏 Running Native iOS Swift Core & Modular Filter Tests..."
+swift run iCamTestRunner
+
+# 3. Check HTTP Server & Port Status
+echo ""
+echo "[Step 3/4] 🌐 Verifying Local Server Status..."
 if curl -s -I http://localhost:8080/ >/dev/null; then
   echo "✅ Local HTTP Server running at http://localhost:8080"
 else

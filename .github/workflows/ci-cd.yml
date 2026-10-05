@@ -121,12 +121,7 @@ jobs:
             echo "SwiftLint not preinstalled on runner, continuing..."
           fi
 
-      - name: Check iOS Project Structure & Prerequisites
+      - name: Build & Run iOS Native Core & Modular Filter Tests
         run: |
-          echo "Verifying iOS Native target readiness..."
-          if [ -d "SnapStudio-iOS" ]; then
-            cd SnapStudio-iOS
-            xcodebuild clean build -scheme SnapStudio -destination 'platform=iOS Simulator,name=iPhone 16 Pro' CODE_SIGNING_ALLOWED=NO || true
-          else
-            echo "iOS native project directory (SnapStudio-iOS) will be compiled upon native code scaffolding."
-          fi
+          swift build
+          swift run iCamTestRunner
