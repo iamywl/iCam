@@ -106,11 +106,29 @@ public final class FilterRegistry: @unchecked Sendable {
         // Fuji Instax Pack
         register(filters: FujiInstaxFilterPack.allFilters)
 
-        // Sihyunhada Pack
-        register(filters: SihyunFilterPack.allFilters)
+        // Color Studio Pack (Personal Color)
+        register(filters: ColorStudioFilterPack.allFilters)
 
         // Passport ID Pack
         register(filters: PassportIDFilterPack.allFilters)
+
+        // Olympus μ [mju:] II Pack
+        register(filters: OlympusMjuFilterPack.allFilters)
+
+        // Contax T2 Pack
+        register(filters: ContaxT2FilterPack.allFilters)
+
+        // Ricoh GR Digital Pack
+        register(filters: RicohGRFilterPack.allFilters)
+
+        // Leica M Pack
+        register(filters: LeicaMFilterPack.allFilters)
+
+        // 80s City Pop Pack
+        register(filters: CityPopFilterPack.allFilters)
+
+        // Old Analog Film Pack
+        register(filters: OldFilmFilterPack.allFilters)
 
         // Optical Lenses Pack
         for opt in OpticalLensFilterPack.allFilters {

@@ -11,7 +11,7 @@ public struct ViewfinderView: View {
     public var body: some View {
         ZStack {
             // Background Layer (Personal Color Studio live backdrop or default dark viewfinder)
-            if viewModel.selectedCategory == .sihyunhada {
+            if viewModel.selectedCategory == .colorStudio {
                 RadialGradient(
                     gradient: Gradient(colors: [
                         Color(hex: viewModel.selectedPersonalColor.hex).opacity(0.85),

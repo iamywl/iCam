@@ -2,7 +2,7 @@ import Foundation
 import CoreImage
 
 /// Protocol defining a modular camera filter.
-/// Any filter pack (e.g. Canon, Sony, Fuji, Sihyunhada) implements this protocol.
+/// Any filter pack (e.g. Canon, Sony, Fuji, ColorStudio) implements this protocol.
 public protocol CameraFilter: Identifiable, Sendable {
     /// Unique identifier (e.g. "ixy_peach_glow")
     var id: String { get }

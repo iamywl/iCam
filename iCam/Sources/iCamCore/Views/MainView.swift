@@ -20,7 +20,7 @@ public struct MainView: View {
                     .padding(.horizontal, 12)
 
                 // 3. Dynamic Mode Drawer (Color Palette or Filter Tray)
-                if viewModel.selectedCategory == .sihyunhada {
+                if viewModel.selectedCategory == .colorStudio {
                     ColorStudioPaletteView(viewModel: viewModel)
                         .transition(.opacity)
                 } else {

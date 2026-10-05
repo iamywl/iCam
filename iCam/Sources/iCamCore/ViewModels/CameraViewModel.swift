@@ -26,9 +26,9 @@ public final class CameraViewModel: ObservableObject {
     @Published public var selectedOpticalFilterId: String? = nil
     @Published public var opticalStrength: Double = 0.8
 
-    // Sihyunhada Live Background State
+    // Color Studio Live Background State
     @Published public var selectedPersonalColor: PersonalColorSwatch = PersonalColorPalette.best8[0]
-    @Published public var studioSubjectName: String = "Sihyun"
+    @Published public var studioSubjectName: String = "Portrait"
     @Published public var isLiveMattingEnabled: Bool = true
 
     // Passport State
@@ -121,7 +121,7 @@ public final class CameraViewModel: ObservableObject {
                 var matte: CIImage? = nil
                 var bgHex: String? = nil
 
-                if self.selectedCategory == .sihyunhada && self.isLiveMattingEnabled {
+                if self.selectedCategory == .colorStudio && self.isLiveMattingEnabled {
                     matte = self.segmentationService.generateMatte(from: raw)
                     bgHex = self.selectedPersonalColor.hex
                 }

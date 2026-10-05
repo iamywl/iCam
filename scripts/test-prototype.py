@@ -40,6 +40,12 @@ def test_html_dom_integrity():
         'drawer-sony-handycam',
         'drawer-sony-cybershot',
         'drawer-instax-mini',
+        'drawer-olympus-mju',
+        'drawer-contax-t2',
+        'drawer-ricoh-gr',
+        'drawer-leica-m',
+        'drawer-citypop-80s',
+        'drawer-oldfilm-35mm',
         'drawer-sihyun-color',
         'drawer-passport-id',
         'dynamic-island',
@@ -59,7 +65,7 @@ def test_html_dom_integrity():
     if missing_ids:
         print(f"❌ HTML missing critical DOM IDs: {missing_ids}")
         return False
-    print("✅ HTML DOM IDs & 6 Iconic Camera Racks integrity passed.")
+    print("✅ HTML DOM IDs & 12 Iconic Camera Racks integrity passed.")
     return True
 
 def test_css_tokens():

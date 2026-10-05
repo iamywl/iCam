@@ -1,8 +1,8 @@
 import Foundation
 import CoreImage
 
-/// Modular filter pack for 시현하다 Color Studio (Personal Color Profile Camera)
-public enum SihyunFilterPack {
+/// Modular filter pack for Color Studio (Personal Color Profile Camera)
+public enum ColorStudioFilterPack {
 
     public static var allFilters: [any CameraFilter] {
         [
@@ -15,10 +15,10 @@ public enum SihyunFilterPack {
 
     // MARK: - 1. Spring Warm Blossom (화사한 생기 봄웜)
     public struct SpringWarmBlossomFilter: CameraFilter {
-        public let id = "sihyun_spring_warm"
+        public let id = "color_studio_spring_warm"
         public let name = "Spring Warm (Blossom)"
         public let localizedName = "봄 웜톤 (블라썸)"
-        public let cameraCategory = CameraCategory.sihyunhada
+        public let cameraCategory = CameraCategory.colorStudio
         public let filterDescription = "화사하고 생기 넘치는 피치 코랄 톤과 맑은 피부결 보정"
         public let iconName = "sun.max.fill"
 
@@ -48,10 +48,10 @@ public enum SihyunFilterPack {
 
     // MARK: - 2. Summer Cool Sky (투명하고 깨끗한 여쿨)
     public struct SummerCoolSkyFilter: CameraFilter {
-        public let id = "sihyun_summer_cool"
+        public let id = "color_studio_summer_cool"
         public let name = "Summer Cool (Sky)"
         public let localizedName = "여름 쿨톤 (스카이)"
-        public let cameraCategory = CameraCategory.sihyunhada
+        public let cameraCategory = CameraCategory.colorStudio
         public let filterDescription = "투명하고 하얗게 정돈된 쿨톤 피부와 청량한 파스텔 블루 조화"
         public let iconName = "cloud.sun.fill"
 
@@ -78,10 +78,10 @@ public enum SihyunFilterPack {
 
     // MARK: - 3. Autumn Muted Sage (우아하고 차분한 가을뮤트)
     public struct AutumnMutedSageFilter: CameraFilter {
-        public let id = "sihyun_autumn_muted"
+        public let id = "color_studio_autumn_muted"
         public let name = "Autumn Muted (Sage)"
         public let localizedName = "가을 뮤트 (세이지)"
-        public let cameraCategory = CameraCategory.sihyunhada
+        public let cameraCategory = CameraCategory.colorStudio
         public let filterDescription = "고급스럽고 차분한 분위기의 올리브 세이지 & 오트 베이지 조화"
         public let iconName = "leaf.fill"
 
@@ -108,10 +108,10 @@ public enum SihyunFilterPack {
 
     // MARK: - 4. Winter Deep Crimson (선명하고 딥한 겨쿨)
     public struct WinterDeepCrimsonFilter: CameraFilter {
-        public let id = "sihyun_winter_deep"
+        public let id = "color_studio_winter_deep"
         public let name = "Winter Deep (Crimson)"
         public let localizedName = "겨울 딥 (크림슨)"
-        public let cameraCategory = CameraCategory.sihyunhada
+        public let cameraCategory = CameraCategory.colorStudio
         public let filterDescription = "강렬한 흑백 대비와 딥 버건디 와인의 모던하고 시크한 프로필 톤"
         public let iconName = "sparkle"
 

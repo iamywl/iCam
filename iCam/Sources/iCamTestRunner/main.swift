@@ -2,8 +2,7 @@ import Foundation
 import CoreImage
 import iCamCore
 
-@MainActor
-func main() {
+func runTests() {
     print("==================================================")
     print("🚀 iCam Native Core & Modular Filter Engine Tests")
     print("==================================================")
@@ -77,13 +76,13 @@ func main() {
         assertTest(output.extent.width == 300, "Chaining \(baseFilter.name) + \(opt.name)")
     }
 
-    // Test 5: Sihyunhada Personal Color Live Backdrop Blending
+    // Test 5: Color Studio Personal Color Live Backdrop Blending
     print("\n[Suite 5] Personal Color Live Backdrop Blending")
     let dummyMatte = CIImage(color: CIColor.white).cropped(to: CGRect(x: 0, y: 0, width: 300, height: 400))
-    let sihyunFilter = registry.defaultFilter(for: .sihyunhada)
+    let colorStudioFilter = registry.defaultFilter(for: .colorStudio)
     let blendedOutput = pipeline.process(
         inputImage: testImage,
-        filter: sihyunFilter,
+        filter: colorStudioFilter,
         opticalFilter: nil,
         opticalStrength: 0.0,
         filterIntensity: 1.0,
@@ -113,6 +112,21 @@ func main() {
     assertTest(fetched != nil, "Dynamic filter plug-in registration succeeded")
     assertTest(fetched?.name == "Kodak Portra 400", "Dynamic filter properties verified")
 
+    // Test 7: Extended Vintage, City Pop, and Leica Camera Verification
+    print("\n[Suite 7] Extended Vintage, City Pop & Leica Lineup Verification")
+    let extendedCategories: [CameraCategory] = [
+        .olympusMju,
+        .contaxT2,
+        .ricohGR,
+        .leicaM,
+        .cityPop80s,
+        .oldFilm
+    ]
+    for category in extendedCategories {
+        let filters = registry.filters(for: category)
+        assertTest(filters.count >= 4, "\(category.displayName) verified with \(filters.count) dedicated filters")
+    }
+
     print("\n==================================================")
     print("📊 TEST SUMMARY: Passed: \(passedCount), Failed: \(failedCount)")
     print("==================================================")
@@ -122,4 +136,4 @@ func main() {
     }
 }
 
-main()
+runTests()

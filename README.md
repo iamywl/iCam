@@ -41,17 +41,23 @@
 
 ---
 
-## 📷 6대 독립 카메라 라인업 (The 6 Iconic Cameras)
+## 📷 12대 독립 카메라 라인업 (The 12 Iconic Cameras)
 
-하단 기계식 다이얼 및 카메라 랙을 통해 카메라를 바꾸면 **바디 테마, 전용 뷰파인더 OSD, 전용 필터 세트(각 4종), 셔터 메커니즘**이 통째로 전환됩니다:
+하단 기계식 다이얼 및 카메라 랙을 통해 카메라를 바꾸면 **바디 테마, 전용 뷰파인더 OSD, 전용 필터 세트, 셔터 메커니즘**이 통째로 전환됩니다:
 
-| 카메라 기종 | 컨셉 및 특징 | 전용 모듈형 필터 세트 (카메라별 4종 고유) |
+| 카메라 기종 | 컨셉 및 특징 | 전용 모듈형 필터 세트 |
 | :--- | :--- | :--- |
 | **📷 Canon IXY Digital 50** | 2000년대 Y2K 얼짱 디카 명기 (복숭아빛 피부 & AiAF OSD) | • `Peach Glow` (뽀샤시 복숭아빛 스킨)<br>• `Flash Pop` (디카 직광 플래시)<br>• `Lo-Fi Pastel` (들뜬 파스텔 섀도우)<br>• `Night Noise` (밤거리 고감도 노이즈) |
 | **📹 Sony DCR Handycam** | 90s-00s 미니DV 비디오 테이프 캠코더 (● REC 타임코드) | • `MiniDV Classic` (소니 3CCD 비디오 톤)<br>• `Hi8 VHS Tape` (스캔라인 글리치)<br>• `Super 8 Cine` (골든 앰버 홈무비)<br>• `NightShot Green` (0 Lux 적외선 녹색) |
 | **💿 Sony Cyber-shot CCD** | 2000년대 사이버 Y2K 미래주의 디카 (쿨블루 틴트 & 플래시) | • `CCD Cool Blue` (투명한 쿨톤 피부)<br>• `Cyber Magenta` (테크노 네온 마젠타)<br>• `Flash Sharp` (선명하고 쨍한 대비)<br>• `Matrix Green` (세기말 매트릭스 그린) |
+| **📷 Olympus μ [mju:] II** | 35mm f/2.8 단렌즈 필름 명기 (녹색 AF 브래킷 & 쿼츠데이트) | • `μ Standard` (생생한 스트리트 필름)<br>• `μ Night Street` (야경 플래시 룩)<br>• `μ Chrome Slide` (선명한 고채도 슬라이드) |
+| **📸 Contax T2** | 티타늄 바디 & Carl Zeiss Sonnar T* 38mm f/2.8 렌즈 | • `Zeiss Warm T*` (칼자이스 묵직한 웜톤)<br>• `T* Rich Shadow` (풍부한 암부계조)<br>• `Titanium Classic` (클래식 티타늄) |
+| **🎞️ Ricoh GR Digital** | 모리야마 다이도의 스냅 명기 (수평계 HUD & 고대비 흑백) | • `High-Contrast B&W` (모리야마 강렬 흑백)<br>• `Positive Film` (포지티브 발색)<br>• `Street Snap` (신속 날카로운 스냅) |
+| **🔴 Leica M System** | 레인지파인더 이중합치 포커스 & 즈미룩스 50mm 톤 | • `Summilux 50` (벨벳 웜톤 & 얕은 심도)<br>• `M Monochrom` (섬세한 흑백 계조)<br>• `Classic M 35` (투명한 선예도) |
+| **📼 City Pop 80s** | 80년대 레트로 카세트 OSD & 퍼플/앰버 선셋 네온 톤 | • `Sunset Neon` (퍼플 앰버 선셋)<br>• `Tokyo Night` (네온 바이올렛)<br>• `Pastel Breeze` (해변 시티팝) |
+| **🎞️ Old Film 35mm** | CineStill 붉은 할레이션 & 코닥 포트라 400 필름 | • `CineStill 800T` (광원 붉은 할레이션)<br>• `Portra 400` (골든 웜 피부톤)<br>• `Ektar 100` (극채도 원색) |
 | **🖼️ Fuji Instax & Polaroid** | 아날로그 즉석 인화 카메라 (시그니처 화이트 카드 프레임) | • `Instax Mini Soft` (화이트 카드 프레임)<br>• `Polaroid 600` (클래식 정방형 스퀘어)<br>• `Warm Monochrome` (웜톤 흑백 즉석사진)<br>• `Rainbow Vivid` (무지개 비비드 카드) |
-| **🎨 시현하다 Color Studio** | **실시간 라이브 배경 컬러 치환 스튜디오** | • 시현하다 Best 8색 실시간 라이브 온디바이스 세그멘테이션 반영<br>• 상단 `[이름]'s Moment` (실시간 수정) + 하단 친필 서명 각인 |
+| **🎨 Personal Color Studio** | **실시간 라이브 배경 컬러 치환 스튜디오** | • Studio Best 8색 실시간 라이브 온디바이스 세그멘테이션 반영<br>• 상단 `[이름]'s Moment` (실시간 수정) + 하단 친필 서명 각인 |
 | **🪪 여권 / 신분증 규격 카메라** | 대한민국 외교부 및 공공기관 신분증 100% 규격 충족 | • 여권(3.5x4.5), 주민등록/면허, 반명함, 비자 규격 HUD<br>• 4x6인치 8분할 인쇄 시트(재단선 포함) 원클릭 고해상도 출력 |
 
 ---
@@ -78,13 +84,13 @@ iCam/
     │   ├── App/
     │   │   └── iCamApp.swift                 # iOS 앱 엔트리포인트
     │   ├── Models/
-    │   │   ├── PersonalColorPalette.swift    # 시현하다 Best 8 컬러 팔레트
+    │   │   ├── PersonalColorPalette.swift    # Personal Color Studio Best 8 컬러 팔레트
     │   │   └── PassportSpec.swift            # 외교부/ICAO 여권·신분증 공식 규격
     │   ├── FilterModule/                     # 🌟 모듈형 필터 아키텍처
     │   │   ├── Protocols/
     │   │   │   ├── CameraFilter.swift        # 필터 인터페이스 프로토콜
     │   │   │   ├── OpticalFilter.swift       # 광학 렌즈 인터페이스 프로토콜
-    │   │   │   ├── CameraCategory.swift      # 6대 카메라 기종 분류
+    │   │   │   ├── CameraCategory.swift      # 9대 카메라 기종 분류
     │   │   │   └── FilterParameter.swift     # 필터 파라미터 제어 모델
     │   │   ├── Helpers/
     │   │   │   └── FilterHelpers.swift       # 고성능 CoreImage 최적화 유틸
@@ -96,8 +102,14 @@ iCam/
     │   │       ├── SonyHandycamFilters.swift # Sony Handycam 전용 4종
     │   │       ├── SonyCybershotFilters.swift# Sony Cyber-shot 전용 4종
     │   │       ├── FujiInstaxFilters.swift   # Fuji Instax/Polaroid 전용 4종
-    │   │       ├── SihyunColorFilters.swift  # 시현하다 퍼스널컬러 4종
+    │   │       ├── ColorStudioFilters.swift  # Color Studio 퍼스널컬러 4종
     │   │       ├── PassportIDFilters.swift   # 여권/신분증 스튜디오 4종
+    │   │       ├── OlympusMjuFilters.swift   # Olympus μ [mju:] II 전용 4종
+    │   │       ├── ContaxT2Filters.swift     # Contax T2 Carl Zeiss 전용 4종
+    │   │       ├── RicohGRFilters.swift      # Ricoh GR Digital 전용 4종
+    │   │       ├── LeicaMFilters.swift       # Leica M Summilux/Monochrom 전용 4종
+    │   │       ├── CityPopFilters.swift      # 80s City Pop Cassette 전용 4종
+    │   │       ├── OldFilmFilters.swift      # Old Film CineStill/Portra 전용 4종
     │   │       └── OpticalLensFilters.swift  # 탈부착 광학 렌즈 5종
     │   ├── CameraEngine/
     │   │   ├── CameraService.swift           # AVFoundation 캡처 세션
@@ -112,16 +124,16 @@ iCam/
     │       │   └── ViewfinderOSDOverlay.swift# 기종별 레트로 OSD 오버레이
     │       ├── Controls/
     │       │   ├── TopToolbarView.swift      # 상단 플래시/타이머/렌즈/그리드
-    │       │   ├── CameraRackDialView.swift  # 6대 카메라 기종 전환 다이얼
+    │       │   ├── CameraRackDialView.swift  # 12대 카메라 기종 전환 다이얼
     │       │   ├── ModularFilterTrayView.swift# 모듈형 필터 트레이 & 강도 슬라이더
-    │       │   ├── ColorStudioPaletteView.swift# 시현하다 실시간 컬러 스와치
+    │       │   ├── ColorStudioPaletteView.swift# Color Studio 실시간 컬러 스와치
     │       │   └── ShutterBarView.swift      # 기계식 셔터 & 썸네일
     │       └── Modals/
     │           ├── OpticalLensPickerModal.swift# 광학 렌즈 탈부착 시트
     │           ├── PassportPrintSheetModal.swift# 여권 4x6 8분할 인쇄 시트
     │           └── CapturedPhotoPreviewModal.swift# 고해상도 사진 프리뷰 & 공유
     └── iCamTestRunner/
-        └── main.swift                        # 45개 전수 테스트 자동 검증기
+        └── main.swift                        # 87개 전수 테스트 자동 검증기
 ```
 
 ---

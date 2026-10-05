@@ -92,7 +92,7 @@ public struct ShutterBarView: View {
         switch viewModel.selectedCategory {
         case .sonyHandycam:
             return Color.red // Handycam red REC shutter
-        case .sihyunhada:
+        case .colorStudio:
             return Color(hex: viewModel.selectedPersonalColor.hex)
         case .canonIXY:
             return Color(red: 0.9, green: 0.9, blue: 0.92)

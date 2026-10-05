@@ -50,6 +50,54 @@
             </div>
           </button>
 
+          <button class="panel-mode-btn" data-cam="olympus-mju" id="p-cam-olympus">
+            <div class="panel-mode-icon">📷</div>
+            <div>
+              <div style="font-weight: 600;">Olympus μ [mju:] II</div>
+              <div style="font-size: 11px; color: var(--text-secondary);">35mm f/2.8 필름 쿼츠데이트 OSD & 스트리트 콘트라스트</div>
+            </div>
+          </button>
+
+          <button class="panel-mode-btn" data-cam="contax-t2" id="p-cam-contax">
+            <div class="panel-mode-icon">📸</div>
+            <div>
+              <div style="font-weight: 600;">Contax T2</div>
+              <div style="font-size: 11px; color: var(--text-secondary);">티타늄 바디 & 칼자이스 T* 묵직하고 깊은 온화한 색감</div>
+            </div>
+          </button>
+
+          <button class="panel-mode-btn" data-cam="ricoh-gr" id="p-cam-ricoh">
+            <div class="panel-mode-icon">🎞️</div>
+            <div>
+              <div style="font-weight: 600;">Ricoh GR Digital</div>
+              <div style="font-size: 11px; color: var(--text-secondary);">모리야마 다이도 고대비 흑백 & 스냅 포커스 슈터</div>
+            </div>
+          </button>
+
+          <button class="panel-mode-btn" data-cam="leica-m" id="p-cam-leica">
+            <div class="panel-mode-icon">🔴</div>
+            <div>
+              <div style="font-weight: 600;">Leica M System</div>
+              <div style="font-size: 11px; color: var(--text-secondary);">레인지파인더 이중합치 포커스 & 즈미룩스 50mm 톤</div>
+            </div>
+          </button>
+
+          <button class="panel-mode-btn" data-cam="citypop-80s" id="p-cam-citypop">
+            <div class="panel-mode-icon">📼</div>
+            <div>
+              <div style="font-weight: 600;">City Pop 80s</div>
+              <div style="font-size: 11px; color: var(--text-secondary);">80년대 레트로 카세트 OSD & 퍼플/앰버 선셋 네온</div>
+            </div>
+          </button>
+
+          <button class="panel-mode-btn" data-cam="oldfilm-35mm" id="p-cam-oldfilm">
+            <div class="panel-mode-icon">🎞️</div>
+            <div>
+              <div style="font-weight: 600;">Old Film 35mm</div>
+              <div style="font-size: 11px; color: var(--text-secondary);">CineStill 붉은 할레이션 & 코닥 포트라 400 필름</div>
+            </div>
+          </button>
+
           <button class="panel-mode-btn" data-cam="instax-mini" id="p-cam-instax">
             <div class="panel-mode-icon">🖼️</div>
             <div>
@@ -61,7 +109,7 @@
           <button class="panel-mode-btn" data-cam="sihyun-color" id="p-cam-color">
             <div class="panel-mode-icon">🎨</div>
             <div>
-              <div style="font-weight: 600;">시현하다 Color Studio</div>
+              <div style="font-weight: 600;">Personal Color Studio</div>
               <div style="font-size: 11px; color: var(--accent-mint); font-weight: 700;">실시간 배경색·사진 라이브 치환 스튜디오</div>
             </div>
           </button>
@@ -310,6 +358,112 @@
               <div class="canon-date-stamp">'26 10 05 14:28</div>
             </div>
 
+            <!-- Olympus μ [mju:] II Film OSD -->
+            <div class="olympus-osd" id="olympus-osd">
+              <div class="olympus-top-row">
+                <span class="olympus-brand">OLYMPUS μ [mju:]-II</span>
+                <span class="olympus-flash-ready">⚡ OK</span>
+              </div>
+              <div class="olympus-af-brackets">
+                <div class="olympus-af-box"></div>
+              </div>
+              <div class="olympus-bottom-row">
+                <span class="olympus-film-counter">[ S 24 ]</span>
+                <span class="olympus-date">'26 10 05</span>
+              </div>
+            </div>
+
+            <!-- Contax T2 Carl Zeiss OSD -->
+            <div class="contax-osd" id="contax-osd">
+              <div class="contax-led-bar">
+                <span class="contax-led-item">T*</span>
+                <span class="contax-led-shutter">1/250</span>
+                <span class="contax-led-aperture">F 2.8</span>
+                <span class="contax-led-exp">+0.5</span>
+              </div>
+              <div class="contax-center-circle"></div>
+              <div class="contax-bottom-bar">
+                <span>CONTAX T2 TITANIUM</span>
+                <span>Carl Zeiss Sonnar 2.8/38</span>
+              </div>
+            </div>
+
+            <!-- Ricoh GR Digital Snap OSD -->
+            <div class="ricoh-osd" id="ricoh-osd">
+              <div class="ricoh-top-row">
+                <span class="ricoh-mode">P</span>
+                <span class="ricoh-snap-dist">[ SNAP 2.5m ]</span>
+                <span class="ricoh-iso">ISO 400</span>
+              </div>
+              <!-- Center Leveler line -->
+              <div class="ricoh-leveler">
+                <div class="ricoh-level-line"></div>
+                <div class="ricoh-level-center"></div>
+                <div class="ricoh-level-line"></div>
+              </div>
+              <div class="ricoh-bottom-row">
+                <span>28mm GR LENS F2.8</span>
+                <span class="ricoh-shutter">1/160</span>
+                <span>RAW+</span>
+              </div>
+            </div>
+
+            <!-- Leica M Rangefinder OSD -->
+            <div class="leica-m-osd" id="leica-m-osd">
+              <div class="leica-top-row">
+                <span class="leica-red-dot">🔴 LEICA M</span>
+                <span class="leica-frameline-tag">35 / 50 mm</span>
+                <span class="leica-shutter-speed">1/500</span>
+              </div>
+              <!-- Rangefinder Split-image Dual Patch in Center -->
+              <div class="leica-rf-patch-container">
+                <div class="leica-bright-frameline"></div>
+                <div class="leica-split-patch">
+                  <div class="leica-patch-inner"></div>
+                </div>
+              </div>
+              <div class="leica-bottom-row">
+                <span>SUMMILUX-M 1:1.4/50 ASPH.</span>
+                <span class="leica-exposure">▲ 0 ▼</span>
+              </div>
+            </div>
+
+            <!-- City Pop 80s Retro Cassette OSD -->
+            <div class="citypop-osd" id="citypop-osd">
+              <div class="citypop-top-banner">
+                <span class="citypop-tape-side">SIDE A • STEREO</span>
+                <span class="citypop-dolby">[DOLBY B-C NR]</span>
+                <span class="citypop-fm">FM 80.0 MHz</span>
+              </div>
+              <!-- Synthwave Neon Grid lines -->
+              <div class="citypop-synth-badge">
+                <span>NIGHT CRUISING 1986</span>
+              </div>
+              <div class="citypop-bottom-bar">
+                <div class="citypop-reel-icon">◷ ◷</div>
+                <span class="citypop-counter">C-60 [02:45]</span>
+                <span class="citypop-label">CITY POP RECORD</span>
+              </div>
+            </div>
+
+            <!-- Old Film 35mm & CineStill Halation OSD -->
+            <div class="oldfilm-osd" id="oldfilm-osd">
+              <!-- Top Film Sprocket Border -->
+              <div class="film-sprocket-top">
+                <span class="sprocket-hole"></span><span class="sprocket-hole"></span>
+                <span class="film-code-text">KODAK SAFETY FILM 5063</span>
+                <span class="sprocket-hole"></span><span class="sprocket-hole"></span>
+              </div>
+              <!-- CineStill Red Halation Glow Layer -->
+              <div class="cinestill-halation-overlay" id="cinestill-halation"></div>
+              <!-- Bottom Film Sprocket Border -->
+              <div class="film-sprocket-bottom">
+                <span class="sprocket-hole"></span><span class="sprocket-hole"></span>
+                <span class="film-code-text">35mm • 24A • PORTRA 400</span>
+                <span class="sprocket-hole"></span><span class="sprocket-hole"></span>
+              </div>
+            </div>
+
             <!-- Super 8mm Cine Vignette -->
             <div class="super8-vignette-overlay" id="super8-overlay">
               <div class="super8-vignette-circle"></div>
@@ -543,15 +697,207 @@
               </div>
             </div>
 
-            <!-- [Camera 5 Drawer] Sihyunhada Color Studio (실시간 배경 컬러 스튜디오) -->
+            <!-- [Camera 5 Drawer] Olympus μ [mju:] II -->
+            <div class="mode-control-panel" id="drawer-olympus-mju">
+              <div class="cam-drawer-header">
+                <span class="cam-drawer-title">📷 Olympus μ [mju:] II 필름 필터</span>
+                <span class="cam-drawer-badge">35mm f/2.8 FILM</span>
+              </div>
+              <div class="filter-carousel">
+                <div class="filter-chip active" data-filter="mju-standard">
+                  <div class="filter-chip-tag olympus-tag">μ2</div>
+                  <span class="filter-chip-icon">📷</span>
+                  <span class="filter-chip-name">μ Standard</span>
+                  <span class="filter-chip-sub">스트리트 필름</span>
+                </div>
+                <div class="filter-chip" data-filter="mju-night">
+                  <div class="filter-chip-tag olympus-tag">FLASH</div>
+                  <span class="filter-chip-icon">⚡</span>
+                  <span class="filter-chip-name">μ Night Street</span>
+                  <span class="filter-chip-sub">야경 플래시 룩</span>
+                </div>
+                <div class="filter-chip" data-filter="mju-chrome">
+                  <div class="filter-chip-tag olympus-tag">SLIDE</div>
+                  <span class="filter-chip-icon">🎞️</span>
+                  <span class="filter-chip-name">μ Chrome Slide</span>
+                  <span class="filter-chip-sub">선명한 슬라이드</span>
+                </div>
+              </div>
+              <div class="vintage-toggles">
+                <div class="toggle-pill active" id="toggle-mju-date">📅 쿼츠 데이트</div>
+                <div class="toggle-pill active" id="toggle-mju-af">🎯 AF 브래킷</div>
+              </div>
+            </div>
+
+            <!-- [Camera 6 Drawer] Contax T2 Carl Zeiss -->
+            <div class="mode-control-panel" id="drawer-contax-t2">
+              <div class="cam-drawer-header">
+                <span class="cam-drawer-title">📸 Contax T2 칼자이스 T* 필터</span>
+                <span class="cam-drawer-badge">Carl Zeiss T*</span>
+              </div>
+              <div class="filter-carousel">
+                <div class="filter-chip active" data-filter="zeiss-warm">
+                  <div class="filter-chip-tag contax-tag">T*</div>
+                  <span class="filter-chip-icon">✨</span>
+                  <span class="filter-chip-name">Zeiss Warm T*</span>
+                  <span class="filter-chip-sub">묵직한 웜톤</span>
+                </div>
+                <div class="filter-chip" data-filter="zeiss-shadow">
+                  <div class="filter-chip-tag contax-tag">SONNAR</div>
+                  <span class="filter-chip-icon">🌒</span>
+                  <span class="filter-chip-name">T* Rich Shadow</span>
+                  <span class="filter-chip-sub">풍부한 암부계조</span>
+                </div>
+                <div class="filter-chip" data-filter="titanium-classic">
+                  <div class="filter-chip-tag contax-tag">TITAN</div>
+                  <span class="filter-chip-icon">🏛️</span>
+                  <span class="filter-chip-name">Titanium Classic</span>
+                  <span class="filter-chip-sub">클래식 티타늄</span>
+                </div>
+              </div>
+              <div class="vintage-toggles">
+                <div class="toggle-pill active" id="toggle-contax-led">🔴 7세그먼트 LED</div>
+                <div class="toggle-pill active" id="toggle-contax-vignette">🌑 T* 비네팅</div>
+              </div>
+            </div>
+
+            <!-- [Camera 7 Drawer] Ricoh GR Digital -->
+            <div class="mode-control-panel" id="drawer-ricoh-gr">
+              <div class="cam-drawer-header">
+                <span class="cam-drawer-title">🎞️ Ricoh GR Digital 스냅 필터</span>
+                <span class="cam-drawer-badge">SNAP SHOOTER</span>
+              </div>
+              <div class="filter-carousel">
+                <div class="filter-chip active" data-filter="gr-bw-high">
+                  <div class="filter-chip-tag ricoh-tag">B&W</div>
+                  <span class="filter-chip-icon">🖤</span>
+                  <span class="filter-chip-name">High-Contrast B&W</span>
+                  <span class="filter-chip-sub">모리야마 흑백</span>
+                </div>
+                <div class="filter-chip" data-filter="gr-positive">
+                  <div class="filter-chip-tag ricoh-tag">POSI</div>
+                  <span class="filter-chip-icon">🟡</span>
+                  <span class="filter-chip-name">Positive Film</span>
+                  <span class="filter-chip-sub">포지티브 발색</span>
+                </div>
+                <div class="filter-chip" data-filter="gr-street">
+                  <div class="filter-chip-tag ricoh-tag">SNAP</div>
+                  <span class="filter-chip-icon">⚡</span>
+                  <span class="filter-chip-name">Street Snap</span>
+                  <span class="filter-chip-sub">신속 스냅 룩</span>
+                </div>
+              </div>
+              <div class="vintage-toggles">
+                <div class="toggle-pill active" id="toggle-ricoh-level">⚖️ 수평계 레벨러</div>
+                <div class="toggle-pill active" id="toggle-ricoh-snap">📏 SNAP 2.5m 고정</div>
+              </div>
+            </div>
+
+            <!-- [Camera 8 Drawer] Leica M System -->
+            <div class="mode-control-panel" id="drawer-leica-m">
+              <div class="cam-drawer-header">
+                <span class="cam-drawer-title">🔴 Leica M 레인지파인더 필터</span>
+                <span class="cam-drawer-badge">RANGEFINDER M</span>
+              </div>
+              <div class="filter-carousel">
+                <div class="filter-chip active" data-filter="leica-summilux">
+                  <div class="filter-chip-tag leica-tag">50mm</div>
+                  <span class="filter-chip-icon">🔴</span>
+                  <span class="filter-chip-name">Summilux 50</span>
+                  <span class="filter-chip-sub">따뜻한 벨벳 톤</span>
+                </div>
+                <div class="filter-chip" data-filter="leica-mono">
+                  <div class="filter-chip-tag bw-tag">MONO</div>
+                  <span class="filter-chip-icon">🎞️</span>
+                  <span class="filter-chip-name">M Monochrom</span>
+                  <span class="filter-chip-sub">깊은 흑백 계조</span>
+                </div>
+                <div class="filter-chip" data-filter="leica-classic">
+                  <div class="filter-chip-tag leica-tag">35mm</div>
+                  <span class="filter-chip-icon">✨</span>
+                  <span class="filter-chip-name">Classic M 35</span>
+                  <span class="filter-chip-sub">투명한 선예도</span>
+                </div>
+              </div>
+              <div class="vintage-toggles">
+                <div class="toggle-pill active" id="toggle-leica-rf">🎯 이중합치 포커스</div>
+                <div class="toggle-pill active" id="toggle-leica-frameline">📐 35/50 프레임선</div>
+              </div>
+            </div>
+
+            <!-- [Camera 9 Drawer] City Pop 80s -->
+            <div class="mode-control-panel" id="drawer-citypop-80s">
+              <div class="cam-drawer-header">
+                <span class="cam-drawer-title">📼 City Pop 80s 레트로 신스웨이브</span>
+                <span class="cam-drawer-badge">RETRO SYNTH 80s</span>
+              </div>
+              <div class="filter-carousel">
+                <div class="filter-chip active" data-filter="city-sunset">
+                  <div class="filter-chip-tag citypop-tag">SUNSET</div>
+                  <span class="filter-chip-icon">🌆</span>
+                  <span class="filter-chip-name">Sunset Neon</span>
+                  <span class="filter-chip-sub">퍼플 앰버 선셋</span>
+                </div>
+                <div class="filter-chip" data-filter="city-tokyo">
+                  <div class="filter-chip-tag citypop-tag">TOKYO</div>
+                  <span class="filter-chip-icon">🌃</span>
+                  <span class="filter-chip-name">Tokyo Night</span>
+                  <span class="filter-chip-sub">네온 바이올렛</span>
+                </div>
+                <div class="filter-chip" data-filter="city-pastel">
+                  <div class="filter-chip-tag citypop-tag">BREEZE</div>
+                  <span class="filter-chip-icon">🌴</span>
+                  <span class="filter-chip-name">Pastel Breeze</span>
+                  <span class="filter-chip-sub">해변 시티팝</span>
+                </div>
+              </div>
+              <div class="vintage-toggles">
+                <div class="toggle-pill active" id="toggle-citypop-cassette">📼 카세트 테이프 HUD</div>
+                <div class="toggle-pill active" id="toggle-citypop-neon">💜 선셋 네온 틴트</div>
+              </div>
+            </div>
+
+            <!-- [Camera 10 Drawer] Old Film 35mm -->
+            <div class="mode-control-panel" id="drawer-oldfilm-35mm">
+              <div class="cam-drawer-header">
+                <span class="cam-drawer-title">🎞️ Old Film 35mm 아날로그 필름</span>
+                <span class="cam-drawer-badge">ANALOG CINE 35</span>
+              </div>
+              <div class="filter-carousel">
+                <div class="filter-chip active" data-filter="film-cinestill">
+                  <div class="filter-chip-tag oldfilm-tag">800T</div>
+                  <span class="filter-chip-icon">🔥</span>
+                  <span class="filter-chip-name">CineStill 800T</span>
+                  <span class="filter-chip-sub">붉은 할레이션</span>
+                </div>
+                <div class="filter-chip" data-filter="film-portra">
+                  <div class="filter-chip-tag kodak-tag">PORTRA</div>
+                  <span class="filter-chip-icon">☀️</span>
+                  <span class="filter-chip-name">Portra 400</span>
+                  <span class="filter-chip-sub">골든 웜 피부톤</span>
+                </div>
+                <div class="filter-chip" data-filter="film-ektar">
+                  <div class="filter-chip-tag kodak-tag">EKTAR</div>
+                  <span class="filter-chip-icon">🌈</span>
+                  <span class="filter-chip-name">Ektar 100</span>
+                  <span class="filter-chip-sub">극채도 원색</span>
+                </div>
+              </div>
+              <div class="vintage-toggles">
+                <div class="toggle-pill active" id="toggle-oldfilm-sprocket">🎞️ 필름 천공 마킹</div>
+                <div class="toggle-pill active" id="toggle-oldfilm-halation">🔴 붉은 할레이션</div>
+              </div>
+            </div>
+
+            <!-- [Camera 11 Drawer] Personal Color Studio (실시간 배경 컬러 스튜디오) -->
             <div class="mode-control-panel" id="drawer-sihyun-color">
               <div class="cam-drawer-header">
-                <span class="cam-drawer-title">🎨 시현하다 실시간 배경 컬러 스튜디오</span>
+                <span class="cam-drawer-title">🎨 Personal Color Studio (실시간 라이브 배경)</span>
                 <span class="cam-drawer-badge" style="color: var(--accent-mint); border-color: rgba(0,229,163,0.5);">LIVE COLOR</span>
               </div>
               <!-- Background Category Tabs -->
               <div class="color-season-tabs">
-                <button class="season-tab-btn active" data-season="sihyunhada">시현하다 PICK</button>
+                <button class="season-tab-btn active" data-season="sihyunhada">Studio Best 8</button>
                 <button class="season-tab-btn" data-season="photo">📷 배경 사진/텍스처</button>
                 <button class="season-tab-btn" data-season="spring">봄 웜</button>
                 <button class="season-tab-btn" data-season="summer">여름 쿨</button>
@@ -581,7 +927,7 @@
               </div>
             </div>
 
-            <!-- [Camera 6 Drawer] Standard ID & Passport -->
+            <!-- [Camera 9 Drawer] Standard ID & Passport -->
             <div class="mode-control-panel" id="drawer-passport-id">
               <div class="cam-drawer-header">
                 <span class="cam-drawer-title">🪪 여권 / 신분증 규격 카메라</span>
@@ -608,12 +954,18 @@
           <!-- Bottom Action Bar & Camera Switcher Wheel -->
           <footer class="camera-bottom-section">
             
-            <!-- 6 Iconic Cameras Switcher Dial -->
+            <!-- 12 Iconic Cameras Switcher Dial -->
             <div class="mode-dial-wrapper">
               <div class="mode-dial-list" id="mode-dial-list">
                 <div class="mode-dial-item active" data-cam="canon-ixy">CANON IXY</div>
                 <div class="mode-dial-item" data-cam="sony-handycam">HANDYCAM</div>
                 <div class="mode-dial-item" data-cam="sony-cybershot">CYBER-SHOT</div>
+                <div class="mode-dial-item" data-cam="olympus-mju">OLYMPUS μ2</div>
+                <div class="mode-dial-item" data-cam="contax-t2">CONTAX T2</div>
+                <div class="mode-dial-item" data-cam="ricoh-gr">RICOH GRD</div>
+                <div class="mode-dial-item" data-cam="leica-m">LEICA M</div>
+                <div class="mode-dial-item" data-cam="citypop-80s">CITY POP 80s</div>
+                <div class="mode-dial-item" data-cam="oldfilm-35mm">OLD FILM 35</div>
                 <div class="mode-dial-item" data-cam="instax-mini">INSTAX</div>
                 <div class="mode-dial-item" data-cam="sihyun-color">COLOR STUDIO</div>
                 <div class="mode-dial-item" data-cam="passport-id">PASSPORT ID</div>

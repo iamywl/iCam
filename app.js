@@ -21,6 +21,12 @@ const state = {
     'canon-ixy': 'ixy-peach',
     'sony-handycam': 'handy-minidv',
     'sony-cybershot': 'cyber-cool',
+    'olympus-mju': 'mju-standard',
+    'contax-t2': 'zeiss-warm',
+    'ricoh-gr': 'gr-bw-high',
+    'leica-m': 'leica-summilux',
+    'citypop-80s': 'city-sunset',
+    'oldfilm-35mm': 'film-cinestill',
     'instax-mini': 'instax-card'
   },
 
@@ -198,9 +204,195 @@ const CAMERAS = {
     }
   },
 
+  'olympus-mju': {
+    id: 'olympus-mju',
+    name: 'Olympus μ [mju:] II',
+    shortName: 'OLYMPUS μ2',
+    sub: 'μ Standard',
+    icon: '📷',
+    badge: '35mm f/2.8 FILM',
+    osdId: 'olympus-osd',
+    drawerId: 'drawer-olympus-mju',
+    filters: {
+      'mju-standard': {
+        name: 'μ Standard',
+        desc: '자연스러운 스트리트 필름',
+        css: 'brightness(1.04) contrast(1.18) saturate(1.16) sepia(0.06)',
+        tintRgba: 'rgba(255, 235, 200, 0.06)'
+      },
+      'mju-night': {
+        name: 'μ Night Street',
+        desc: '플래시 야경 스트리트 룩',
+        css: 'brightness(1.12) contrast(1.32) saturate(1.25)',
+        tintRgba: 'rgba(255, 240, 210, 0.08)'
+      },
+      'mju-chrome': {
+        name: 'μ Chrome Slide',
+        desc: '선명한 슬라이드 발색',
+        css: 'brightness(1.02) contrast(1.28) saturate(1.35) sepia(0.04)',
+        tintRgba: 'rgba(255, 200, 150, 0.05)'
+      }
+    }
+  },
+
+  'contax-t2': {
+    id: 'contax-t2',
+    name: 'Contax T2',
+    shortName: 'CONTAX T2',
+    sub: 'Zeiss Warm T*',
+    icon: '📸',
+    badge: 'Carl Zeiss T*',
+    osdId: 'contax-osd',
+    drawerId: 'drawer-contax-t2',
+    filters: {
+      'zeiss-warm': {
+        name: 'Zeiss Warm T*',
+        desc: '칼자이스 묵직한 웜톤',
+        css: 'brightness(1.02) contrast(1.22) saturate(1.15) sepia(0.12)',
+        tintRgba: 'rgba(255, 210, 160, 0.12)'
+      },
+      'zeiss-shadow': {
+        name: 'T* Rich Shadow',
+        desc: '풍부한 암부와 섬세한 하이라이트',
+        css: 'brightness(0.98) contrast(1.35) saturate(1.1) sepia(0.05)',
+        tintRgba: 'rgba(240, 220, 200, 0.08)'
+      },
+      'titanium-classic': {
+        name: 'Titanium Classic',
+        desc: '티타늄 바디 클래식 룩',
+        css: 'brightness(1.06) contrast(1.15) saturate(1.08) sepia(0.08)',
+        tintRgba: 'rgba(255, 230, 210, 0.06)'
+      }
+    }
+  },
+
+  'ricoh-gr': {
+    id: 'ricoh-gr',
+    name: 'Ricoh GR Digital',
+    shortName: 'RICOH GRD',
+    sub: 'High-Contrast B&W',
+    icon: '🎞️',
+    badge: 'SNAP SHOOTER',
+    osdId: 'ricoh-osd',
+    drawerId: 'drawer-ricoh-gr',
+    filters: {
+      'gr-bw-high': {
+        name: 'High-Contrast B&W',
+        desc: '모리야마 풍 강렬한 흑백',
+        css: 'grayscale(1) contrast(1.85) brightness(0.95)',
+        tintRgba: null
+      },
+      'gr-positive': {
+        name: 'Positive Film',
+        desc: '특유의 포지티브 필름 발색',
+        css: 'brightness(1.04) contrast(1.28) saturate(1.32) sepia(0.03)',
+        tintRgba: 'rgba(255, 220, 180, 0.06)'
+      },
+      'gr-street': {
+        name: 'Street Snap',
+        desc: '신속하고 날카로운 스냅 룩',
+        css: 'brightness(1.02) contrast(1.22) saturate(1.12)',
+        tintRgba: null
+      }
+    }
+  },
+
+  'leica-m': {
+    id: 'leica-m',
+    name: 'Leica M System',
+    shortName: 'LEICA M',
+    sub: 'Summilux 50',
+    icon: '🔴',
+    badge: 'RANGEFINDER M',
+    osdId: 'leica-m-osd',
+    drawerId: 'drawer-leica-m',
+    filters: {
+      'leica-summilux': {
+        name: 'Summilux 50',
+        desc: '따뜻한 벨벳 톤 & 부드러운 보케',
+        css: 'brightness(1.05) contrast(1.12) saturate(1.18) sepia(0.08)',
+        tintRgba: 'rgba(255, 225, 180, 0.08)'
+      },
+      'leica-mono': {
+        name: 'M Monochrom',
+        desc: '깊고 섬세한 흑백 계조',
+        css: 'grayscale(1) contrast(1.45) brightness(0.96)',
+        tintRgba: null
+      },
+      'leica-classic': {
+        name: 'Classic M 35',
+        desc: '투명하고 날카로운 선예도',
+        css: 'brightness(1.03) contrast(1.22) saturate(1.1)',
+        tintRgba: null
+      }
+    }
+  },
+
+  'citypop-80s': {
+    id: 'citypop-80s',
+    name: 'City Pop 80s',
+    shortName: 'CITY POP 80s',
+    sub: 'Sunset Neon',
+    icon: '📼',
+    badge: 'RETRO SYNTH 80s',
+    osdId: 'citypop-osd',
+    drawerId: 'drawer-citypop-80s',
+    filters: {
+      'city-sunset': {
+        name: 'Sunset Neon',
+        desc: '퍼플 앰버 선셋 시티팝',
+        css: 'brightness(1.04) contrast(1.25) saturate(1.4) hue-rotate(-20deg)',
+        tintRgba: 'rgba(255, 45, 185, 0.12)'
+      },
+      'city-tokyo': {
+        name: 'Tokyo Night',
+        desc: '네온 바이올렛 & 사이언 섀도우',
+        css: 'brightness(0.98) contrast(1.3) saturate(1.35) hue-rotate(15deg)',
+        tintRgba: 'rgba(120, 0, 255, 0.14)'
+      },
+      'city-pastel': {
+        name: 'Pastel Breeze',
+        desc: '해변 드라이브 파스텔',
+        css: 'brightness(1.12) contrast(1.08) saturate(1.22) sepia(0.06)',
+        tintRgba: 'rgba(0, 240, 255, 0.08)'
+      }
+    }
+  },
+
+  'oldfilm-35mm': {
+    id: 'oldfilm-35mm',
+    name: 'Old Film 35mm',
+    shortName: 'OLD FILM 35',
+    sub: 'CineStill 800T',
+    icon: '🎞️',
+    badge: 'ANALOG CINE 35',
+    osdId: 'oldfilm-osd',
+    drawerId: 'drawer-oldfilm-35mm',
+    filters: {
+      'film-cinestill': {
+        name: 'CineStill 800T',
+        desc: '광원 붉은 할레이션 번짐',
+        css: 'brightness(1.02) contrast(1.24) saturate(1.25) hue-rotate(195deg)',
+        tintRgba: 'rgba(255, 20, 0, 0.1)'
+      },
+      'film-portra': {
+        name: 'Portra 400',
+        desc: '따뜻한 골든 옐로우 피부톤',
+        css: 'brightness(1.06) contrast(1.14) saturate(1.15) sepia(0.1)',
+        tintRgba: 'rgba(255, 210, 140, 0.08)'
+      },
+      'film-ektar': {
+        name: 'Ektar 100',
+        desc: '선명하고 강렬한 원색 콘트라스트',
+        css: 'brightness(1.03) contrast(1.32) saturate(1.42)',
+        tintRgba: null
+      }
+    }
+  },
+
   'sihyun-color': {
     id: 'sihyun-color',
-    name: '시현하다 Color Studio',
+    name: 'Personal Color Studio',
     shortName: 'COLOR STUDIO',
     sub: '#01 Blossom Pink',
     icon: '🎨',
@@ -549,16 +741,11 @@ function switchCamera(camId) {
   });
 
   const dialList = document.getElementById('mode-dial-list');
-  const dialOffsets = {
-    'canon-ixy': 110,
-    'sony-handycam': 60,
-    'sony-cybershot': 0,
-    'instax-mini': -60,
-    'sihyun-color': -120,
-    'passport-id': -180
-  };
-  if (dialList && dialOffsets[camId] !== undefined) {
-    dialList.style.transform = `translateX(${dialOffsets[camId]}px)`;
+  const activeItem = document.querySelector(`#mode-dial-list .mode-dial-item[data-cam="${camId}"]`);
+  if (dialList && activeItem) {
+    const wrapper = dialList.parentElement;
+    const offset = (wrapper.offsetWidth / 2) - (activeItem.offsetLeft + activeItem.offsetWidth / 2);
+    dialList.style.transform = `translateX(${offset}px)`;
   }
 
   // 2. Update Left Sidebar Rack Active State
@@ -584,6 +771,13 @@ function switchCamera(camId) {
     'canon-ixy-osd',
     'sony-handycam-osd',
     'sony-cybershot-osd',
+    'olympus-osd',
+    'contax-osd',
+    'ricoh-osd',
+    'leica-m-osd',
+    'citypop-osd',
+    'oldfilm-osd',
+    'cinestill-halation',
     'instax-frame',
     'mood-card-frame',
     'standard-id-hud',
@@ -601,7 +795,13 @@ function switchCamera(camId) {
     if (targetOsd) targetOsd.style.display = (cam.id === 'sihyun-color' ? 'flex' : 'block');
   }
 
-  // 6. Handle Background Layer (Real-time Live Color for Sihyunhada)
+  // Old Film CineStill Halation Glow
+  const halationEl = document.getElementById('cinestill-halation');
+  if (halationEl) {
+    halationEl.style.display = (camId === 'oldfilm-35mm') ? 'block' : 'none';
+  }
+
+  // 6. Handle Background Layer (Real-time Live Color for Personal Color Studio)
   const bgLayer = document.getElementById('viewfinder-bg');
   if (bgLayer) {
     if (camId === 'sihyun-color') {
@@ -674,6 +874,48 @@ function updateRightSpecCard(camId) {
       <li class="feature-item"><span class="feature-bullet">✓</span><span>사이버샷 5.1 MEGAPIXELS, DSC-P10, 정밀 4코너 포커스 브래킷 HUD</span></li>
       <li class="feature-item"><span class="feature-bullet">✓</span><span>하얗고 투명한 쿨톤 피부 표현과 세기말 Y2K 비주얼 완성</span></li>
     `;
+  } else if (camId === 'olympus-mju') {
+    descEl.textContent = '컴팩트 필름 카메라의 전설 Olympus μ [mju:] II. 35mm f/2.8 단렌즈의 날카로운 선예도와 생동감 넘치는 스트리트 컬러 밸런스를 제공합니다.';
+    featureListEl.innerHTML = `
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>전용 필터 3종: μ Standard(스트리트 필름), μ Night Street(야경 플래시), μ Chrome Slide</span></li>
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>올림푸스 시그니처 녹색 AF 포커스 브래킷 & 쿼츠 데이트 스탬프 OSD</span></li>
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>생생한 콘트라스트와 아날로그 35mm 필름 입자 질감 렌더링</span></li>
+    `;
+  } else if (camId === 'contax-t2') {
+    descEl.textContent = '티타늄 바디와 Carl Zeiss Sonnar T* 38mm f/2.8 렌즈의 명품 P&S 카메라. 묵직하고 깊은 섀도우 계조와 온화하고 고급스러운 칼자이스 발색이 살아납니다.';
+    featureListEl.innerHTML = `
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>전용 필터 3종: Zeiss Warm T*(칼자이스 웜톤), T* Rich Shadow(암부 계조), Titanium Classic</span></li>
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>붉은색 7세그먼트 LED 셔터/노출 바 & 중앙 스팟 측광 OSD</span></li>
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>하이라이트 번짐 억제 및 고급스러운 아날로그 비네팅 합성</span></li>
+    `;
+  } else if (camId === 'ricoh-gr') {
+    descEl.textContent = '모리야마 다이도의 스냅 명기 Ricoh GR Digital. 강렬한 흑백 하이콘트라스트와 신속한 스냅 포커스(2.5m) 감성을 구현합니다.';
+    featureListEl.innerHTML = `
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>전용 필터 3종: High-Contrast B&W(모리야마 흑백), Positive Film, Street Snap</span></li>
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>수평계 자이로 레벨러 HUD & SNAP 2.5m 거리 고정 인디케이터 OSD</span></li>
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>거친 그레인 입자와 날카로운 선예도의 도시 스냅 감성 완결</span></li>
+    `;
+  } else if (camId === 'leica-m') {
+    descEl.textContent = '독일 장인 정신의 레인지파인더 Leica M 시스템. 이중합치 포커스 패치와 즈미룩스(Summilux) 50mm의 벨벳 같은 얕은 심도 톤을 재현합니다.';
+    featureListEl.innerHTML = `
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>전용 필터 3종: Summilux 50(벨벳 웜톤), M Monochrom(섬세한 흑백 계조), Classic M 35</span></li>
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>라이카 시그니처 🔴 레드 닷 & 노란색 이중합치 스플릿 포커스 패치 OSD</span></li>
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>35mm/50mm 브라이트 프레임라인 및 클래식 셔터 메커니즘 사운드</span></li>
+    `;
+  } else if (camId === 'citypop-80s') {
+    descEl.textContent = '80년대 도쿄 시티팝과 레트로 신스웨이브의 낭만. 카세트 테이프 릴 OSD와 마젠타·바이올렛 네온 선셋 그라디언트를 선사합니다.';
+    featureListEl.innerHTML = `
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>전용 필터 3종: Sunset Neon(퍼플 앰버 선셋), Tokyo Night(네온 바이올렛), Pastel Breeze</span></li>
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>80s 카세트 테이프 SIDE A • DOLBY NR • FM 80.0 MHz 레트로 HUD</span></li>
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>타츠로 야마시타 앨범 커버 감성의 따뜻한 저녁노을 틴트 합성</span></li>
+    `;
+  } else if (camId === 'oldfilm-35mm') {
+    descEl.textContent = 'CineStill 800T와 Kodak Portra 400의 정통 아날로그 영화용 필름. 광원 주변의 붉은 할레이션과 상하 필름 스프라켓 구멍이 살아납니다.';
+    featureListEl.innerHTML = `
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>전용 필터 3종: CineStill 800T(붉은 할레이션), Portra 400(골든 옐로우), Ektar 100</span></li>
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>KODAK SAFETY FILM 5063 상하 스프라켓 천공 홀 & 아날로그 날짜 각인</span></li>
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>시네마틱 붉은 할레이션(Red Halation) 광선 블룸 실시간 오버레이</span></li>
+    `;
   } else if (camId === 'instax-mini') {
     descEl.textContent = '세상에 단 한 장뿐인 아날로그 즉석인화 카메라. 화사한 파스텔 톤과 하단 여백이 돋보이는 시그니처 화이트 카드 프레임이 제공됩니다.';
     featureListEl.innerHTML = `
@@ -682,9 +924,9 @@ function updateRightSpecCard(camId) {
       <li class="feature-item"><span class="feature-bullet">✓</span><span>들뜬 섀도우와 따뜻한 즉석인화 필름 계조 온디바이스 합성</span></li>
     `;
   } else if (camId === 'sihyun-color') {
-    descEl.textContent = '나만의 퍼스널 컬러 배경이 실시간으로 라이브 변환되는 프로필 카메라. 뷰파인더에서 실시간으로 인물 뒤 배경이 부드럽게 전환됩니다.';
+    descEl.textContent = '나만의 퍼스널 컬러 배경이 실시간으로 라이브 변환되는 Personal Color Studio. 뷰파인더에서 실시간으로 인물 뒤 배경이 부드럽게 전환됩니다.';
     featureListEl.innerHTML = `
-      <li class="feature-item"><span class="feature-bullet">✓</span><span>실시간 배경 라이브 치환: 시현하다 Best 8색 + 4계절 16색 + 그라디언트 터치 즉시 반영</span></li>
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>실시간 배경 라이브 치환: Studio Best 8색 + 4계절 16색 + 그라디언트 터치 즉시 반영</span></li>
       <li class="feature-item"><span class="feature-bullet">✓</span><span>스튜디오 조명 방사형 센터 라이트(Radial Lighting) 백드롭 재현</span></li>
       <li class="feature-item"><span class="feature-bullet">✓</span><span>상단 [이름]'s Moment 레터링 (직접 편집 가능) & 하단 작가 친필 서명 각인</span></li>
     `;
@@ -970,6 +1212,132 @@ function executeCapture() {
     ctx.font = '18px -apple-system, sans-serif';
     ctx.fillText('5.1 MEGAPIXELS', captureCanvas.width - 200, 60);
     ctx.fillText('DSC-P10  ISO 100', 40, captureCanvas.height - 40);
+  } else if (cam.id === 'olympus-mju') {
+    ctx.font = 'bold 20px -apple-system, sans-serif';
+    ctx.fillStyle = '#30d158';
+    ctx.fillText('OLYMPUS μ [mju:]-II', 40, 60);
+    ctx.fillStyle = '#ff9f0a';
+    ctx.font = 'bold 18px monospace';
+    ctx.fillText('⚡ OK', captureCanvas.width - 120, 60);
+    ctx.fillText('[ S 24 ]', 40, captureCanvas.height - 40);
+    ctx.fillText("'26 10 05", captureCanvas.width - 150, captureCanvas.height - 40);
+  } else if (cam.id === 'contax-t2') {
+    // Red LED T* Bar
+    ctx.fillStyle = 'rgba(0,0,0,0.6)';
+    ctx.fillRect(30, 25, captureCanvas.width - 60, 48);
+    ctx.font = 'bold 20px "Courier New", monospace';
+    ctx.fillStyle = '#ff453a';
+    ctx.fillText('T*  1/250  F2.8  +0.5', 50, 56);
+
+    ctx.font = '14px -apple-system, sans-serif';
+    ctx.fillStyle = '#d1d1d6';
+    ctx.fillText('CONTAX T2 TITANIUM', 40, captureCanvas.height - 40);
+    ctx.fillText('Carl Zeiss Sonnar 2.8/38', captureCanvas.width - 250, captureCanvas.height - 40);
+  } else if (cam.id === 'ricoh-gr') {
+    ctx.font = 'bold 18px -apple-system, sans-serif';
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText('P   [ SNAP 2.5m ]   ISO 400', 40, 60);
+    ctx.font = '16px -apple-system, sans-serif';
+    ctx.fillStyle = '#ffd60a';
+    ctx.fillText('28mm GR LENS F2.8   1/160   RAW+', 40, captureCanvas.height - 40);
+
+    // If High-contrast B&W is selected
+    if (state.selectedFilters['ricoh-gr'] === 'gr-bw-high') {
+      const imgData = ctx.getImageData(0, 0, captureCanvas.width, captureCanvas.height);
+      const d = imgData.data;
+      for (let i = 0; i < d.length; i += 4) {
+        let v = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
+        // High contrast curve
+        v = (v - 128) * 1.5 + 128;
+        v = Math.max(0, Math.min(255, v));
+        d[i] = v; d[i + 1] = v; d[i + 2] = v;
+      }
+      ctx.putImageData(imgData, 0, 0);
+    }
+  } else if (cam.id === 'leica-m') {
+    // Red Dot
+    ctx.fillStyle = '#ff3b30';
+    ctx.beginPath();
+    ctx.roundRect(40, 40, 110, 32, 16);
+    ctx.fill();
+    ctx.font = 'bold 15px -apple-system, sans-serif';
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText('LEICA M', 66, 62);
+
+    ctx.font = 'bold 16px monospace';
+    ctx.fillStyle = '#ffd60a';
+    ctx.fillText('1/500  f/1.4', captureCanvas.width - 150, 62);
+
+    ctx.font = '14px -apple-system, sans-serif';
+    ctx.fillStyle = '#e0e0e0';
+    ctx.fillText('SUMMILUX-M 1:1.4/50 ASPH.', 40, captureCanvas.height - 40);
+
+    // If Monochrom filter is selected
+    if (state.selectedFilters['leica-m'] === 'leica-mono') {
+      const imgData = ctx.getImageData(0, 0, captureCanvas.width, captureCanvas.height);
+      const d = imgData.data;
+      for (let i = 0; i < d.length; i += 4) {
+        const v = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
+        d[i] = v; d[i + 1] = v; d[i + 2] = v;
+      }
+      ctx.putImageData(imgData, 0, 0);
+    }
+  } else if (cam.id === 'citypop-80s') {
+    // City Pop Tape Top Banner
+    ctx.fillStyle = 'rgba(30, 5, 50, 0.7)';
+    ctx.fillRect(30, 30, captureCanvas.width - 60, 44);
+    ctx.strokeStyle = '#ff2db9';
+    ctx.lineWidth = 1;
+    ctx.strokeRect(30, 30, captureCanvas.width - 60, 44);
+
+    ctx.font = 'bold 15px "Courier New", monospace';
+    ctx.fillStyle = '#ff2db9';
+    ctx.fillText('SIDE A • STEREO', 50, 58);
+    ctx.fillStyle = '#00f0ff';
+    ctx.fillText('[DOLBY B-C NR]', 240, 58);
+    ctx.fillStyle = '#ffd60a';
+    ctx.fillText('FM 80.0 MHz', captureCanvas.width - 180, 58);
+
+    // Bottom Badge
+    ctx.font = 'bold 20px "Courier New", monospace';
+    ctx.fillStyle = '#00f0ff';
+    ctx.fillText('NIGHT CRUISING 1986', 40, captureCanvas.height - 40);
+    ctx.fillStyle = '#ff2db9';
+    ctx.fillText('◷ ◷ C-60', captureCanvas.width - 150, captureCanvas.height - 40);
+  } else if (cam.id === 'oldfilm-35mm') {
+    // Top & Bottom Film Sprocket Borders
+    const sprocketH = 34;
+    ctx.fillStyle = '#0a0a0c';
+    ctx.fillRect(0, 0, captureCanvas.width, sprocketH);
+    ctx.fillRect(0, captureCanvas.height - sprocketH, captureCanvas.width, sprocketH);
+
+    // Sprocket Holes
+    ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+    for (let x = 20; x < captureCanvas.width; x += 60) {
+      ctx.fillRect(x, 8, 20, 16);
+      ctx.fillRect(x, captureCanvas.height - 24, 20, 16);
+    }
+
+    // Film Stamp
+    ctx.font = 'bold 14px "Courier New", monospace';
+    ctx.fillStyle = '#ff9f0a';
+    ctx.fillText('KODAK SAFETY FILM 5063 • 35mm • 24A • PORTRA 400', 120, 22);
+
+    // CineStill Red Halation Simulation
+    if (state.selectedFilters['oldfilm-35mm'] === 'film-cinestill') {
+      ctx.save();
+      ctx.globalCompositeOperation = 'screen';
+      const halation = ctx.createRadialGradient(
+        captureCanvas.width / 2, captureCanvas.height * 0.35, 10,
+        captureCanvas.width / 2, captureCanvas.height * 0.35, captureCanvas.width * 0.55
+      );
+      halation.addColorStop(0, 'rgba(255, 30, 0, 0.35)');
+      halation.addColorStop(0.4, 'rgba(255, 80, 0, 0.15)');
+      halation.addColorStop(1, 'transparent');
+      ctx.fillStyle = halation;
+      ctx.fillRect(0, 0, captureCanvas.width, captureCanvas.height);
+      ctx.restore();
+    }
   } else if (cam.id === 'instax-mini') {
     ctx.lineWidth = 36;
     ctx.strokeStyle = '#f5f4ef';
@@ -1020,7 +1388,7 @@ function executeCapture() {
 
     ctx.font = '34px "Brush Script MT", cursive';
     ctx.fillStyle = 'rgba(255,255,255,0.95)';
-    ctx.fillText('Sihyun Sign', captureCanvas.width - 240, captureCanvas.height - 45);
+    ctx.fillText('Studio Signature', captureCanvas.width - 270, captureCanvas.height - 45);
   }
 
   // 6. Optical Lens Filter Synthesis (Mist, Star, Streak, Prism, CPL)
@@ -1420,6 +1788,126 @@ function initEventListeners() {
       if (frame && state.activeCamera === 'sihyun-color') {
         frame.style.display = state.moodFrameEnabled ? 'flex' : 'none';
       }
+    });
+  }
+
+  // Olympus μ2 Toggles
+  const mjuDateToggle = document.getElementById('toggle-mju-date');
+  if (mjuDateToggle) {
+    mjuDateToggle.addEventListener('click', () => {
+      soundEngine.playTick();
+      const dateEl = document.querySelector('#olympus-osd .olympus-date');
+      const active = mjuDateToggle.classList.toggle('active');
+      if (dateEl) dateEl.style.display = active ? 'block' : 'none';
+    });
+  }
+
+  const mjuAfToggle = document.getElementById('toggle-mju-af');
+  if (mjuAfToggle) {
+    mjuAfToggle.addEventListener('click', () => {
+      soundEngine.playTick();
+      const afEl = document.querySelector('#olympus-osd .olympus-af-brackets');
+      const active = mjuAfToggle.classList.toggle('active');
+      if (afEl) afEl.style.display = active ? 'block' : 'none';
+    });
+  }
+
+  // Contax T2 Toggles
+  const contaxLedToggle = document.getElementById('toggle-contax-led');
+  if (contaxLedToggle) {
+    contaxLedToggle.addEventListener('click', () => {
+      soundEngine.playTick();
+      const ledEl = document.querySelector('#contax-osd .contax-led-bar');
+      const active = contaxLedToggle.classList.toggle('active');
+      if (ledEl) ledEl.style.display = active ? 'flex' : 'none';
+    });
+  }
+
+  // Ricoh GR Toggles
+  const ricohLevelToggle = document.getElementById('toggle-ricoh-level');
+  if (ricohLevelToggle) {
+    ricohLevelToggle.addEventListener('click', () => {
+      soundEngine.playTick();
+      const levelEl = document.querySelector('#ricoh-osd .ricoh-leveler');
+      const active = ricohLevelToggle.classList.toggle('active');
+      if (levelEl) levelEl.style.display = active ? 'flex' : 'none';
+    });
+  }
+
+  const ricohSnapToggle = document.getElementById('toggle-ricoh-snap');
+  if (ricohSnapToggle) {
+    ricohSnapToggle.addEventListener('click', () => {
+      soundEngine.playTick();
+      const snapEl = document.querySelector('#ricoh-osd .ricoh-snap-dist');
+      const active = ricohSnapToggle.classList.toggle('active');
+      if (snapEl) snapEl.style.display = active ? 'inline' : 'none';
+    });
+  }
+
+  // Leica M Toggles
+  const leicaRfToggle = document.getElementById('toggle-leica-rf');
+  if (leicaRfToggle) {
+    leicaRfToggle.addEventListener('click', () => {
+      soundEngine.playTick();
+      const rfEl = document.querySelector('#leica-m-osd .leica-split-patch');
+      const active = leicaRfToggle.classList.toggle('active');
+      if (rfEl) rfEl.style.display = active ? 'flex' : 'none';
+    });
+  }
+
+  const leicaFrameToggle = document.getElementById('toggle-leica-frameline');
+  if (leicaFrameToggle) {
+    leicaFrameToggle.addEventListener('click', () => {
+      soundEngine.playTick();
+      const frameEl = document.querySelector('#leica-m-osd .leica-bright-frameline');
+      const active = leicaFrameToggle.classList.toggle('active');
+      if (frameEl) frameEl.style.display = active ? 'block' : 'none';
+    });
+  }
+
+  // City Pop 80s Toggles
+  const cityCassetteToggle = document.getElementById('toggle-citypop-cassette');
+  if (cityCassetteToggle) {
+    cityCassetteToggle.addEventListener('click', () => {
+      soundEngine.playTick();
+      const bannerEl = document.querySelector('#citypop-osd .citypop-top-banner');
+      const bottomEl = document.querySelector('#citypop-osd .citypop-bottom-bar');
+      const active = cityCassetteToggle.classList.toggle('active');
+      if (bannerEl) bannerEl.style.display = active ? 'flex' : 'none';
+      if (bottomEl) bottomEl.style.display = active ? 'flex' : 'none';
+    });
+  }
+
+  const cityNeonToggle = document.getElementById('toggle-citypop-neon');
+  if (cityNeonToggle) {
+    cityNeonToggle.addEventListener('click', () => {
+      soundEngine.playTick();
+      const badgeEl = document.querySelector('#citypop-osd .citypop-synth-badge');
+      const active = cityNeonToggle.classList.toggle('active');
+      if (badgeEl) badgeEl.style.display = active ? 'block' : 'none';
+    });
+  }
+
+  // Old Film 35mm Toggles
+  const oldfilmSprocketToggle = document.getElementById('toggle-oldfilm-sprocket');
+  if (oldfilmSprocketToggle) {
+    oldfilmSprocketToggle.addEventListener('click', () => {
+      soundEngine.playTick();
+      const topSprocket = document.querySelector('#oldfilm-osd .film-sprocket-top');
+      const botSprocket = document.querySelector('#oldfilm-osd .film-sprocket-bottom');
+      const active = oldfilmSprocketToggle.classList.toggle('active');
+      if (topSprocket) topSprocket.style.display = active ? 'flex' : 'none';
+      if (botSprocket) botSprocket.style.display = active ? 'flex' : 'none';
+    });
+  }
+
+  const oldfilmHalationToggle = document.getElementById('toggle-oldfilm-halation');
+  if (oldfilmHalationToggle) {
+    oldfilmHalationToggle.addEventListener('click', () => {
+      soundEngine.playTick();
+      const halation = document.getElementById('cinestill-halation');
+      const active = oldfilmHalationToggle.classList.toggle('active');
+      if (halation) halation.style.display = active ? 'block' : 'none';
     });
   }
 

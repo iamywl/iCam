@@ -19,10 +19,22 @@ public struct ViewfinderOSDOverlay: View {
                 sonyCybershotOverlay
             case .fujiInstax:
                 fujiInstaxOverlay
-            case .sihyunhada:
-                sihyunhadaOverlay
+            case .colorStudio:
+                colorStudioOverlay
             case .passportID:
                 passportIDOverlay
+            case .olympusMju:
+                olympusMjuOverlay
+            case .contaxT2:
+                contaxT2Overlay
+            case .ricohGR:
+                ricohGROverlay
+            case .leicaM:
+                leicaMOverlay
+            case .cityPop80s:
+                cityPopOverlay
+            case .oldFilm:
+                oldFilmOverlay
             }
         }
         .allowsHitTesting(false)
@@ -195,11 +207,11 @@ public struct ViewfinderOSDOverlay: View {
         }
     }
 
-    // MARK: - 5. 시현하다 OSD
-    private var sihyunhadaOverlay: some View {
+    // MARK: - 5. Color Studio OSD
+    private var colorStudioOverlay: some View {
         VStack {
             HStack {
-                Text("\(viewModel.studioSubjectName)'s Moment")
+                Text("\(viewModel.studioSubjectName)'s Portrait")
                     .font(.system(size: 12, weight: .bold, design: .serif))
                     .foregroundColor(.white)
                     .padding(.horizontal, 10)
@@ -222,12 +234,12 @@ public struct ViewfinderOSDOverlay: View {
             Spacer()
 
             HStack {
-                Text("Sihyunhada Archive 2026")
+                Text("Color Studio Archive 2026")
                     .font(.system(size: 9, weight: .medium, design: .serif))
                     .italic()
                     .foregroundColor(.white.opacity(0.8))
                 Spacer()
-                Text("Signed by Artist")
+                Text("Personal Color Profile")
                     .font(.system(size: 9, weight: .regular, design: .serif))
                     .foregroundColor(.white.opacity(0.8))
             }
@@ -307,6 +319,357 @@ public struct ViewfinderOSDOverlay: View {
                     .padding(10)
                 }
             }
+        }
+    }
+
+    // MARK: - 7. Olympus μ [mju:] II OSD
+    private var olympusMjuOverlay: some View {
+        VStack {
+            HStack {
+                HStack(spacing: 4) {
+                    Text("OLYMPUS")
+                        .font(.system(size: 11, weight: .black, design: .default))
+                    Text("μ [mju:]-II")
+                        .font(.system(size: 11, weight: .bold, design: .serif))
+                        .italic()
+                }
+                .foregroundColor(Color(red: 0.95, green: 0.85, blue: 0.65))
+
+                Spacer()
+
+                HStack(spacing: 4) {
+                    Image(systemName: "bolt.fill")
+                        .font(.system(size: 10))
+                    Text("AUTO")
+                        .font(.system(size: 9, weight: .heavy, design: .monospaced))
+                }
+                .foregroundColor(Color.orange)
+                .padding(.horizontal, 6)
+                .padding(.vertical, 2)
+                .background(Color.black.opacity(0.5))
+                .cornerRadius(3)
+            }
+            .padding(12)
+
+            Spacer()
+
+            // Classic 90s AF ellipse bracket: ( [  ] )
+            ZStack {
+                RoundedRectangle(cornerRadius: 12)
+                    .stroke(Color.white.opacity(0.4), lineWidth: 1)
+                    .frame(width: 80, height: 44)
+
+                HStack(spacing: 24) {
+                    Text("[")
+                        .font(.system(size: 14, weight: .bold, design: .monospaced))
+                    Text("]")
+                        .font(.system(size: 14, weight: .bold, design: .monospaced))
+                }
+                .foregroundColor(.green.opacity(0.8))
+            }
+
+            Spacer()
+
+            HStack {
+                Text("35mm F2.8")
+                    .font(.system(size: 10, weight: .semibold, design: .monospaced))
+                    .foregroundColor(.white.opacity(0.7))
+                Spacer()
+                Text("S [24]")
+                    .font(.system(size: 11, weight: .black, design: .monospaced))
+                    .foregroundColor(Color(red: 1.0, green: 0.6, blue: 0.2))
+            }
+            .padding(12)
+        }
+    }
+
+    // MARK: - 8. Contax T2 OSD
+    private var contaxT2Overlay: some View {
+        VStack {
+            HStack {
+                Text("CONTAX T2")
+                    .font(.system(size: 12, weight: .heavy, design: .default))
+                    .foregroundColor(.white)
+                Spacer()
+                Text("Carl Zeiss T*")
+                    .font(.system(size: 10, weight: .bold, design: .serif))
+                    .foregroundColor(Color(red: 0.9, green: 0.3, blue: 0.3))
+            }
+            .padding(12)
+
+            Spacer()
+
+            // Center-weighted circle & aperture badge
+            ZStack {
+                Circle()
+                    .stroke(Color.white.opacity(0.45), lineWidth: 1)
+                    .frame(width: 60, height: 60)
+
+                Text("f/2.8")
+                    .font(.system(size: 10, weight: .black, design: .monospaced))
+                    .foregroundColor(Color(red: 0.6, green: 0.9, blue: 0.6))
+                    .offset(y: 42)
+            }
+
+            Spacer()
+
+            HStack {
+                Text("TITANIUM")
+                    .font(.system(size: 9, weight: .bold, design: .monospaced))
+                    .foregroundColor(Color(hex: "#8D99AE"))
+                Spacer()
+                HStack(spacing: 8) {
+                    Text("1/500")
+                        .font(.system(size: 10, weight: .bold, design: .monospaced))
+                        .foregroundColor(.green)
+                    Text("±0.0")
+                        .font(.system(size: 10, weight: .medium, design: .monospaced))
+                        .foregroundColor(.white.opacity(0.6))
+                }
+            }
+            .padding(12)
+        }
+    }
+
+    // MARK: - 9. Ricoh GR Digital OSD
+    private var ricohGROverlay: some View {
+        VStack {
+            HStack {
+                HStack(spacing: 4) {
+                    Text("GR")
+                        .font(.system(size: 13, weight: .black, design: .monospaced))
+                        .foregroundColor(.red)
+                    Text("DIGITAL")
+                        .font(.system(size: 10, weight: .heavy, design: .monospaced))
+                        .foregroundColor(.white)
+                }
+
+                Spacer()
+
+                Text("SNAP 2.5m")
+                    .font(.system(size: 10, weight: .bold, design: .monospaced))
+                    .foregroundColor(.yellow)
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 2)
+                    .background(Color.black.opacity(0.6))
+                    .cornerRadius(3)
+            }
+            .padding(12)
+
+            Spacer()
+
+            // Minimal street snap crosshair with 28mm wide guides
+            ZStack {
+                RoundedRectangle(cornerRadius: 2)
+                    .stroke(Color.white.opacity(0.35), lineWidth: 1)
+                    .frame(width: 140, height: 100)
+
+                Image(systemName: "plus")
+                    .font(.system(size: 14, weight: .light))
+                    .foregroundColor(.green.opacity(0.9))
+            }
+
+            Spacer()
+
+            HStack {
+                Text("F2.8 1/250")
+                    .font(.system(size: 10, weight: .bold, design: .monospaced))
+                    .foregroundColor(.white)
+                Spacer()
+                Text("ISO 400 • 28mm")
+                    .font(.system(size: 10, weight: .bold, design: .monospaced))
+                    .foregroundColor(.white.opacity(0.75))
+            }
+            .padding(12)
+        }
+    }
+
+    // MARK: - 10. Leica M OSD
+    private var leicaMOverlay: some View {
+        VStack {
+            HStack {
+                HStack(spacing: 5) {
+                    Circle()
+                        .fill(Color.red)
+                        .frame(width: 14, height: 14)
+                        .overlay(
+                            Text("L")
+                                .font(.system(size: 9, weight: .black, design: .serif))
+                                .foregroundColor(.white)
+                        )
+                    Text("LEICA M6")
+                        .font(.system(size: 11, weight: .heavy, design: .monospaced))
+                        .foregroundColor(.white)
+                }
+
+                Spacer()
+
+                Text("[ 18 ]")
+                    .font(.system(size: 11, weight: .bold, design: .monospaced))
+                    .foregroundColor(.yellow)
+            }
+            .padding(12)
+
+            Spacer()
+
+            // Rangefinder split-prism focusing patch and 35mm frameline marks
+            ZStack {
+                // 35mm Frameline
+                Rectangle()
+                    .stroke(Color.white.opacity(0.35), lineWidth: 1)
+                    .frame(width: 220, height: 160)
+
+                // Split Rangefinder Patch in Center
+                Rectangle()
+                    .stroke(Color.yellow.opacity(0.7), lineWidth: 1.2)
+                    .frame(width: 38, height: 26)
+            }
+
+            Spacer()
+
+            HStack {
+                Text("SUMMILUX 1:1.4/35")
+                    .font(.system(size: 9, weight: .bold, design: .monospaced))
+                    .foregroundColor(.white.opacity(0.8))
+
+                Spacer()
+
+                // Classic Leica M6 LED metering readout: ◄ ● ►
+                HStack(spacing: 4) {
+                    Text("◄")
+                        .font(.system(size: 9, weight: .bold))
+                        .foregroundColor(.red.opacity(0.4))
+                    Text("●")
+                        .font(.system(size: 10, weight: .black))
+                        .foregroundColor(.red)
+                    Text("►")
+                        .font(.system(size: 9, weight: .bold))
+                        .foregroundColor(.red.opacity(0.4))
+                }
+                .padding(.horizontal, 6)
+                .padding(.vertical, 2)
+                .background(Color.black.opacity(0.5))
+                .cornerRadius(4)
+            }
+            .padding(12)
+        }
+    }
+
+    // MARK: - 11. 80s City Pop OSD
+    private var cityPopOverlay: some View {
+        VStack {
+            HStack {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("TDK SA-90")
+                        .font(.system(size: 11, weight: .black, design: .monospaced))
+                        .foregroundColor(Color(hex: "#FF007F"))
+                    Text("PACIFIC SOUND 1986")
+                        .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                        .foregroundColor(.cyan)
+                }
+
+                Spacer()
+
+                HStack(spacing: 3) {
+                    Text("DOLBY B-NR")
+                        .font(.system(size: 8, weight: .heavy, design: .monospaced))
+                        .foregroundColor(.white)
+                    Circle()
+                        .fill(Color.green)
+                        .frame(width: 6, height: 6)
+                }
+                .padding(.horizontal, 6)
+                .padding(.vertical, 3)
+                .background(Color.black.opacity(0.6))
+                .cornerRadius(4)
+            }
+            .padding(12)
+
+            Spacer()
+
+            // Cassette tape spool crosshair & vintage visualizer bar
+            VStack(spacing: 12) {
+                HStack(spacing: 30) {
+                    Circle()
+                        .stroke(Color.cyan.opacity(0.5), lineWidth: 1.5)
+                        .frame(width: 28, height: 28)
+                        .overlay(Image(systemName: "asterisk").foregroundColor(.cyan.opacity(0.7)).font(.system(size: 12)))
+                    Circle()
+                        .stroke(Color(hex: "#FF007F").opacity(0.5), lineWidth: 1.5)
+                        .frame(width: 28, height: 28)
+                        .overlay(Image(systemName: "asterisk").foregroundColor(Color(hex: "#FF007F").opacity(0.7)).font(.system(size: 12)))
+                }
+
+                // Retro Graphic EQ indicator
+                Text("L ■■■■■■□□  R ■■■■■□□□")
+                    .font(.system(size: 9, weight: .black, design: .monospaced))
+                    .foregroundColor(.yellow.opacity(0.9))
+            }
+
+            Spacer()
+
+            HStack {
+                Text("SIDE A • PLASTIC LOVE")
+                    .font(.system(size: 9, weight: .bold, design: .monospaced))
+                    .foregroundColor(.white.opacity(0.85))
+                Spacer()
+                Text("TAPE [ 042 ]")
+                    .font(.system(size: 10, weight: .heavy, design: .monospaced))
+                    .foregroundColor(Color(hex: "#FF007F"))
+            }
+            .padding(12)
+        }
+    }
+
+    // MARK: - 12. Old Film Studio OSD
+    private var oldFilmOverlay: some View {
+        VStack {
+            HStack {
+                HStack(spacing: 4) {
+                    Text("🎞️")
+                        .font(.system(size: 10))
+                    Text("35mm COLOR NEGATIVE")
+                        .font(.system(size: 10, weight: .heavy, design: .monospaced))
+                        .foregroundColor(Color(hex: "#D4A373"))
+                }
+
+                Spacer()
+
+                Text("ISO 800T")
+                    .font(.system(size: 10, weight: .bold, design: .monospaced))
+                    .foregroundColor(.white)
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 2)
+                    .background(Color(red: 0.8, green: 0.1, blue: 0.1).opacity(0.8))
+                    .cornerRadius(3)
+            }
+            .padding(12)
+
+            Spacer()
+
+            // 35mm Frame Sprocket & Center Notch
+            ZStack {
+                RoundedRectangle(cornerRadius: 4)
+                    .stroke(Color(hex: "#D4A373").opacity(0.4), lineWidth: 1)
+                    .frame(width: 180, height: 120)
+
+                Image(systemName: "camera.metering.center.weighted")
+                    .font(.system(size: 20))
+                    .foregroundColor(.white.opacity(0.3))
+            }
+
+            Spacer()
+
+            HStack {
+                Text("CINE 800T / PORTRA 400")
+                    .font(.system(size: 9, weight: .bold, design: .monospaced))
+                    .foregroundColor(.white.opacity(0.7))
+                Spacer()
+                Text("EXP 24A ►")
+                    .font(.system(size: 10, weight: .heavy, design: .monospaced))
+                    .foregroundColor(Color(hex: "#D4A373"))
+            }
+            .padding(12)
         }
     }
 }
