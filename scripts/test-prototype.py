@@ -35,10 +35,13 @@ def test_html_dom_integrity():
         'model-canvas',
         'shutter-btn',
         'mode-dial-list',
-        'filter-carousel',
-        'drawer-vintage',
-        'drawer-standard-id',
-        'drawer-color-id',
+        'camera-model-badge',
+        'drawer-canon-ixy',
+        'drawer-sony-handycam',
+        'drawer-sony-cybershot',
+        'drawer-instax-mini',
+        'drawer-sihyun-color',
+        'drawer-passport-id',
         'dynamic-island',
         'mood-card-frame',
         'sihyun-moment-title',
@@ -56,7 +59,7 @@ def test_html_dom_integrity():
     if missing_ids:
         print(f"❌ HTML missing critical DOM IDs: {missing_ids}")
         return False
-    print("✅ HTML DOM IDs & Optical Lens Layers integrity passed.")
+    print("✅ HTML DOM IDs & 6 Iconic Camera Racks integrity passed.")
     return True
 
 def test_css_tokens():
@@ -85,14 +88,14 @@ def test_js_syntax():
     with open('app.js', 'r', encoding='utf-8') as f:
         js = f.read()
 
-    # Check required functions
+    # Check required functions for 6-Camera Architecture
     functions = [
         'renderStudioModel',
-        'applyVintagePreset',
+        'switchCamera',
+        'applyCurrentCameraFilter',
         'applyLensFilter',
         'renderColorSwatches',
         'executeCapture',
-        'switchMode',
         'initEventListeners'
     ]
 
@@ -100,7 +103,7 @@ def test_js_syntax():
     if missing_funcs:
         print(f"❌ JS missing critical functions: {missing_funcs}")
         return False
-    print("✅ JavaScript core functions & Lens Filter engine verified.")
+    print("✅ JavaScript 6-Camera Switcher & Live Background engine verified.")
     return True
 
 def main():

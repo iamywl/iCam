@@ -1,40 +1,46 @@
 /**
- * SnapStudio - iPhone 16 Pro Interactive Web Prototype
- * Apple HIG Compliant Architecture & Core Interactions
- * Multi-Cam Vintage Filters (Sony, Canon, Camcorder, Instax, Film) &
- * Sihyunhada Style Personal Color Studio
+ * SnapStudio - Multi-Camera Studio & Real-time Color Profile System
+ * Iconic Cameras Architecture:
+ * 1. Canon IXY Digital 50 (Y2K DigiCam Peach Skin)
+ * 2. Sony DCR Handycam (90s-00s MiniDV Tape & Glitch)
+ * 3. Sony Cyber-shot CCD (Cyber Y2K Cool Blue & Flash)
+ * 4. Fuji Instax & Polaroid (Instant Film Card)
+ * 5. Sihyunhada Color Studio (Live Real-time Background Changer)
+ * 6. Passport & Standard ID (Official Korean Passport HUD & 4x6 Sheet)
  */
 
 // ==========================================================================
-// 1. App State & Presets
+// 1. App State & Cameras Specifications
 // ==========================================================================
 const state = {
-  currentMode: 'vintage', // 'vintage' | 'standard-id' | 'color-id'
+  activeCamera: 'canon-ixy', // 'canon-ixy' | 'sony-handycam' | 'sony-cybershot' | 'instax-mini' | 'sihyun-color' | 'passport-id'
   cameraSource: 'model', // 'model' | 'webcam'
   
-  // Vintage Mode State (Multi-brand: Sony, Canon, Camcorder, Instax, Film)
-  vintageFilter: 'sony-handycam',
-  activeVintageCat: 'all',
-  grainEnabled: true,
-  dateStampEnabled: true,
-  osdEnabled: true,
-  lightLeakEnabled: false,
-  
-  // Standard ID Mode State
-  idSpec: 'passport', // 'passport' | 'idcard' | 'half' | 'visa'
-  
-  // Color ID Mode State (Sihyunhada Studio)
+  // Selected filter per camera
+  selectedFilters: {
+    'canon-ixy': 'ixy-peach',
+    'sony-handycam': 'handy-minidv',
+    'sony-cybershot': 'cyber-cool',
+    'instax-mini': 'instax-card'
+  },
+
+  // Color Studio (Sihyunhada) State
   activeSeason: 'sihyunhada',
   selectedColor: { name: '#01 Blossom Pink', hex: '#F38B95', bg: 'radial-gradient(circle at 50% 38%, #FDB0B8 0%, #F38B95 100%)' },
   retouchTone: 35,
   moodFrameEnabled: true,
-  studioModelType: 'female', // 'female' | 'male' | 'custom'
   momentTitle: "Wu wanlin's Moment",
-  customModelImg: null,
   
-  // Toolbar & Lens State
-  flashMode: 'off', // 'off' | 'on'
-  timerSec: 0, // 0 | 3 | 10
+  // Standard ID State
+  idSpec: 'passport', // 'passport' | 'idcard' | 'half' | 'visa'
+
+  // Model Source
+  studioModelType: 'female', // 'female' | 'male' | 'custom'
+  customModelImg: null,
+
+  // Toolbar & Lens Filter State
+  flashMode: 'off',
+  timerSec: 0,
   gridEnabled: false,
   lensFilter: 'none', // 'none' | 'mist' | 'star' | 'streak' | 'prism' | 'cpl'
   
@@ -42,14 +48,189 @@ const state = {
   lastCapturedUrl: null
 };
 
-// Optical Lens Filters Specifications (Physical Light Dispersion & Scattering)
+// 6 Iconic Cameras Architecture Definition
+const CAMERAS = {
+  'canon-ixy': {
+    id: 'canon-ixy',
+    name: 'Canon IXY Digital 50',
+    shortName: 'CANON IXY',
+    sub: 'Peach Glow',
+    icon: '📸',
+    badge: 'Y2K DIGICAM',
+    osdId: 'canon-ixy-osd',
+    drawerId: 'drawer-canon-ixy',
+    filters: {
+      'ixy-peach': {
+        name: 'Peach Glow',
+        desc: '뽀샤시 복숭아빛 피부',
+        css: 'brightness(1.1) contrast(1.04) saturate(1.18) sepia(0.05)',
+        tintRgba: 'rgba(255, 195, 160, 0.12)'
+      },
+      'ixy-flash': {
+        name: 'Flash Pop',
+        desc: '디카 직광 플래시',
+        css: 'brightness(1.08) contrast(1.18) saturate(1.22) sepia(0.04)',
+        tintRgba: 'rgba(255, 220, 180, 0.1)'
+      },
+      'ixy-pastel': {
+        name: 'Pastel Haze',
+        desc: '들뜬 파스텔 섀도우',
+        css: 'brightness(1.12) contrast(0.96) saturate(1.08) sepia(0.08)',
+        tintRgba: 'rgba(255, 235, 240, 0.1)'
+      },
+      'ixy-night': {
+        name: 'Night Party',
+        desc: '밤거리 감성 노이즈',
+        css: 'brightness(0.98) contrast(1.25) saturate(1.25) sepia(0.14)',
+        tintRgba: 'rgba(240, 160, 60, 0.12)'
+      }
+    }
+  },
+
+  'sony-handycam': {
+    id: 'sony-handycam',
+    name: 'Sony DCR Handycam',
+    shortName: 'HANDYCAM',
+    sub: 'MiniDV Classic',
+    icon: '📹',
+    badge: 'MINI-DV',
+    osdId: 'sony-handycam-osd',
+    drawerId: 'drawer-sony-handycam',
+    filters: {
+      'handy-minidv': {
+        name: 'MiniDV Classic',
+        desc: '소니 3CCD 비디오 톤',
+        css: 'brightness(1.05) contrast(1.12) saturate(1.22) sepia(0.08)',
+        tintRgba: 'rgba(255, 235, 180, 0.08)'
+      },
+      'handy-vhs': {
+        name: 'Hi8 Tape Glitch',
+        desc: '스캔라인 테이프 글리치',
+        css: 'brightness(1.05) contrast(1.15) saturate(1.18) sepia(0.12)',
+        tintRgba: 'rgba(255, 210, 150, 0.1)'
+      },
+      'handy-super8': {
+        name: 'Super 8mm Cine',
+        desc: '골든 앰버 홈무비',
+        css: 'brightness(0.96) contrast(1.22) saturate(1.15) sepia(0.32)',
+        tintRgba: 'rgba(240, 160, 60, 0.15)'
+      },
+      'handy-nightshot': {
+        name: 'NightShot Green',
+        desc: '적외선 0 Lux 야간투시',
+        css: 'brightness(1.15) contrast(1.3) saturate(2.0) hue-rotate(90deg)',
+        tintRgba: 'rgba(0, 255, 120, 0.15)'
+      }
+    }
+  },
+
+  'sony-cybershot': {
+    id: 'sony-cybershot',
+    name: 'Sony Cyber-shot DSC-P10',
+    shortName: 'CYBER-SHOT',
+    sub: 'CCD Cool Blue',
+    icon: '💿',
+    badge: 'CYBER Y2K',
+    osdId: 'sony-cybershot-osd',
+    drawerId: 'drawer-sony-cybershot',
+    filters: {
+      'cyber-cool': {
+        name: 'CCD Cool Blue',
+        desc: '차가운 블루 틴트',
+        css: 'brightness(1.06) contrast(1.16) saturate(1.12) hue-rotate(-8deg)',
+        tintRgba: 'rgba(160, 205, 255, 0.12)'
+      },
+      'cyber-magenta': {
+        name: 'Cyber Magenta',
+        desc: '테크노 네온 마젠타',
+        css: 'brightness(1.05) contrast(1.2) saturate(1.35) hue-rotate(295deg)',
+        tintRgba: 'rgba(255, 50, 200, 0.12)'
+      },
+      'cyber-flash': {
+        name: 'Flash Sharp',
+        desc: '선명하고 쨍한 플래시',
+        css: 'brightness(1.08) contrast(1.26) saturate(1.2) sepia(0.02)',
+        tintRgba: 'rgba(255, 240, 220, 0.08)'
+      },
+      'cyber-matrix': {
+        name: 'Matrix Green',
+        desc: '세기말 매트릭스 그린',
+        css: 'brightness(1.02) contrast(1.25) saturate(1.3) hue-rotate(75deg)',
+        tintRgba: 'rgba(50, 255, 100, 0.12)'
+      }
+    }
+  },
+
+  'instax-mini': {
+    id: 'instax-mini',
+    name: 'Fuji Instax & Polaroid',
+    shortName: 'INSTAX',
+    sub: 'Instax Soft',
+    icon: '🖼️',
+    badge: 'INSTANT FILM',
+    osdId: 'instax-frame',
+    drawerId: 'drawer-instax-mini',
+    filters: {
+      'instax-card': {
+        name: 'Instax Soft',
+        desc: '화이트 카드 프레임',
+        css: 'brightness(1.1) contrast(0.98) saturate(1.06) sepia(0.05)',
+        tintRgba: 'rgba(255, 245, 235, 0.08)'
+      },
+      'polaroid-square': {
+        name: 'Polaroid 600',
+        desc: '클래식 정방형 스퀘어',
+        css: 'brightness(1.04) contrast(1.08) saturate(1.08) sepia(0.12)',
+        tintRgba: 'rgba(255, 215, 160, 0.1)'
+      },
+      'instant-bw': {
+        name: 'Warm Mono',
+        desc: '웜톤 흑백 즉석사진',
+        css: 'grayscale(1) contrast(1.25) brightness(1.02)',
+        tintRgba: null
+      },
+      'instant-rainbow': {
+        name: 'Rainbow Edge',
+        desc: '비비드 무지개 카드',
+        css: 'brightness(1.08) contrast(1.14) saturate(1.3)',
+        tintRgba: null
+      }
+    }
+  },
+
+  'sihyun-color': {
+    id: 'sihyun-color',
+    name: '시현하다 Color Studio',
+    shortName: 'COLOR STUDIO',
+    sub: '#01 Blossom Pink',
+    icon: '🎨',
+    badge: 'LIVE COLOR',
+    osdId: 'mood-card-frame',
+    drawerId: 'drawer-sihyun-color',
+    filters: null
+  },
+
+  'passport-id': {
+    id: 'passport-id',
+    name: '여권 / 신분증 규격 카메라',
+    shortName: 'PASSPORT ID',
+    sub: '대한민국 여권',
+    icon: '🪪',
+    badge: 'STANDARD ID',
+    osdId: 'standard-id-hud',
+    drawerId: 'drawer-passport-id',
+    filters: null
+  }
+};
+
+// Optical Lens Filters Specifications
 const LENS_FILTERS = {
-  none: { name: '기본 (Clear)', title: '광학 렌즈 미장착', desc: '왜곡 없는 클리어 광학 유리' },
-  mist: { name: '블랙 미스트', title: 'Black Mist (Pro-Mist)', desc: '빛 산란 할레이션 & 부드러운 인물 피부결' },
-  star: { name: '크로스 4X', title: 'Cross Star 4-Point', desc: '정밀 회절 격자에 의한 다이아몬드 별빛 갈라짐' },
-  streak: { name: '블루 스트릭', title: 'Blue Streak (Anamorphic)', desc: '수평 원통형 플레어로 네온 시네마틱 감성 연출' },
-  prism: { name: '프리즘 분광', title: 'Prism Spectrum Dispersion', desc: '빛 굴절에 의한 무지개 림라이트 & 색수차 분광' },
-  cpl: { name: 'CPL 편광', title: 'Circular Polarizer (CPL)', desc: '불필요한 반사광 억제 및 색상 채도·선명도 극대화' }
+  none: { name: '기본 (Clear)', title: '광학 렌즈 미장착' },
+  mist: { name: '블랙 미스트', title: 'Black Mist (Pro-Mist)' },
+  star: { name: '크로스 4X', title: 'Cross Star 4-Point' },
+  streak: { name: '블루 스트릭', title: 'Blue Streak (Anamorphic)' },
+  prism: { name: '프리즘 분광', title: 'Prism Spectrum Dispersion' },
+  cpl: { name: 'CPL 편광', title: 'Circular Polarizer (CPL)' }
 };
 
 // Sihyunhada Signature Palette & 4-Season Personal Color Data
@@ -63,6 +244,14 @@ const COLOR_PALETTES = {
     { name: '#06 Pop Fuchsia', hex: '#E93B81', bg: 'radial-gradient(circle at 50% 38%, #F96FA7 0%, #E93B81 100%)' },
     { name: '#07 Camel Ochre', hex: '#C89A58', bg: 'radial-gradient(circle at 50% 38%, #DEB67B 0%, #C89A58 100%)' },
     { name: '#08 Muted Lavender', hex: '#9B8CB4', bg: 'radial-gradient(circle at 50% 38%, #BDB0D4 0%, #9B8CB4 100%)' }
+  ],
+  photo: [
+    { name: '#29 Textured Canvas', hex: '#8C8D91', bg: 'radial-gradient(circle at 50% 35%, #B5B7BD 0%, #75777D 60%, #4D4E52 100%)' },
+    { name: '#30 Golden Sunset', hex: '#FF7043', bg: 'linear-gradient(180deg, #FF8A65 0%, #FF7043 45%, #BF360C 100%)' },
+    { name: '#31 Blue Hour Magic', hex: '#3949AB', bg: 'linear-gradient(180deg, #1A237E 0%, #283593 50%, #5C6BC0 100%)' },
+    { name: '#32 Warm Wood Studio', hex: '#8D6E63', bg: 'radial-gradient(circle at 50% 40%, #A1887F 0%, #6D4C41 70%, #3E2723 100%)' },
+    { name: '#33 Dark Moody Noir', hex: '#212121', bg: 'radial-gradient(circle at 50% 35%, #424242 0%, #212121 70%, #000000 100%)' },
+    { name: '#34 Fairy Lavender', hex: '#AB47BC', bg: 'radial-gradient(circle at 50% 38%, #CE93D8 0%, #AB47BC 65%, #6A1B9A 100%)' }
   ],
   spring: [
     { name: '#09 Coral Peach', hex: '#FF8A80', bg: 'radial-gradient(circle at 50% 38%, #FFAEA6 0%, #FF8A80 100%)' },
@@ -101,140 +290,26 @@ const ID_SPECS = {
   passport: {
     title: '대한민국 여권',
     detail: '3.5 x 4.5 cm (정수리~턱 3.2~3.6cm 규정 준수)',
-    boxRatio: '35 / 45',
     boxWidth: 250,
     boxHeight: 320
   },
   idcard: {
     title: '주민등록증 / 운전면허증',
     detail: '3.5 x 4.5 cm (최근 6개월 이내 촬영)',
-    boxRatio: '35 / 45',
     boxWidth: 250,
     boxHeight: 320
   },
   half: {
-    title: '반명함판 / 취업 이력서',
-    detail: '3.0 x 4.0 cm (서류 및 학생증 규격)',
-    boxRatio: '30 / 40',
+    title: '반명함판 (이력서/학생증)',
+    detail: '3.0 x 4.0 cm (취업·자격증 공용 규격)',
     boxWidth: 240,
     boxHeight: 320
   },
   visa: {
     title: '미국 / 글로벌 비자',
     detail: '5.0 x 5.0 cm (2x2 inch 정방형 규격)',
-    boxRatio: '1 / 1',
     boxWidth: 280,
     boxHeight: 280
-  }
-};
-
-// 11 Multi-brand Vintage Filters Meta (Sony, Canon, Camcorder, Instax, Film Stocks)
-const VINTAGE_FILTERS = {
-  // 1. Camcorder / Tape Line
-  'sony-handycam': {
-    name: 'Sony DCR Handycam',
-    brand: 'SONY',
-    model: 'DCR-TRV900 MiniDV',
-    cat: 'camcorder',
-    css: 'contrast(1.22) saturate(1.28) hue-rotate(185deg) brightness(1.04)',
-    osdId: 'sony-handycam-osd',
-    frameType: 'handycam'
-  },
-  'vhs-glitch': {
-    name: 'Hi8 / VHS Tape',
-    brand: 'VHS',
-    model: 'JVC / Hi8 Video Tape',
-    cat: 'camcorder',
-    css: 'contrast(1.32) saturate(1.4) hue-rotate(190deg) brightness(1.08)',
-    osdId: 'vhs-tape-osd',
-    frameType: 'vhs'
-  },
-  'retro-8mm': {
-    name: 'Super 8mm Cine',
-    brand: 'CINE',
-    model: '1970s Super 8 Home Movie',
-    cat: 'camcorder',
-    css: 'sepia(0.55) contrast(1.35) saturate(1.15) brightness(0.92)',
-    osdId: 'super8-overlay',
-    frameType: 'super8'
-  },
-
-  // 2. Digital CCD Line (Y2K DigiCam)
-  'canon-ixy': {
-    name: 'Canon IXY Digital',
-    brand: 'CANON',
-    model: 'IXY Digital 50 (Warm Skin)',
-    cat: 'digital',
-    css: 'contrast(1.08) saturate(1.25) brightness(1.06) sepia(0.12)',
-    osdId: 'canon-ixy-osd',
-    frameType: 'canon-ixy'
-  },
-  'sony-cybershot': {
-    name: 'Sony Cyber-shot',
-    brand: 'SONY',
-    model: 'DSC-P10 (CCD Cool Tone)',
-    cat: 'digital',
-    css: 'contrast(1.26) saturate(1.38) hue-rotate(350deg) brightness(1.02)',
-    osdId: 'sony-cybershot-osd',
-    frameType: 'cybershot'
-  },
-  'olympus-camedia': {
-    name: 'Olympus Camedia',
-    brand: 'OLYMPUS',
-    model: 'C-3040 ZOOM (Flash Pop)',
-    cat: 'digital',
-    css: 'contrast(1.3) saturate(1.2) hue-rotate(12deg) brightness(1.05)',
-    osdId: null,
-    frameType: 'camedia'
-  },
-
-  // 3. Instant & Polaroid Line
-  'instax-mini': {
-    name: 'Fuji Instax Mini',
-    brand: 'FUJIFILM',
-    model: 'Instax Mini Instant Card',
-    cat: 'instant',
-    css: 'contrast(0.94) saturate(0.92) brightness(1.12) sepia(0.08)',
-    osdId: 'instax-frame',
-    frameType: 'instax'
-  },
-  'polaroid-600': {
-    name: 'Polaroid 600',
-    brand: 'POLAROID',
-    model: 'Polaroid 600 Vintage Square',
-    cat: 'instant',
-    css: 'contrast(0.9) saturate(0.85) brightness(1.15)',
-    osdId: 'polaroid-frame',
-    frameType: 'polaroid'
-  },
-
-  // 4. 35mm Classic Film Stocks Line
-  'kodak-gold': {
-    name: 'Kodak Gold 200',
-    brand: 'KODAK',
-    model: 'Gold 200 35mm Analog Film',
-    cat: 'film',
-    css: 'sepia(0.32) saturate(1.3) contrast(1.15) brightness(1.02)',
-    osdId: null,
-    frameType: 'kodak'
-  },
-  'fuji-superia': {
-    name: 'Fujifilm Superia 400',
-    brand: 'FUJIFILM',
-    model: 'Superia X-TRA 400 (Emerald)',
-    cat: 'film',
-    css: 'contrast(1.18) saturate(1.22) hue-rotate(345deg) brightness(0.98)',
-    osdId: null,
-    frameType: 'fuji'
-  },
-  'kodak-tri-x': {
-    name: 'Kodak Tri-X Noir',
-    brand: 'KODAK',
-    model: 'Tri-X 400 B&W High-Contrast',
-    cat: 'film',
-    css: 'grayscale(1) contrast(1.7) brightness(0.94)',
-    osdId: null,
-    frameType: 'bw'
   }
 };
 
@@ -260,43 +335,42 @@ class SoundFXEngine {
     this.init();
     if (!this.ctx) return;
     const now = this.ctx.currentTime;
-    const bufferSize = this.ctx.sampleRate * 0.08;
+    
+    // Mechanical Shutter Click
+    const osc = this.ctx.createOscillator();
+    const gain = this.ctx.createGain();
+    osc.type = 'triangle';
+    osc.frequency.setValueAtTime(320, now);
+    osc.frequency.exponentialRampToValueAtTime(40, now + 0.08);
+
+    gain.gain.setValueAtTime(0.5, now);
+    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+
+    osc.connect(gain);
+    gain.connect(this.ctx.destination);
+    osc.start(now);
+    osc.stop(now + 0.09);
+
+    // Camera Motor / Mirror Slap
+    const bufferSize = this.ctx.sampleRate * 0.06;
     const buffer = this.ctx.createBuffer(1, bufferSize, this.ctx.sampleRate);
     const data = buffer.getChannelData(0);
     for (let i = 0; i < bufferSize; i++) {
       data[i] = Math.random() * 2 - 1;
     }
-
     const noise = this.ctx.createBufferSource();
     noise.buffer = buffer;
+    const noiseFilter = this.ctx.createBiquadFilter();
+    noiseFilter.type = 'bandpass';
+    noiseFilter.frequency.value = 1200;
+    const noiseGain = this.ctx.createGain();
+    noiseGain.gain.setValueAtTime(0.35, now + 0.02);
+    noiseGain.gain.exponentialRampToValueAtTime(0.01, now + 0.09);
 
-    const filter = this.ctx.createBiquadFilter();
-    filter.type = 'bandpass';
-    filter.frequency.setValueAtTime(1600, now);
-    filter.Q.setValueAtTime(3.0, now);
-
-    const gain = this.ctx.createGain();
-    gain.gain.setValueAtTime(0.85, now);
-    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.075);
-
-    noise.connect(filter);
-    filter.connect(gain);
-    gain.connect(this.ctx.destination);
-    noise.start(now);
-    noise.stop(now + 0.08);
-
-    const osc = this.ctx.createOscillator();
-    const oscGain = this.ctx.createGain();
-    osc.type = 'triangle';
-    osc.frequency.setValueAtTime(140, now);
-    osc.frequency.exponentialRampToValueAtTime(45, now + 0.09);
-    oscGain.gain.setValueAtTime(0.7, now);
-    oscGain.gain.exponentialRampToValueAtTime(0.01, now + 0.09);
-
-    osc.connect(oscGain);
-    oscGain.connect(this.ctx.destination);
-    osc.start(now);
-    osc.stop(now + 0.09);
+    noise.connect(noiseFilter);
+    noiseFilter.connect(noiseGain);
+    noiseGain.connect(this.ctx.destination);
+    noise.start(now + 0.02);
   }
 
   playTick() {
@@ -307,16 +381,15 @@ class SoundFXEngine {
     const gain = this.ctx.createGain();
 
     osc.type = 'sine';
-    osc.frequency.setValueAtTime(750, now);
-    osc.frequency.exponentialRampToValueAtTime(200, now + 0.035);
-
+    osc.frequency.setValueAtTime(800, now);
+    osc.frequency.exponentialRampToValueAtTime(200, now + 0.025);
     gain.gain.setValueAtTime(0.2, now);
-    gain.gain.exponentialRampToValueAtTime(0.01, now + 0.035);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.025);
 
     osc.connect(gain);
     gain.connect(this.ctx.destination);
     osc.start(now);
-    osc.stop(now + 0.035);
+    osc.stop(now + 0.03);
   }
 
   playBeep(isFinal = false) {
@@ -344,7 +417,6 @@ const soundEngine = new SoundFXEngine();
 // 3. Studio Portrait Photographic Cutout Renderer (Transparent Alpha PNG)
 // ==========================================================================
 
-// Preload high-res studio transparent models (Female & Male)
 const studioModels = {
   female: new Image(),
   male: new Image()
@@ -352,7 +424,6 @@ const studioModels = {
 studioModels.female.src = 'model_female.png';
 studioModels.male.src = 'model_male.png';
 
-// Re-render when images are loaded
 studioModels.female.onload = () => {
   if (state.cameraSource === 'model') {
     const canvas = document.getElementById('model-canvas');
@@ -374,7 +445,6 @@ function renderStudioModel(canvas, toneVal = 35) {
 
   ctx.clearRect(0, 0, w, h);
 
-  // Determine active model image
   let activeImg = null;
   if (state.studioModelType === 'custom' && state.customModelImg) {
     activeImg = state.customModelImg;
@@ -384,16 +454,13 @@ function renderStudioModel(canvas, toneVal = 35) {
     activeImg = studioModels.female;
   }
 
-  // Calculate beauty skin retouch tone (brightness & gentle contrast)
   const toneRatio = 1 + (toneVal - 35) * 0.0035;
 
   ctx.save();
 
   if (activeImg && activeImg.complete && activeImg.naturalWidth > 0) {
-    // Apply real-time skin tone retouching filter
     ctx.filter = `brightness(${toneRatio}) contrast(${1 + (toneVal - 35) * 0.001})`;
 
-    // Scale to fit nicely in 3:4 studio portrait frame (Sihyunhada upper-body composition)
     const imgAspect = activeImg.naturalWidth / activeImg.naturalHeight;
     const canvasAspect = w / h;
 
@@ -427,12 +494,11 @@ function renderStudioModel(canvas, toneVal = 35) {
 }
 
 // ==========================================================================
-// 4. UI Synchronization & Mode Switcher
+// 4. Multi-Camera Switcher Engine & Real-time Live Background
 // ==========================================================================
 
 function updateClock() {
   const clockEl = document.getElementById('status-time');
-  const dateCardEl = document.getElementById('mood-card-date');
   const dateCodeEl = document.getElementById('sihyun-date-code');
   const dateStampEl = document.getElementById('date-stamp');
   
@@ -448,12 +514,11 @@ function updateClock() {
   const mm = String(now.getMonth() + 1).padStart(2, '0');
   const dd = String(now.getDate()).padStart(2, '0');
 
-  if (dateCardEl) dateCardEl.textContent = `${yyyy}.${mm}.${dd}`;
   if (dateCodeEl) dateCodeEl.textContent = `${yyyy}.${mm}.${dd} RECORD`;
   if (dateStampEl) dateStampEl.textContent = `'${String(yyyy).slice(2)} ${mm} ${dd}`;
 }
 
-function showDynamicIslandBanner(title, subtitle, durationMs = 2400) {
+function showDynamicIslandBanner(title, subtitle, durationMs = 2200) {
   const island = document.getElementById('dynamic-island');
   const label = document.getElementById('island-label');
   const extra = document.getElementById('island-extra');
@@ -470,184 +535,170 @@ function showDynamicIslandBanner(title, subtitle, durationMs = 2400) {
   }, durationMs);
 }
 
-function switchMode(modeKey) {
-  if (state.currentMode === modeKey) return;
-  state.currentMode = modeKey;
+// Core Camera Switching Engine
+function switchCamera(camId) {
+  if (!CAMERAS[camId]) return;
+  state.activeCamera = camId;
+  const cam = CAMERAS[camId];
   soundEngine.playTick();
 
-  // 1. Update Dial Items
-  const dialItems = document.querySelectorAll('.mode-dial-item');
+  // 1. Update Dial Active Class & Position Shift
+  const dialItems = document.querySelectorAll('#mode-dial-list .mode-dial-item');
   dialItems.forEach(item => {
-    item.classList.toggle('active', item.dataset.mode === modeKey);
+    item.classList.toggle('active', item.dataset.cam === camId);
   });
 
-  // Dial transform shift
   const dialList = document.getElementById('mode-dial-list');
-  if (modeKey === 'vintage') {
-    dialList.style.transform = 'translateX(58px)';
-  } else if (modeKey === 'standard-id') {
-    dialList.style.transform = 'translateX(0px)';
-  } else if (modeKey === 'color-id') {
-    dialList.style.transform = 'translateX(-58px)';
+  const dialOffsets = {
+    'canon-ixy': 110,
+    'sony-handycam': 60,
+    'sony-cybershot': 0,
+    'instax-mini': -60,
+    'sihyun-color': -120,
+    'passport-id': -180
+  };
+  if (dialList && dialOffsets[camId] !== undefined) {
+    dialList.style.transform = `translateX(${dialOffsets[camId]}px)`;
   }
 
-  // 2. Synchronize Left Sidebar buttons
-  document.querySelectorAll('.panel-mode-btn').forEach(btn => {
-    btn.classList.toggle('active', btn.dataset.mode === modeKey);
+  // 2. Update Left Sidebar Rack Active State
+  document.querySelectorAll('.panel-modes .panel-mode-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.cam === camId);
   });
 
-  // 3. Switch Control Drawer Panels
-  document.getElementById('drawer-vintage').classList.toggle('active', modeKey === 'vintage');
-  document.getElementById('drawer-standard-id').classList.toggle('active', modeKey === 'standard-id');
-  document.getElementById('drawer-color-id').classList.toggle('active', modeKey === 'color-id');
+  // 3. Update Viewfinder Top Active Camera Badge HUD
+  const badgeTitle = document.getElementById('cam-badge-title');
+  const badgeSub = document.getElementById('cam-badge-sub');
+  const badgeIcon = document.getElementById('cam-badge-icon');
+  if (badgeTitle) badgeTitle.textContent = cam.name;
+  if (badgeIcon) badgeIcon.textContent = cam.icon;
+  if (badgeSub) badgeSub.textContent = cam.sub;
 
-  // 4. Viewfinder Overlays
-  const standardHud = document.getElementById('standard-id-hud');
-  const moodFrame = document.getElementById('mood-card-frame');
-  const grainLayer = document.getElementById('film-grain-layer');
-  const dateStamp = document.getElementById('date-stamp');
-  const leak = document.getElementById('light-leak');
-  const polaroid = document.getElementById('polaroid-frame');
-  const instax = document.getElementById('instax-frame');
-  const sonyHandy = document.getElementById('sony-handycam-osd');
-  const vhsTape = document.getElementById('vhs-tape-osd');
-  const sonyCyber = document.getElementById('sony-cybershot-osd');
-  const canonIxy = document.getElementById('canon-ixy-osd');
-  const super8 = document.getElementById('super8-overlay');
-  const camOsd = document.getElementById('camcorder-osd');
-  const bgLayer = document.getElementById('viewfinder-bg');
-  const mediaFilterEl = state.cameraSource === 'webcam' ? document.getElementById('camera-video') : document.getElementById('model-canvas');
+  // 4. Switch Control Drawer Panel
+  document.querySelectorAll('.control-drawer .mode-control-panel').forEach(panel => {
+    panel.classList.toggle('active', panel.id === cam.drawerId);
+  });
 
-  // Reset overlays first
-  standardHud.style.display = 'none';
-  moodFrame.style.display = 'none';
-  grainLayer.style.display = 'none';
-  dateStamp.style.display = 'none';
-  leak.style.display = 'none';
-  if (polaroid) polaroid.style.display = 'none';
-  if (instax) instax.style.display = 'none';
-  if (sonyHandy) sonyHandy.style.display = 'none';
-  if (vhsTape) vhsTape.style.display = 'none';
-  if (sonyCyber) sonyCyber.style.display = 'none';
-  if (canonIxy) canonIxy.style.display = 'none';
-  if (super8) super8.style.display = 'none';
-  if (camOsd) camOsd.style.display = 'none';
-
-  if (modeKey === 'vintage') {
-    bgLayer.style.background = '#16181d';
-    applyVintagePreset(state.vintageFilter);
-  } else if (modeKey === 'standard-id') {
-    bgLayer.style.background = '#f7f8fa';
-    mediaFilterEl.style.filter = 'none';
-    standardHud.style.display = 'block';
-  } else if (modeKey === 'color-id') {
-    bgLayer.style.background = state.selectedColor.bg || state.selectedColor.hex;
-    mediaFilterEl.style.filter = `brightness(${1 + (state.retouchTone - 35) * 0.003})`;
-    if (state.moodFrameEnabled) {
-      moodFrame.style.display = 'flex';
-    }
-    const colorBadge = document.getElementById('sihyun-color-badge');
-    if (colorBadge) colorBadge.textContent = state.selectedColor.name;
-  }
-
-  // 5. Update Right Info Spec Card
-  updateRightSpecCard(modeKey);
-
-  // 6. Dynamic Island announcement
-  const titles = {
-    'vintage': 'Multi-Cam Vintage',
-    'standard-id': 'Standard ID 규격',
-    'color-id': '시현하다 Color Studio'
-  };
-  showDynamicIslandBanner(titles[modeKey], 'MODE ACTIVE', 1800);
-}
-
-function updateRightSpecCard(modeKey) {
-  const badge = document.getElementById('active-mode-badge');
-  const title = document.getElementById('mode-spec-title');
-  const desc = document.getElementById('mode-spec-desc');
-  const list = document.getElementById('mode-feature-list');
-
-  if (modeKey === 'vintage') {
-    badge.textContent = 'Vintage / Multi-Cam';
-    title.textContent = '11종 명기 카메라 & 캠코더 라인업';
-    desc.textContent = '소니 캠코더, 캐논 IXY 디카, 인스탁스 미니 즉석인화, Hi8 비디오 글리치, 코닥/후지 필름 등 11종의 명기 카메라 톤과 실시간 뷰파인더 OSD가 완벽히 재현됩니다.';
-    list.innerHTML = `
-      <li class="feature-item"><span class="feature-bullet">✓</span><span>브랜드별 11종 프리셋: Sony DCR, Canon IXY, Cyber-shot, Instax Mini, Polaroid, Hi8 Tape, Super 8mm, Kodak Gold, Fuji Superia, Tri-X Noir</span></li>
-      <li class="feature-item"><span class="feature-bullet">✓</span><span>기종별 전용 OSD & 프레임: 소니 타임코드, 캐논 데이트스탬프, 인스탁스 화이트 카드 프레임, VHS 스캔라인</span></li>
-      <li class="feature-item"><span class="feature-bullet">✓</span><span>Web Audio API 기반 기계식 셔터 찰칵 햅틱 사운드 & Dynamic Island 상태 연동</span></li>
-    `;
-  } else if (modeKey === 'standard-id') {
-    badge.textContent = 'Standard ID';
-    title.textContent = '공공기관 규격 정밀 검증';
-    desc.textContent = '외교부 여권 규격(정수리부터 턱까지 3.2~3.6cm) 및 신분증, 미국 비자 규격을 완벽 준수하도록 정밀 HUD 가이드라인을 제공합니다.';
-    list.innerHTML = `
-      <li class="feature-item"><span class="feature-bullet">✓</span><span>여권, 주민등록증, 반명함(3x4), 미국비자(2x2) 4종 규격</span></li>
-      <li class="feature-item"><span class="feature-bullet">✓</span><span>실시간 정수리선/눈높이/턱끝/어깨선 규격 인식 배지</span></li>
-      <li class="feature-item"><span class="feature-bullet">✓</span><span>사진관 인화용 4x6인치 8분할 템플릿(재단선 포함) 원클릭 생성</span></li>
-    `;
-  } else if (modeKey === 'color-id') {
-    badge.textContent = 'Color ID (시현하다 스타일)';
-    title.textContent = '인물 누끼 & 퍼스널 컬러 스튜디오';
-    desc.textContent = '인물의 배경을 투명하게 완벽 분리하여, 시현하다 시그니처 8색 및 4계절 퍼스널 컬러 백드롭 조명을 실시간 치환하고 시그니처 각인 카드를 완성합니다.';
-    list.innerHTML = `
-      <li class="feature-item"><span class="feature-bullet">✓</span><span>초고화질 실사 투명 누끼 모델(여성/남성/내 사진 업로드) 배경 실시간 분리</span></li>
-      <li class="feature-item"><span class="feature-bullet">✓</span><span>시현하다 시그니처(블라썸 핑크, 세이지 올리브 등 8색) + 4계절 16색 + 그라디언트 백드롭</span></li>
-      <li class="feature-item"><span class="feature-bullet">✓</span><span>시현하다 모먼트 상단 레터링(이름 직접 편집) & 하단 기록가 친필 서명 각인</span></li>
-    `;
-  }
-}
-
-function applyVintagePreset(filterKey) {
-  state.vintageFilter = filterKey;
-  const preset = VINTAGE_FILTERS[filterKey] || VINTAGE_FILTERS['sony-handycam'];
-
-  const mediaFilterEl = state.cameraSource === 'webcam' ? document.getElementById('camera-video') : document.getElementById('model-canvas');
-  if (mediaFilterEl) mediaFilterEl.style.filter = preset.css;
-
-  // Reset all vintage OSD / frames
-  const osdElements = [
-    'polaroid-frame',
-    'instax-frame',
-    'sony-handycam-osd',
-    'vhs-tape-osd',
-    'sony-cybershot-osd',
+  // 5. Manage Viewfinder OSD Overlays
+  const allOsdIds = [
     'canon-ixy-osd',
+    'sony-handycam-osd',
+    'sony-cybershot-osd',
+    'instax-frame',
+    'mood-card-frame',
+    'standard-id-hud',
+    'vhs-tape-osd',
     'super8-overlay',
-    'camcorder-osd'
+    'polaroid-frame'
   ];
-  osdElements.forEach(id => {
+  allOsdIds.forEach(id => {
     const el = document.getElementById(id);
     if (el) el.style.display = 'none';
   });
 
-  // Show active preset OSD if enabled
-  if (state.osdEnabled && preset.osdId) {
-    const targetOsd = document.getElementById(preset.osdId);
-    if (targetOsd) targetOsd.style.display = 'block';
+  if (cam.osdId) {
+    const targetOsd = document.getElementById(cam.osdId);
+    if (targetOsd) targetOsd.style.display = (cam.id === 'sihyun-color' ? 'flex' : 'block');
   }
 
-  // Toggles
-  const grainEl = document.getElementById('film-grain-layer');
-  const dateStampEl = document.getElementById('date-stamp');
-  const leakEl = document.getElementById('light-leak');
-
-  if (grainEl) grainEl.style.display = state.grainEnabled ? 'block' : 'none';
-  // Avoid duplicate date if Canon IXY or Instax is showing its own date stamp
-  if (dateStampEl) {
-    const hasOwnDate = (preset.osdId === 'canon-ixy-osd' || preset.osdId === 'instax-frame');
-    dateStampEl.style.display = (state.dateStampEnabled && !hasOwnDate) ? 'block' : 'none';
+  // 6. Handle Background Layer (Real-time Live Color for Sihyunhada)
+  const bgLayer = document.getElementById('viewfinder-bg');
+  if (bgLayer) {
+    if (camId === 'sihyun-color') {
+      bgLayer.style.background = state.selectedColor.bg || state.selectedColor.hex;
+    } else if (camId === 'passport-id') {
+      bgLayer.style.background = '#f7f8fa';
+    } else {
+      bgLayer.style.background = '#15171c';
+    }
   }
-  if (leakEl) leakEl.style.display = state.lightLeakEnabled ? 'block' : 'none';
 
-  // Highlight active filter chip
-  document.querySelectorAll('#filter-carousel .filter-chip').forEach(c => {
-    c.classList.toggle('active', c.dataset.filter === filterKey);
-  });
+  // 7. Apply Camera-specific Filter to Media
+  applyCurrentCameraFilter();
 
-  showDynamicIslandBanner(preset.brand, preset.model, 1600);
+  // 8. Update Right Spec Sidebar
+  updateRightSpecCard(camId);
+
+  // 9. Announce via Dynamic Island
+  showDynamicIslandBanner(cam.badge, cam.shortName, 1800);
 }
 
+function applyCurrentCameraFilter() {
+  const cam = CAMERAS[state.activeCamera];
+  const mediaFilterEl = state.cameraSource === 'webcam' ? document.getElementById('camera-video') : document.getElementById('model-canvas');
+  if (!mediaFilterEl) return;
+
+  if (cam.filters) {
+    const activeFilterKey = state.selectedFilters[cam.id];
+    const filterSpec = cam.filters[activeFilterKey] || Object.values(cam.filters)[0];
+    mediaFilterEl.style.filter = filterSpec.css;
+  } else if (cam.id === 'sihyun-color') {
+    const toneRatio = 1 + (state.retouchTone - 35) * 0.0035;
+    mediaFilterEl.style.filter = `brightness(${toneRatio}) contrast(${1 + (state.retouchTone - 35) * 0.001})`;
+  } else {
+    mediaFilterEl.style.filter = 'none';
+  }
+}
+
+// Right Spec Card Update
+function updateRightSpecCard(camId) {
+  const cam = CAMERAS[camId];
+  const badgeEl = document.getElementById('active-mode-badge');
+  const titleEl = document.getElementById('mode-spec-title');
+  const descEl = document.getElementById('mode-spec-desc');
+  const featureListEl = document.getElementById('mode-feature-list');
+
+  if (!badgeEl || !titleEl || !descEl || !featureListEl || !cam) return;
+
+  badgeEl.textContent = cam.badge;
+  titleEl.textContent = cam.name;
+
+  if (camId === 'canon-ixy') {
+    descEl.textContent = '2000년대 얼짱들이 열광한 전설의 일본 명기 디카. 뽀샤시하고 맑은 피부톤과 복숭아빛 생기, 오렌지색 디지털 데이트 각인이 완벽히 재현됩니다.';
+    featureListEl.innerHTML = `
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>전용 필터 4종: Peach Glow(복숭아 뽀샤시), Flash Pop(디카 플래시), Pastel Haze, Night Party</span></li>
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>캐논 AiAF 오토포커스 프레임 & 오렌지 디지털 데이트 각인 OSD 탑재</span></li>
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>Y2K 디카 특유의 직광 플래시 중앙 핫스팟 & 비네팅 렌더링</span></li>
+    `;
+  } else if (camId === 'sony-handycam') {
+    descEl.textContent = '90년대 후반~2000년대 초반 소니 미니DV 캠코더. 특유의 따뜻하고 묵직한 3CCD 비디오 질감과 타임코드 녹화 화면이 살아납니다.';
+    featureListEl.innerHTML = `
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>전용 필터 4종: MiniDV Classic, Hi8 Tape Glitch, Super 8mm Cine, NightShot Green</span></li>
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>실시간 ● REC 타임코드, SP 0:00:14, Hi-Fi STEREO OSD 오버레이</span></li>
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>아날로그 비디오 테이프 수평 스캔라인 글리치 이펙트 토글 지원</span></li>
+    `;
+  } else if (camId === 'sony-cybershot') {
+    descEl.textContent = '2000년대 세기말 테크노 미래주의 감성의 소니 사이버샷 CCD. 차가운 쿨블루 틴트와 쨍하고 선명한 플래시 대비가 특징입니다.';
+    featureListEl.innerHTML = `
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>전용 필터 4종: CCD Cool Blue, Cyber Magenta, Flash Sharp, Matrix Green</span></li>
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>사이버샷 5.1 MEGAPIXELS, DSC-P10, 정밀 4코너 포커스 브래킷 HUD</span></li>
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>하얗고 투명한 쿨톤 피부 표현과 세기말 Y2K 비주얼 완성</span></li>
+    `;
+  } else if (camId === 'instax-mini') {
+    descEl.textContent = '세상에 단 한 장뿐인 아날로그 즉석인화 카메라. 화사한 파스텔 톤과 하단 여백이 돋보이는 시그니처 화이트 카드 프레임이 제공됩니다.';
+    featureListEl.innerHTML = `
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>전용 필터 4종: Instax Soft, Polaroid 600, Warm Mono, Rainbow Edge</span></li>
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>하단 친필 서명이 가능한 instax mini 시그니처 화이트 프레임</span></li>
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>들뜬 섀도우와 따뜻한 즉석인화 필름 계조 온디바이스 합성</span></li>
+    `;
+  } else if (camId === 'sihyun-color') {
+    descEl.textContent = '나만의 퍼스널 컬러 배경이 실시간으로 라이브 변환되는 프로필 카메라. 뷰파인더에서 실시간으로 인물 뒤 배경이 부드럽게 전환됩니다.';
+    featureListEl.innerHTML = `
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>실시간 배경 라이브 치환: 시현하다 Best 8색 + 4계절 16색 + 그라디언트 터치 즉시 반영</span></li>
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>스튜디오 조명 방사형 센터 라이트(Radial Lighting) 백드롭 재현</span></li>
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>상단 [이름]'s Moment 레터링 (직접 편집 가능) & 하단 작가 친필 서명 각인</span></li>
+    `;
+  } else if (camId === 'passport-id') {
+    descEl.textContent = '외교부 여권 및 공공기관 신분증 규격을 100% 충족하는 홈 증명사진 스튜디오. 정밀 규격 가이드선과 4x6 인화 시트를 제공합니다.';
+    featureListEl.innerHTML = `
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>정밀 규격선: 정수리선, 눈높이, 턱선, 어깨 수평선 실시간 오버레이</span></li>
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>여권(3.5x4.5), 주민등록/면허, 반명함(3x4), 비자(5x5) 원클릭 규격 전환</span></li>
+      <li class="feature-item"><span class="feature-bullet">✓</span><span>4x6인치 8분할 인쇄 시트(재단 안내선 포함) 원클릭 고해상도 출력</span></li>
+    `;
+  }
+}
+
+// Optical Lens Filter System (Black Mist, Star, Streak, Prism, CPL)
 function applyLensFilter(filterKey = 'none') {
   soundEngine.playTick();
   state.lensFilter = filterKey;
@@ -664,17 +715,13 @@ function applyLensFilter(filterKey = 'none') {
     if (el) el.style.display = (k === filterKey) ? 'block' : 'none';
   });
 
-  // Update Popover Buttons
   document.querySelectorAll('.lens-pill-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.lens === filterKey);
   });
-
-  // Update Sidebar Buttons
   document.querySelectorAll('.sidebar-lens-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.lens === filterKey);
   });
 
-  // Update Top Toolbar Button
   const btnLens = document.getElementById('btn-lens');
   if (btnLens) {
     btnLens.classList.toggle('active', filterKey !== 'none');
@@ -684,6 +731,7 @@ function applyLensFilter(filterKey = 'none') {
   showDynamicIslandBanner('LENS FILTER', meta.name.toUpperCase(), 1500);
 }
 
+// Real-time Background Swatches Renderer & Live Transition
 function renderColorSwatches(seasonKey) {
   state.activeSeason = seasonKey;
   const container = document.getElementById('color-palette-scroll');
@@ -708,6 +756,7 @@ function renderColorSwatches(seasonKey) {
     itemEl.appendChild(swatchEl);
     itemEl.appendChild(labelEl);
 
+    // Live Real-time Background Color Change
     itemEl.addEventListener('click', () => {
       soundEngine.playTick();
       state.selectedColor = item;
@@ -715,13 +764,22 @@ function renderColorSwatches(seasonKey) {
       document.querySelectorAll('.color-palette-item').forEach(el => el.classList.remove('active'));
       itemEl.classList.add('active');
 
+      // 1. Immediately Change Viewfinder Background in Real-time
       const bgLayer = document.getElementById('viewfinder-bg');
-      if (bgLayer) bgLayer.style.background = item.bg || item.hex;
+      if (bgLayer) {
+        bgLayer.style.background = item.bg || item.hex;
+      }
 
+      // 2. Update OSD Badge & Camera Subtitle
       const codeEl = document.getElementById('sihyun-color-badge');
       if (codeEl) codeEl.textContent = item.name;
 
-      showDynamicIslandBanner('BACKGROUND', item.name, 1200);
+      const badgeSub = document.getElementById('cam-badge-sub');
+      if (badgeSub && state.activeCamera === 'sihyun-color') {
+        badgeSub.textContent = item.name.split(' ')[1] || item.name;
+      }
+
+      showDynamicIslandBanner('LIVE BG COLOR', item.name, 1200);
     });
 
     container.appendChild(itemEl);
@@ -729,7 +787,7 @@ function renderColorSwatches(seasonKey) {
 }
 
 // ==========================================================================
-// 5. Shutter Capture Engine & Canvas Composer
+// 5. High-Resolution Shutter Capture & Synthesis Engine
 // ==========================================================================
 
 function triggerShutterCapture() {
@@ -770,29 +828,21 @@ function runCountdown(seconds, callback) {
 function executeCapture() {
   soundEngine.playShutter();
 
-  // White Flash Animation
   const flashScreen = document.getElementById('flash-screen');
   flashScreen.classList.add('active');
   setTimeout(() => flashScreen.classList.remove('active'), 320);
 
-  // Dynamic Island status
   showDynamicIslandBanner('PHOTO SAVED', 'PROCESSED', 2200);
 
-  // Setup Off-screen High-Res Capture Canvas
   const captureCanvas = document.createElement('canvas');
   captureCanvas.width = 780;
   captureCanvas.height = 1040;
   const ctx = captureCanvas.getContext('2d');
 
+  const cam = CAMERAS[state.activeCamera];
+
   // 1. Render Background
-  if (state.currentMode === 'vintage') {
-    ctx.fillStyle = '#16181d';
-    ctx.fillRect(0, 0, captureCanvas.width, captureCanvas.height);
-  } else if (state.currentMode === 'standard-id') {
-    ctx.fillStyle = '#f7f8fa';
-    ctx.fillRect(0, 0, captureCanvas.width, captureCanvas.height);
-  } else if (state.currentMode === 'color-id') {
-    // Fill Sihyunhada Studio Backdrop with soft center lighting
+  if (state.activeCamera === 'sihyun-color') {
     const hex = state.selectedColor.hex || '#F38B95';
     const grad = ctx.createRadialGradient(
       captureCanvas.width / 2, captureCanvas.height * 0.38, 30,
@@ -803,20 +853,37 @@ function executeCapture() {
     grad.addColorStop(1, hex);
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, captureCanvas.width, captureCanvas.height);
+  } else if (state.activeCamera === 'passport-id') {
+    ctx.fillStyle = '#f7f8fa';
+    ctx.fillRect(0, 0, captureCanvas.width, captureCanvas.height);
+  } else {
+    ctx.fillStyle = '#15171c';
+    ctx.fillRect(0, 0, captureCanvas.width, captureCanvas.height);
   }
 
-  // 2. Draw Subject (Transparent Model or Mirrored Webcam)
+  // 2. Determine Filter CSS for Subject
+  let activeFilter = 'none';
+  if (cam.filters) {
+    const fKey = state.selectedFilters[cam.id];
+    const spec = cam.filters[fKey] || Object.values(cam.filters)[0];
+    activeFilter = spec.css;
+  } else if (cam.id === 'sihyun-color') {
+    const toneRatio = 1 + (state.retouchTone - 35) * 0.0035;
+    activeFilter = `brightness(${toneRatio}) contrast(${1 + (state.retouchTone - 35) * 0.001})`;
+  }
+
+  // 3. Draw Subject (Transparent Model or Mirrored Webcam)
   if (state.cameraSource === 'webcam') {
     const video = document.getElementById('camera-video');
     if (video.videoWidth) {
       ctx.save();
+      ctx.filter = activeFilter;
       ctx.translate(captureCanvas.width, 0);
       ctx.scale(-1, 1);
       ctx.drawImage(video, 0, 0, captureCanvas.width, captureCanvas.height);
       ctx.restore();
     }
   } else {
-    // Render Photographic Transparent Model
     let activeImg = null;
     if (state.studioModelType === 'custom' && state.customModelImg) {
       activeImg = state.customModelImg;
@@ -828,8 +895,7 @@ function executeCapture() {
 
     if (activeImg && activeImg.complete && activeImg.naturalWidth > 0) {
       ctx.save();
-      const toneRatio = 1 + (state.retouchTone - 35) * 0.0035;
-      ctx.filter = `brightness(${toneRatio}) contrast(${1 + (state.retouchTone - 35) * 0.001})`;
+      ctx.filter = activeFilter;
 
       const imgAspect = activeImg.naturalWidth / activeImg.naturalHeight;
       const canvasAspect = captureCanvas.width / captureCanvas.height;
@@ -852,102 +918,71 @@ function executeCapture() {
     }
   }
 
-  // 3. Mode-specific Overlays & Signature Watermarks
-  if (state.currentMode === 'vintage') {
-    const preset = VINTAGE_FILTERS[state.vintageFilter];
-
-    if (state.vintageFilter === 'kodak-tri-x') {
-      // Grayscale conversion
-      const imgData = ctx.getImageData(0, 0, captureCanvas.width, captureCanvas.height);
-      const d = imgData.data;
-      for (let i = 0; i < d.length; i += 4) {
-        const v = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
-        d[i] = v; d[i + 1] = v; d[i + 2] = v;
-      }
-      ctx.putImageData(imgData, 0, 0);
-    } else if (state.vintageFilter === 'kodak-gold') {
-      ctx.fillStyle = 'rgba(255, 175, 45, 0.16)';
+  // 4. Tint & Direct Flash Falloff Overlay
+  if (cam.filters) {
+    const fKey = state.selectedFilters[cam.id];
+    const spec = cam.filters[fKey] || Object.values(cam.filters)[0];
+    if (spec.tintRgba) {
+      ctx.save();
+      ctx.fillStyle = spec.tintRgba;
       ctx.fillRect(0, 0, captureCanvas.width, captureCanvas.height);
-    } else if (state.vintageFilter === 'fuji-superia') {
-      ctx.fillStyle = 'rgba(60, 210, 160, 0.09)';
-      ctx.fillRect(0, 0, captureCanvas.width, captureCanvas.height);
-    } else if (state.vintageFilter === 'canon-ixy') {
-      // Canon IXY soft warm glow & orange timestamp
-      ctx.fillStyle = 'rgba(255, 190, 140, 0.12)';
-      ctx.fillRect(0, 0, captureCanvas.width, captureCanvas.height);
-      ctx.font = 'bold 26px "Courier New", monospace';
-      ctx.fillStyle = '#ff9500';
-      ctx.shadowColor = 'rgba(0,0,0,0.9)';
-      ctx.shadowOffsetX = 2;
-      ctx.shadowOffsetY = 2;
-      ctx.fillText(\"'26 10 05 14:28\", captureCanvas.width - 270, captureCanvas.height - 40);
-      ctx.shadowColor = 'transparent';
-    } else if (state.vintageFilter === 'sony-handycam') {
-      // Sony DV Handycam OSD
-      ctx.font = 'bold 24px "Courier New", monospace';
-      ctx.fillStyle = '#ff3b30';
-      ctx.fillText('● REC', 40, 60);
-      ctx.fillStyle = '#00ffcc';
-      ctx.fillText('SP 0:00:14  SONY DCR', 130, 60);
-      ctx.fillText('Hi-Fi STEREO [DV]', 40, captureCanvas.height - 40);
-      ctx.fillText('BATT ▮▮▮▯', captureCanvas.width - 200, captureCanvas.height - 40);
-    } else if (state.vintageFilter === 'vhs-glitch') {
-      // VHS Scanlines & Play OSD
-      ctx.fillStyle = 'rgba(0,0,0,0.18)';
-      for (let y = 0; y < captureCanvas.height; y += 4) {
-        ctx.fillRect(0, y, captureCanvas.width, 2);
-      }
-      ctx.font = 'bold 26px "Courier New", monospace';
-      ctx.fillStyle = '#55ff55';
-      ctx.fillText('PLAY ▶ 0:12:45 SP', 40, 60);
-      ctx.fillStyle = '#ffffff';
-      ctx.fillText('AUTO TRACKING', 40, captureCanvas.height - 40);
-    } else if (state.vintageFilter === 'sony-cybershot') {
-      // Cyber-shot OSD
-      ctx.font = 'bold 22px -apple-system, sans-serif';
-      ctx.fillStyle = '#ff9f0a';
-      ctx.fillText('Cyber-shot', 40, 60);
-      ctx.fillStyle = '#ffffff';
-      ctx.font = '18px -apple-system, sans-serif';
-      ctx.fillText('5.1 MEGAPIXELS', captureCanvas.width - 200, 60);
-      ctx.fillText('DSC-P10  ISO 100', 40, captureCanvas.height - 40);
-    } else if (state.vintageFilter === 'instax-mini') {
-      // Instax Mini Signature Frame (Wider bottom)
-      ctx.lineWidth = 36;
-      ctx.strokeStyle = '#f5f4ef';
-      ctx.strokeRect(18, 18, captureCanvas.width - 36, captureCanvas.height - 36);
-      ctx.fillStyle = '#f5f4ef';
-      ctx.fillRect(0, captureCanvas.height - 140, captureCanvas.width, 140);
-
-      ctx.font = 'bold 24px -apple-system, sans-serif';
-      ctx.fillStyle = '#3b3d44';
-      ctx.fillText('instax mini', 40, captureCanvas.height - 55);
-      ctx.font = '20px "Courier New", monospace';
-      ctx.fillStyle = '#8c8f99';
-      ctx.fillText(\"'26 10 05\", captureCanvas.width - 170, captureCanvas.height - 55);
-    } else if (state.vintageFilter === 'polaroid-600') {
-      ctx.lineWidth = 40;
-      ctx.strokeStyle = '#f6f6f2';
-      ctx.strokeRect(20, 20, captureCanvas.width - 40, captureCanvas.height - 40);
-      ctx.fillStyle = '#f6f6f2';
-      ctx.fillRect(0, captureCanvas.height - 120, captureCanvas.width, 120);
+      ctx.restore();
     }
 
-    // Classic Date Stamp if enabled
-    if (state.dateStampEnabled && state.vintageFilter !== 'canon-ixy' && state.vintageFilter !== 'instax-mini') {
-      const dateText = document.getElementById('date-stamp').textContent;
-      ctx.font = 'bold 36px "Impact", sans-serif';
-      ctx.fillStyle = '#ff8c00';
-      ctx.shadowColor = 'rgba(0,0,0,0.8)';
-      ctx.shadowOffsetX = 2;
-      ctx.shadowOffsetY = 2;
-      ctx.fillText(dateText, captureCanvas.width - 240, captureCanvas.height - 50);
-      ctx.shadowColor = 'transparent';
+    // Direct Flash Vignette for DigiCam & Handycam
+    if (cam.id === 'canon-ixy' || cam.id === 'sony-cybershot' || cam.id === 'sony-handycam') {
+      ctx.save();
+      const flashGrad = ctx.createRadialGradient(
+        captureCanvas.width / 2, captureCanvas.height * 0.4, captureCanvas.width * 0.25,
+        captureCanvas.width / 2, captureCanvas.height * 0.4, captureCanvas.width * 0.75
+      );
+      flashGrad.addColorStop(0, 'rgba(255, 255, 255, 0.08)');
+      flashGrad.addColorStop(0.6, 'transparent');
+      flashGrad.addColorStop(1, 'rgba(0, 0, 0, 0.22)');
+      ctx.fillStyle = flashGrad;
+      ctx.fillRect(0, 0, captureCanvas.width, captureCanvas.height);
+      ctx.restore();
     }
+  }
 
-  } else if (state.currentMode === 'color-id' && state.moodFrameEnabled) {
-    // Sihyunhada Style Moment Card Overlay
-    // 1. Top Moment Banner
+  // 5. Camera-Specific OSD Watermarks & Frames
+  if (cam.id === 'canon-ixy') {
+    ctx.font = 'bold 26px "Courier New", monospace';
+    ctx.fillStyle = '#ff9500';
+    ctx.shadowColor = 'rgba(0,0,0,0.9)';
+    ctx.shadowOffsetX = 2;
+    ctx.shadowOffsetY = 2;
+    ctx.fillText("'26 10 05 14:28", captureCanvas.width - 270, captureCanvas.height - 40);
+    ctx.shadowColor = 'transparent';
+  } else if (cam.id === 'sony-handycam') {
+    ctx.font = 'bold 24px "Courier New", monospace';
+    ctx.fillStyle = '#ff3b30';
+    ctx.fillText('● REC', 40, 60);
+    ctx.fillStyle = '#00ffcc';
+    ctx.fillText('SP 0:00:14  SONY DCR', 130, 60);
+    ctx.fillText('Hi-Fi STEREO [DV]', 40, captureCanvas.height - 40);
+    ctx.fillText('BATT ▮▮▮▯', captureCanvas.width - 200, captureCanvas.height - 40);
+  } else if (cam.id === 'sony-cybershot') {
+    ctx.font = 'bold 22px -apple-system, sans-serif';
+    ctx.fillStyle = '#ff9f0a';
+    ctx.fillText('Cyber-shot', 40, 60);
+    ctx.fillStyle = '#ffffff';
+    ctx.font = '18px -apple-system, sans-serif';
+    ctx.fillText('5.1 MEGAPIXELS', captureCanvas.width - 200, 60);
+    ctx.fillText('DSC-P10  ISO 100', 40, captureCanvas.height - 40);
+  } else if (cam.id === 'instax-mini') {
+    ctx.lineWidth = 36;
+    ctx.strokeStyle = '#f5f4ef';
+    ctx.strokeRect(18, 18, captureCanvas.width - 36, captureCanvas.height - 36);
+    ctx.fillStyle = '#f5f4ef';
+    ctx.fillRect(0, captureCanvas.height - 140, captureCanvas.width, 140);
+    ctx.font = 'bold 24px -apple-system, sans-serif';
+    ctx.fillStyle = '#3b3d44';
+    ctx.fillText('instax mini', 40, captureCanvas.height - 55);
+    ctx.font = '20px "Courier New", monospace';
+    ctx.fillStyle = '#8c8f99';
+    ctx.fillText("'26 10 05", captureCanvas.width - 170, captureCanvas.height - 55);
+  } else if (cam.id === 'sihyun-color' && state.moodFrameEnabled) {
     const topGrad = ctx.createLinearGradient(0, 0, 0, 160);
     topGrad.addColorStop(0, 'rgba(0,0,0,0.65)');
     topGrad.addColorStop(0.7, 'rgba(0,0,0,0.25)');
@@ -967,7 +1002,6 @@ function executeCapture() {
     ctx.fillText('Young Adults - Best Record • Photos by SnapStudio', 40, 95);
     ctx.shadowColor = 'transparent';
 
-    // 2. Bottom Signature Banner
     const bannerH = 150;
     const botGrad = ctx.createLinearGradient(0, captureCanvas.height - bannerH, 0, captureCanvas.height);
     botGrad.addColorStop(0, 'transparent');
@@ -989,7 +1023,7 @@ function executeCapture() {
     ctx.fillText('Sihyun Sign', captureCanvas.width - 240, captureCanvas.height - 45);
   }
 
-  // 4. Optical Lens Filter Synthesis (Black Mist, Star 4X, Blue Streak, Prism, CPL)
+  // 6. Optical Lens Filter Synthesis (Mist, Star, Streak, Prism, CPL)
   if (state.lensFilter === 'mist') {
     ctx.save();
     ctx.globalCompositeOperation = 'screen';
@@ -1058,36 +1092,27 @@ function executeCapture() {
   const dataUrl = captureCanvas.toDataURL('image/jpeg', 0.95);
   state.lastCapturedUrl = dataUrl;
 
-  // Update gallery thumbnail
   const thumbImg = document.getElementById('gallery-thumb');
   const thumbPlaceholder = document.getElementById('gallery-placeholder');
   thumbImg.src = dataUrl;
   thumbImg.style.display = 'block';
   thumbPlaceholder.style.display = 'none';
 
-  // Open Review Modal
-  openReviewModal(dataUrl);
+  setTimeout(() => {
+    openReviewModal(dataUrl);
+  }, 350);
 }
 
-function openReviewModal(imgUrl) {
+function openReviewModal(imgDataUrl) {
   const modal = document.getElementById('review-photo-modal');
   const previewImg = document.getElementById('review-preview-img');
-  const subTitle = document.getElementById('review-subtitle');
+  const subtitle = document.getElementById('review-subtitle');
   const infoTag = document.getElementById('review-info-tag');
 
-  previewImg.src = imgUrl;
-
-  if (state.currentMode === 'vintage') {
-    const p = VINTAGE_FILTERS[state.vintageFilter];
-    subTitle.textContent = `Vintage / Multi-Cam [${p.name}]`;
-    infoTag.textContent = `${p.model} 전용 아날로그 톤과 OSD/프레임이 합성되었습니다.`;
-  } else if (state.currentMode === 'standard-id') {
-    subTitle.textContent = `Standard ID [${ID_SPECS[state.idSpec].title}]`;
-    infoTag.textContent = '여권 및 신분증 공공 규격 가이드라인에 맞춰 정밀 촬영되었습니다.';
-  } else if (state.currentMode === 'color-id') {
-    subTitle.textContent = `Color ID (시현하다 스타일) [${state.selectedColor.name}]`;
-    infoTag.textContent = '인물 누끼 분리 후 시현하다 스튜디오 조명 배경과 시그니처 각인이 합성되었습니다.';
-  }
+  const cam = CAMERAS[state.activeCamera];
+  previewImg.src = imgDataUrl;
+  subtitle.textContent = `SnapStudio • ${cam.name}`;
+  infoTag.textContent = `${cam.name} 고유 광학 톤과 하이라이트가 온디바이스로 합성되었습니다.`;
 
   modal.classList.add('open');
 }
@@ -1102,14 +1127,13 @@ function openPrintSheetModal() {
   for (let i = 0; i < 8; i++) {
     const item = document.createElement('div');
     item.className = 'print-photo-item';
-    
+
     const img = document.createElement('img');
     img.src = photoSrc;
-    img.alt = 'Passport Cut';
     item.appendChild(img);
 
     const mark = document.createElement('div');
-    mark.className = 'crop-mark-corner tl';
+    mark.className = 'print-crop-mark';
     item.appendChild(mark);
 
     grid.appendChild(item);
@@ -1139,14 +1163,10 @@ function generatePrintSheetCanvasDataUrl() {
 
   ctx.fillStyle = '#ffffff';
   ctx.fillRect(0, 0, sheetCanvas.width, sheetCanvas.height);
-
   return sheetCanvas.toDataURL('image/jpeg', 0.95);
 }
 
-// ==========================================================================
-// 6. Camera Source Switch (Webcam vs Studio Models)
-// ==========================================================================
-
+// Camera Source Switch (Webcam vs Studio Models)
 async function enableWebcam() {
   const video = document.getElementById('camera-video');
   const modelCanvas = document.getElementById('model-canvas');
@@ -1167,6 +1187,7 @@ async function enableWebcam() {
     if (btnWebcam) btnWebcam.classList.add('active');
     if (btnFem) btnFem.classList.remove('active');
     if (btnMale) btnMale.classList.remove('active');
+    applyCurrentCameraFilter();
     showDynamicIslandBanner('WEBCAM CONNECTED', 'LIVE STREAM', 2000);
   } catch (err) {
     alert('웹캠 접근 권한이 필요합니다. 고화질 실사 스튜디오 모델을 계속 사용합니다.');
@@ -1188,6 +1209,7 @@ function useStudioModel(type = 'female') {
   state.studioModelType = type;
 
   renderStudioModel(modelCanvas, state.retouchTone);
+  applyCurrentCameraFilter();
 
   const btnFem = document.getElementById('btn-use-female');
   const btnMale = document.getElementById('btn-use-male');
@@ -1201,21 +1223,21 @@ function useStudioModel(type = 'female') {
 }
 
 // ==========================================================================
-// 7. Event Listeners & Initialization
+// 6. Event Listeners & Bootstrapping
 // ==========================================================================
 
 function initEventListeners() {
-  // Mode Switcher Dial items
-  document.querySelectorAll('.mode-dial-item').forEach(item => {
-    item.addEventListener('click', () => switchMode(item.dataset.mode));
+  // 1. Bottom Camera Switcher Dial items
+  document.querySelectorAll('#mode-dial-list .mode-dial-item').forEach(item => {
+    item.addEventListener('click', () => switchCamera(item.dataset.cam));
   });
 
-  // Left Sidebar Mode buttons
-  document.querySelectorAll('.panel-mode-btn').forEach(btn => {
-    btn.addEventListener('click', () => switchMode(btn.dataset.mode));
+  // 2. Left Sidebar Camera Rack Buttons
+  document.querySelectorAll('.panel-modes .panel-mode-btn').forEach(btn => {
+    btn.addEventListener('click', () => switchCamera(btn.dataset.cam));
   });
 
-  // Shutter button & Hardware volume buttons
+  // 3. Shutter & Volume Hardware Buttons
   const shutterBtn = document.getElementById('shutter-btn');
   if (shutterBtn) shutterBtn.addEventListener('click', triggerShutterCapture);
 
@@ -1224,19 +1246,15 @@ function initEventListeners() {
   if (volUp) volUp.addEventListener('click', triggerShutterCapture);
   if (volDown) volDown.addEventListener('click', triggerShutterCapture);
 
-  // Gallery Thumbnail button
+  // 4. Gallery Thumbnail
   const galBtn = document.getElementById('gallery-btn');
   if (galBtn) {
     galBtn.addEventListener('click', () => {
-      if (state.lastCapturedUrl) {
-        openReviewModal(state.lastCapturedUrl);
-      } else {
-        openReviewModal(generateDefaultThumb());
-      }
+      openReviewModal(state.lastCapturedUrl || generateDefaultThumb());
     });
   }
 
-  // Flash Toggle
+  // 5. Flash Toggle
   const btnFlash = document.getElementById('btn-flash');
   if (btnFlash) {
     btnFlash.addEventListener('click', () => {
@@ -1247,7 +1265,7 @@ function initEventListeners() {
     });
   }
 
-  // Timer Toggle (Off -> 3s -> 10s)
+  // 6. Timer Toggle
   const btnTimer = document.getElementById('btn-timer');
   const timerText = document.getElementById('timer-text');
   if (btnTimer && timerText) {
@@ -1263,7 +1281,7 @@ function initEventListeners() {
     });
   }
 
-  // Grid Toggle
+  // 7. Grid Toggle
   const btnGrid = document.getElementById('btn-grid');
   const gridOverlay = document.getElementById('grid-overlay');
   if (btnGrid && gridOverlay) {
@@ -1275,7 +1293,7 @@ function initEventListeners() {
     });
   }
 
-  // Camera Flip (Female -> Male -> Webcam)
+  // 8. Camera Flip (Female -> Male -> Webcam)
   const btnFlip = document.getElementById('btn-flip');
   if (btnFlip) {
     btnFlip.addEventListener('click', () => {
@@ -1289,6 +1307,155 @@ function initEventListeners() {
       }
     });
   }
+
+  // 9. Camera Filter Chips in All Drawers
+  document.querySelectorAll('.filter-carousel .filter-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      soundEngine.playTick();
+      const parentDrawer = chip.closest('.mode-control-panel');
+      if (parentDrawer) {
+        parentDrawer.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
+      }
+      chip.classList.add('active');
+
+      const filterKey = chip.dataset.filter;
+      state.selectedFilters[state.activeCamera] = filterKey;
+      applyCurrentCameraFilter();
+
+      const cam = CAMERAS[state.activeCamera];
+      const spec = cam.filters ? cam.filters[filterKey] : null;
+      if (spec) {
+        const badgeSub = document.getElementById('cam-badge-sub');
+        if (badgeSub) badgeSub.textContent = spec.name;
+        showDynamicIslandBanner(cam.shortName, spec.name, 1200);
+      }
+    });
+  });
+
+  // 10. Optical Lens Filter Toolbar Popover & Buttons
+  const btnLens = document.getElementById('btn-lens');
+  const lensPopover = document.getElementById('lens-filter-popover');
+  const btnCloseLensPopover = document.getElementById('btn-close-lens-popover');
+
+  if (btnLens && lensPopover) {
+    btnLens.addEventListener('click', () => {
+      soundEngine.playTick();
+      lensPopover.classList.toggle('open');
+    });
+  }
+
+  if (btnCloseLensPopover && lensPopover) {
+    btnCloseLensPopover.addEventListener('click', () => {
+      soundEngine.playTick();
+      lensPopover.classList.remove('open');
+    });
+  }
+
+  document.querySelectorAll('.lens-pill-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      applyLensFilter(btn.dataset.lens);
+      if (lensPopover) lensPopover.classList.remove('open');
+    });
+  });
+
+  document.querySelectorAll('.sidebar-lens-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      applyLensFilter(btn.dataset.lens);
+    });
+  });
+
+  // 11. Color Studio Season Tabs
+  document.querySelectorAll('.color-season-tabs .season-tab-btn').forEach(tab => {
+    tab.addEventListener('click', () => {
+      soundEngine.playTick();
+      document.querySelectorAll('.color-season-tabs .season-tab-btn').forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      renderColorSwatches(tab.dataset.season);
+    });
+  });
+
+  // Custom Color Picker
+  const customColorInput = document.getElementById('custom-color-input');
+  if (customColorInput) {
+    customColorInput.addEventListener('input', (e) => {
+      const hex = e.target.value;
+      state.selectedColor = { name: `Custom ${hex.toUpperCase()}`, hex: hex, bg: hex };
+
+      const bgLayer = document.getElementById('viewfinder-bg');
+      if (bgLayer) bgLayer.style.background = hex;
+
+      const codeEl = document.getElementById('sihyun-color-badge');
+      if (codeEl) codeEl.textContent = state.selectedColor.name;
+
+      const badgeSub = document.getElementById('cam-badge-sub');
+      if (badgeSub && state.activeCamera === 'sihyun-color') {
+        badgeSub.textContent = hex.toUpperCase();
+      }
+
+      document.querySelectorAll('.color-palette-item').forEach(el => el.classList.remove('active'));
+      showDynamicIslandBanner('LIVE BG COLOR', hex.toUpperCase(), 1000);
+    });
+  }
+
+  // Retouch Tone Slider
+  const toneSlider = document.getElementById('tone-slider');
+  if (toneSlider) {
+    toneSlider.addEventListener('input', (e) => {
+      state.retouchTone = parseInt(e.target.value, 10);
+      const canvas = document.getElementById('model-canvas');
+      if (canvas && state.cameraSource === 'model') {
+        renderStudioModel(canvas, state.retouchTone);
+      }
+    });
+  }
+
+  // Mood Frame Toggle
+  const toggleMood = document.getElementById('toggle-mood-frame');
+  if (toggleMood) {
+    toggleMood.addEventListener('click', () => {
+      soundEngine.playTick();
+      state.moodFrameEnabled = !state.moodFrameEnabled;
+      toggleMood.classList.toggle('active', state.moodFrameEnabled);
+      const frame = document.getElementById('mood-card-frame');
+      if (frame && state.activeCamera === 'sihyun-color') {
+        frame.style.display = state.moodFrameEnabled ? 'flex' : 'none';
+      }
+    });
+  }
+
+  // Editable Moment Title
+  const momentTitleEl = document.getElementById('sihyun-moment-title');
+  if (momentTitleEl) {
+    momentTitleEl.addEventListener('input', () => {
+      state.momentTitle = momentTitleEl.textContent;
+    });
+  }
+
+  // Standard ID Specs Buttons
+  document.querySelectorAll('.spec-segmented-control .spec-segment-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      soundEngine.playTick();
+      document.querySelectorAll('.spec-segmented-control .spec-segment-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const specKey = btn.dataset.spec;
+      state.idSpec = specKey;
+      const spec = ID_SPECS[specKey];
+
+      const detailText = document.getElementById('spec-detail-text');
+      const statusName = document.getElementById('spec-status-name');
+      const box = document.getElementById('id-boundary-box');
+
+      if (detailText) detailText.textContent = spec.detail;
+      if (statusName) statusName.textContent = `${spec.title} 적합`;
+      if (box) {
+        box.style.width = `${spec.boxWidth}px`;
+        box.style.height = `${spec.boxHeight}px`;
+      }
+
+      showDynamicIslandBanner('ID SPEC', spec.title, 1400);
+    });
+  });
 
   // Sidebar Model Selectors
   const btnFem = document.getElementById('btn-use-female');
@@ -1319,209 +1486,7 @@ function initEventListeners() {
     });
   }
 
-  // [Vintage Drawer] Category Sub-tabs
-  document.querySelectorAll('.vintage-cat-btn').forEach(tab => {
-    tab.addEventListener('click', () => {
-      soundEngine.playTick();
-      document.querySelectorAll('.vintage-cat-btn').forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-
-      const cat = tab.dataset.cat;
-      state.activeVintageCat = cat;
-
-      const chips = document.querySelectorAll('#filter-carousel .filter-chip');
-      let firstVisible = null;
-      chips.forEach(chip => {
-        const match = (cat === 'all' || chip.dataset.cat === cat);
-        chip.classList.toggle('hidden', !match);
-        if (match && !firstVisible) firstVisible = chip;
-      });
-
-      // If active filter is hidden, switch to first visible
-      const currentChip = document.querySelector(`#filter-carousel .filter-chip[data-filter="${state.vintageFilter}"]`);
-      if (currentChip && currentChip.classList.contains('hidden') && firstVisible) {
-        firstVisible.click();
-      }
-    });
-  });
-
-  // [Vintage Drawer] Filter Chips
-  document.querySelectorAll('#filter-carousel .filter-chip').forEach(chip => {
-    chip.addEventListener('click', () => {
-      soundEngine.playTick();
-      document.querySelectorAll('#filter-carousel .filter-chip').forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
-      applyVintagePreset(chip.dataset.filter);
-    });
-  });
-
-  // [Vintage Drawer] Toggles
-  const tGrain = document.getElementById('toggle-grain');
-  if (tGrain) {
-    tGrain.addEventListener('click', () => {
-      soundEngine.playTick();
-      state.grainEnabled = !state.grainEnabled;
-      tGrain.classList.toggle('active', state.grainEnabled);
-      const grainEl = document.getElementById('film-grain-layer');
-      if (grainEl) grainEl.style.display = state.grainEnabled ? 'block' : 'none';
-    });
-  }
-
-  const tDate = document.getElementById('toggle-date');
-  if (tDate) {
-    tDate.addEventListener('click', () => {
-      soundEngine.playTick();
-      state.dateStampEnabled = !state.dateStampEnabled;
-      tDate.classList.toggle('active', state.dateStampEnabled);
-      const dateEl = document.getElementById('date-stamp');
-      if (dateEl) dateEl.style.display = state.dateStampEnabled ? 'block' : 'none';
-    });
-  }
-
-  const tOsd = document.getElementById('toggle-osd');
-  if (tOsd) {
-    tOsd.addEventListener('click', () => {
-      soundEngine.playTick();
-      state.osdEnabled = !state.osdEnabled;
-      tOsd.classList.toggle('active', state.osdEnabled);
-      applyVintagePreset(state.vintageFilter);
-    });
-  }
-
-  const tLeak = document.getElementById('toggle-leak');
-  if (tLeak) {
-    tLeak.addEventListener('click', () => {
-      soundEngine.playTick();
-      state.lightLeakEnabled = !state.lightLeakEnabled;
-      tLeak.classList.toggle('active', state.lightLeakEnabled);
-      const leakEl = document.getElementById('light-leak');
-      if (leakEl) leakEl.style.display = state.lightLeakEnabled ? 'block' : 'none';
-    });
-  }
-
-  // [Standard ID Drawer] Spec Segmented buttons
-  document.querySelectorAll('.spec-segment-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      soundEngine.playTick();
-      document.querySelectorAll('.spec-segment-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
-      const specKey = btn.dataset.spec;
-      state.idSpec = specKey;
-      const spec = ID_SPECS[specKey];
-
-      const detailText = document.getElementById('spec-detail-text');
-      const statusName = document.getElementById('spec-status-name');
-      const box = document.getElementById('id-boundary-box');
-
-      if (detailText) detailText.textContent = `${spec.detail}`;
-      if (statusName) statusName.textContent = `${spec.title} 적합`;
-      if (box) {
-        box.style.width = `${spec.boxWidth}px`;
-        box.style.height = `${spec.boxHeight}px`;
-      }
-
-      showDynamicIslandBanner('ID SPEC', spec.title, 1400);
-    });
-  });
-
-  // [Color ID Drawer] Season Tabs
-  document.querySelectorAll('.season-tab-btn').forEach(tab => {
-    tab.addEventListener('click', () => {
-      soundEngine.playTick();
-      document.querySelectorAll('.season-tab-btn').forEach(t => t.classList.remove('active'));
-      tab.classList.add('active');
-      renderColorSwatches(tab.dataset.season);
-    });
-  });
-
-  // Custom Color Picker
-  const customColorInput = document.getElementById('custom-color-input');
-  if (customColorInput) {
-    customColorInput.addEventListener('input', (e) => {
-      const hex = e.target.value;
-      state.selectedColor = { name: `Custom ${hex.toUpperCase()}`, hex: hex, bg: hex };
-
-      const bgLayer = document.getElementById('viewfinder-bg');
-      if (bgLayer) bgLayer.style.background = hex;
-
-      const codeEl = document.getElementById('sihyun-color-badge');
-      if (codeEl) codeEl.textContent = state.selectedColor.name;
-
-      document.querySelectorAll('.color-palette-item').forEach(el => el.classList.remove('active'));
-      showDynamicIslandBanner('CUSTOM COLOR', hex.toUpperCase(), 1000);
-    });
-  }
-
-  // Tone Retouch Slider
-  const toneSlider = document.getElementById('tone-slider');
-  if (toneSlider) {
-    toneSlider.addEventListener('input', (e) => {
-      state.retouchTone = parseInt(e.target.value, 10);
-      const canvas = document.getElementById('model-canvas');
-      if (canvas && state.cameraSource === 'model') {
-        renderStudioModel(canvas, state.retouchTone);
-      }
-    });
-  }
-
-  // Mood Frame Toggle
-  const toggleMood = document.getElementById('toggle-mood-frame');
-  if (toggleMood) {
-    toggleMood.addEventListener('click', () => {
-      soundEngine.playTick();
-      state.moodFrameEnabled = !state.moodFrameEnabled;
-      toggleMood.classList.toggle('active', state.moodFrameEnabled);
-      const frame = document.getElementById('mood-card-frame');
-      if (frame && state.currentMode === 'color-id') {
-        frame.style.display = state.moodFrameEnabled ? 'flex' : 'none';
-      }
-    });
-  }
-
-  // Sihyunhada Moment Title direct edit
-  const momentTitleEl = document.getElementById('sihyun-moment-title');
-  if (momentTitleEl) {
-    momentTitleEl.addEventListener('input', () => {
-      state.momentTitle = momentTitleEl.textContent;
-    });
-  }
-
-  // Optical Lens Filter Toolbar Popover & Buttons
-  const btnLens = document.getElementById('btn-lens');
-  const lensPopover = document.getElementById('lens-filter-popover');
-  const btnCloseLensPopover = document.getElementById('btn-close-lens-popover');
-
-  if (btnLens && lensPopover) {
-    btnLens.addEventListener('click', () => {
-      soundEngine.playTick();
-      lensPopover.classList.toggle('open');
-    });
-  }
-
-  if (btnCloseLensPopover && lensPopover) {
-    btnCloseLensPopover.addEventListener('click', () => {
-      soundEngine.playTick();
-      lensPopover.classList.remove('open');
-    });
-  }
-
-  // Popover Lens Pill Buttons
-  document.querySelectorAll('.lens-pill-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      applyLensFilter(btn.dataset.lens);
-      if (lensPopover) lensPopover.classList.remove('open');
-    });
-  });
-
-  // Sidebar Lens Buttons
-  document.querySelectorAll('.sidebar-lens-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      applyLensFilter(btn.dataset.lens);
-    });
-  });
-
-  // Modals Event Listeners (Print Sheet & Photo Review)
+  // Modals Event Listeners
   const btnPrint1 = document.getElementById('btn-open-print-sheet');
   const btnPrint2 = document.getElementById('btn-open-print-sheet-sidebar');
   const btnReviewPrint = document.getElementById('btn-review-open-print');
@@ -1555,7 +1520,6 @@ function initEventListeners() {
     });
   }
 
-  // Review Photo Modal Close Buttons
   const btnCloseRev1 = document.getElementById('btn-close-review-modal');
   const btnCloseRev2 = document.getElementById('btn-close-review');
   [btnCloseRev1, btnCloseRev2].forEach(btn => {
@@ -1566,7 +1530,6 @@ function initEventListeners() {
     }
   });
 
-  // Retake Photo Button
   const btnRetake = document.getElementById('btn-retake-photo');
   if (btnRetake) {
     btnRetake.addEventListener('click', () => {
@@ -1576,14 +1539,13 @@ function initEventListeners() {
     });
   }
 
-  // Save/Download Photo Buttons
   const btnSave1 = document.getElementById('btn-save-photo');
   const btnSave2 = document.getElementById('btn-download-photo');
   const handleDownloadPhoto = () => {
     if (state.lastCapturedUrl) {
       const a = document.createElement('a');
       a.href = state.lastCapturedUrl;
-      a.download = `SnapStudio_${state.currentMode}_${Date.now()}.jpg`;
+      a.download = `SnapStudio_${state.activeCamera}_${Date.now()}.jpg`;
       a.click();
       showDynamicIslandBanner('DOWNLOADED', 'CAMERA ROLL', 1500);
     }
@@ -1591,23 +1553,29 @@ function initEventListeners() {
   if (btnSave1) btnSave1.addEventListener('click', handleDownloadPhoto);
   if (btnSave2) btnSave2.addEventListener('click', handleDownloadPhoto);
 
-  // Keyboard Shortcuts
+  // Keyboard Shortcuts (1~6 for Cameras)
   window.addEventListener('keydown', (e) => {
     if (e.code === 'Space' && e.target.tagName !== 'INPUT' && e.target.contentEditable !== 'true') {
       e.preventDefault();
       triggerShutterCapture();
     } else if (e.key === '1') {
-      switchMode('vintage');
+      switchCamera('canon-ixy');
     } else if (e.key === '2') {
-      switchMode('standard-id');
+      switchCamera('sony-handycam');
     } else if (e.key === '3') {
-      switchMode('color-id');
+      switchCamera('sony-cybershot');
+    } else if (e.key === '4') {
+      switchCamera('instax-mini');
+    } else if (e.key === '5') {
+      switchCamera('sihyun-color');
+    } else if (e.key === '6') {
+      switchCamera('passport-id');
     }
   });
 }
 
 // ==========================================================================
-// 8. Application Bootstrap
+// 7. Application Bootstrap
 // ==========================================================================
 window.addEventListener('DOMContentLoaded', () => {
   updateClock();
@@ -1620,5 +1588,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   renderColorSwatches('sihyunhada');
   initEventListeners();
-  applyVintagePreset(state.vintageFilter);
+
+  // Start with iconic Canon IXY Digital 50
+  switchCamera('canon-ixy');
 });

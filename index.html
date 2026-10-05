@@ -24,29 +24,53 @@
           일상의 아날로그 필름 감성부터 공공기관 여권 증명사진, MZ세대 트렌디 퍼스널 컬러 프로필까지 하나의 앱으로 완성하는 올인원 iOS 카메라 솔루션.
         </p>
 
-        <!-- Mode Selectors -->
+        <!-- 6 Iconic Cameras Rack Selectors -->
         <div class="panel-modes">
-          <button class="panel-mode-btn active" data-mode="vintage" id="p-mode-vintage">
-            <div class="panel-mode-icon">🎞️</div>
+          <button class="panel-mode-btn active" data-cam="canon-ixy" id="p-cam-ixy">
+            <div class="panel-mode-icon">📸</div>
             <div>
-              <div style="font-weight: 600;">Vintage / Multi-Cam 모드</div>
-              <div style="font-size: 11px; color: var(--text-secondary);">소니·캐논·캠코더·인스탁스·35mm 필름 11종</div>
+              <div style="font-weight: 600;">Canon IXY Digital 50</div>
+              <div style="font-size: 11px; color: var(--text-secondary);">Y2K 얼짱 디카 뽀샤시 웜톤 & 복숭아빛 피부</div>
             </div>
           </button>
 
-          <button class="panel-mode-btn" data-mode="standard-id" id="p-mode-id">
-            <div class="panel-mode-icon">🪪</div>
+          <button class="panel-mode-btn" data-cam="sony-handycam" id="p-cam-handy">
+            <div class="panel-mode-icon">📹</div>
             <div>
-              <div style="font-weight: 600;">Standard ID 모드</div>
-              <div style="font-size: 11px; color: var(--text-secondary);">여권·신분증 정밀 규격 가이드 & 4x6 인화</div>
+              <div style="font-weight: 600;">Sony DCR Handycam</div>
+              <div style="font-size: 11px; color: var(--text-secondary);">90s-00s 미니DV 비디오 테이프 & 글리치 캠코더</div>
             </div>
           </button>
 
-          <button class="panel-mode-btn" data-mode="color-id" id="p-mode-color">
+          <button class="panel-mode-btn" data-cam="sony-cybershot" id="p-cam-cyber">
+            <div class="panel-mode-icon">💿</div>
+            <div>
+              <div style="font-weight: 600;">Sony Cyber-shot CCD</div>
+              <div style="font-size: 11px; color: var(--text-secondary);">사이버 Y2K 쿨톤 블루 틴트 & 쨍한 플래시 대비</div>
+            </div>
+          </button>
+
+          <button class="panel-mode-btn" data-cam="instax-mini" id="p-cam-instax">
+            <div class="panel-mode-icon">🖼️</div>
+            <div>
+              <div style="font-weight: 600;">Fuji Instax & Polaroid</div>
+              <div style="font-size: 11px; color: var(--text-secondary);">서명 프레임 즉석인화 & 파스텔 아날로그 감성</div>
+            </div>
+          </button>
+
+          <button class="panel-mode-btn" data-cam="sihyun-color" id="p-cam-color">
             <div class="panel-mode-icon">🎨</div>
             <div>
-              <div style="font-weight: 600;">Color ID (배경화면 변경) 모드</div>
-              <div style="font-size: 11px; color: var(--text-secondary);">인물 누끼 & 퍼스널 컬러 배경 실시간 치환</div>
+              <div style="font-weight: 600;">시현하다 Color Studio</div>
+              <div style="font-size: 11px; color: var(--accent-mint); font-weight: 700;">실시간 배경색·사진 라이브 치환 스튜디오</div>
+            </div>
+          </button>
+
+          <button class="panel-mode-btn" data-cam="passport-id" id="p-cam-passport">
+            <div class="panel-mode-icon">🪪</div>
+            <div>
+              <div style="font-weight: 600;">여권 / 신분증 규격 카메라</div>
+              <div style="font-size: 11px; color: var(--text-secondary);">정수리·눈·턱 정밀 규격선 & 4x6 인화 시트</div>
             </div>
           </button>
         </div>
@@ -174,7 +198,14 @@
           <!-- Central Viewfinder Area -->
           <div class="viewfinder-container" id="viewfinder">
             
-            <!-- Real-time Background Layer (Color ID) -->
+            <!-- Real-time Active Camera Model Badge HUD -->
+            <div class="camera-model-badge" id="camera-model-badge">
+              <span class="cam-badge-icon" id="cam-badge-icon">📸</span>
+              <span class="cam-badge-title" id="cam-badge-title">Canon IXY Digital 50</span>
+              <span class="cam-badge-sub" id="cam-badge-sub">Peach Glow</span>
+            </div>
+
+            <!-- Real-time Background Layer (Color ID Studio Live Background) -->
             <div class="viewfinder-bg-layer" id="viewfinder-bg"></div>
 
             <!-- Subject Foreground Media (Video Webcam or Canvas Model) -->
@@ -354,129 +385,174 @@
             </div>
           </div>
 
-          <!-- Central Bottom Control Drawer (Contextual to Active Mode) -->
+          <!-- Central Bottom Control Drawer (Contextual to Active Camera) -->
           <div class="control-drawer">
             
-            <!-- [Mode 1 Drawer] Vintage Controls -->
-            <div class="mode-control-panel active" id="drawer-vintage">
-              <!-- Vintage Category Sub-tabs -->
-              <div class="vintage-category-tabs">
-                <button class="vintage-cat-btn active" data-cat="all">전체</button>
-                <button class="vintage-cat-btn" data-cat="camcorder">📹 캠코더</button>
-                <button class="vintage-cat-btn" data-cat="digital">💿 디카 CCD</button>
-                <button class="vintage-cat-btn" data-cat="instant">🖼️ 인스탁스</button>
-                <button class="vintage-cat-btn" data-cat="film">🎞️ 35mm 필름</button>
+            <!-- [Camera 1 Drawer] Canon IXY Digital 50 -->
+            <div class="mode-control-panel active" id="drawer-canon-ixy">
+              <div class="cam-drawer-header">
+                <span class="cam-drawer-title">📷 Canon IXY Digital 50 전용 필터</span>
+                <span class="cam-drawer-badge">Y2K DIGICAM</span>
               </div>
-
-              <!-- Multi-brand Filter Carousel (Sony, Canon, Camcorder, Instax, Kodak, Fuji) -->
-              <div class="filter-carousel" id="filter-carousel">
-                <!-- 1. Camcorder / Tape Line -->
-                <div class="filter-chip active" data-filter="sony-handycam" data-cat="camcorder">
-                  <div class="filter-chip-tag sony-tag">SONY</div>
-                  <span class="filter-chip-icon">📹</span>
-                  <span class="filter-chip-name">Sony DCR</span>
-                  <span class="filter-chip-sub">DV 핸디캠</span>
+              <div class="filter-carousel">
+                <div class="filter-chip active" data-filter="ixy-peach">
+                  <div class="filter-chip-tag canon-tag">BEST</div>
+                  <span class="filter-chip-icon">🍑</span>
+                  <span class="filter-chip-name">Peach Glow</span>
+                  <span class="filter-chip-sub">뽀샤시 웜톤</span>
                 </div>
-                <div class="filter-chip" data-filter="vhs-glitch" data-cat="camcorder">
+                <div class="filter-chip" data-filter="ixy-flash">
+                  <div class="filter-chip-tag canon-tag">FLASH</div>
+                  <span class="filter-chip-icon">📸</span>
+                  <span class="filter-chip-name">Flash Pop</span>
+                  <span class="filter-chip-sub">디카 플래시</span>
+                </div>
+                <div class="filter-chip" data-filter="ixy-pastel">
+                  <div class="filter-chip-tag canon-tag">LO-FI</div>
+                  <span class="filter-chip-icon">🌸</span>
+                  <span class="filter-chip-name">Pastel Haze</span>
+                  <span class="filter-chip-sub">들뜬 섀도우</span>
+                </div>
+                <div class="filter-chip" data-filter="ixy-night">
+                  <div class="filter-chip-tag canon-tag">NIGHT</div>
+                  <span class="filter-chip-icon">🌙</span>
+                  <span class="filter-chip-name">Night Party</span>
+                  <span class="filter-chip-sub">밤거리 노이즈</span>
+                </div>
+              </div>
+              <div class="vintage-toggles">
+                <div class="toggle-pill active" id="toggle-ixy-date">📅 오렌지 데이트스탬프</div>
+                <div class="toggle-pill active" id="toggle-ixy-aiaf">🎯 AiAF 오토포커스</div>
+                <div class="toggle-pill" id="toggle-ixy-grain">✨ 미세 그레인</div>
+              </div>
+            </div>
+
+            <!-- [Camera 2 Drawer] Sony DCR Handycam -->
+            <div class="mode-control-panel" id="drawer-sony-handycam">
+              <div class="cam-drawer-header">
+                <span class="cam-drawer-title">📹 Sony DCR Handycam 전용 필터</span>
+                <span class="cam-drawer-badge">MINI-DV</span>
+              </div>
+              <div class="filter-carousel">
+                <div class="filter-chip active" data-filter="handy-minidv">
+                  <div class="filter-chip-tag sony-tag">3CCD</div>
+                  <span class="filter-chip-icon">📹</span>
+                  <span class="filter-chip-name">MiniDV Classic</span>
+                  <span class="filter-chip-sub">소니 비디오</span>
+                </div>
+                <div class="filter-chip" data-filter="handy-vhs">
                   <div class="filter-chip-tag vhs-tag">VHS</div>
                   <span class="filter-chip-icon">📼</span>
-                  <span class="filter-chip-name">Hi8 Tape</span>
-                  <span class="filter-chip-sub">비디오 글리치</span>
+                  <span class="filter-chip-name">Hi8 Tape Glitch</span>
+                  <span class="filter-chip-sub">스캔라인 글리치</span>
                 </div>
-                <div class="filter-chip" data-filter="retro-8mm" data-cat="camcorder">
+                <div class="filter-chip" data-filter="handy-super8">
                   <div class="filter-chip-tag cine-tag">CINE</div>
                   <span class="filter-chip-icon">📽️</span>
                   <span class="filter-chip-name">Super 8mm</span>
-                  <span class="filter-chip-sub">빈티지 시네</span>
+                  <span class="filter-chip-sub">골든 홈무비</span>
                 </div>
+                <div class="filter-chip" data-filter="handy-nightshot">
+                  <div class="filter-chip-tag sony-tag">0 LUX</div>
+                  <span class="filter-chip-icon">🟢</span>
+                  <span class="filter-chip-name">NightShot</span>
+                  <span class="filter-chip-sub">적외선 야간</span>
+                </div>
+              </div>
+              <div class="vintage-toggles">
+                <div class="toggle-pill active" id="toggle-handy-rec">● REC 타임코드</div>
+                <div class="toggle-pill active" id="toggle-handy-osd">📟 Hi-Fi STEREO</div>
+                <div class="toggle-pill" id="toggle-handy-scan">📺 테이프 스캔라인</div>
+              </div>
+            </div>
 
-                <!-- 2. Digital CCD (Y2K DigiCam) Line -->
-                <div class="filter-chip" data-filter="canon-ixy" data-cat="digital">
-                  <div class="filter-chip-tag canon-tag">CANON</div>
-                  <span class="filter-chip-icon">📸</span>
-                  <span class="filter-chip-name">Canon IXY</span>
-                  <span class="filter-chip-sub">익서스 웜톤</span>
+            <!-- [Camera 3 Drawer] Sony Cyber-shot DSC-P10 -->
+            <div class="mode-control-panel" id="drawer-sony-cybershot">
+              <div class="cam-drawer-header">
+                <span class="cam-drawer-title">💿 Sony Cyber-shot CCD 전용 필터</span>
+                <span class="cam-drawer-badge">CYBER Y2K</span>
+              </div>
+              <div class="filter-carousel">
+                <div class="filter-chip active" data-filter="cyber-cool">
+                  <div class="filter-chip-tag sony-tag">COOL</div>
+                  <span class="filter-chip-icon">❄️</span>
+                  <span class="filter-chip-name">CCD Cool Blue</span>
+                  <span class="filter-chip-sub">차가운 블루 틴트</span>
                 </div>
-                <div class="filter-chip" data-filter="sony-cybershot" data-cat="digital">
-                  <div class="filter-chip-tag sony-tag">SONY</div>
-                  <span class="filter-chip-icon">💿</span>
-                  <span class="filter-chip-name">Cyber-shot</span>
-                  <span class="filter-chip-sub">사이버샷 CCD</span>
+                <div class="filter-chip" data-filter="cyber-magenta">
+                  <div class="filter-chip-tag sony-tag">NEON</div>
+                  <span class="filter-chip-icon">🔮</span>
+                  <span class="filter-chip-name">Cyber Magenta</span>
+                  <span class="filter-chip-sub">테크노 마젠타</span>
                 </div>
-                <div class="filter-chip" data-filter="olympus-camedia" data-cat="digital">
-                  <div class="filter-chip-tag olympus-tag">OLYMPUS</div>
-                  <span class="filter-chip-icon">📷</span>
-                  <span class="filter-chip-name">Camedia</span>
-                  <span class="filter-chip-sub">레트로 플래시</span>
+                <div class="filter-chip" data-filter="cyber-flash">
+                  <div class="filter-chip-tag sony-tag">FLASH</div>
+                  <span class="filter-chip-icon">⚡</span>
+                  <span class="filter-chip-name">Flash Sharp</span>
+                  <span class="filter-chip-sub">쨍한 콘트라스트</span>
                 </div>
+                <div class="filter-chip" data-filter="cyber-matrix">
+                  <div class="filter-chip-tag sony-tag">TECH</div>
+                  <span class="filter-chip-icon">🟩</span>
+                  <span class="filter-chip-name">Matrix Green</span>
+                  <span class="filter-chip-sub">세기말 그린</span>
+                </div>
+              </div>
+              <div class="vintage-toggles">
+                <div class="toggle-pill active" id="toggle-cyber-mp">5.1 MEGAPIXELS</div>
+                <div class="toggle-pill active" id="toggle-cyber-iso">ISO 100 FINE</div>
+                <div class="toggle-pill active" id="toggle-cyber-focus">🎯 브래킷 포커스</div>
+              </div>
+            </div>
 
-                <!-- 3. Instant & Polaroid Line -->
-                <div class="filter-chip" data-filter="instax-mini" data-cat="instant">
-                  <div class="filter-chip-tag fuji-tag">INSTAX</div>
+            <!-- [Camera 4 Drawer] Fuji Instax & Polaroid -->
+            <div class="mode-control-panel" id="drawer-instax-mini">
+              <div class="cam-drawer-header">
+                <span class="cam-drawer-title">🖼️ Fuji Instax & Polaroid 전용 필터</span>
+                <span class="cam-drawer-badge">INSTANT FILM</span>
+              </div>
+              <div class="filter-carousel">
+                <div class="filter-chip active" data-filter="instax-card">
+                  <div class="filter-chip-tag fuji-tag">MINI</div>
                   <span class="filter-chip-icon">🖼️</span>
-                  <span class="filter-chip-name">Instax Mini</span>
-                  <span class="filter-chip-sub">화이트 프레임</span>
+                  <span class="filter-chip-name">Instax Soft</span>
+                  <span class="filter-chip-sub">화이트 카드 프레임</span>
                 </div>
-                <div class="filter-chip" data-filter="polaroid-600" data-cat="instant">
-                  <div class="filter-chip-tag polaroid-tag">POLAROID</div>
+                <div class="filter-chip" data-filter="polaroid-square">
+                  <div class="filter-chip-tag polaroid-tag">600</div>
                   <span class="filter-chip-icon">🔲</span>
                   <span class="filter-chip-name">Polaroid 600</span>
-                  <span class="filter-chip-sub">스퀘어 즉석</span>
+                  <span class="filter-chip-sub">클래식 스퀘어</span>
                 </div>
-
-                <!-- 4. 35mm Classic Film Stocks Line -->
-                <div class="filter-chip" data-filter="kodak-gold" data-cat="film">
-                  <div class="filter-chip-tag kodak-tag">KODAK</div>
-                  <span class="filter-chip-icon">☀️</span>
-                  <span class="filter-chip-name">Gold 200</span>
-                  <span class="filter-chip-sub">골든 웜 35mm</span>
-                </div>
-                <div class="filter-chip" data-filter="fuji-superia" data-cat="film">
-                  <div class="filter-chip-tag fuji-tag">FUJI</div>
-                  <span class="filter-chip-icon">🌿</span>
-                  <span class="filter-chip-name">Superia 400</span>
-                  <span class="filter-chip-sub">청량 에메랄드</span>
-                </div>
-                <div class="filter-chip" data-filter="kodak-tri-x" data-cat="film">
+                <div class="filter-chip" data-filter="instant-bw">
                   <div class="filter-chip-tag bw-tag">B&W</div>
                   <span class="filter-chip-icon">🎞️</span>
-                  <span class="filter-chip-name">Tri-X Noir</span>
-                  <span class="filter-chip-sub">콘트라스트 흑백</span>
+                  <span class="filter-chip-name">Warm Mono</span>
+                  <span class="filter-chip-sub">웜톤 흑백 즉석</span>
+                </div>
+                <div class="filter-chip" data-filter="instant-rainbow">
+                  <div class="filter-chip-tag fuji-tag">COLOR</div>
+                  <span class="filter-chip-icon">🌈</span>
+                  <span class="filter-chip-name">Rainbow Edge</span>
+                  <span class="filter-chip-sub">무지개 카드</span>
                 </div>
               </div>
-
-              <!-- Vintage FX Toggles -->
               <div class="vintage-toggles">
-                <div class="toggle-pill active" id="toggle-grain">✨ 그레인</div>
-                <div class="toggle-pill active" id="toggle-date">📅 데이트스탬프</div>
-                <div class="toggle-pill active" id="toggle-osd">📟 카메라 OSD/프레임</div>
-                <div class="toggle-pill" id="toggle-leak">🔥 빛샘 효과</div>
+                <div class="toggle-pill active" id="toggle-instax-frame">🖼️ 시그니처 프레임</div>
+                <div class="toggle-pill active" id="toggle-instax-date">📅 아날로그 날짜각인</div>
               </div>
             </div>
 
-            <!-- [Mode 2 Drawer] Standard ID Controls -->
-            <div class="mode-control-panel" id="drawer-standard-id">
-              <div class="spec-segmented-control">
-                <button class="spec-segment-btn active" data-spec="passport">대한민국 여권</button>
-                <button class="spec-segment-btn" data-spec="idcard">주민등록/면허</button>
-                <button class="spec-segment-btn" data-spec="half">반명함 (3x4)</button>
-                <button class="spec-segment-btn" data-spec="visa">미국 비자 (2x2)</button>
+            <!-- [Camera 5 Drawer] Sihyunhada Color Studio (실시간 배경 컬러 스튜디오) -->
+            <div class="mode-control-panel" id="drawer-sihyun-color">
+              <div class="cam-drawer-header">
+                <span class="cam-drawer-title">🎨 시현하다 실시간 배경 컬러 스튜디오</span>
+                <span class="cam-drawer-badge" style="color: var(--accent-mint); border-color: rgba(0,229,163,0.5);">LIVE COLOR</span>
               </div>
-              <div class="id-bottom-action-row">
-                <div style="font-size: 11px; color: var(--text-secondary);">
-                  규격: <span id="spec-detail-text" style="color: #fff; font-weight: 600;">3.5 x 4.5 cm (얼굴 3.2~3.6cm)</span>
-                </div>
-                <button class="sheet-preview-trigger-btn" id="btn-open-print-sheet">
-                  <span>📄 4x6 인화 시트</span>
-                </button>
-              </div>
-            </div>
-
-            <!-- [Mode 3 Drawer] Color ID Controls -->
-            <div class="mode-control-panel" id="drawer-color-id">
               <!-- Background Category Tabs -->
               <div class="color-season-tabs">
                 <button class="season-tab-btn active" data-season="sihyunhada">시현하다 PICK</button>
+                <button class="season-tab-btn" data-season="photo">📷 배경 사진/텍스처</button>
                 <button class="season-tab-btn" data-season="spring">봄 웜</button>
                 <button class="season-tab-btn" data-season="summer">여름 쿨</button>
                 <button class="season-tab-btn" data-season="autumn">가을 웜</button>
@@ -486,9 +562,8 @@
               <!-- Swatches Horizontal Scroll & Custom Color Picker -->
               <div class="color-palette-scroll-wrapper">
                 <div class="color-palette-scroll" id="color-palette-scroll">
-                  <!-- Color items dynamically injected or mapped -->
+                  <!-- Color items dynamically injected -->
                 </div>
-                <!-- Custom Hex Color Picker Input -->
                 <label class="custom-color-picker-btn" title="커스텀 배경색 직접 지정">
                   <input type="color" id="custom-color-input" value="#9FA8DA" style="opacity: 0; width: 0; height: 0; position: absolute;">
                   <span class="custom-picker-icon">🎨+</span>
@@ -506,17 +581,42 @@
               </div>
             </div>
 
+            <!-- [Camera 6 Drawer] Standard ID & Passport -->
+            <div class="mode-control-panel" id="drawer-passport-id">
+              <div class="cam-drawer-header">
+                <span class="cam-drawer-title">🪪 여권 / 신분증 규격 카메라</span>
+                <span class="cam-drawer-badge">STANDARD ID</span>
+              </div>
+              <div class="spec-segmented-control">
+                <button class="spec-segment-btn active" data-spec="passport">대한민국 여권</button>
+                <button class="spec-segment-btn" data-spec="idcard">주민등록/면허</button>
+                <button class="spec-segment-btn" data-spec="half">반명함 (3x4)</button>
+                <button class="spec-segment-btn" data-spec="visa">미국 비자 (2x2)</button>
+              </div>
+              <div class="id-bottom-action-row">
+                <div style="font-size: 11px; color: var(--text-secondary);">
+                  규격: <span id="spec-detail-text" style="color: #fff; font-weight: 600;">3.5 x 4.5 cm (얼굴 3.2~3.6cm)</span>
+                </div>
+                <button class="sheet-preview-trigger-btn" id="btn-open-print-sheet">
+                  <span>📄 4x6 인화 시트</span>
+                </button>
+              </div>
+            </div>
+
           </div>
 
-          <!-- Bottom Action Bar & Mode Switcher Wheel -->
+          <!-- Bottom Action Bar & Camera Switcher Wheel -->
           <footer class="camera-bottom-section">
             
-            <!-- Dial Mode Switcher -->
+            <!-- 6 Iconic Cameras Switcher Dial -->
             <div class="mode-dial-wrapper">
               <div class="mode-dial-list" id="mode-dial-list">
-                <div class="mode-dial-item active" data-mode="vintage">VINTAGE</div>
-                <div class="mode-dial-item" data-mode="standard-id">STANDARD ID</div>
-                <div class="mode-dial-item" data-mode="color-id">COLOR ID</div>
+                <div class="mode-dial-item active" data-cam="canon-ixy">CANON IXY</div>
+                <div class="mode-dial-item" data-cam="sony-handycam">HANDYCAM</div>
+                <div class="mode-dial-item" data-cam="sony-cybershot">CYBER-SHOT</div>
+                <div class="mode-dial-item" data-cam="instax-mini">INSTAX</div>
+                <div class="mode-dial-item" data-cam="sihyun-color">COLOR STUDIO</div>
+                <div class="mode-dial-item" data-cam="passport-id">PASSPORT ID</div>
               </div>
             </div>
 
