@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>SnapStudio - 올인원 감성 & 프로필 카메라 (iPhone 16 Pro MVP)</title>
+  <link rel="stylesheet" href="style.css">
+  <!-- Phosphor Icons or Clean SVG icons embedded -->
+</head>
+<body>
+
+  <!-- Outer Desktop Showcase Wrapper -->
+  <div class="showcase-container">
+    
+    <!-- Left Sidebar: Project Overview & Mode Navigation -->
+    <aside class="showcase-panel left-panel">
+      <div class="panel-card">
+        <div class="brand-badge">SnapStudio v1.0 MVP</div>
+        <h1 class="panel-title">
+          <span>SnapStudio</span>
+          <span style="font-size: 14px; color: var(--accent-mint); font-weight: 500;">All-in-Cam</span>
+        </h1>
+        <p class="panel-desc">
+          일상의 아날로그 필름 감성부터 공공기관 여권 증명사진, MZ세대 트렌디 퍼스널 컬러 프로필까지 하나의 앱으로 완성하는 올인원 iOS 카메라 솔루션.
+        </p>
+
+        <!-- Mode Selectors -->
+        <div class="panel-modes">
+          <button class="panel-mode-btn active" data-mode="vintage" id="p-mode-vintage">
+            <div class="panel-mode-icon">🎞️</div>
+            <div>
+              <div style="font-weight: 600;">Vintage / Multi-Cam 모드</div>
+              <div style="font-size: 11px; color: var(--text-secondary);">소니·캐논·캠코더·인스탁스·35mm 필름 11종</div>
+            </div>
+          </button>
+
+          <button class="panel-mode-btn" data-mode="standard-id" id="p-mode-id">
+            <div class="panel-mode-icon">🪪</div>
+            <div>
+              <div style="font-weight: 600;">Standard ID 모드</div>
+              <div style="font-size: 11px; color: var(--text-secondary);">여권·신분증 정밀 규격 가이드 & 4x6 인화</div>
+            </div>
+          </button>
+
+          <button class="panel-mode-btn" data-mode="color-id" id="p-mode-color">
+            <div class="panel-mode-icon">🎨</div>
+            <div>
+              <div style="font-weight: 600;">Color ID (배경화면 변경) 모드</div>
+              <div style="font-size: 11px; color: var(--text-secondary);">인물 누끼 & 퍼스널 컬러 배경 실시간 치환</div>
+            </div>
+          </button>
+        </div>
+
+        <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border-subtle);">
+          <div style="font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px;">스튜디오 인물 모델 / 웹캠</div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px; margin-bottom: 6px;">
+            <button class="btn-secondary active" id="btn-use-female" style="padding: 7px; font-size: 11px; border: 1px solid var(--accent-mint);">👩 여성 모델 (실사)</button>
+            <button class="btn-secondary" id="btn-use-male" style="padding: 7px; font-size: 11px;">👨 남성 모델 (실사)</button>
+          </div>
+          <div style="display: flex; gap: 6px;">
+            <button class="btn-secondary" id="btn-use-webcam" style="flex: 1; padding: 7px; font-size: 11px;">📷 실제 웹캠 (셀카)</button>
+            <label class="btn-secondary" style="flex: 1; padding: 7px; font-size: 11px; text-align: center; cursor: pointer;" title="내 사진 불러오기">
+              📁 내 사진 업로드
+              <input type="file" id="user-photo-upload" accept="image/*" style="display: none;">
+            </label>
+          </div>
+        <!-- Optical Lens Filter Selection in Sidebar -->
+        <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border-subtle);">
+          <div style="font-size: 12px; font-weight: 600; color: var(--text-secondary); margin-bottom: 8px;">
+            ◎ 광학 렌즈 필터 (Lens Filter)
+          </div>
+          <div class="sidebar-lens-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 6px;">
+            <button class="btn-secondary sidebar-lens-btn active" data-lens="none" style="padding: 6px; font-size: 11px;">기본 (Clear)</button>
+            <button class="btn-secondary sidebar-lens-btn" data-lens="mist" style="padding: 6px; font-size: 11px;">✨ 블랙 미스트</button>
+            <button class="btn-secondary sidebar-lens-btn" data-lens="star" style="padding: 6px; font-size: 11px;">✦ 크로스 4X</button>
+            <button class="btn-secondary sidebar-lens-btn" data-lens="streak" style="padding: 6px; font-size: 11px;">━ 블루 스트릭</button>
+            <button class="btn-secondary sidebar-lens-btn" data-lens="prism" style="padding: 6px; font-size: 11px;">🌈 프리즘 분광</button>
+            <button class="btn-secondary sidebar-lens-btn" data-lens="cpl" style="padding: 6px; font-size: 11px;">🪞 CPL 편광</button>
+          </div>
+        </div>
+
+        <button class="panel-action-btn" id="btn-open-print-sheet-sidebar">
+          <span>🖨️ 4x6인치 8분할 인쇄 시트 열기</span>
+        </button>
+      </div>
+
+      <!-- Quick Tips Card -->
+      <div class="panel-card" style="padding: 18px 22px;">
+        <div style="font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;">조작 팁</div>
+        <div class="key-hints">
+          <span class="key-chip">Space : 셔터 촬영</span>
+          <span class="key-chip">1 : Vintage 모드</span>
+          <span class="key-chip">2 : Standard ID</span>
+          <span class="key-chip">3 : Color ID</span>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Center: iPhone 16 Pro Frame -->
+    <main class="device-wrapper">
+      
+      <!-- Hardware Buttons (Mock) -->
+      <div class="device-hardware-buttons">
+        <div class="hw-button hw-action" title="Action Button"></div>
+        <div class="hw-button hw-vol-up" id="hw-vol-up-btn" title="Volume Up (Shutter)"></div>
+        <div class="hw-button hw-vol-down" id="hw-vol-down-btn" title="Volume Down (Shutter)"></div>
+        <div class="hw-button hw-power" title="Power Button"></div>
+      </div>
+
+      <!-- iPhone Body -->
+      <div class="iphone-frame">
+        
+        <!-- iOS Status Bar -->
+        <header class="ios-status-bar">
+          <div class="status-time" id="status-time">9:41</div>
+          <div class="status-icons">
+            <svg width="14" height="12" viewBox="0 0 16 12" fill="#fff"><path d="M1 9.5C1 8.67 1.67 8 2.5 8H4v3.5H2.5C1.67 11.5 1 10.83 1 10V9.5zM6 6c0-.83.67-1.5 1.5-1.5H9v7H7.5C6.67 11.5 6 10.83 6 10V6zM11 2.5C11 1.67 11.67 1 12.5 1H14v10.5h-1.5c-.83 0-1.5-.67-1.5-1.5V2.5z"/></svg>
+            <svg width="14" height="12" viewBox="0 0 16 12" fill="#fff"><path d="M8 2.5C5.2 2.5 2.7 3.6.9 5.5l1.4 1.4C3.8 5.4 5.8 4.5 8 4.5s4.2.9 5.7 2.4l1.4-1.4C13.3 3.6 10.8 2.5 8 2.5zm0 4c-1.7 0-3.2.7-4.3 1.8l1.4 1.4c.8-.8 1.8-1.2 2.9-1.2s2.1.4 2.9 1.2l1.4-1.4C11.2 7.2 9.7 6.5 8 6.5zm0 4c-.8 0-1.5.7-1.5 1.5S7.2 13.5 8 13.5s1.5-.7 1.5-1.5S8.8 10.5 8 10.5z"/></svg>
+            <svg width="22" height="11" viewBox="0 0 25 12" fill="none"><rect x="0.5" y="0.5" width="21" height="11" rx="3.5" stroke="#fff"/><rect x="2" y="2" width="16" height="8" rx="2" fill="#fff"/><path d="M23 4v4c.8 0 1.5-.7 1.5-1.5v-1c0-.8-.7-1.5-1.5-1.5z" fill="#fff"/></svg>
+          </div>
+        </header>
+
+        <!-- Dynamic Island -->
+        <div class="dynamic-island" id="dynamic-island">
+          <div class="island-camera-cutout"></div>
+          <div class="island-content" id="island-content">
+            <span style="display: flex; align-items: center; gap: 6px;">
+              <span style="color: var(--accent-mint); font-size: 13px;">●</span>
+              <span id="island-label">SnapStudio</span>
+            </span>
+            <span id="island-extra" style="color: var(--ios-yellow); font-family: monospace;">READY</span>
+          </div>
+          <div class="island-sensor"></div>
+        </div>
+
+        <!-- Camera App Surface -->
+        <div class="camera-app">
+          
+          <!-- Top Utility Toolbar -->
+          <nav class="camera-top-toolbar">
+            <button class="toolbar-btn" id="btn-flash" title="플래시">
+              <span id="flash-icon">⚡</span>
+            </button>
+            <button class="toolbar-btn" id="btn-timer" title="타이머">
+              <span id="timer-text" style="font-size: 12px; font-weight: 700;">OFF</span>
+            </button>
+            <button class="toolbar-btn" id="btn-lens" title="광학 렌즈 필터 (미스트, 스타, 스트릭, 프리즘, CPL)">
+              <span style="font-size: 13px; font-weight: 700;">◎</span>
+            </button>
+            <button class="toolbar-btn" id="btn-grid" title="격자 안내선">
+              <span>▦</span>
+            </button>
+            <button class="toolbar-btn" id="btn-flip" title="카메라/모델 전환">
+              <span>↻</span>
+            </button>
+          </nav>
+
+          <!-- Optical Lens Filter Popover Dropdown -->
+          <div class="lens-filter-popover" id="lens-filter-popover">
+            <div class="lens-popover-header">
+              <span class="lens-popover-title">◎ 광학 렌즈 필터 (Lens Filter)</span>
+              <span class="lens-popover-close" id="btn-close-lens-popover">✕</span>
+            </div>
+            <div class="lens-pill-group">
+              <button class="lens-pill-btn active" data-lens="none">기본 (Clear)</button>
+              <button class="lens-pill-btn" data-lens="mist">✨ 블랙 미스트</button>
+              <button class="lens-pill-btn" data-lens="star">✦ 크로스 4X</button>
+              <button class="lens-pill-btn" data-lens="streak">━ 블루 스트릭</button>
+              <button class="lens-pill-btn" data-lens="prism">🌈 프리즘 분광</button>
+              <button class="lens-pill-btn" data-lens="cpl">🪞 CPL 편광</button>
+            </div>
+          </div>
+
+          <!-- Central Viewfinder Area -->
+          <div class="viewfinder-container" id="viewfinder">
+            
+            <!-- Real-time Background Layer (Color ID) -->
+            <div class="viewfinder-bg-layer" id="viewfinder-bg"></div>
+
+            <!-- Subject Foreground Media (Video Webcam or Canvas Model) -->
+            <video id="camera-video" class="viewfinder-media" autoplay playsinline muted style="display: none;"></video>
+            <canvas id="model-canvas" class="viewfinder-media" width="780" height="1040"></canvas>
+
+            <!-- Optical Lens Filter Overlay FX Layers -->
+            <div class="lens-fx-layer lens-mist-layer" id="lens-layer-mist"></div>
+            <div class="lens-fx-layer lens-star-layer" id="lens-layer-star"></div>
+            <div class="lens-fx-layer lens-streak-layer" id="lens-layer-streak"></div>
+            <div class="lens-fx-layer lens-prism-layer" id="lens-layer-prism"></div>
+            <div class="lens-fx-layer lens-cpl-layer" id="lens-layer-cpl"></div>
+
+            <!-- 3x3 Composition Grid -->
+            <div class="grid-overlay" id="grid-overlay">
+              <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+              <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+              <div class="grid-cell"></div><div class="grid-cell"></div><div class="grid-cell"></div>
+            </div>
+
+            <!-- Mode 1: Vintage Film Overlays -->
+            <div class="film-grain-layer" id="film-grain-layer">
+              <svg width="100%" height="100%">
+                <filter id="noiseFilter">
+                  <feTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/>
+                  <feColorMatrix type="saturate" values="0"/>
+                </filter>
+                <rect width="100%" height="100%" filter="url(#noiseFilter)"/>
+              </svg>
+            </div>
+            
+            <div class="light-leak-overlay" id="light-leak"></div>
+            <div class="polaroid-frame-overlay" id="polaroid-frame"></div>
+            
+            <!-- Instax Mini Signature Card Frame -->
+            <div class="instax-mini-overlay" id="instax-frame">
+              <div class="instax-inner-cutout"></div>
+              <div class="instax-bottom-brand">
+                <span class="instax-brand-logo">instax <i>mini</i></span>
+                <span class="instax-date-stamp">'26 10 05</span>
+              </div>
+            </div>
+
+            <!-- Sony Handycam DCR Camcorder OSD -->
+            <div class="camcorder-osd sony-handycam-osd" id="sony-handycam-osd">
+              <div class="cam-top-row">
+                <div class="cam-rec-badge">
+                  <div class="cam-rec-dot"></div>
+                  <span>REC</span>
+                </div>
+                <span class="cam-sp-mode">SP 0:00:14</span>
+                <span class="cam-brand-tag">SONY DCR</span>
+              </div>
+              <div class="cam-mid-crosshair">
+                <div class="cam-bracket cam-bracket-tl"></div>
+                <div class="cam-bracket cam-bracket-br"></div>
+              </div>
+              <div class="cam-bottom-osd">
+                <span>Hi-Fi STEREO [DV]</span>
+                <span>BATT ▮▮▮▯</span>
+              </div>
+            </div>
+
+            <!-- VHS Tape Glitch / Scanline OSD -->
+            <div class="vhs-tape-osd" id="vhs-tape-osd">
+              <div class="vhs-scanlines"></div>
+              <div class="vhs-hud-top">
+                <span class="vhs-play-badge">PLAY ▶</span>
+                <span class="vhs-timecode">0:12:45 SP</span>
+              </div>
+              <div class="vhs-hud-bottom">
+                <span>AUTO TRACKING</span>
+                <span>NTSC-U</span>
+              </div>
+            </div>
+
+            <!-- Sony Cyber-shot CCD OSD -->
+            <div class="sony-cybershot-osd" id="sony-cybershot-osd">
+              <div class="sony-cs-top">
+                <span class="sony-cs-logo">Cyber-shot</span>
+                <span class="sony-cs-mp">5.1 MEGAPIXELS</span>
+              </div>
+              <div class="sony-cs-focus-box">
+                <div class="cs-corner cs-tl"></div>
+                <div class="cs-corner cs-tr"></div>
+                <div class="cs-corner cs-bl"></div>
+                <div class="cs-corner cs-br"></div>
+              </div>
+              <div class="sony-cs-bottom">
+                <span>DSC-P10</span>
+                <span>ISO 100</span>
+                <span>FINE</span>
+              </div>
+            </div>
+
+            <!-- Canon IXY / IXUS Digital OSD -->
+            <div class="canon-ixy-osd" id="canon-ixy-osd">
+              <div class="canon-top-row">
+                <span class="canon-brand">Canon IXY</span>
+                <span class="canon-macro">AiAF</span>
+              </div>
+              <div class="canon-date-stamp">'26 10 05 14:28</div>
+            </div>
+
+            <!-- Super 8mm Cine Vignette -->
+            <div class="super8-vignette-overlay" id="super8-overlay">
+              <div class="super8-vignette-circle"></div>
+              <div class="super8-sprocket-mark"></div>
+            </div>
+
+            <div class="date-stamp-overlay" id="date-stamp">'26 10 05</div>
+
+            <!-- Mode 2: Standard ID Precision HUD Overlay -->
+            <div class="standard-id-hud" id="standard-id-hud">
+              <!-- Spec Boundary Box -->
+              <div class="id-spec-boundary matched" id="id-boundary-box">
+                <!-- Head Oval -->
+                <div class="hud-head-oval"></div>
+                <!-- Crown Line -->
+                <div class="hud-crown-line">
+                  <span class="hud-line-label">정수리 기준선 (Crown)</span>
+                </div>
+                <!-- Eye Line -->
+                <div class="hud-eye-line">
+                  <div class="hud-eye-crosshair"></div>
+                  <span class="hud-line-label" style="margin-top: -6px;">눈높이 수평 (Eyes)</span>
+                  <div class="hud-eye-crosshair"></div>
+                </div>
+                <!-- Chin Line -->
+                <div class="hud-chin-line">
+                  <span class="hud-line-label">턱끝 기준선 (Chin)</span>
+                </div>
+                <!-- Shoulder Guideline -->
+                <div class="hud-shoulder-guide"></div>
+              </div>
+
+              <!-- Real-time ID Compliance Badges -->
+              <div class="id-status-badge-container">
+                <div class="id-badge">
+                  <span class="id-badge-dot"></span>
+                  <span id="spec-status-name">여권 규격 적합</span>
+                </div>
+                <div class="id-badge">
+                  <span class="id-badge-dot"></span>
+                  <span>조명 균형 OK</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Mode 3: Color ID Sihyunhada Style Signature Card Frame Overlay -->
+            <div class="color-mood-card-frame" id="mood-card-frame">
+              <!-- Top Signature Moment Banner -->
+              <div class="sihyun-top-banner">
+                <div class="sihyun-moment-title" id="sihyun-moment-title" contenteditable="true" spellcheck="false" title="클릭하여 이름을 직접 수정할 수 있습니다">Wu wanlin's Moment</div>
+                <div class="sihyun-sub-caption">Young Adults - Best Record • Photos by SnapStudio</div>
+              </div>
+
+              <!-- Bottom Signature & Color Code Banner -->
+              <div class="sihyun-bottom-banner">
+                <div class="sihyun-bottom-left">
+                  <span class="sihyun-date-code" id="sihyun-date-code">2026.10.05 RECORD</span>
+                  <span class="sihyun-color-badge" id="sihyun-color-badge">#01 Blossom Pink</span>
+                </div>
+                <div class="sihyun-bottom-right">
+                  <span class="sihyun-archive-text">기록가 서명</span>
+                  <span class="sihyun-sign-script">Sihyun Sign</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Camera Flash FX Screen -->
+            <div class="camera-flash-fx" id="flash-screen"></div>
+
+            <!-- Large Countdown Numbers -->
+            <div class="timer-countdown-overlay" id="timer-overlay">
+              <div class="countdown-number" id="countdown-num">3</div>
+            </div>
+          </div>
+
+          <!-- Central Bottom Control Drawer (Contextual to Active Mode) -->
+          <div class="control-drawer">
+            
+            <!-- [Mode 1 Drawer] Vintage Controls -->
+            <div class="mode-control-panel active" id="drawer-vintage">
+              <!-- Vintage Category Sub-tabs -->
+              <div class="vintage-category-tabs">
+                <button class="vintage-cat-btn active" data-cat="all">전체</button>
+                <button class="vintage-cat-btn" data-cat="camcorder">📹 캠코더</button>
+                <button class="vintage-cat-btn" data-cat="digital">💿 디카 CCD</button>
+                <button class="vintage-cat-btn" data-cat="instant">🖼️ 인스탁스</button>
+                <button class="vintage-cat-btn" data-cat="film">🎞️ 35mm 필름</button>
+              </div>
+
+              <!-- Multi-brand Filter Carousel (Sony, Canon, Camcorder, Instax, Kodak, Fuji) -->
+              <div class="filter-carousel" id="filter-carousel">
+                <!-- 1. Camcorder / Tape Line -->
+                <div class="filter-chip active" data-filter="sony-handycam" data-cat="camcorder">
+                  <div class="filter-chip-tag sony-tag">SONY</div>
+                  <span class="filter-chip-icon">📹</span>
+                  <span class="filter-chip-name">Sony DCR</span>
+                  <span class="filter-chip-sub">DV 핸디캠</span>
+                </div>
+                <div class="filter-chip" data-filter="vhs-glitch" data-cat="camcorder">
+                  <div class="filter-chip-tag vhs-tag">VHS</div>
+                  <span class="filter-chip-icon">📼</span>
+                  <span class="filter-chip-name">Hi8 Tape</span>
+                  <span class="filter-chip-sub">비디오 글리치</span>
+                </div>
+                <div class="filter-chip" data-filter="retro-8mm" data-cat="camcorder">
+                  <div class="filter-chip-tag cine-tag">CINE</div>
+                  <span class="filter-chip-icon">📽️</span>
+                  <span class="filter-chip-name">Super 8mm</span>
+                  <span class="filter-chip-sub">빈티지 시네</span>
+                </div>
+
+                <!-- 2. Digital CCD (Y2K DigiCam) Line -->
+                <div class="filter-chip" data-filter="canon-ixy" data-cat="digital">
+                  <div class="filter-chip-tag canon-tag">CANON</div>
+                  <span class="filter-chip-icon">📸</span>
+                  <span class="filter-chip-name">Canon IXY</span>
+                  <span class="filter-chip-sub">익서스 웜톤</span>
+                </div>
+                <div class="filter-chip" data-filter="sony-cybershot" data-cat="digital">
+                  <div class="filter-chip-tag sony-tag">SONY</div>
+                  <span class="filter-chip-icon">💿</span>
+                  <span class="filter-chip-name">Cyber-shot</span>
+                  <span class="filter-chip-sub">사이버샷 CCD</span>
+                </div>
+                <div class="filter-chip" data-filter="olympus-camedia" data-cat="digital">
+                  <div class="filter-chip-tag olympus-tag">OLYMPUS</div>
+                  <span class="filter-chip-icon">📷</span>
+                  <span class="filter-chip-name">Camedia</span>
+                  <span class="filter-chip-sub">레트로 플래시</span>
+                </div>
+
+                <!-- 3. Instant & Polaroid Line -->
+                <div class="filter-chip" data-filter="instax-mini" data-cat="instant">
+                  <div class="filter-chip-tag fuji-tag">INSTAX</div>
+                  <span class="filter-chip-icon">🖼️</span>
+                  <span class="filter-chip-name">Instax Mini</span>
+                  <span class="filter-chip-sub">화이트 프레임</span>
+                </div>
+                <div class="filter-chip" data-filter="polaroid-600" data-cat="instant">
+                  <div class="filter-chip-tag polaroid-tag">POLAROID</div>
+                  <span class="filter-chip-icon">🔲</span>
+                  <span class="filter-chip-name">Polaroid 600</span>
+                  <span class="filter-chip-sub">스퀘어 즉석</span>
+                </div>
+
+                <!-- 4. 35mm Classic Film Stocks Line -->
+                <div class="filter-chip" data-filter="kodak-gold" data-cat="film">
+                  <div class="filter-chip-tag kodak-tag">KODAK</div>
+                  <span class="filter-chip-icon">☀️</span>
+                  <span class="filter-chip-name">Gold 200</span>
+                  <span class="filter-chip-sub">골든 웜 35mm</span>
+                </div>
+                <div class="filter-chip" data-filter="fuji-superia" data-cat="film">
+                  <div class="filter-chip-tag fuji-tag">FUJI</div>
+                  <span class="filter-chip-icon">🌿</span>
+                  <span class="filter-chip-name">Superia 400</span>
+                  <span class="filter-chip-sub">청량 에메랄드</span>
+                </div>
+                <div class="filter-chip" data-filter="kodak-tri-x" data-cat="film">
+                  <div class="filter-chip-tag bw-tag">B&W</div>
+                  <span class="filter-chip-icon">🎞️</span>
+                  <span class="filter-chip-name">Tri-X Noir</span>
+                  <span class="filter-chip-sub">콘트라스트 흑백</span>
+                </div>
+              </div>
+
+              <!-- Vintage FX Toggles -->
+              <div class="vintage-toggles">
+                <div class="toggle-pill active" id="toggle-grain">✨ 그레인</div>
+                <div class="toggle-pill active" id="toggle-date">📅 데이트스탬프</div>
+                <div class="toggle-pill active" id="toggle-osd">📟 카메라 OSD/프레임</div>
+                <div class="toggle-pill" id="toggle-leak">🔥 빛샘 효과</div>
+              </div>
+            </div>
+
+            <!-- [Mode 2 Drawer] Standard ID Controls -->
+            <div class="mode-control-panel" id="drawer-standard-id">
+              <div class="spec-segmented-control">
+                <button class="spec-segment-btn active" data-spec="passport">대한민국 여권</button>
+                <button class="spec-segment-btn" data-spec="idcard">주민등록/면허</button>
+                <button class="spec-segment-btn" data-spec="half">반명함 (3x4)</button>
+                <button class="spec-segment-btn" data-spec="visa">미국 비자 (2x2)</button>
+              </div>
+              <div class="id-bottom-action-row">
+                <div style="font-size: 11px; color: var(--text-secondary);">
+                  규격: <span id="spec-detail-text" style="color: #fff; font-weight: 600;">3.5 x 4.5 cm (얼굴 3.2~3.6cm)</span>
+                </div>
+                <button class="sheet-preview-trigger-btn" id="btn-open-print-sheet">
+                  <span>📄 4x6 인화 시트</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- [Mode 3 Drawer] Color ID Controls -->
+            <div class="mode-control-panel" id="drawer-color-id">
+              <!-- Background Category Tabs -->
+              <div class="color-season-tabs">
+                <button class="season-tab-btn active" data-season="sihyunhada">시현하다 PICK</button>
+                <button class="season-tab-btn" data-season="spring">봄 웜</button>
+                <button class="season-tab-btn" data-season="summer">여름 쿨</button>
+                <button class="season-tab-btn" data-season="autumn">가을 웜</button>
+                <button class="season-tab-btn" data-season="winter">겨울 쿨</button>
+                <button class="season-tab-btn" data-season="gradient">그라디언트</button>
+              </div>
+              <!-- Swatches Horizontal Scroll & Custom Color Picker -->
+              <div class="color-palette-scroll-wrapper">
+                <div class="color-palette-scroll" id="color-palette-scroll">
+                  <!-- Color items dynamically injected or mapped -->
+                </div>
+                <!-- Custom Hex Color Picker Input -->
+                <label class="custom-color-picker-btn" title="커스텀 배경색 직접 지정">
+                  <input type="color" id="custom-color-input" value="#9FA8DA" style="opacity: 0; width: 0; height: 0; position: absolute;">
+                  <span class="custom-picker-icon">🎨+</span>
+                </label>
+              </div>
+              <!-- Retouch & Mood Card Toggle -->
+              <div class="color-retouch-controls">
+                <div class="slider-group">
+                  <span class="slider-label">피부 톤업</span>
+                  <input type="range" class="retouch-slider" id="tone-slider" min="0" max="100" value="35">
+                </div>
+                <div class="toggle-pill active" id="toggle-mood-frame" style="padding: 4px 10px; font-size: 10.5px;">
+                  🏷️ 무드 서명 카드
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <!-- Bottom Action Bar & Mode Switcher Wheel -->
+          <footer class="camera-bottom-section">
+            
+            <!-- Dial Mode Switcher -->
+            <div class="mode-dial-wrapper">
+              <div class="mode-dial-list" id="mode-dial-list">
+                <div class="mode-dial-item active" data-mode="vintage">VINTAGE</div>
+                <div class="mode-dial-item" data-mode="standard-id">STANDARD ID</div>
+                <div class="mode-dial-item" data-mode="color-id">COLOR ID</div>
+              </div>
+            </div>
+
+            <!-- Shutter Controls Row -->
+            <div class="shutter-row">
+              <!-- Left: Gallery Thumbnail -->
+              <div class="gallery-thumbnail-btn" id="gallery-btn" title="촬영된 사진 미리보기">
+                <img src="" alt="Thumb" class="gallery-thumb-img" id="gallery-thumb" style="display: none;">
+                <span id="gallery-placeholder" style="font-size: 18px;">🖼️</span>
+              </div>
+
+              <!-- Center: Shutter Button -->
+              <button class="shutter-btn-outer" id="shutter-btn" title="사진 촬영">
+                <div class="shutter-btn-inner"></div>
+              </button>
+
+              <!-- Right: Mode Extra Action -->
+              <button class="bottom-quick-btn" id="bottom-quick-action" title="추가 옵션">
+                <span>🪄</span>
+              </button>
+            </div>
+
+          </footer>
+
+        </div>
+
+        <!-- iOS Home Indicator -->
+        <div class="ios-home-indicator"></div>
+
+      </div>
+    </main>
+
+    <!-- Right Sidebar: Feature Specs & HIG Design Details -->
+    <aside class="showcase-panel right-panel">
+      <div class="panel-card">
+        <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+          <span style="font-size: 11px; font-weight: 700; color: var(--accent-mint); text-transform: uppercase;">Mode Specification</span>
+          <span style="font-size: 11px; color: var(--text-secondary);" id="active-mode-badge">Vintage / Film</span>
+        </div>
+        <h2 style="font-size: 20px; font-weight: 700; color: #fff; margin-bottom: 10px;" id="mode-spec-title">
+          아날로그 필름 & 텍스처
+        </h2>
+        <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.6;" id="mode-spec-desc">
+          소니 캠코더, 캐논 IXY 디카, 인스탁스 미니 즉석인화, Hi8 비디오 글리치, 코닥/후지 필름 등 11종의 명기 카메라 톤과 실시간 뷰파인더 OSD가 완벽히 재현됩니다.
+        </p>
+
+        <ul class="feature-list" id="mode-feature-list">
+          <li class="feature-item">
+            <span class="feature-bullet">✓</span>
+            <span>브랜드별 11종 프리셋: Sony DCR, Canon IXY, Cyber-shot, Instax Mini, Polaroid, Hi8 Tape, Super 8mm, Kodak Gold, Fuji Superia, Tri-X Noir</span>
+          </li>
+          <li class="feature-item">
+            <span class="feature-bullet">✓</span>
+            <span>기종별 전용 OSD & 프레임: 소니 타임코드, 캐논 데이트스탬프, 인스탁스 화이트 카드 프레임, VHS 스캔라인</span>
+          </li>
+          <li class="feature-item">
+            <span class="feature-bullet">✓</span>
+            <span>Web Audio API 기반 기계식 셔터 찰칵 햅틱 사운드 & Dynamic Island 상태 연동</span>
+          </li>
+        </ul>
+      </div>
+
+      <!-- HIG & Native Tech Highlights -->
+      <div class="panel-card">
+        <h3 style="font-size: 14px; font-weight: 700; color: #fff; margin-bottom: 12px; display: flex; align-items: center; gap: 6px;">
+          <span></span> Apple HIG 디자인 설계 포인트
+        </h3>
+        <ul class="feature-list" style="margin-top: 0;">
+          <li class="feature-item">
+            <span class="feature-bullet">•</span>
+            <span><strong>iOS Liquid Glass 디자인 시스템</strong>: 초고해상도 블러(Backdrop-filter blur 24px), 미세 화이트 보더(0.5px), 다층 반투명 머티리얼 적용</span>
+          </li>
+          <li class="feature-item">
+            <span class="feature-bullet">•</span>
+            <span><strong>실시간 배경화면 치환 (Color ID)</strong>: 인물 누끼 실시간 분리 및 4계절 16색 + 그라디언트 + 커스텀 컬러 배경 전환</span>
+          </li>
+          <li class="feature-item">
+            <span class="feature-bullet">•</span>
+            <span><strong>Dynamic Island 인터랙션</strong>: 타이머 카운트다운, 모드 전환, 배경 변경 시 다이나믹 아일랜드가 부드럽게 팽창</span>
+          </li>
+        </ul>
+      </div>
+    </aside>
+
+  </div>
+
+  <!-- Modal 1: 4x6 Print Sheet (8-Cut) Modal -->
+  <div class="modal-backdrop" id="print-sheet-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">4x6 인치 규격 인화 시트 (8분할)</div>
+          <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">
+            10cm x 15cm 인화지 규격 • 여권 3.5x4.5cm 8매 배치 • 재단선 자동 포함
+          </div>
+        </div>
+        <button class="modal-close-btn" id="btn-close-print-modal">✕</button>
+      </div>
+      
+      <div class="modal-body">
+        <!-- 4x6 Printable Sheet Canvas/Paper -->
+        <div class="print-sheet-paper" id="print-paper-content">
+          <div class="print-sheet-header">
+            <span>SnapStudio Photo Sheet • Standard ID</span>
+            <span>4 x 6 INCH (300 DPI)</span>
+          </div>
+          
+          <div class="print-sheet-grid" id="print-photo-grid">
+            <!-- 8 photos will be populated dynamically -->
+          </div>
+
+          <div class="print-sheet-footer">
+            <span>대한민국 여권·신분증 공용 규격 3.5 x 4.5 cm</span>
+            <span>재단 안내선(Crop Marks) 기준 커팅 요망</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-secondary" id="btn-close-print-modal-2">닫기</button>
+        <button class="btn-primary" id="btn-download-print-sheet">
+          <span>🖨️ 인쇄 시트 다운로드 (JPG)</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 2: Photo Capture Review Sheet -->
+  <div class="modal-backdrop" id="review-photo-modal">
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">촬영된 결과물 확인</div>
+          <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;" id="review-subtitle">
+            SnapStudio 고해상도 캡처
+          </div>
+        </div>
+        <button class="modal-close-btn" id="btn-close-review-modal">✕</button>
+      </div>
+
+      <div class="modal-body">
+        <div class="captured-preview-card" id="review-preview-container">
+          <img src="" alt="Captured Photo" class="captured-preview-img" id="review-preview-img">
+        </div>
+        <div style="font-size: 12px; color: var(--text-secondary); text-align: center;" id="review-info-tag">
+          모드 효과와 퍼스널 컬러 배경이 온디바이스로 합성되었습니다.
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-secondary" id="btn-retake-photo">다시 촬영</button>
+        <button class="btn-secondary" id="btn-review-open-print">📄 4x6 시트</button>
+        <button class="btn-primary" id="btn-save-photo">
+          <span>💾 사진첩 저장</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="app.js"></script>
+</body>
+</html>

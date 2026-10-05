@@ -1,0 +1,2339 @@
+/* ==========================================================================
+   SnapStudio - iPhone 16 Pro Interactive Web Prototype Stylesheet
+   Apple Human Interface Guidelines (HIG) Compliant
+   ========================================================================== */
+
+:root {
+  --bg-desktop: #07090e;
+  --bg-card: rgba(20, 24, 33, 0.55);
+  --border-subtle: rgba(255, 255, 255, 0.12);
+  --border-active: rgba(255, 255, 255, 0.28);
+  --border-glass-specular: rgba(255, 255, 255, 0.4);
+  --text-primary: #f0f6fc;
+  --text-secondary: #9aa4b2;
+  --text-muted: #57606a;
+  --accent-gold: #f5b74c;
+  --accent-mint: #00f2ad;
+  --accent-blue: #388bfd;
+  --accent-coral: #ff7b72;
+  --ios-yellow: #ffd60a;
+
+  /* Glassmorphism Design Tokens */
+  --glass-bg-ultra-thin: rgba(255, 255, 255, 0.05);
+  --glass-bg-thin: rgba(25, 28, 36, 0.45);
+  --glass-bg-regular: rgba(22, 26, 35, 0.65);
+  --glass-bg-thick: rgba(18, 22, 30, 0.82);
+  --glass-blur-sm: blur(12px);
+  --glass-blur-md: blur(24px);
+  --glass-blur-lg: blur(40px);
+  --glass-border: 1px solid rgba(255, 255, 255, 0.14);
+  --glass-border-top: 1px solid rgba(255, 255, 255, 0.28);
+  --glass-shadow: 0 16px 40px -10px rgba(0, 0, 0, 0.65), 0 0 1px 1px rgba(255, 255, 255, 0.08) inset;
+  --glass-inner-bevel: inset 0 1px 1px rgba(255, 255, 255, 0.25);
+  
+  /* iPhone 16 Pro Dimensions */
+  --device-width: 393px;
+  --device-height: 852px;
+  --device-radius: 54px;
+  --bezel-width: 4px;
+}
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  user-select: none;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", sans-serif;
+  background-color: var(--bg-desktop);
+  color: var(--text-primary);
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* Subtle background lighting effect */
+body::before {
+  content: "";
+  position: fixed;
+  top: 15%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 900px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(47, 129, 247, 0.08) 0%, rgba(0, 229, 163, 0.04) 40%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ==========================================================================
+   Desktop Showcase Layout (Sidebars + Center Device)
+   ========================================================================== */
+
+.showcase-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 48px;
+  width: 100%;
+  max-width: 1540px;
+  padding: 24px;
+  min-height: 100vh;
+  position: relative;
+  z-index: 1;
+}
+
+/* Left / Right Information Panels */
+.showcase-panel {
+  flex: 1;
+  max-width: 360px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.panel-card {
+  background: var(--bg-card);
+  backdrop-filter: var(--glass-blur-md);
+  -webkit-backdrop-filter: var(--glass-blur-md);
+  border: var(--glass-border);
+  border-top: var(--glass-border-top);
+  border-radius: 24px;
+  padding: 24px;
+  box-shadow: var(--glass-shadow);
+  position: relative;
+  overflow: hidden;
+}
+
+.panel-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 255, 255, 0.4) 50%, transparent 100%);
+  pointer-events: none;
+}
+
+.brand-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(229, 169, 60, 0.12);
+  color: var(--accent-gold);
+  border: 1px solid rgba(229, 169, 60, 0.3);
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.panel-title {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  color: #fff;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.panel-desc {
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: var(--text-secondary);
+}
+
+/* Quick Mode Switcher in Panel */
+.panel-modes {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 16px;
+}
+
+.panel-mode-btn {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 12px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid var(--border-subtle);
+  border-radius: 14px;
+  color: var(--text-primary);
+  font-size: 13.5px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: left;
+}
+
+.panel-mode-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--border-active);
+  transform: translateY(-1px);
+}
+
+.panel-mode-btn.active {
+  background: rgba(47, 129, 247, 0.15);
+  border-color: rgba(47, 129, 247, 0.5);
+  color: #58a6ff;
+}
+
+.panel-mode-icon {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+/* Feature tags */
+.feature-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 12px;
+}
+
+.feature-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 13px;
+  color: var(--text-secondary);
+  line-height: 1.5;
+}
+
+.feature-bullet {
+  color: var(--accent-mint);
+  font-weight: bold;
+}
+
+/* Keyboard hint chips */
+.key-hints {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+
+.key-chip {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid var(--border-subtle);
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-family: monospace;
+  color: var(--text-secondary);
+}
+
+/* Quick Action Buttons in Panel */
+.panel-action-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px;
+  background: linear-gradient(135deg, #1f6feb 0%, #238636 100%);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s, transform 0.1s;
+  margin-top: 8px;
+}
+
+.panel-action-btn:hover {
+  opacity: 0.92;
+  transform: translateY(-1px);
+}
+
+/* ==========================================================================
+   iPhone 16 Pro Device Frame
+   ========================================================================== */
+
+.device-wrapper {
+  position: relative;
+  width: var(--device-width);
+  height: var(--device-height);
+  flex-shrink: 0;
+  filter: drop-shadow(0 25px 60px rgba(0, 0, 0, 0.85)) drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
+}
+
+/* Physical Hardware Buttons */
+.device-hardware-buttons {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hw-button {
+  position: absolute;
+  background: #2a2c31;
+  border-radius: 3px;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.2), 0 2px 4px rgba(0, 0, 0, 0.5);
+  pointer-events: auto;
+  cursor: pointer;
+}
+
+/* Action button (Left top) */
+.hw-action {
+  left: -3px;
+  top: 115px;
+  width: 4px;
+  height: 28px;
+}
+
+/* Volume Up */
+.hw-vol-up {
+  left: -3px;
+  top: 160px;
+  width: 4px;
+  height: 50px;
+}
+
+/* Volume Down */
+.hw-vol-down {
+  left: -3px;
+  top: 220px;
+  width: 4px;
+  height: 50px;
+}
+
+/* Power button (Right) */
+.hw-power {
+  right: -3px;
+  top: 175px;
+  width: 4px;
+  height: 75px;
+}
+
+/* Outer Titanium Bezel */
+.iphone-frame {
+  width: 100%;
+  height: 100%;
+  background: #000;
+  border-radius: var(--device-radius);
+  border: var(--bezel-width) solid #2d3036;
+  outline: 1.5px solid #141619;
+  position: relative;
+  overflow: hidden;
+  box-shadow: inset 0 0 0 2px rgba(255, 255, 255, 0.1), inset 0 0 6px rgba(0, 0, 0, 0.9);
+  display: flex;
+  flex-direction: column;
+}
+
+/* ==========================================================================
+   iOS Top Status Bar & Dynamic Island
+   ========================================================================== */
+
+.ios-status-bar {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 54px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  padding: 14px 26px 0 26px;
+  z-index: 100;
+  pointer-events: none;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  letter-spacing: -0.3px;
+}
+
+.status-time {
+  width: 60px;
+  cursor: pointer;
+  pointer-events: auto;
+}
+
+.status-icons {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  width: 60px;
+  justify-content: flex-end;
+}
+
+/* Dynamic Island */
+.dynamic-island {
+  position: absolute;
+  top: 11px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 122px;
+  height: 35px;
+  background: #000;
+  border-radius: 20px;
+  z-index: 110;
+  transition: all 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 12px;
+  cursor: pointer;
+  pointer-events: auto;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.6);
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+}
+
+.island-camera-cutout {
+  width: 11px;
+  height: 11px;
+  background: #0a0e1a;
+  border-radius: 50%;
+  box-shadow: inset 0 0 3px #182848;
+}
+
+.island-sensor {
+  width: 8px;
+  height: 8px;
+  background: #07090f;
+  border-radius: 50%;
+}
+
+.island-content {
+  display: none;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+}
+
+/* Expanded Dynamic Island (Timer / Status) */
+.dynamic-island.expanded {
+  width: 280px;
+  height: 48px;
+  border-radius: 24px;
+  padding: 0 18px;
+  background: rgba(18, 18, 20, 0.95);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+
+.dynamic-island.expanded .island-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+/* ==========================================================================
+   iOS Camera App Main UI
+   ========================================================================== */
+
+.camera-app {
+  position: absolute;
+  inset: 0;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+/* Top Camera Utility Toolbar */
+.camera-top-toolbar {
+  position: absolute;
+  top: 52px;
+  left: 0;
+  right: 0;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  z-index: 50;
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.6) 0%, transparent 100%);
+}
+
+.toolbar-btn {
+  background: var(--glass-bg-thin);
+  border: var(--glass-border);
+  backdrop-filter: var(--glass-blur-sm);
+  -webkit-backdrop-filter: var(--glass-blur-sm);
+  box-shadow: var(--glass-inner-bevel), 0 4px 12px rgba(0, 0, 0, 0.4);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 15px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.toolbar-btn:active {
+  transform: scale(0.9);
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.toolbar-btn.active {
+  background: rgba(255, 214, 10, 0.28);
+  color: var(--ios-yellow);
+  border-color: rgba(255, 214, 10, 0.6);
+  box-shadow: 0 0 14px rgba(255, 214, 10, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+}
+
+/* Optical Lens Filter Popover Dropdown */
+.lens-filter-popover {
+  position: absolute;
+  top: 96px;
+  left: 12px;
+  right: 12px;
+  background: rgba(20, 24, 33, 0.88);
+  backdrop-filter: blur(28px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-top: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 18px;
+  padding: 10px 12px;
+  z-index: 60;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7), inset 0 1px 1px rgba(255, 255, 255, 0.3);
+  display: none;
+  animation: fadeIn 0.2s ease;
+}
+
+.lens-filter-popover.open {
+  display: block;
+}
+
+.lens-popover-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+  padding: 0 2px;
+}
+
+.lens-popover-title {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--text-primary);
+  letter-spacing: 0.3px;
+}
+
+.lens-popover-close {
+  font-size: 12px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  padding: 2px 6px;
+  border-radius: 50%;
+  transition: color 0.15s ease;
+}
+
+.lens-popover-close:hover {
+  color: #fff;
+}
+
+.lens-pill-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.lens-pill-btn {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.lens-pill-btn:hover {
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+}
+
+.lens-pill-btn.active {
+  background: rgba(0, 229, 163, 0.24);
+  color: var(--accent-mint);
+  border-color: rgba(0, 229, 163, 0.6);
+  box-shadow: 0 0 10px rgba(0, 229, 163, 0.3);
+}
+
+/* Live Viewfinder Area (Strict 3:4 Photographic Ratio - Exact 369 x 492px) */
+.viewfinder-container {
+  position: absolute;
+  top: 100px;
+  left: 8px;
+  right: 8px;
+  width: calc(100% - 16px);
+  height: 492px;
+  max-height: 492px;
+  aspect-ratio: 3 / 4;
+  background: #111;
+  overflow: hidden;
+  border-radius: 20px;
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.9), 0 2px 8px rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+}
+
+/* Optical Lens Filters Layers (Black Mist, Star, Streak, Prism, CPL) */
+.lens-fx-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 11;
+  display: none;
+}
+
+/* Black Mist / Pro-Mist Bloom Layer */
+.lens-layer-mist,
+.lens-mist-layer {
+  backdrop-filter: blur(1.5px) brightness(1.08) contrast(0.96);
+  -webkit-backdrop-filter: blur(1.5px) brightness(1.08) contrast(0.96);
+  mix-blend-mode: screen;
+  background: radial-gradient(circle at 50% 38%, rgba(255, 255, 255, 0.26) 0%, rgba(255, 230, 200, 0.14) 40%, transparent 75%);
+}
+
+/* Cross Star 4X Flare Layer */
+.lens-layer-star,
+.lens-star-layer {
+  background-image: 
+    radial-gradient(circle at 45% 38%, rgba(255, 255, 255, 0.9) 0%, transparent 2%),
+    radial-gradient(circle at 55% 38%, rgba(255, 255, 255, 0.9) 0%, transparent 2%),
+    linear-gradient(45deg, transparent 48%, rgba(255, 255, 255, 0.8) 50%, transparent 52%),
+    linear-gradient(-45deg, transparent 48%, rgba(255, 255, 255, 0.8) 50%, transparent 52%);
+  background-size: 100% 100%, 100% 100%, 160px 160px, 160px 160px;
+  background-position: center center, center center, 45% 38%, 55% 38%;
+  background-repeat: no-repeat;
+  mix-blend-mode: screen;
+}
+
+/* Anamorphic Blue Streak Flare Layer */
+.lens-layer-streak,
+.lens-streak-layer {
+  background: linear-gradient(
+    0deg,
+    transparent 48.5%,
+    rgba(0, 229, 255, 0.85) 49.5%,
+    rgba(255, 255, 255, 0.95) 50%,
+    rgba(0, 229, 255, 0.85) 50.5%,
+    transparent 51.5%
+  );
+  mix-blend-mode: screen;
+  filter: blur(1.5px);
+}
+
+/* Prism Halo Chromatic Aberration Layer */
+.lens-layer-prism,
+.lens-prism-layer {
+  box-shadow: 
+    inset 0 0 30px rgba(255, 0, 128, 0.35),
+    inset 0 0 50px rgba(0, 255, 255, 0.35),
+    inset 0 0 70px rgba(255, 255, 0, 0.25);
+  border-radius: 20px;
+  mix-blend-mode: screen;
+}
+
+/* CPL Circular Polarizer Filter Layer (Reflection Suppression & Saturation Boost) */
+.lens-layer-cpl,
+.lens-cpl-layer {
+  background: rgba(0, 20, 40, 0.05);
+  filter: contrast(1.15) saturate(1.22);
+  mix-blend-mode: multiply;
+}
+
+/* Background Replacement Layer (For Color ID Mode) */
+.viewfinder-bg-layer {
+  position: absolute;
+  inset: 0;
+  background-color: #2b313a; /* Default studio dark gray */
+  transition: background-color 0.3s ease;
+  z-index: 1;
+}
+
+/* Subject Media Layer (Video or High-Res Sample Model) */
+.viewfinder-media {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 2;
+  transition: filter 0.25s ease;
+}
+
+/* SVG Person Cutout for Color ID background replacement */
+.viewfinder-cutout-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* 3x3 Grid Overlay */
+.grid-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 10;
+  pointer-events: none;
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  grid-template-rows: 1fr 1fr 1fr;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+
+.grid-overlay.visible {
+  opacity: 1;
+}
+
+.grid-cell {
+  border: 0.5px solid rgba(255, 255, 255, 0.2);
+}
+
+/* ==========================================================================
+   [Mode 1] Vintage / Film Overlays
+   ========================================================================== */
+
+/* Film Grain Overlay */
+.film-grain-layer {
+  position: absolute;
+  inset: 0;
+  z-index: 12;
+  pointer-events: none;
+  opacity: 0.38;
+  mix-blend-mode: overlay;
+  display: none;
+}
+
+/* Y2K Camcorder OSD Overlay */
+.camcorder-osd {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  pointer-events: none;
+  display: none;
+  padding: 16px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 0 4px rgba(0, 255, 200, 0.8), 1px 1px 1px #000;
+}
+
+.cam-rec-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  color: #ff3b30;
+}
+
+.cam-rec-dot {
+  width: 10px;
+  height: 10px;
+  background: #ff3b30;
+  border-radius: 50%;
+  animation: pulseDot 1s infinite;
+}
+
+@keyframes pulseDot {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+
+.cam-bottom-osd {
+  position: absolute;
+  bottom: 14px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  justify-content: space-between;
+}
+
+/* Date Stamp Overlay */
+.date-stamp-overlay {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  font-family: 'Impact', 'Arial Black', sans-serif;
+  font-size: 15px;
+  letter-spacing: 1.5px;
+  color: #ff8c00;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8), 0 0 6px rgba(255, 140, 0, 0.6);
+  z-index: 16;
+  pointer-events: none;
+  display: none;
+}
+
+/* Light Leak Effect */
+.light-leak-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 13;
+  pointer-events: none;
+  background: radial-gradient(circle at 10% 20%, rgba(255, 80, 0, 0.45) 0%, rgba(255, 200, 50, 0.25) 35%, transparent 70%);
+  mix-blend-mode: screen;
+  display: none;
+  animation: leakFlicker 6s infinite alternate ease-in-out;
+}
+
+@keyframes leakFlicker {
+  0% { opacity: 0.6; transform: scale(1); }
+  50% { opacity: 0.9; transform: scale(1.05) rotate(1deg); }
+  100% { opacity: 0.5; transform: scale(0.98); }
+}
+
+/* Polaroid Frame Overlay */
+.polaroid-frame-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 14;
+  pointer-events: none;
+  border-top: 14px solid #f6f6f2;
+  border-left: 14px solid #f6f6f2;
+  border-right: 14px solid #f6f6f2;
+  border-bottom: 50px solid #f6f6f2;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.3);
+  display: none;
+}
+
+/* Instax Mini Signature Frame Overlay */
+.instax-mini-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 14;
+  pointer-events: none;
+  display: none;
+  background: transparent;
+  border-top: 18px solid #f5f4ef;
+  border-left: 18px solid #f5f4ef;
+  border-right: 18px solid #f5f4ef;
+  border-bottom: 68px solid #f5f4ef;
+  border-radius: 4px;
+  box-shadow: inset 0 0 12px rgba(0, 0, 0, 0.25), 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.instax-bottom-brand {
+  position: absolute;
+  bottom: -62px;
+  left: 0;
+  right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 8px;
+  color: #55575d;
+}
+
+.instax-brand-logo {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Rounded", sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: #3b3d44;
+}
+
+.instax-brand-logo i {
+  font-family: "Georgia", serif;
+  font-style: italic;
+  font-weight: normal;
+  color: #e65100;
+  margin-left: 2px;
+}
+
+.instax-date-stamp {
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  color: #8c8f99;
+  letter-spacing: 0.5px;
+}
+
+/* Sony Handycam DV Camcorder OSD */
+.sony-handycam-osd {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  pointer-events: none;
+  display: none;
+  padding: 16px;
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: #00ffcc;
+  text-shadow: 0 0 6px rgba(0, 255, 204, 0.8), 1px 1px 2px #000;
+}
+
+.cam-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.cam-brand-tag {
+  background: rgba(0, 0, 0, 0.5);
+  border: 1px solid #00ffcc;
+  padding: 2px 6px;
+  border-radius: 3px;
+  font-size: 10px;
+}
+
+.cam-sp-mode {
+  color: #fff;
+  font-size: 12px;
+}
+
+.cam-mid-crosshair {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 90px;
+  height: 90px;
+}
+
+.cam-bracket {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  border-color: rgba(0, 255, 204, 0.7);
+  border-style: solid;
+}
+
+.cam-bracket-tl {
+  top: 0;
+  left: 0;
+  border-width: 2px 0 0 2px;
+}
+
+.cam-bracket-br {
+  bottom: 0;
+  right: 0;
+  border-width: 0 2px 2px 0;
+}
+
+/* VHS Tape Scanline & Glitch OSD */
+.vhs-tape-osd {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  pointer-events: none;
+  display: none;
+  overflow: hidden;
+  font-family: "Courier New", Courier, monospace;
+  color: #fff;
+  text-shadow: 2px 0 3px rgba(255, 0, 0, 0.7), -2px 0 3px rgba(0, 150, 255, 0.7);
+}
+
+.vhs-scanlines {
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.28) 0px,
+    rgba(0, 0, 0, 0.28) 2px,
+    transparent 2px,
+    transparent 4px
+  );
+  opacity: 0.75;
+}
+
+.vhs-hud-top {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  font-weight: 700;
+}
+
+.vhs-play-badge {
+  color: #55ff55;
+  text-shadow: 0 0 6px rgba(85, 255, 85, 0.8);
+}
+
+.vhs-hud-bottom {
+  position: absolute;
+  bottom: 16px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Sony Cyber-shot CCD OSD */
+.sony-cybershot-osd {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  pointer-events: none;
+  display: none;
+  padding: 14px;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  color: #fff;
+  font-size: 11px;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+}
+
+.sony-cs-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.sony-cs-logo {
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  color: #ff9f0a;
+}
+
+.sony-cs-mp {
+  font-size: 10px;
+  background: rgba(0,0,0,0.5);
+  border: 1px solid rgba(255,255,255,0.4);
+  padding: 1px 5px;
+  border-radius: 3px;
+}
+
+.sony-cs-focus-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60px;
+  height: 60px;
+}
+
+.cs-corner {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-color: #30d158;
+  border-style: solid;
+}
+
+.cs-tl { top: 0; left: 0; border-width: 2px 0 0 2px; }
+.cs-tr { top: 0; right: 0; border-width: 2px 2px 0 0; }
+.cs-bl { bottom: 0; left: 0; border-width: 0 0 2px 2px; }
+.cs-br { bottom: 0; right: 0; border-width: 0 2px 2px 0; }
+
+.sony-cs-bottom {
+  position: absolute;
+  bottom: 14px;
+  left: 14px;
+  right: 14px;
+  display: flex;
+  justify-content: space-between;
+  font-weight: 600;
+  color: #e0e0e0;
+}
+
+/* Canon IXY / IXUS OSD */
+.canon-ixy-osd {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  pointer-events: none;
+  display: none;
+  padding: 14px;
+}
+
+.canon-top-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #ff453a;
+  text-shadow: 0 0 4px rgba(255, 69, 58, 0.4);
+}
+
+.canon-date-stamp {
+  position: absolute;
+  bottom: 16px;
+  right: 16px;
+  font-family: 'Courier New', monospace;
+  font-weight: 800;
+  font-size: 13px;
+  color: #ff9500;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.9);
+  letter-spacing: 1px;
+}
+
+/* Super 8mm Cine Vignette */
+.super8-vignette-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 13;
+  pointer-events: none;
+  display: none;
+  box-shadow: inset 0 0 70px rgba(0, 0, 0, 0.85), inset 0 0 120px rgba(30, 20, 10, 0.6);
+  border-radius: 24px;
+}
+
+/* ==========================================================================
+   [Mode 2] Standard ID Precision HUD Guideline Overlay
+   ========================================================================== */
+
+.standard-id-hud {
+  position: absolute;
+  inset: 0;
+  z-index: 18;
+  pointer-events: none;
+  display: none;
+  padding: 12px;
+}
+
+/* ID Spec Boundary Box */
+.id-spec-boundary {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 250px;
+  height: 320px;
+  border: 1.5px dashed rgba(255, 255, 255, 0.4);
+  border-radius: 8px;
+  transition: all 0.3s ease;
+}
+
+.id-spec-boundary.matched {
+  border-color: var(--accent-mint);
+  border-style: solid;
+  box-shadow: 0 0 15px rgba(0, 229, 163, 0.4);
+}
+
+/* Face Oval & Crown Line */
+.hud-head-oval {
+  position: absolute;
+  top: 14%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 140px;
+  height: 180px;
+  border: 2px solid rgba(255, 255, 255, 0.7);
+  border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+  transition: border-color 0.3s ease;
+}
+
+.hud-crown-line {
+  position: absolute;
+  top: 14%;
+  left: 20%;
+  right: 20%;
+  border-top: 1px solid rgba(255, 255, 255, 0.6);
+  display: flex;
+  justify-content: flex-end;
+}
+
+.hud-line-label {
+  font-size: 9.5px;
+  color: rgba(255, 255, 255, 0.75);
+  background: rgba(0, 0, 0, 0.5);
+  padding: 1px 4px;
+  border-radius: 3px;
+  margin-top: 2px;
+}
+
+/* Eye Level Horizontal Line */
+.hud-eye-line {
+  position: absolute;
+  top: 38%;
+  left: 25%;
+  right: 25%;
+  border-top: 1.5px dashed rgba(255, 255, 255, 0.6);
+  display: flex;
+  justify-content: space-between;
+}
+
+.hud-eye-crosshair {
+  width: 12px;
+  height: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.7);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Chin Guide Line */
+.hud-chin-line {
+  position: absolute;
+  top: 66%;
+  left: 32%;
+  right: 32%;
+  border-bottom: 2px solid rgba(255, 255, 255, 0.6);
+  text-align: center;
+}
+
+/* Shoulder Guide Curves */
+.hud-shoulder-guide {
+  position: absolute;
+  top: 76%;
+  left: 10%;
+  right: 10%;
+  height: 50px;
+  border-top: 2px dashed rgba(255, 255, 255, 0.5);
+  border-radius: 50% 50% 0 0;
+}
+
+/* ID Status Badge HUD */
+.id-status-badge-container {
+  position: absolute;
+  top: 14px;
+  left: 12px;
+  right: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.id-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  color: #fff;
+}
+
+.id-badge-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent-mint);
+  box-shadow: 0 0 6px var(--accent-mint);
+}
+
+.id-badge-dot.warning {
+  background: var(--accent-gold);
+  box-shadow: 0 0 6px var(--accent-gold);
+}
+
+/* ==========================================================================
+   [Mode 3] Color ID Mood Frame Overlay
+   ========================================================================== */
+
+.color-mood-card-frame {
+  position: absolute;
+  inset: 0;
+  z-index: 17;
+  pointer-events: none;
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 10px 10px;
+}
+
+/* Sihyunhada Signature Moment Top Banner */
+.sihyun-top-banner {
+  background: linear-gradient(180deg, rgba(0, 0, 0, 0.55) 0%, rgba(0, 0, 0, 0.2) 65%, transparent 100%);
+  padding: 12px 14px 18px 14px;
+  border-radius: 8px 8px 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.sihyun-moment-title {
+  font-family: "Georgia", "Baskerville", "Times New Roman", serif;
+  font-size: 19px;
+  font-weight: 700;
+  color: #ffffff;
+  letter-spacing: -0.3px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+  pointer-events: auto;
+  cursor: text;
+  outline: none;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.4);
+  display: inline-block;
+  width: fit-content;
+  transition: border-color 0.2s ease;
+}
+
+.sihyun-moment-title:focus {
+  border-bottom: 1px solid var(--accent-mint);
+  color: #fff;
+}
+
+.sihyun-sub-caption {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  font-size: 9px;
+  color: rgba(255, 255, 255, 0.85);
+  letter-spacing: 0.5px;
+}
+
+/* Sihyunhada Signature Bottom Banner */
+.sihyun-bottom-banner {
+  background: linear-gradient(0deg, rgba(0, 0, 0, 0.75) 0%, rgba(0, 0, 0, 0.35) 60%, transparent 100%);
+  padding: 24px 14px 10px 14px;
+  border-radius: 0 0 8px 8px;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.sihyun-bottom-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.sihyun-date-code {
+  font-family: "Courier New", monospace;
+  font-size: 9.5px;
+  color: rgba(255, 255, 255, 0.7);
+  letter-spacing: 0.5px;
+}
+
+.sihyun-color-badge {
+  background: rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  border: 0.5px solid rgba(255, 255, 255, 0.3);
+  padding: 2px 8px;
+  border-radius: 6px;
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #fff;
+  width: fit-content;
+}
+
+.sihyun-bottom-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 1px;
+}
+
+.sihyun-archive-text {
+  font-size: 8.5px;
+  color: rgba(255, 255, 255, 0.65);
+  letter-spacing: 0.5px;
+}
+
+.sihyun-sign-script {
+  font-family: "Brush Script MT", "Caveat", "Segoe Script", cursive;
+  font-size: 22px;
+  color: rgba(255, 255, 255, 0.95);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.6);
+  letter-spacing: 1px;
+}
+
+/* ==========================================================================
+   Control Drawer (Mode-Specific Panels)
+   ========================================================================== */
+
+.control-drawer {
+  position: absolute;
+  top: 598px;
+  left: 8px;
+  right: 8px;
+  height: 126px;
+  z-index: 40;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 8px 12px;
+  background: var(--glass-bg-thin);
+  backdrop-filter: var(--glass-blur-md);
+  -webkit-backdrop-filter: var(--glass-blur-md);
+  border: var(--glass-border);
+  border-top: var(--glass-border-top);
+  border-radius: 22px;
+  box-shadow: var(--glass-shadow), var(--glass-inner-bevel);
+}
+
+.mode-control-panel {
+  display: none;
+  width: 100%;
+  animation: fadeIn 0.25s ease;
+}
+
+.mode-control-panel.active {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Mode 1: Vintage Controls */
+/* Vintage Category Sub-tabs */
+.vintage-category-tabs {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 1px 2px;
+}
+
+.vintage-category-tabs::-webkit-scrollbar {
+  display: none;
+}
+
+.vintage-cat-btn {
+  background: var(--glass-bg-ultra-thin);
+  border: var(--glass-border);
+  backdrop-filter: var(--glass-blur-sm);
+  -webkit-backdrop-filter: var(--glass-blur-sm);
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+  box-shadow: var(--glass-inner-bevel);
+}
+
+.vintage-cat-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.vintage-cat-btn.active {
+  background: rgba(255, 255, 255, 0.24);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.45);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35), var(--glass-inner-bevel);
+}
+
+/* Multi-brand Filter Carousel */
+.filter-carousel {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  padding: 3px 2px;
+  scrollbar-width: none;
+}
+
+.filter-carousel::-webkit-scrollbar {
+  display: none;
+}
+
+.filter-chip {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  background: var(--glass-bg-ultra-thin);
+  border: var(--glass-border);
+  backdrop-filter: var(--glass-blur-sm);
+  -webkit-backdrop-filter: var(--glass-blur-sm);
+  border-radius: 13px;
+  padding: 5px 10px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  min-width: 72px;
+  box-shadow: var(--glass-inner-bevel);
+  position: relative;
+}
+
+.filter-chip.hidden {
+  display: none !important;
+}
+
+.filter-chip:hover {
+  background: rgba(255, 255, 255, 0.12);
+  transform: translateY(-2px);
+}
+
+.filter-chip.active {
+  border-color: rgba(255, 214, 10, 0.8);
+  background: rgba(255, 214, 10, 0.22);
+  box-shadow: 0 0 14px rgba(255, 214, 10, 0.35), var(--glass-inner-bevel);
+  transform: translateY(-2px);
+}
+
+/* Filter Chip Brand Tag Badge */
+.filter-chip-tag {
+  font-size: 8.5px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  padding: 1px 4px;
+  border-radius: 4px;
+  margin-bottom: 2px;
+}
+
+.sony-tag {
+  background: rgba(0, 229, 255, 0.25);
+  color: #00e5ff;
+  border: 0.5px solid rgba(0, 229, 255, 0.5);
+}
+
+.canon-tag {
+  background: rgba(255, 59, 48, 0.25);
+  color: #ff453a;
+  border: 0.5px solid rgba(255, 59, 48, 0.5);
+}
+
+.vhs-tag {
+  background: rgba(255, 149, 0, 0.25);
+  color: #ff9500;
+  border: 0.5px solid rgba(255, 149, 0, 0.5);
+}
+
+.cine-tag {
+  background: rgba(255, 214, 10, 0.25);
+  color: #ffd60a;
+  border: 0.5px solid rgba(255, 214, 10, 0.5);
+}
+
+.olympus-tag {
+  background: rgba(48, 209, 88, 0.25);
+  color: #30d158;
+  border: 0.5px solid rgba(48, 209, 88, 0.5);
+}
+
+.fuji-tag {
+  background: rgba(52, 199, 89, 0.25);
+  color: #34c759;
+  border: 0.5px solid rgba(52, 199, 89, 0.5);
+}
+
+.polaroid-tag {
+  background: rgba(90, 200, 250, 0.25);
+  color: #5ac8fa;
+  border: 0.5px solid rgba(90, 200, 250, 0.5);
+}
+
+.kodak-tag {
+  background: rgba(255, 204, 0, 0.25);
+  color: #ffcc00;
+  border: 0.5px solid rgba(255, 204, 0, 0.5);
+}
+
+.bw-tag {
+  background: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  border: 0.5px solid rgba(255, 255, 255, 0.5);
+}
+
+.filter-chip-icon {
+  font-size: 15px;
+}
+
+.filter-chip-name {
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #fff;
+  white-space: nowrap;
+}
+
+.filter-chip-sub {
+  font-size: 8.5px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.vintage-toggles {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  margin-top: 1px;
+}
+
+.toggle-pill {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: var(--glass-bg-ultra-thin);
+  border: var(--glass-border);
+  backdrop-filter: var(--glass-blur-sm);
+  -webkit-backdrop-filter: var(--glass-blur-sm);
+  padding: 3px 10px;
+  border-radius: 12px;
+  font-size: 10.5px;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: var(--glass-inner-bevel);
+}
+
+.toggle-pill:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.toggle-pill.active {
+  background: rgba(255, 255, 255, 0.22);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.4);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), var(--glass-inner-bevel);
+}
+
+/* Mode 2: Standard ID Controls */
+.spec-segmented-control {
+  display: flex;
+  background: rgba(15, 18, 25, 0.6);
+  border: var(--glass-border);
+  backdrop-filter: var(--glass-blur-sm);
+  -webkit-backdrop-filter: var(--glass-blur-sm);
+  border-radius: 14px;
+  padding: 3px;
+  gap: 3px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.4);
+}
+
+.spec-segment-btn {
+  flex: 1;
+  padding: 6px 2px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 600;
+  border-radius: 11px;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  text-align: center;
+}
+
+.spec-segment-btn.active {
+  background: rgba(255, 255, 255, 0.24);
+  color: #fff;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), var(--glass-inner-bevel);
+}
+
+.id-bottom-action-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 4px;
+}
+
+.sheet-preview-trigger-btn {
+  background: rgba(0, 229, 163, 0.18);
+  border: 1px solid rgba(0, 229, 163, 0.45);
+  color: var(--accent-mint);
+  backdrop-filter: var(--glass-blur-sm);
+  -webkit-backdrop-filter: var(--glass-blur-sm);
+  padding: 5px 12px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s ease;
+  box-shadow: var(--glass-inner-bevel);
+}
+
+.sheet-preview-trigger-btn:hover {
+  background: rgba(0, 229, 163, 0.32);
+  transform: translateY(-1px);
+}
+
+/* Mode 3: Color ID Controls */
+.color-season-tabs {
+  display: flex;
+  justify-content: space-around;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding-bottom: 4px;
+}
+
+.season-tab-btn {
+  background: none;
+  border: none;
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  padding: 2px 6px;
+  position: relative;
+  transition: color 0.2s ease;
+}
+
+.season-tab-btn:hover {
+  color: #fff;
+}
+
+.season-tab-btn.active {
+  color: #fff;
+}
+
+.season-tab-btn.active::after {
+  content: "";
+  position: absolute;
+  bottom: -4px;
+  left: 15%;
+  right: 15%;
+  height: 2px;
+  background: var(--ios-yellow);
+  border-radius: 2px;
+  box-shadow: 0 0 6px var(--ios-yellow);
+}
+
+.color-palette-scroll-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.color-palette-scroll {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  overflow-x: auto;
+  padding: 6px 4px;
+  scrollbar-width: none;
+  flex: 1;
+}
+
+.color-palette-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.color-palette-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.color-palette-item:hover {
+  transform: translateY(-2px);
+}
+
+.color-swatch-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4), var(--glass-inner-bevel);
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.color-palette-item.active .color-swatch-circle {
+  border-color: #ffffff;
+  transform: scale(1.12);
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.8), 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.color-swatch-name {
+  font-size: 8.5px;
+  color: var(--text-secondary);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.color-palette-item.active .color-swatch-name {
+  color: #fff;
+  font-weight: 700;
+}
+
+.color-swatch-item {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  cursor: pointer;
+  border: 2px solid transparent;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4), var(--glass-inner-bevel);
+  transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275), border-color 0.2s ease;
+  position: relative;
+}
+
+.color-swatch-item:hover {
+  transform: scale(1.15);
+}
+
+.color-swatch-item.active {
+  border-color: #fff;
+  transform: scale(1.18);
+  box-shadow: 0 0 12px rgba(255, 255, 255, 0.7), 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+.custom-color-picker-btn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--glass-bg-ultra-thin);
+  border: 1px dashed rgba(255, 255, 255, 0.35);
+  backdrop-filter: var(--glass-blur-sm);
+  -webkit-backdrop-filter: var(--glass-blur-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  cursor: pointer;
+  box-shadow: var(--glass-inner-bevel);
+  transition: all 0.2s ease;
+}
+
+.custom-color-picker-btn:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: #fff;
+  transform: scale(1.08);
+}
+
+.custom-picker-icon {
+  font-size: 13px;
+  color: #fff;
+}
+
+.color-retouch-controls {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 0 4px;
+}
+
+.slider-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+}
+
+.slider-label {
+  font-size: 10.5px;
+  color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.retouch-slider {
+  width: 100%;
+  -webkit-appearance: none;
+  appearance: none;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.2);
+  outline: none;
+}
+
+.retouch-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: #fff;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+/* ==========================================================================
+   Bottom Action Bar & Mode Switcher Wheel
+   ========================================================================== */
+
+.camera-bottom-section {
+  position: absolute;
+  top: 728px;
+  left: 0;
+  right: 0;
+  height: 104px;
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-bottom: 10px;
+}
+
+/* Mode Switcher Dial */
+.mode-dial-wrapper {
+  width: 100%;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  overflow: hidden;
+}
+
+.mode-dial-list {
+  display: flex;
+  align-items: center;
+  gap: 22px;
+  transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.mode-dial-item {
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.mode-dial-item.active {
+  color: var(--ios-yellow);
+  transform: scale(1.08);
+}
+
+/* Shutter Row */
+.shutter-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 24px;
+}
+
+.gallery-thumbnail-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: #222;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  overflow: hidden;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  transition: transform 0.2s ease;
+}
+
+.gallery-thumbnail-btn:active {
+  transform: scale(0.92);
+}
+
+.gallery-thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* iOS Main Shutter Button */
+.shutter-btn-outer {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 3.5px solid #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+  background: transparent;
+}
+
+.shutter-btn-outer:active {
+  transform: scale(0.92);
+}
+
+.shutter-btn-inner {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: #fff;
+  transition: all 0.15s ease;
+}
+
+.shutter-btn-outer:active .shutter-btn-inner {
+  transform: scale(0.88);
+  background: #e0e0e0;
+}
+
+/* Secondary Quick Action Button */
+.bottom-quick-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: rgba(30, 30, 30, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  font-size: 18px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.bottom-quick-btn:active {
+  transform: scale(0.92);
+}
+
+/* iOS Home Indicator Bar */
+.ios-home-indicator {
+  position: absolute;
+  bottom: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 134px;
+  height: 4.5px;
+  background: #fff;
+  border-radius: 3px;
+  opacity: 0.85;
+  pointer-events: none;
+  z-index: 100;
+}
+
+/* Camera Flash Animation Screen */
+.camera-flash-fx {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  z-index: 200;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.08s ease-out;
+}
+
+.camera-flash-fx.flashing {
+  opacity: 1;
+}
+
+/* Countdown Big Number Overlay */
+.timer-countdown-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 90;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+.countdown-number {
+  font-size: 96px;
+  font-weight: 800;
+  color: var(--ios-yellow);
+  text-shadow: 0 0 20px rgba(255, 214, 10, 0.8);
+  animation: countdownPulse 0.9s infinite;
+}
+
+@keyframes countdownPulse {
+  0% { transform: scale(1.3); opacity: 0.8; }
+  100% { transform: scale(0.9); opacity: 1; }
+}
+
+/* ==========================================================================
+   Modals & Sheets (Review Modal & 4x6 Print Sheet Modal)
+   ========================================================================== */
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(3, 5, 8, 0.72);
+  backdrop-filter: var(--glass-blur-lg);
+  -webkit-backdrop-filter: var(--glass-blur-lg);
+  z-index: 1000;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.modal-backdrop.open {
+  display: flex;
+  opacity: 1;
+}
+
+.modal-dialog {
+  background: var(--glass-bg-thick);
+  backdrop-filter: var(--glass-blur-md);
+  -webkit-backdrop-filter: var(--glass-blur-md);
+  border: var(--glass-border);
+  border-top: var(--glass-border-top);
+  border-radius: 30px;
+  width: 90%;
+  max-width: 580px;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: var(--glass-shadow), 0 30px 80px rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  transform: scale(0.94);
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.modal-backdrop.open .modal-dialog {
+  transform: scale(1);
+}
+
+.modal-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 24px 16px 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.modal-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.modal-close-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  color: #fff;
+  font-size: 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modal-body {
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+}
+
+/* 4x6 Print Template Sheet Preview */
+.print-sheet-paper {
+  width: 360px;
+  height: 540px; /* 4x6 Aspect Ratio */
+  background: #ffffff;
+  border-radius: 4px;
+  padding: 16px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+.print-sheet-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 9px;
+  font-family: monospace;
+  color: #666;
+  border-bottom: 0.5px dashed #ccc;
+  padding-bottom: 4px;
+  margin-bottom: 12px;
+}
+
+.print-sheet-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: repeat(4, 1fr);
+  gap: 12px 14px;
+  flex: 1;
+}
+
+.print-photo-item {
+  position: relative;
+  background: #eee;
+  border: 0.5px solid #bbb;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Crop Marks on Print Sheet */
+.print-photo-item::before,
+.print-photo-item::after {
+  content: "";
+  position: absolute;
+  pointer-events: none;
+  z-index: 10;
+}
+
+.print-sheet-footer {
+  margin-top: 8px;
+  font-size: 8.5px;
+  color: #777;
+  display: flex;
+  justify-content: space-between;
+  border-top: 0.5px dashed #ccc;
+  padding-top: 4px;
+}
+
+.modal-footer {
+  display: flex;
+  gap: 12px;
+  padding: 16px 24px 24px 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  width: 100%;
+}
+
+.btn-secondary {
+  flex: 1;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.btn-primary {
+  flex: 2;
+  padding: 12px;
+  background: #2f81f7;
+  border: none;
+  border-radius: 12px;
+  color: #fff;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+/* Review Captured Photo Card */
+.captured-preview-card {
+  width: 280px;
+  height: 380px;
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.6);
+  position: relative;
+  background: #000;
+}
+
+.captured-preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* ==========================================================================
+   Desktop & Laptop Viewport Height Scaling
+   ========================================================================== */
+
+@media (min-width: 1101px) and (max-height: 940px) {
+  .showcase-container {
+    padding: 12px 20px;
+    gap: 24px;
+  }
+  
+  .device-wrapper {
+    transform: scale(0.92);
+    transform-origin: center center;
+  }
+  
+  .showcase-panel {
+    max-height: 800px;
+    overflow-y: auto;
+  }
+}
+
+@media (min-width: 1101px) and (max-height: 830px) {
+  .showcase-container {
+    padding: 8px 16px;
+    gap: 16px;
+  }
+  
+  .device-wrapper {
+    transform: scale(0.82);
+    transform-origin: center center;
+  }
+  
+  .showcase-panel {
+    max-height: 720px;
+    overflow-y: auto;
+  }
+}
+
+@media (min-width: 1101px) and (max-height: 740px) {
+  .device-wrapper {
+    transform: scale(0.72);
+    transform-origin: center center;
+  }
+  
+  .showcase-panel {
+    max-height: 640px;
+  }
+}
+
+/* ==========================================================================
+   Mobile Responsive Adjustments
+   ========================================================================== */
+
+@media (max-width: 1100px) {
+  .showcase-panel {
+    display: none;
+  }
+  
+  .showcase-container {
+    padding: 0;
+    gap: 0;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 500px) {
+  body {
+    background: #000;
+  }
+  
+  .device-wrapper {
+    width: 100vw;
+    height: 100vh;
+    border-radius: 0;
+    filter: none;
+    transform: none !important;
+  }
+  
+  .iphone-frame {
+    border-radius: 0;
+    border: none;
+    outline: none;
+  }
+  
+  .hw-button {
+    display: none;
+  }
+}
