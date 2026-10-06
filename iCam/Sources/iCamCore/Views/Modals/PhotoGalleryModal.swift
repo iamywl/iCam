@@ -44,14 +44,24 @@ public struct PhotoGalleryModal: View {
                 }
             }
             .navigationTitle("갤러리 (\(viewModel.galleryItems.count))")
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
+            #endif
             .toolbar {
+                #if os(iOS)
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("닫기") {
                         viewModel.showGalleryModal = false
                     }
                     .foregroundColor(.white)
                 }
+                #else
+                ToolbarItem(placement: .automatic) {
+                    Button("닫기") {
+                        viewModel.showGalleryModal = false
+                    }
+                }
+                #endif
             }
             .sheet(isPresented: $showExifInspector) {
                 if let item = selectedItem {

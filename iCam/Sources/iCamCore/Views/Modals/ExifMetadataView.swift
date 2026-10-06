@@ -91,14 +91,24 @@ public struct ExifMetadataModalView: View {
                 }
             }
             .navigationTitle("사진 상세 & EXIF")
+            #if os(iOS)
             .navigationBarTitleDisplayMode(.inline)
+            #endif
             .toolbar {
+                #if os(iOS)
                 ToolbarItem(placement: .navigationBarTrailing) {
                     Button("완료") {
                         presentationMode.wrappedValue.dismiss()
                     }
                     .foregroundColor(.white)
                 }
+                #else
+                ToolbarItem(placement: .automatic) {
+                    Button("완료") {
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                }
+                #endif
             }
         }
     }

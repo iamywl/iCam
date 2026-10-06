@@ -98,7 +98,7 @@ def test_css_tokens():
         '--glass-blur-md',
         '--glass-border',
         '--accent-mint',
-        'height: 460px;',
+        'height: 436px;',
         'aspect-ratio: 3 / 4;'
     ]
 

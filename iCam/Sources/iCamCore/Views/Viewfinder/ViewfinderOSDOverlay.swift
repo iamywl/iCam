@@ -39,6 +39,10 @@ public struct ViewfinderOSDOverlay: View {
                 hasselbladOverlay
             case .polaroidSX70:
                 polaroidSX70Overlay
+            case .fujiQuickSnap:
+                fujiQuickSnapOverlay
+            case .kyoceraSamurai:
+                kyoceraSamuraiOverlay
             }
         }
         .allowsHitTesting(false)
@@ -745,7 +749,7 @@ public struct ViewfinderOSDOverlay: View {
                         Rectangle().frame(width: 4, height: 10).foregroundColor(.green)
                         Rectangle().frame(width: 4, height: 10).foregroundColor(.blue)
                         Text("SX-70 LAND CAMERA")
-                            .font(.system(size: 9, weight: .black, design: .sansSerif))
+                            .font(.system(size: 9, weight: .black, design: .default))
                             .foregroundColor(.white)
                     }
                     .padding(.horizontal, 6)
@@ -774,6 +778,112 @@ public struct ViewfinderOSDOverlay: View {
                 }
                 .padding(12)
             }
+        }
+    }
+
+    // MARK: - 15. Fuji QuickSnap OSD
+    private var fujiQuickSnapOverlay: some View {
+        VStack {
+            HStack {
+                HStack(spacing: 4) {
+                    Circle().frame(width: 6, height: 6).foregroundColor(.green)
+                    Text("FUJICOLOR 写ルンです")
+                        .font(.system(size: 10, weight: .black, design: .default))
+                        .foregroundColor(.white)
+                }
+                .padding(.horizontal, 8)
+                .padding(.vertical, 4)
+                .background(Color(hex: "#007A33").opacity(0.85))
+                .cornerRadius(4)
+
+                Spacer()
+
+                HStack(spacing: 4) {
+                    Image(systemName: "bolt.fill")
+                        .font(.system(size: 10))
+                        .foregroundColor(.yellow)
+                    Text("FLASH READY")
+                        .font(.system(size: 9, weight: .bold, design: .monospaced))
+                        .foregroundColor(.white)
+                }
+                .padding(.horizontal, 6)
+                .padding(.vertical, 3)
+                .background(Color.black.opacity(0.6))
+                .cornerRadius(3)
+            }
+            .padding(12)
+
+            Spacer()
+
+            HStack {
+                Text("SUPER IA 400 32mm F/10")
+                    .font(.system(size: 9, weight: .bold, design: .monospaced))
+                    .foregroundColor(.white.opacity(0.8))
+
+                Spacer()
+
+                HStack(spacing: 2) {
+                    Text("REMAIN")
+                        .font(.system(size: 8, weight: .bold))
+                        .foregroundColor(.white.opacity(0.7))
+                    Text("[27]")
+                        .font(.system(size: 12, weight: .heavy, design: .monospaced))
+                        .foregroundColor(Color(hex: "#E85D04"))
+                }
+                .padding(.horizontal, 6)
+                .padding(.vertical, 2)
+                .background(Color.black.opacity(0.7))
+                .cornerRadius(3)
+            }
+            .padding(12)
+        }
+    }
+
+    // MARK: - 16. Kyocera Samurai X3.0 OSD
+    private var kyoceraSamuraiOverlay: some View {
+        VStack {
+            HStack {
+                Text("SAMURAI X3.0")
+                    .font(.system(size: 11, weight: .black, design: .monospaced))
+                    .foregroundColor(Color(hex: "#E50914"))
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 2)
+                    .background(Color.white.opacity(0.9))
+                    .cornerRadius(3)
+
+                Spacer()
+
+                Text("HALF-FRAME 72")
+                    .font(.system(size: 9, weight: .bold, design: .monospaced))
+                    .foregroundColor(.cyan)
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 2)
+                    .background(Color.black.opacity(0.6))
+                    .cornerRadius(3)
+            }
+            .padding(12)
+
+            Spacer()
+
+            // Half-frame split guide
+            Rectangle()
+                .stroke(Color.cyan.opacity(0.4), lineWidth: 1)
+                .frame(width: 140, height: 210)
+
+            Spacer()
+
+            HStack {
+                Text("25-75mm F/3.5-4.3 ZOOM")
+                    .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                    .foregroundColor(.white.opacity(0.7))
+
+                Spacer()
+
+                Text("'88 11 04")
+                    .font(.system(size: 12, weight: .bold, design: .monospaced))
+                    .foregroundColor(Color(hex: "#FF8C00"))
+            }
+            .padding(12)
         }
     }
 }
