@@ -27,7 +27,14 @@ async def send_cdp(ws, msg_id, method, params=None):
 async def main():
     import websockets
     port = 8080
-    chrome_path = r'C:\Program Files\Google\Chrome\Application\chrome.exe'
+    chrome_candidates = [
+        r'C:\Program Files\Google\Chrome\Application\chrome.exe',
+        r'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe',
+        '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+        '/usr/bin/google-chrome',
+        '/usr/bin/chromium-browser'
+    ]
+    chrome_path = next((p for p in chrome_candidates if os.path.exists(p)), 'google-chrome')
     user_data_dir = tempfile.mkdtemp(prefix='icam_cam_switch_test_')
 
     proc = subprocess.Popen([
@@ -95,22 +102,24 @@ async def main():
             msg_id += 1
             stepper_res = await send_cdp(ws, msg_id, 'Runtime.evaluate', {
                 'expression': '''(function() {
-                    switchCamera('canon-ixy');
-                    const initial = state.activeCamera;
+                    const sc = window.switchCamera;
+                    const st = window.state;
+                    sc('canon-ixy');
+                    const initial = st.activeCamera;
 
                     // Click Next
                     const btnNext = document.getElementById('btn-cam-next');
                     btnNext.click();
-                    const afterNext = state.activeCamera;
+                    const afterNext = st.activeCamera;
 
                     // Click Next again
                     btnNext.click();
-                    const afterNext2 = state.activeCamera;
+                    const afterNext2 = st.activeCamera;
 
                     // Click Prev
                     const btnPrev = document.getElementById('btn-cam-prev');
                     btnPrev.click();
-                    const afterPrev = state.activeCamera;
+                    const afterPrev = st.activeCamera;
 
                     return {
                         initial: initial,
@@ -136,26 +145,27 @@ async def main():
             cat_res = await send_cdp(ws, msg_id, 'Runtime.evaluate', {
                 'expression': '''(function() {
                     const results = {};
+                    const st = window.state || state;
 
                     // Jump to Bubble
                     const bubblePill = document.querySelector('.cam-cat-pill[data-cat="bubble"]');
                     bubblePill.click();
-                    results.bubbleFirst = state.activeCamera;
+                    results.bubbleFirst = st.activeCamera;
 
                     // Jump to Medium
                     const mediumPill = document.querySelector('.cam-cat-pill[data-cat="medium"]');
                     mediumPill.click();
-                    results.mediumFirst = state.activeCamera;
+                    results.mediumFirst = st.activeCamera;
 
                     // Jump to Studio
                     const studioPill = document.querySelector('.cam-cat-pill[data-cat="studio"]');
                     studioPill.click();
-                    results.studioFirst = state.activeCamera;
+                    results.studioFirst = st.activeCamera;
 
                     // Jump to Y2K
                     const y2kPill = document.querySelector('.cam-cat-pill[data-cat="y2k"]');
                     y2kPill.click();
-                    results.y2kFirst = state.activeCamera;
+                    results.y2kFirst = st.activeCamera;
 
                     return results;
                 })()''',
@@ -174,6 +184,7 @@ async def main():
             msg_id += 1
             bag_res = await send_cdp(ws, msg_id, 'Runtime.evaluate', {
                 'expression': '''(function() {
+                    const st = window.state || state;
                     // Open bag via toolbar button
                     const btnBag = document.getElementById('btn-camera-bag');
                     btnBag.click();
@@ -196,7 +207,7 @@ async def main():
                     const samuraiCard = document.querySelector('#camera-bag-grid .bag-cam-card[data-cam="kyocera-samurai"]');
                     samuraiCard.click();
 
-                    const activeAfterEquip = state.activeCamera;
+                    const activeAfterEquip = st.activeCamera;
                     const isClosedAfterEquip = !modal.classList.contains('open');
 
                     return {
@@ -223,7 +234,9 @@ async def main():
             msg_id += 1
             swipe_res = await send_cdp(ws, msg_id, 'Runtime.evaluate', {
                 'expression': '''(function() {
-                    switchCamera('canon-ixy');
+                    const sc = window.switchCamera;
+                    const st = window.state;
+                    sc('canon-ixy');
                     const vf = document.getElementById('viewfinder');
 
                     // Simulate Left Swipe (Next Camera)
@@ -231,14 +244,14 @@ async def main():
                     const upEvent = new PointerEvent('pointerup', { clientX: 120, clientY: 250, bubbles: true });
                     vf.dispatchEvent(downEvent);
                     vf.dispatchEvent(upEvent);
-                    const afterSwipeLeft = state.activeCamera;
+                    const afterSwipeLeft = st.activeCamera;
 
                     // Simulate Right Swipe (Prev Camera)
                     const downEvent2 = new PointerEvent('pointerdown', { clientX: 120, clientY: 250, bubbles: true });
                     const upEvent2 = new PointerEvent('pointerup', { clientX: 200, clientY: 250, bubbles: true });
                     vf.dispatchEvent(downEvent2);
                     vf.dispatchEvent(upEvent2);
-                    const afterSwipeRight = state.activeCamera;
+                    const afterSwipeRight = st.activeCamera;
 
                     return {
                         initial: 'canon-ixy',

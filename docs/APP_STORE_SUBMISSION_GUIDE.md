@@ -51,7 +51,7 @@
   - **6.7형 / 6.5형 디스플레이 (iPhone 15 Pro Max / 14 Plus)**: `1290 × 2796 px`
   - *(팁: 본 프로젝트의 `qa_viewport_max.png`, `qa_viewport_standard.png`를 기반으로 목업 프레임을 입혀 업로드 가능)*
 - **홍보 문구 (Promotional Text)**: 복사-붙여넣기 템플릿 사용.
-- **설명 (Description)**: 16종 카메라와 광학 렌즈, 시현하다 프로필, 여권 사진 시트 설명 기재.
+- **설명 (Description)**: 16종 카메라와 광학 렌즈, 퍼스널 컬러 프로필, 여권 사진 시트 설명 기재.
 - **키워드 (Keywords)**: 100자 이내 쉼표 구분 키워드 입력.
 - **지원 URL (Support URL)** 및 **마케팅 URL (Marketing URL)** 입력.
 

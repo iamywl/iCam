@@ -38,14 +38,14 @@ Y2K 디카, 35mm 필름, 컬러 스튜디오
 
 ### 📌 홍보 문구 (Promotional Text) - 최대 170자
 ```text
-Canon IXY, Sony Cyber-shot, Hasselblad 등 16가지 시대를 초월한 레트로 명기 카메라와 광학 렌즈 필터, 시현하다 스타일 퍼스널 컬러 프로필을 실시간으로 경험해보세요.
+Canon IXY, Sony Cyber-shot, Hasselblad 등 16가지 시대를 초월한 레트로 명기 카메라와 광학 렌즈 필터, 트렌디한 퍼스널 컬러 프로필을 실시간으로 경험해보세요.
 ```
 
 ---
 
 ### 📌 키워드 (Keywords) - 최대 100자 (쉼표 구분)
 ```text
-필름카메라,디카,Y2K,레트로,빈티지,시현하다,증명사진,여권사진,흑백필름,코닥,인스탁스,폴라로이드,캐논,하프카메라,캠코더,카메라필터,감성사진
+필름카메라,디카,Y2K,레트로,빈티지,퍼스널컬러,증명사진,여권사진,흑백필름,코닥,인스탁스,폴라로이드,캐논,하프카메라,캠코더,카메라필터,감성사진
 ```
 *(영문 버전: `vintage camera,film camera,digicam,y2k,retro camera,polaroid,hasselblad,kodak,instax,photo filter,analog,leica,ricoh,cyber`)*
 

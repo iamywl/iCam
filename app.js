@@ -670,6 +670,11 @@ const CAMERA_CATEGORIES = {
   'studio': ['sihyun-color', 'passport-id']
 };
 
+window.state = state;
+window.CAMERAS = CAMERAS;
+window.CAMERA_ORDER = CAMERA_ORDER;
+window.CAMERA_CATEGORIES = CAMERA_CATEGORIES;
+
 function getCameraCategory(camId) {
   for (const [cat, cams] of Object.entries(CAMERA_CATEGORIES)) {
     if (cams.includes(camId)) return cat;
@@ -3400,3 +3405,10 @@ window.addEventListener('DOMContentLoaded', () => {
   // Start with iconic Canon IXY Digital 50
   switchCamera('canon-ixy');
 });
+
+// Expose on window for QA test automation
+window.switchCamera = switchCamera;
+window.executeCapture = executeCapture;
+window.renderStudioModel = renderStudioModel;
+window.applyCurrentCameraFilter = applyCurrentCameraFilter;
+window.applyLensFilter = applyLensFilter;

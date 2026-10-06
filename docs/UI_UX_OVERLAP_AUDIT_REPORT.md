@@ -14,7 +14,7 @@
 - **근본 원인**:
   - 카메라 OSD 상단 요소들(`.olympus-top-row`, `.canon-top-row`, `.sony-cs-top` 등)의 세로 시작 위치가 `padding: 14px~16px`로 HUD 배지와 동일 평면에 위치함.
 - **해결 조치**:
-  - 모든 13개 카메라 OSD 상단 행에 `margin-top: 32px !important;` (시현하다 상단 배너는 `36px !important;`)를 부여.
+  - 모든 13개 카메라 OSD 상단 행에 `margin-top: 32px !important;` (Color Studio 상단 배너는 `36px !important;`)를 부여.
   - HUD 배지(Y: 8px~34px) 바로 아래인 Y >= 42px 영역에 OSD 브랜드 및 상태 정보가 배치되도록 분리하여 **상하 여유 간격 8px 이상 확보 완료 (Zero Overlap)**.
 
 ---

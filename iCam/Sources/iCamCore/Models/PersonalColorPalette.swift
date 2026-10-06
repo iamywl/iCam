@@ -1,7 +1,7 @@
 import Foundation
 import SwiftUI
 
-/// Authentic 시현하다 Personal Color Swatches
+/// Authentic Studio Personal Color Swatches
 public struct PersonalColorSwatch: Identifiable, Hashable, Sendable {
     public let id: String
     public let name: String

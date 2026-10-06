@@ -1,6 +1,6 @@
 import SwiftUI
 
-/// Real-time personal color swatch selector for 시현하다 Color Studio
+/// Real-time personal color swatch selector for Personal Color Studio
 public struct ColorStudioPaletteView: View {
     @ObservedObject var viewModel: CameraViewModel
 

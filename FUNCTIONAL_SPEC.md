@@ -292,7 +292,7 @@ iCam의 광학 렌즈는 바디 필터와 완전히 독립적으로 작동하며
 │ CAMERAS['polaroid-sx70']        │ CameraCategory.polaroidSX70      │ 폴라로이드 SX-70 1972  │
 │ CAMERAS['fuji-quicksnap']       │ CameraCategory.fujiQuickSnap     │ 후지 퀵스냅 1986 버블   │
 │ CAMERAS['kyocera-samurai']      │ CameraCategory.kyoceraSamurai    │ 쿄세라 사무라이 X3.0    │
-│ CAMERAS['sihyun-color']         │ CameraCategory.colorStudio       │ 시현하다 퍼스널컬러 스튜디오│
+│ CAMERAS['sihyun-color']         │ CameraCategory.colorStudio       │ 퍼스널 컬러 프로필 스튜디오│
 │ CAMERAS['passport-id']          │ CameraCategory.passportID        │ 공식 여권 규격 스튜디오  │
 ├─────────────────────────────────┼──────────────────────────────────┼────────────────────────┤
 │ applyLensFilter('mist')         │ OpticalLensFilterPack.BlackMist  │ 블랙 미스트 블룸 광학   │

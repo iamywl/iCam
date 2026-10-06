@@ -22,7 +22,14 @@ async def send_cdp(ws, msg_id, method, params=None):
 async def main():
     import websockets
     port = 8080
-    chrome_path = r'C:\Program Files\Google\Chrome\Application\chrome.exe'
+    chrome_candidates = [
+        r'C:\Program Files\Google\Chrome\Application\chrome.exe',
+        r'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe',
+        '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+        '/usr/bin/google-chrome',
+        '/usr/bin/chromium-browser'
+    ]
+    chrome_path = next((p for p in chrome_candidates if os.path.exists(p)), 'google-chrome')
     user_data_dir = tempfile.mkdtemp(prefix='icam_view_')
 
     print(f"Launching Chrome: {chrome_path}")

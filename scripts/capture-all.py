@@ -192,9 +192,15 @@ async def run_pipeline():
         print(f"🌐 Using existing HTTP Server on http://127.0.0.1:{port}")
 
     # 2. Launch Chrome Headless
-    chrome_path = r'C:\Program Files\Google\Chrome\Application\chrome.exe'
-    if not os.path.exists(chrome_path):
-        chrome_path = r'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe'
+    chrome_candidates = [
+        r'C:\Program Files\Google\Chrome\Application\chrome.exe',
+        r'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe',
+        r'C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe',
+        '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+        '/usr/bin/google-chrome',
+        '/usr/bin/chromium-browser'
+    ]
+    chrome_path = next((p for p in chrome_candidates if os.path.exists(p)), 'google-chrome')
 
     print(f"🚀 Launching Headless Browser: {chrome_path}")
     user_data_dir = tempfile.mkdtemp(prefix='icam_cdp_')

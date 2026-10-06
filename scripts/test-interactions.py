@@ -28,7 +28,14 @@ async def send_cdp(ws, msg_id, method, params=None):
 async def main():
     import websockets
     port = 8080
-    chrome_path = r'C:\Program Files\Google\Chrome\Application\chrome.exe'
+    chrome_candidates = [
+        r'C:\Program Files\Google\Chrome\Application\chrome.exe',
+        r'C:\Program Files (x86)\Google\Chrome\Application\chrome.exe',
+        '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome',
+        '/usr/bin/google-chrome',
+        '/usr/bin/chromium-browser'
+    ]
+    chrome_path = next((p for p in chrome_candidates if os.path.exists(p)), 'google-chrome')
     user_data_dir = tempfile.mkdtemp(prefix='icam_test_')
 
     proc = subprocess.Popen([
@@ -42,12 +49,20 @@ async def main():
         f'http://127.0.0.1:{port}/index.html'
     ])
 
-    await asyncio.sleep(2.0)
+    targets = None
+    for _ in range(15):
+        try:
+            res = urllib.request.urlopen('http://127.0.0.1:9444/json', timeout=1).read()
+            targets = json.loads(res.decode('utf-8'))
+            break
+        except Exception:
+            await asyncio.sleep(0.5)
+
     msg_id = 1
 
     try:
-        res = urllib.request.urlopen('http://127.0.0.1:9444/json').read()
-        targets = json.loads(res.decode('utf-8'))
+        if not targets:
+            raise RuntimeError("Could not connect to Chrome debugging port 9444")
         page_target = next((t for t in targets if t.get('type') == 'page'), None)
         if not page_target:
             raise RuntimeError("No page target found")
@@ -76,8 +91,10 @@ async def main():
                         'oldfilm-35mm', 'instax-mini', 'sihyun-color', 'passport-id',
                         'hasselblad-500cm', 'polaroid-sx70', 'fuji-quicksnap', 'kyocera-samurai'
                     ];
+                    const camsObj = window.CAMERAS || (typeof CAMERAS !== 'undefined' ? CAMERAS : {});
+                    const st = window.state || (typeof state !== 'undefined' ? state : {});
                     for (const c of expectedCams) {
-                        const cam = CAMERAS[c];
+                        const cam = camsObj[c];
                         if (!cam) {
                             errors.push("Missing camera config: " + c);
                             continue;
@@ -91,13 +108,16 @@ async def main():
 
                     return {
                         errors: errors,
-                        currentCam: state ? state.activeCamera : null,
-                        galleryCount: state && state.gallery ? state.gallery.length : 0
+                        currentCam: st ? st.activeCamera : null,
+                        galleryCount: st && st.gallery ? st.gallery.length : 0
                     };
                 })()''',
-                'returnByValue': True
             })
-            print("System sanity check:", eval_res['result']['result']['value'])
+            val = eval_res.get('result', {}).get('result', {}).get('value')
+            if val is None:
+                print("eval_res:", eval_res)
+            else:
+                print("System sanity check:", val)
 
             # Test 1: Click Shutter Button
             print("Testing Shutter Click...")
@@ -106,18 +126,20 @@ async def main():
                 'expression': '''(function() {
                     const sb = document.getElementById('shutter-btn');
                     sb.click();
+                    const st = window.state || (typeof state !== 'undefined' ? state : {});
                     return {
-                        galleryLength: state.gallery.length,
-                        lastRecord: state.gallery[0] ? {
-                            camera: state.gallery[0].cameraName,
-                            hasDataUrl: !!state.gallery[0].dataUrl,
-                            hasExif: !!state.gallery[0].exif
+                        galleryLength: st && st.gallery ? st.gallery.length : 0,
+                        lastRecord: st && st.gallery && st.gallery[0] ? {
+                            camera: st.gallery[0].cameraName,
+                            hasDataUrl: !!st.gallery[0].dataUrl,
+                            hasExif: !!st.gallery[0].exif
                         } : null
                     };
                 })()''',
                 'returnByValue': True
             })
-            print("Shutter click result:", shutter_res['result']['result']['value'])
+            shutter_val = shutter_res.get('result', {}).get('result', {}).get('value')
+            print("Shutter click result:", shutter_val)
 
             # Test 2: Mode Dial switching to each camera
             print("Testing Mode Dial / Camera Switcher...")
@@ -125,17 +147,20 @@ async def main():
                 msg_id += 1
                 switch_res = await send_cdp(ws, msg_id, 'Runtime.evaluate', {
                     'expression': f'''(function() {{
-                        switchCamera('{cam_id}');
+                        const sc = window.switchCamera || switchCamera;
+                        sc('{cam_id}');
                         const activeDrawer = document.querySelector('.mode-control-panel.active');
+                        const st = window.state || (typeof state !== 'undefined' ? state : {{}});
                         return {{
-                            activeCam: state.activeCamera,
+                            activeCam: st ? st.activeCamera : null,
                             activeDrawerId: activeDrawer ? activeDrawer.id : null,
                             badgeTitle: document.getElementById('cam-badge-title')?.textContent
                         }};
                     }})()''',
                     'returnByValue': True
                 })
-                print(f"Switched to {cam_id}:", switch_res['result']['result']['value'])
+                switch_val = switch_res.get('result', {}).get('result', {}).get('value')
+                print(f"Switched to {cam_id}:", switch_val)
 
     finally:
         proc.terminate()
