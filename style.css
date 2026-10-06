@@ -535,6 +535,18 @@ body::before {
   box-shadow: 0 0 14px rgba(255, 214, 10, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.5);
 }
 
+.toolbar-btn svg,
+.bottom-quick-btn svg,
+.cam-badge-step-btn svg,
+.cam-badge-icon svg,
+.cam-badge-bag-hint svg,
+.panel-mode-icon svg,
+.bag-card-icon svg,
+.gallery-thumbnail-btn svg {
+  display: block;
+  pointer-events: none;
+}
+
 /* Optical Lens Filter Popover Dropdown */
 .lens-filter-popover {
   position: absolute;
@@ -2195,8 +2207,7 @@ body::before {
 }
 
 .filter-chip-icon {
-  font-size: 13px;
-  line-height: 1;
+  display: none;
 }
 
 .filter-chip-name {
@@ -4000,7 +4011,15 @@ body::before {
 }
 
 .bag-card-icon {
-  font-size: 22px;
+  font-size: 20px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  color: #fff;
 }
 
 .bag-card-badge {
