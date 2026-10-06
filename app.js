@@ -15,6 +15,8 @@
 const state = {
   activeCamera: 'canon-ixy', // 'canon-ixy' | 'sony-handycam' | 'sony-cybershot' | 'instax-mini' | 'sihyun-color' | 'passport-id'
   cameraSource: 'model', // 'model' | 'webcam'
+  facingMode: 'user', // 'user' | 'environment'
+  currentStream: null,
   
   // Selected filter per camera
   selectedFilters: {
@@ -1458,8 +1460,27 @@ function executeCapture() {
   soundEngine.playShutter();
 
   const flashScreen = document.getElementById('flash-screen');
-  flashScreen.classList.add('active');
-  setTimeout(() => flashScreen.classList.remove('active'), 320);
+  if (flashScreen) {
+    flashScreen.classList.add('active', 'flashing');
+    const flashDur = state.flashMode === 'on' ? 260 : 90;
+    setTimeout(() => {
+      flashScreen.classList.remove('active', 'flashing');
+    }, flashDur);
+  }
+
+  // Mobile LED Torch trigger if Flash ON
+  if (state.flashMode === 'on' && state.currentStream) {
+    try {
+      const track = state.currentStream.getVideoTracks()[0];
+      const caps = track?.getCapabilities ? track.getCapabilities() : {};
+      if (caps.torch) {
+        track.applyConstraints({ advanced: [{ torch: true }] }).catch(() => {});
+        setTimeout(() => {
+          track.applyConstraints({ advanced: [{ torch: false }] }).catch(() => {});
+        }, 280);
+      }
+    } catch (e) {}
+  }
 
   showDynamicIslandBanner('PHOTO SAVED', 'PROCESSED', 2200);
 
@@ -1501,15 +1522,40 @@ function executeCapture() {
     activeFilter = `brightness(${toneRatio}) contrast(${1 + (state.retouchTone - 35) * 0.001})`;
   }
 
-  // 3. Draw Subject (Transparent Model or Mirrored Webcam)
+  // 3. Draw Subject (Transparent Model or Mirrored/Unmirrored Webcam)
   if (state.cameraSource === 'webcam') {
     const video = document.getElementById('camera-video');
-    if (video.videoWidth) {
+    if (video.videoWidth && video.videoHeight) {
       ctx.save();
-      ctx.filter = activeFilter;
-      ctx.translate(captureCanvas.width, 0);
-      ctx.scale(-1, 1);
-      ctx.drawImage(video, 0, 0, captureCanvas.width, captureCanvas.height);
+      let filterToApply = activeFilter;
+      if (state.flashMode === 'on') {
+        filterToApply = (filterToApply === 'none')
+          ? 'brightness(1.22) contrast(1.14)'
+          : filterToApply + ' brightness(1.2) contrast(1.1)';
+      }
+      ctx.filter = filterToApply;
+
+      // Crop video to exact 3:4 target ratio
+      const vAspect = video.videoWidth / video.videoHeight;
+      const targetAspect = 780 / 1040;
+      let sx, sy, sw, sh;
+      if (vAspect > targetAspect) {
+        sh = video.videoHeight;
+        sw = video.videoHeight * targetAspect;
+        sx = (video.videoWidth - sw) / 2;
+        sy = 0;
+      } else {
+        sw = video.videoWidth;
+        sh = video.videoWidth / targetAspect;
+        sx = 0;
+        sy = (video.videoHeight - sh) / 2;
+      }
+
+      if (state.facingMode === 'user') {
+        ctx.translate(captureCanvas.width, 0);
+        ctx.scale(-1, 1);
+      }
+      ctx.drawImage(video, sx, sy, sw, sh, 0, 0, captureCanvas.width, captureCanvas.height);
       ctx.restore();
     }
   } else {
@@ -2242,18 +2288,58 @@ function generatePrintSheetCanvasDataUrl() {
 }
 
 // Camera Source Switch (Webcam vs Studio Models)
-async function enableWebcam() {
+async function enableWebcam(targetFacingMode) {
   const video = document.getElementById('camera-video');
   const modelCanvas = document.getElementById('model-canvas');
+  const promptOverlay = document.getElementById('camera-prompt-overlay');
+
+  if (targetFacingMode) {
+    state.facingMode = targetFacingMode;
+  }
+  const facing = state.facingMode || 'user';
+
+  // Stop previous tracks cleanly
+  if (state.currentStream) {
+    try {
+      state.currentStream.getTracks().forEach(track => track.stop());
+    } catch(e) {}
+    state.currentStream = null;
+  }
+  if (video && video.srcObject) {
+    try {
+      video.srcObject.getTracks().forEach(track => track.stop());
+    } catch(e) {}
+    video.srcObject = null;
+  }
 
   try {
     const stream = await navigator.mediaDevices.getUserMedia({
-      video: { width: { ideal: 1280 }, height: { ideal: 720 }, facingMode: 'user' },
+      video: {
+        width: { ideal: 1920, min: 640 },
+        height: { ideal: 1080, min: 480 },
+        facingMode: facing
+      },
       audio: false
     });
+
+    state.currentStream = stream;
     video.srcObject = stream;
+    video.setAttribute('playsinline', 'true');
+    video.setAttribute('autoplay', 'true');
+    video.setAttribute('muted', 'true');
     video.style.display = 'block';
-    modelCanvas.style.display = 'none';
+
+    // Apply mirroring: front camera mirrors, rear camera normal
+    video.style.transform = (facing === 'user') ? 'scaleX(-1)' : 'none';
+
+    if (modelCanvas) modelCanvas.style.display = 'none';
+    if (promptOverlay) promptOverlay.style.display = 'none';
+
+    // Critical for iOS Safari: explicit play()
+    await video.play().catch(playErr => {
+      console.warn("Autoplay was prevented by browser policy:", playErr);
+    });
+
     state.cameraSource = 'webcam';
 
     const btnWebcam = document.getElementById('btn-use-webcam');
@@ -2262,11 +2348,16 @@ async function enableWebcam() {
     if (btnWebcam) btnWebcam.classList.add('active');
     if (btnFem) btnFem.classList.remove('active');
     if (btnMale) btnMale.classList.remove('active');
+
     applyCurrentCameraFilter();
-    showDynamicIslandBanner('WEBCAM CONNECTED', 'LIVE STREAM', 2000);
+    showDynamicIslandBanner('LIVE CAMERA', facing === 'user' ? '전면 카메라' : '후면 카메라', 1800);
+    return true;
   } catch (err) {
-    alert('웹캠 접근 권한이 필요합니다. 고화질 실사 스튜디오 모델을 계속 사용합니다.');
+    console.warn('Webcam access failed or denied:', err);
+    if (promptOverlay) promptOverlay.style.display = 'flex';
     useStudioModel('female');
+    showDynamicIslandBanner('STUDIO MODEL', '카메라 권한 필요', 2000);
+    return false;
   }
 }
 
@@ -2820,17 +2911,16 @@ function initEventListeners() {
     });
   }
 
-  // 8. Camera Flip (Female -> Male -> Webcam)
+  // 8. Camera Flip (Front <-> Rear Camera)
   const btnFlip = document.getElementById('btn-flip');
   if (btnFlip) {
-    btnFlip.addEventListener('click', () => {
+    btnFlip.addEventListener('click', async () => {
       soundEngine.playTick();
-      if (state.cameraSource === 'webcam') {
-        useStudioModel('female');
-      } else if (state.studioModelType === 'female') {
-        useStudioModel('male');
+      if (state.cameraSource !== 'webcam') {
+        await enableWebcam('user');
       } else {
-        enableWebcam();
+        const nextFacing = state.facingMode === 'user' ? 'environment' : 'user';
+        await enableWebcam(nextFacing);
       }
     });
   }
@@ -3402,8 +3492,22 @@ window.addEventListener('DOMContentLoaded', () => {
   initEventListeners();
   initDeviceAndOSSwitcher();
 
+  // Connect Start Camera button and viewfinder touch
+  const btnStartCam = document.getElementById('btn-start-camera');
+  if (btnStartCam) {
+    btnStartCam.addEventListener('click', (e) => {
+      e.stopPropagation();
+      enableWebcam(state.facingMode || 'user');
+    });
+  }
+
   // Start with iconic Canon IXY Digital 50
   switchCamera('canon-ixy');
+
+  // Auto-attempt webcam if supported
+  if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+    enableWebcam(state.facingMode || 'user').catch(() => {});
+  }
 });
 
 // Expose on window for QA test automation
@@ -3412,3 +3516,5 @@ window.executeCapture = executeCapture;
 window.renderStudioModel = renderStudioModel;
 window.applyCurrentCameraFilter = applyCurrentCameraFilter;
 window.applyLensFilter = applyLensFilter;
+window.enableWebcam = enableWebcam;
+window.useStudioModel = useStudioModel;

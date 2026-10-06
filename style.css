@@ -732,13 +732,13 @@ body::before {
 /* Active Camera Model Badge HUD with Ergonomic Steppers */
 .camera-model-badge-container {
   position: absolute;
-  top: 8px;
+  top: 60px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
   align-items: center;
   gap: 5px;
-  z-index: 25;
+  z-index: 45;
   white-space: nowrap;
 }
 
@@ -868,6 +868,46 @@ body::before {
   object-fit: cover;
   z-index: 2;
   transition: filter 0.25s ease;
+}
+
+/* Camera Enable Prompt Overlay */
+.camera-prompt-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 20;
+  background: rgba(0, 0, 0, 0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-start-camera {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 700;
+  padding: 10px 18px;
+  border-radius: 24px;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+  transition: all 0.2s ease;
+}
+
+.btn-start-camera:hover {
+  background: rgba(255, 255, 255, 0.28);
+  transform: scale(1.04);
+}
+
+.btn-start-camera:active {
+  transform: scale(0.96);
 }
 
 /* SVG Person Cutout for Color ID background replacement */
@@ -2751,14 +2791,30 @@ body::before {
   position: absolute;
   inset: 0;
   background: #fff;
-  z-index: 200;
+  z-index: 300;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.08s ease-out;
+  transition: opacity 0.15s ease-out;
 }
 
+.camera-flash-fx.active,
 .camera-flash-fx.flashing {
-  opacity: 1;
+  opacity: 1 !important;
+  transition: none !important;
+}
+
+/* Flash Button Glowing Active State */
+#btn-flash.active,
+.toolbar-btn#btn-flash.active {
+  background: rgba(255, 214, 10, 0.28) !important;
+  color: #ffd60a !important;
+  border-color: rgba(255, 214, 10, 0.8) !important;
+  box-shadow: 0 0 16px rgba(255, 214, 10, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.6) !important;
+}
+
+#btn-flash.active svg {
+  stroke: #ffd60a !important;
+  fill: #ffd60a !important;
 }
 
 /* Countdown Big Number Overlay */
@@ -3096,30 +3152,47 @@ body::before {
   }
 
   /* Default Standard Mobile (iPhone 13 / 14 / 15 / 16) */
-  .camera-bottom-section {
-    position: absolute;
-    top: auto;
-    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
-    height: 148px;
-    padding-bottom: 6px;
+  .ios-status-bar {
+    display: none !important;
+  }
+
+  .dynamic-island {
+    display: none !important;
+  }
+
+  .camera-top-toolbar {
+    top: max(8px, env(safe-area-inset-top, 8px)) !important;
+    height: 40px;
+  }
+
+  .camera-model-badge-container {
+    top: calc(max(8px, env(safe-area-inset-top, 8px)) + 44px) !important;
+  }
+
+  .viewfinder-container {
+    top: calc(max(8px, env(safe-area-inset-top, 8px)) + 76px) !important;
+    bottom: calc(296px + env(safe-area-inset-bottom, 0px));
+    height: auto;
+    max-height: calc(100vh - 380px);
+    max-height: calc(100dvh - 380px);
   }
 
   .control-drawer {
     position: absolute;
     top: auto;
-    bottom: calc(164px + env(safe-area-inset-bottom, 0px));
+    bottom: calc(156px + env(safe-area-inset-bottom, 0px));
     height: 132px;
     padding: 6px 10px;
     overflow-y: auto;
     overflow-x: hidden;
   }
 
-  .viewfinder-container {
-    top: 98px;
-    bottom: calc(302px + env(safe-area-inset-bottom, 0px));
-    height: auto;
-    max-height: calc(100vh - 408px);
-    max-height: calc(100dvh - 408px);
+  .camera-bottom-section {
+    position: absolute;
+    top: auto;
+    bottom: calc(10px + env(safe-area-inset-bottom, 0px));
+    height: 144px;
+    padding-bottom: 6px;
   }
 }
 
@@ -3268,6 +3341,7 @@ body::before {
 .device-wrapper.device-se .ios-status-bar { height: 24px; padding: 4px 14px 0 14px; }
 .device-wrapper.device-se .dynamic-island { display: none !important; }
 .device-wrapper.device-se .camera-top-toolbar { top: 26px; height: 38px; }
+.device-wrapper.device-se .camera-model-badge-container { top: 32px; }
 .device-wrapper.device-se .viewfinder-container { top: 66px; height: 316px; max-height: 316px; border-radius: 14px; }
 .device-wrapper.device-se .control-drawer { top: 388px; height: 136px; padding: 4px 6px; }
 .device-wrapper.device-se .filter-chip { padding: 2px 4px; min-width: 52px; gap: 1px; }
@@ -3291,6 +3365,7 @@ body::before {
 }
 .device-wrapper.device-mini .ios-status-bar { height: 44px; }
 .device-wrapper.device-mini .camera-top-toolbar { top: 48px; height: 40px; }
+.device-wrapper.device-mini .camera-model-badge-container { top: 52px; }
 .device-wrapper.device-mini .viewfinder-container { top: 90px; height: 402px; max-height: 402px; }
 .device-wrapper.device-mini .control-drawer { top: 498px; height: 144px; }
 .device-wrapper.device-mini .camera-bottom-section { top: 648px; height: 146px; }
@@ -3300,6 +3375,7 @@ body::before {
   --device-height: 852px;
   --device-radius: 54px;
 }
+.device-wrapper.device-standard .camera-model-badge-container { top: 58px; }
 .device-wrapper.device-standard .viewfinder-container { top: 98px; height: 436px; max-height: 436px; }
 .device-wrapper.device-standard .control-drawer { top: 540px; height: 142px; }
 .device-wrapper.device-standard .camera-bottom-section { top: 688px; height: 148px; }
@@ -3311,6 +3387,7 @@ body::before {
 }
 .device-wrapper.device-max .ios-status-bar { height: 56px; }
 .device-wrapper.device-max .camera-top-toolbar { top: 60px; height: 42px; }
+.device-wrapper.device-max .camera-model-badge-container { top: 64px; }
 .device-wrapper.device-max .viewfinder-container { top: 104px; height: 484px; max-height: 484px; }
 .device-wrapper.device-max .control-drawer { top: 594px; height: 148px; }
 .device-wrapper.device-max .camera-bottom-section { top: 748px; height: 152px; }

@@ -17,3 +17,6 @@ DerivedData/
 # Node / Scratch
 node_modules/
 .user_uploaded/
+*.ipa
+iCam-iOS-Sideloadly-IPA/
+*screenshot*.png
