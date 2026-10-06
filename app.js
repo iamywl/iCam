@@ -27,8 +27,23 @@ const state = {
     'leica-m': 'leica-summilux',
     'citypop-80s': 'city-sunset',
     'oldfilm-35mm': 'film-cinestill',
+    'hasselblad-500cm': 'hassel-planar',
+    'polaroid-sx70': 'sx70-fade',
+    'fuji-quicksnap': 'quicksnap-86',
+    'kyocera-samurai': 'samurai-half',
     'instax-mini': 'instax-card'
   },
+
+  // QuickTake Video Recording State
+  isRecordingVideo: false,
+  recordingSeconds: 0,
+  recordingTimerInterval: null,
+  mediaRecorder: null,
+  recordedVideoChunks: [],
+
+  // Gallery & EXIF Storage
+  gallery: [],
+  selectedGalleryIndex: 0,
 
   // Color Studio (Sihyunhada) State
   activeSeason: 'sihyunhada',
@@ -231,6 +246,12 @@ const CAMERAS = {
         desc: '선명한 슬라이드 발색',
         css: 'brightness(1.02) contrast(1.28) saturate(1.35) sepia(0.04)',
         tintRgba: 'rgba(255, 200, 150, 0.05)'
+      },
+      'mju-gold': {
+        name: 'μ Gold 200',
+        desc: '황금빛 웜톤 네거티브',
+        css: 'brightness(1.06) contrast(1.15) saturate(1.24) sepia(0.12)',
+        tintRgba: 'rgba(255, 215, 140, 0.1)'
       }
     }
   },
@@ -262,6 +283,12 @@ const CAMERAS = {
         desc: '티타늄 바디 클래식 룩',
         css: 'brightness(1.06) contrast(1.15) saturate(1.08) sepia(0.08)',
         tintRgba: 'rgba(255, 230, 210, 0.06)'
+      },
+      'zeiss-mono': {
+        name: 'Zeiss T* B&W',
+        desc: '독일 광학 깊은 흑백 계조',
+        css: 'grayscale(1) contrast(1.4) brightness(1.0)',
+        tintRgba: null
       }
     }
   },
@@ -293,6 +320,12 @@ const CAMERAS = {
         desc: '신속하고 날카로운 스냅 룩',
         css: 'brightness(1.02) contrast(1.22) saturate(1.12)',
         tintRgba: null
+      },
+      'gr-cross': {
+        name: 'Cross Process',
+        desc: '그런지한 교차 현상 발색',
+        css: 'brightness(1.08) contrast(1.38) saturate(1.4) hue-rotate(25deg)',
+        tintRgba: 'rgba(180, 255, 100, 0.08)'
       }
     }
   },
@@ -324,6 +357,12 @@ const CAMERAS = {
         desc: '투명하고 날카로운 선예도',
         css: 'brightness(1.03) contrast(1.22) saturate(1.1)',
         tintRgba: null
+      },
+      'leica-red': {
+        name: 'Red Dot Color',
+        desc: '라이카 특유의 깊은 원색 렌더링',
+        css: 'brightness(1.02) contrast(1.26) saturate(1.28) sepia(0.02)',
+        tintRgba: 'rgba(255, 180, 180, 0.05)'
       }
     }
   },
@@ -355,6 +394,12 @@ const CAMERAS = {
         desc: '해변 드라이브 파스텔',
         css: 'brightness(1.12) contrast(1.08) saturate(1.22) sepia(0.06)',
         tintRgba: 'rgba(0, 240, 255, 0.08)'
+      },
+      'city-plastic': {
+        name: 'Plastic Love',
+        desc: '80년대 카세트 레트로 감성',
+        css: 'brightness(1.06) contrast(1.28) saturate(1.3) hue-rotate(-35deg)',
+        tintRgba: 'rgba(255, 100, 200, 0.1)'
       }
     }
   },
@@ -386,6 +431,168 @@ const CAMERAS = {
         desc: '선명하고 강렬한 원색 콘트라스트',
         css: 'brightness(1.03) contrast(1.32) saturate(1.42)',
         tintRgba: null
+      },
+      'film-superia': {
+        name: 'Superia 400',
+        desc: '특유의 에메랄드 그린 섀도우',
+        css: 'brightness(1.04) contrast(1.18) saturate(1.22) hue-rotate(15deg)',
+        tintRgba: 'rgba(50, 200, 150, 0.08)'
+      }
+    }
+  },
+
+  'hasselblad-500cm': {
+    id: 'hasselblad-500cm',
+    name: 'Hasselblad 500C/M',
+    shortName: 'HASSELBLAD',
+    sub: 'Planar 80mm Pop',
+    icon: '📷',
+    badge: '6x6 MEDIUM FORMAT',
+    osdId: 'hasselblad-osd',
+    drawerId: 'drawer-hasselblad',
+    lensModel: 'Carl Zeiss Planar 80mm f/2.8 T* CB',
+    exposure: { shutter: '1/250s', aperture: 'f/2.8', iso: 'ISO 100', focal: '80mm eq.' },
+    filters: {
+      'hassel-planar': {
+        name: 'Planar 80mm Pop',
+        desc: '중형 렌즈 인물 분리감',
+        css: 'brightness(1.02) contrast(1.16) saturate(1.10) sepia(0.04)',
+        tintRgba: 'rgba(255, 235, 215, 0.06)'
+      },
+      'hassel-trix': {
+        name: 'Tri-X 400 MF',
+        desc: '중형 롤필름 깊은 은염 흑백',
+        css: 'grayscale(1) contrast(1.35) brightness(1.0)',
+        tintRgba: null
+      },
+      'hassel-astia': {
+        name: 'Astia 100F Slide',
+        desc: '투명하고 부드러운 스킨톤',
+        css: 'brightness(1.04) contrast(1.12) saturate(1.15) sepia(0.06)',
+        tintRgba: 'rgba(255, 220, 200, 0.07)'
+      },
+      'hassel-chromium': {
+        name: 'Chromium Silver',
+        desc: '북유럽 쿨톤 메탈릭 질감',
+        css: 'brightness(1.02) contrast(1.24) saturate(0.88) hue-rotate(-10deg)',
+        tintRgba: 'rgba(200, 225, 255, 0.08)'
+      }
+    }
+  },
+
+  'polaroid-sx70': {
+    id: 'polaroid-sx70',
+    name: 'Polaroid SX-70',
+    shortName: 'POLAROID SX-70',
+    sub: 'SX-70 Vintage Fade',
+    icon: '📸',
+    badge: '1972 LAND CAMERA',
+    osdId: 'polaroid-sx70-osd',
+    drawerId: 'drawer-polaroid-sx70',
+    lensModel: 'Polaroid 116mm f/8 4-Element Glass',
+    exposure: { shutter: '1/125s', aperture: 'f/8.0', iso: 'ISO 160', focal: '116mm eq.' },
+    filters: {
+      'sx70-fade': {
+        name: 'SX-70 Vintage Fade',
+        desc: '1970년대 따뜻하게 바랜 유제',
+        css: 'brightness(1.04) contrast(0.95) saturate(0.88) sepia(0.18)',
+        tintRgba: 'rgba(255, 215, 140, 0.12)'
+      },
+      'sx70-color600': {
+        name: 'Color Protection 600',
+        desc: '사이언/마젠타 즉석사진 발색',
+        css: 'brightness(1.02) contrast(1.18) saturate(1.22) hue-rotate(-8deg)',
+        tintRgba: 'rgba(200, 100, 255, 0.08)'
+      },
+      'sx70-expired': {
+        name: 'Expired Film 1979',
+        desc: '유통기한 지난 필름의 황록색 변색',
+        css: 'brightness(1.06) contrast(0.90) saturate(0.75) hue-rotate(30deg)',
+        tintRgba: 'rgba(220, 255, 120, 0.14)'
+      },
+      'sx70-sepia': {
+        name: 'Sepia Dream',
+        desc: '클래식 브라운 세피아 모노크롬',
+        css: 'sepia(0.85) contrast(1.15) brightness(1.02)',
+        tintRgba: 'rgba(240, 180, 100, 0.1)'
+      }
+    }
+  },
+
+  'fuji-quicksnap': {
+    id: 'fuji-quicksnap',
+    name: 'Fuji QuickSnap (写ルンです 1986)',
+    shortName: 'QUICKSNAP',
+    sub: '1986 Disposable Icon',
+    icon: '📸',
+    badge: '1986 BUBBLE ERA',
+    osdId: 'quicksnap-osd',
+    drawerId: 'drawer-fuji-quicksnap',
+    lensModel: 'Fujinon 32mm F/11 Plastic Meniscus Lens',
+    exposure: { shutter: '1/100s', aperture: 'f/11', iso: 'ISO 400', focal: '32mm (Plastic)' },
+    filters: {
+      'quicksnap-86': {
+        name: '写ルンです 1986 Original',
+        desc: '후지 Superia 400 특유의 청록색 암부 틴트와 플라스틱 렌즈의 따뜻한 소프트함',
+        css: 'brightness(1.08) contrast(1.12) saturate(1.24) hue-rotate(-6deg) sepia(0.08)',
+        tintRgba: 'rgba(50, 180, 120, 0.12)'
+      },
+      'quicksnap-flash': {
+        name: '深夜の直焚きフラッシュ',
+        desc: '버블시대 도쿄 심야 거리의 거친 직광 플래시와 강렬한 비네팅',
+        css: 'brightness(1.18) contrast(1.32) saturate(1.15) sepia(0.04)',
+        tintRgba: 'rgba(255, 230, 190, 0.14)'
+      },
+      'quicksnap-nostalgia': {
+        name: 'ノスタルジック・メモリー',
+        desc: '바랜 감열 인화지와 따스한 쇼와-헤이세이 레트로 골드 톤',
+        css: 'brightness(1.04) contrast(0.96) saturate(1.10) sepia(0.24)',
+        tintRgba: 'rgba(255, 200, 130, 0.15)'
+      },
+      'quicksnap-neon': {
+        name: '六本木ネオン 1988',
+        desc: '1988년 롯폰기 나이트라이프의 사이언과 마젠타 네온 발색',
+        css: 'brightness(1.10) contrast(1.22) saturate(1.40) hue-rotate(12deg)',
+        tintRgba: 'rgba(255, 60, 160, 0.12)'
+      }
+    }
+  },
+
+  'kyocera-samurai': {
+    id: 'kyocera-samurai',
+    name: 'Kyocera Samurai X3.0 (1988)',
+    shortName: 'SAMURAI 1988',
+    sub: 'Cyber Half-Frame 72-Shot SLR',
+    icon: '🗡️',
+    badge: 'CYBER HALF-FRAME',
+    osdId: 'kyocera-samurai-osd',
+    drawerId: 'drawer-kyocera-samurai',
+    lensModel: 'Yashica Zoom 25-75mm F/3.5-4.3 Macro',
+    exposure: { shutter: '1/250s', aperture: 'f/3.5', iso: 'ISO 100', focal: '35mm eq. (Half Frame)' },
+    filters: {
+      'samurai-half': {
+        name: 'Half-Frame 72 Split',
+        desc: '세로 분할 하프프레임 72컷과 고선명 야시카 줌 렌즈 콘트라스트',
+        css: 'brightness(1.05) contrast(1.25) saturate(1.15) sepia(0.04)',
+        tintRgba: 'rgba(180, 220, 240, 0.10)'
+      },
+      'samurai-cyber': {
+        name: 'サイバー・トーキョー 1988',
+        desc: '미래지향 에메랄드 그린 HUD와 하이테크 사이버펑크 고대비 톤',
+        css: 'brightness(1.08) contrast(1.28) saturate(1.22) hue-rotate(-12deg)',
+        tintRgba: 'rgba(0, 240, 160, 0.12)'
+      },
+      'samurai-tokyo': {
+        name: 'バブル・トワイライト',
+        desc: '신주쿠 고층빌딩 매직아워의 쿨블루 섀도우와 황금빛 가로등 대비',
+        css: 'brightness(1.02) contrast(1.20) saturate(1.30) hue-rotate(200deg)',
+        tintRgba: 'rgba(40, 120, 255, 0.14)'
+      },
+      'samurai-titanium': {
+        name: 'チタン・ハードトーン',
+        desc: '다크 그래파이트 티타늄 바디의 묵직한 하드 콘트라스트와 딥 블랙',
+        css: 'brightness(0.96) contrast(1.38) saturate(0.85) sepia(0.06)',
+        tintRgba: 'rgba(160, 170, 185, 0.12)'
       }
     }
   },
@@ -415,11 +622,46 @@ const CAMERAS = {
   }
 };
 
+// 16 Iconic Cameras Ordering & Categorization Architecture
+const CAMERA_ORDER = [
+  'canon-ixy',
+  'sony-handycam',
+  'sony-cybershot',
+  'olympus-mju',
+  'contax-t2',
+  'ricoh-gr',
+  'leica-m',
+  'citypop-80s',
+  'oldfilm-35mm',
+  'hasselblad-500cm',
+  'polaroid-sx70',
+  'fuji-quicksnap',
+  'kyocera-samurai',
+  'instax-mini',
+  'sihyun-color',
+  'passport-id'
+];
+
+const CAMERA_CATEGORIES = {
+  'bubble': ['fuji-quicksnap', 'kyocera-samurai', 'citypop-80s', 'oldfilm-35mm', 'contax-t2', 'olympus-mju'],
+  'y2k': ['canon-ixy', 'sony-handycam', 'sony-cybershot', 'ricoh-gr', 'leica-m'],
+  'medium': ['hasselblad-500cm', 'polaroid-sx70', 'instax-mini'],
+  'studio': ['sihyun-color', 'passport-id']
+};
+
+function getCameraCategory(camId) {
+  for (const [cat, cams] of Object.entries(CAMERA_CATEGORIES)) {
+    if (cams.includes(camId)) return cat;
+  }
+  return 'all';
+}
+
 // Optical Lens Filters Specifications
 const LENS_FILTERS = {
   none: { name: '기본 (Clear)', title: '광학 렌즈 미장착' },
   mist: { name: '블랙 미스트', title: 'Black Mist (Pro-Mist)' },
   star: { name: '크로스 4X', title: 'Cross Star 4-Point' },
+  star6: { name: '6날 스타 조리개', title: '6-Blade Sunstar (0°/60°/120° Diffraction)' },
   streak: { name: '블루 스트릭', title: 'Blue Streak (Anamorphic)' },
   prism: { name: '프리즘 분광', title: 'Prism Spectrum Dispersion' },
   cpl: { name: 'CPL 편광', title: 'Circular Polarizer (CPL)' }
@@ -601,6 +843,90 @@ class SoundFXEngine {
     osc.start(now);
     osc.stop(now + (isFinal ? 0.22 : 0.1));
   }
+
+  playRecordStart() {
+    this.init();
+    if (!this.ctx) return;
+    const now = this.ctx.currentTime;
+    const osc1 = this.ctx.createOscillator();
+    const gain1 = this.ctx.createGain();
+    osc1.type = 'sine';
+    osc1.frequency.setValueAtTime(880, now);
+    gain1.gain.setValueAtTime(0.2, now);
+    gain1.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
+    osc1.connect(gain1);
+    gain1.connect(this.ctx.destination);
+    osc1.start(now);
+    osc1.stop(now + 0.07);
+
+    const osc2 = this.ctx.createOscillator();
+    const gain2 = this.ctx.createGain();
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(1320, now + 0.08);
+    gain2.gain.setValueAtTime(0.25, now + 0.08);
+    gain2.gain.exponentialRampToValueAtTime(0.01, now + 0.16);
+    osc2.connect(gain2);
+    gain2.connect(this.ctx.destination);
+    osc2.start(now + 0.08);
+    osc2.stop(now + 0.17);
+  }
+
+  playRecordStop() {
+    this.init();
+    if (!this.ctx) return;
+    const now = this.ctx.currentTime;
+    const osc1 = this.ctx.createOscillator();
+    const gain1 = this.ctx.createGain();
+    osc1.type = 'sine';
+    osc1.frequency.setValueAtTime(1320, now);
+    gain1.gain.setValueAtTime(0.25, now);
+    gain1.gain.exponentialRampToValueAtTime(0.01, now + 0.06);
+    osc1.connect(gain1);
+    gain1.connect(this.ctx.destination);
+    osc1.start(now);
+    osc1.stop(now + 0.07);
+
+    const osc2 = this.ctx.createOscillator();
+    const gain2 = this.ctx.createGain();
+    osc2.type = 'sine';
+    osc2.frequency.setValueAtTime(660, now + 0.08);
+    gain2.gain.setValueAtTime(0.2, now + 0.08);
+    gain2.gain.exponentialRampToValueAtTime(0.01, now + 0.18);
+    osc2.connect(gain2);
+    gain2.connect(this.ctx.destination);
+    osc2.start(now + 0.08);
+    osc2.stop(now + 0.19);
+  }
+
+  playMount() {
+    this.init();
+    if (!this.ctx) return;
+    const now = this.ctx.currentTime;
+    // Heavy mechanical bayonet lens lock "clack-click"
+    const osc1 = this.ctx.createOscillator();
+    const gain1 = this.ctx.createGain();
+    osc1.type = 'square';
+    osc1.frequency.setValueAtTime(450, now);
+    osc1.frequency.exponentialRampToValueAtTime(110, now + 0.05);
+    gain1.gain.setValueAtTime(0.22, now);
+    gain1.gain.exponentialRampToValueAtTime(0.001, now + 0.05);
+    osc1.connect(gain1);
+    gain1.connect(this.ctx.destination);
+    osc1.start(now);
+    osc1.stop(now + 0.06);
+
+    const osc2 = this.ctx.createOscillator();
+    const gain2 = this.ctx.createGain();
+    osc2.type = 'triangle';
+    osc2.frequency.setValueAtTime(680, now + 0.06);
+    osc2.frequency.exponentialRampToValueAtTime(160, now + 0.12);
+    gain2.gain.setValueAtTime(0.28, now + 0.06);
+    gain2.gain.exponentialRampToValueAtTime(0.001, now + 0.12);
+    osc2.connect(gain2);
+    gain2.connect(this.ctx.destination);
+    osc2.start(now + 0.06);
+    osc2.stop(now + 0.13);
+  }
 }
 
 const soundEngine = new SoundFXEngine();
@@ -732,7 +1058,7 @@ function switchCamera(camId) {
   if (!CAMERAS[camId]) return;
   state.activeCamera = camId;
   const cam = CAMERAS[camId];
-  soundEngine.playTick();
+  soundEngine.playMount();
 
   // 1. Update Dial Active Class & Position Shift
   const dialItems = document.querySelectorAll('#mode-dial-list .mode-dial-item');
@@ -748,12 +1074,18 @@ function switchCamera(camId) {
     dialList.style.transform = `translateX(${offset}px)`;
   }
 
-  // 2. Update Left Sidebar Rack Active State
+  // 2. Synchronize Category Fast-Jump Bar Active Pill
+  const activeCat = getCameraCategory(camId);
+  document.querySelectorAll('.camera-category-bar .cam-cat-pill').forEach(pill => {
+    pill.classList.toggle('active', pill.dataset.cat === activeCat);
+  });
+
+  // 3. Update Left Sidebar Rack Active State
   document.querySelectorAll('.panel-modes .panel-mode-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.cam === camId);
   });
 
-  // 3. Update Viewfinder Top Active Camera Badge HUD
+  // 4. Update Viewfinder Top Active Camera Badge HUD
   const badgeTitle = document.getElementById('cam-badge-title');
   const badgeSub = document.getElementById('cam-badge-sub');
   const badgeIcon = document.getElementById('cam-badge-icon');
@@ -761,7 +1093,17 @@ function switchCamera(camId) {
   if (badgeIcon) badgeIcon.textContent = cam.icon;
   if (badgeSub) badgeSub.textContent = cam.sub;
 
-  // 4. Switch Control Drawer Panel
+  // 5. Update Equipped State in Camera Bag Modal Cards
+  document.querySelectorAll('.camera-bag-grid .bag-cam-card').forEach(card => {
+    const isEq = card.dataset.cam === camId;
+    card.classList.toggle('equipped', isEq);
+    const statusEl = card.querySelector('.bag-card-status');
+    if (statusEl) {
+      statusEl.textContent = isEq ? '● 장착 중 (EQUIPPED)' : '○ 탭하여 즉시 장착';
+    }
+  });
+
+  // 6. Switch Control Drawer Panel
   document.querySelectorAll('.control-drawer .mode-control-panel').forEach(panel => {
     panel.classList.toggle('active', panel.id === cam.drawerId);
   });
@@ -778,6 +1120,10 @@ function switchCamera(camId) {
     'citypop-osd',
     'oldfilm-osd',
     'cinestill-halation',
+    'hasselblad-osd',
+    'polaroid-sx70-osd',
+    'quicksnap-osd',
+    'kyocera-samurai-osd',
     'instax-frame',
     'mood-card-frame',
     'standard-id-hud',
@@ -821,6 +1167,20 @@ function switchCamera(camId) {
 
   // 9. Announce via Dynamic Island
   showDynamicIslandBanner(cam.badge, cam.shortName, 1800);
+}
+
+// Next Camera Stepper (Ergonomic 1-tap/swipe transition)
+function switchNextCamera() {
+  const currentIndex = CAMERA_ORDER.indexOf(state.activeCamera);
+  const nextIndex = (currentIndex + 1) % CAMERA_ORDER.length;
+  switchCamera(CAMERA_ORDER[nextIndex]);
+}
+
+// Previous Camera Stepper (Ergonomic 1-tap/swipe transition)
+function switchPrevCamera() {
+  const currentIndex = CAMERA_ORDER.indexOf(state.activeCamera);
+  const prevIndex = (currentIndex - 1 + CAMERA_ORDER.length) % CAMERA_ORDER.length;
+  switchCamera(CAMERA_ORDER[prevIndex]);
 }
 
 function applyCurrentCameraFilter() {
@@ -948,6 +1308,7 @@ function applyLensFilter(filterKey = 'none') {
   const layers = {
     mist: document.getElementById('lens-layer-mist'),
     star: document.getElementById('lens-layer-star'),
+    star6: document.getElementById('lens-layer-star6'),
     streak: document.getElementById('lens-layer-streak'),
     prism: document.getElementById('lens-layer-prism'),
     cpl: document.getElementById('lens-layer-cpl')
@@ -1338,6 +1699,118 @@ function executeCapture() {
       ctx.fillRect(0, 0, captureCanvas.width, captureCanvas.height);
       ctx.restore();
     }
+  } else if (cam.id === 'hasselblad-500cm') {
+    // 6x6 Medium Format Inner Frame
+    ctx.lineWidth = 1.5;
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+    ctx.strokeRect(30, 30, captureCanvas.width - 60, captureCanvas.height - 60);
+
+    // Crosshair at center
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+    ctx.lineWidth = 1;
+    ctx.beginPath();
+    ctx.moveTo(captureCanvas.width / 2 - 12, captureCanvas.height / 2);
+    ctx.lineTo(captureCanvas.width / 2 + 12, captureCanvas.height / 2);
+    ctx.moveTo(captureCanvas.width / 2, captureCanvas.height / 2 - 12);
+    ctx.lineTo(captureCanvas.width / 2, captureCanvas.height / 2 + 12);
+    ctx.stroke();
+
+    // Top Hasselblad Swedish Badge
+    ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
+    ctx.fillRect(40, 40, 220, 34);
+    ctx.font = 'bold 15px Georgia, serif';
+    ctx.fillStyle = '#9a8c98';
+    ctx.fillText('HASSELBLAD 500C/M', 52, 63);
+
+    // Bottom Zeiss Planar & Shutter
+    ctx.font = 'bold 16px "Courier New", monospace';
+    ctx.fillStyle = '#ffffff';
+    ctx.fillText('Carl Zeiss Planar 2.8/80 T*', 50, captureCanvas.height - 50);
+    ctx.fillStyle = '#9a8c98';
+    ctx.fillText('1/250  f/2.8  A12 6x6', captureCanvas.width - 260, captureCanvas.height - 50);
+  } else if (cam.id === 'polaroid-sx70') {
+    // Signature Polaroid SX-70 Instant Card Frame
+    ctx.lineWidth = 28;
+    ctx.strokeStyle = '#f5f0eb';
+    ctx.strokeRect(14, 14, captureCanvas.width - 28, captureCanvas.height - 28);
+    ctx.fillStyle = '#f5f0eb';
+    ctx.fillRect(0, captureCanvas.height - 150, captureCanvas.width, 150);
+
+    // Rainbow 5-color stripe badge
+    const rx = 40, ry = captureCanvas.height - 85;
+    const colors = ['#ff3b30', '#ff9500', '#ffcc00', '#34c759', '#007aff'];
+    colors.forEach((col, idx) => {
+      ctx.fillStyle = col;
+      ctx.fillRect(rx + idx * 8, ry, 7, 24);
+    });
+
+    ctx.font = 'bold 22px -apple-system, sans-serif';
+    ctx.fillStyle = '#2c2d30';
+    ctx.fillText('POLAROID SX-70', 90, captureCanvas.height - 68);
+
+    ctx.font = 'bold 14px "Courier New", monospace';
+    ctx.fillStyle = '#8e793e';
+    ctx.fillText('ALPHA 1 • 1972 LAND CAMERA', 90, captureCanvas.height - 48);
+
+    ctx.font = 'bold 18px "Courier New", monospace';
+    ctx.fillStyle = '#6e7075';
+    ctx.fillText("'26 10 05", captureCanvas.width - 160, captureCanvas.height - 60);
+  } else if (cam.id === 'fuji-quicksnap') {
+    // 1986 Bubble Era Fuji QuickSnap Plastic Meniscus Flare & Amber Quartz Date Imprint
+    ctx.save();
+    ctx.font = 'bold 22px "Impact", "Arial Black", sans-serif';
+    ctx.fillStyle = '#ff9100';
+    ctx.shadowColor = 'rgba(255, 145, 0, 0.8)';
+    ctx.shadowBlur = 8;
+    ctx.fillText("'89 11 24", captureCanvas.width - 150, captureCanvas.height - 45);
+
+    // Top-left FUJICOLOR 写ルンです single-use paper badge
+    ctx.fillStyle = 'rgba(0, 100, 40, 0.8)';
+    ctx.fillRect(30, 30, 240, 34);
+    ctx.font = 'bold 14px -apple-system, sans-serif';
+    ctx.fillStyle = '#ffffff';
+    ctx.shadowColor = 'transparent';
+    ctx.shadowBlur = 0;
+    ctx.fillText('FUJICOLOR 写ルンです 1986', 42, 53);
+
+    // Subtle plastic edge vignette
+    const pGrad = ctx.createRadialGradient(
+      captureCanvas.width / 2, captureCanvas.height / 2, captureCanvas.width * 0.4,
+      captureCanvas.width / 2, captureCanvas.height / 2, captureCanvas.width * 0.75
+    );
+    pGrad.addColorStop(0, 'transparent');
+    pGrad.addColorStop(1, 'rgba(10, 35, 15, 0.28)');
+    ctx.fillStyle = pGrad;
+    ctx.fillRect(0, 0, captureCanvas.width, captureCanvas.height);
+    ctx.restore();
+  } else if (cam.id === 'kyocera-samurai') {
+    // 1988 Kyocera Samurai X3.0 Cyber Half-Frame 72-Shot SLR
+    ctx.save();
+    ctx.strokeStyle = 'rgba(0, 229, 255, 0.4)';
+    ctx.lineWidth = 1.5;
+    ctx.setLineDash([8, 8]);
+    ctx.beginPath();
+    ctx.moveTo(captureCanvas.width / 2, 40);
+    ctx.lineTo(captureCanvas.width / 2, captureCanvas.height - 40);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Top-left cyber LCD banner
+    ctx.fillStyle = 'rgba(4, 16, 20, 0.85)';
+    ctx.fillRect(30, 30, 260, 34);
+    ctx.font = 'bold 13px "Courier New", monospace';
+    ctx.fillStyle = '#00ff80';
+    ctx.shadowColor = '#00ff80';
+    ctx.shadowBlur = 6;
+    ctx.fillText('SAMURAI X3.0 • EXP 48/72', 42, 52);
+
+    // Bottom-right Yashica zoom mark
+    ctx.font = 'bold 13px "Courier New", monospace';
+    ctx.fillStyle = '#00e5ff';
+    ctx.shadowColor = '#00e5ff';
+    ctx.shadowBlur = 4;
+    ctx.fillText('YASHICA ZOOM 25-75mm MACRO', captureCanvas.width - 270, captureCanvas.height - 45);
+    ctx.restore();
   } else if (cam.id === 'instax-mini') {
     ctx.lineWidth = 36;
     ctx.strokeStyle = '#f5f4ef';
@@ -1423,6 +1896,35 @@ function executeCapture() {
     drawStar(captureCanvas.width * 0.42, captureCanvas.height * 0.36, 45);
     drawStar(captureCanvas.width * 0.58, captureCanvas.height * 0.36, 45);
     ctx.restore();
+  } else if (state.lensFilter === 'star6') {
+    ctx.save();
+    ctx.globalCompositeOperation = 'screen';
+    const drawStar6 = (cx, cy, r) => {
+      const angles = [0, Math.PI / 3, (2 * Math.PI) / 3];
+      angles.forEach(ang => {
+        const dx = Math.cos(ang) * r;
+        const dy = Math.sin(ang) * r;
+        ctx.lineWidth = 1.8;
+        ctx.strokeStyle = 'rgba(255, 248, 235, 0.92)';
+        ctx.beginPath();
+        ctx.moveTo(cx - dx, cy - dy); ctx.lineTo(cx + dx, cy + dy);
+        ctx.stroke();
+
+        // Chromatic spectral dispersion fringe
+        ctx.lineWidth = 1.0;
+        ctx.strokeStyle = 'rgba(255, 180, 220, 0.5)';
+        ctx.beginPath();
+        ctx.moveTo(cx - dx * 1.08, cy - dy * 1.08); ctx.lineTo(cx + dx * 1.08, cy + dy * 1.08);
+        ctx.stroke();
+      });
+      ctx.fillStyle = '#ffffff';
+      ctx.beginPath();
+      ctx.arc(cx, cy, 3.5, 0, Math.PI * 2);
+      ctx.fill();
+    };
+    drawStar6(captureCanvas.width * 0.42, captureCanvas.height * 0.36, 55);
+    drawStar6(captureCanvas.width * 0.58, captureCanvas.height * 0.36, 55);
+    ctx.restore();
   } else if (state.lensFilter === 'streak') {
     ctx.save();
     ctx.globalCompositeOperation = 'screen';
@@ -1460,6 +1962,51 @@ function executeCapture() {
   const dataUrl = captureCanvas.toDataURL('image/jpeg', 0.95);
   state.lastCapturedUrl = dataUrl;
 
+  const fKey = state.selectedFilters[cam.id];
+  const filterSpec = (cam.filters && cam.filters[fKey]) ? cam.filters[fKey] : { name: 'Standard Pass', desc: '표준 렌더링' };
+
+  const photoRecord = {
+    id: 'snap_' + Date.now(),
+    dataUrl: dataUrl,
+    timestamp: new Date().toISOString(),
+    formattedDate: new Date().toLocaleString('ko-KR', {
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', second: '2-digit'
+    }),
+    cameraKey: cam.id,
+    cameraName: cam.name,
+    lensModel: cam.lensModel || 'Precision Optical Glass',
+    filterName: filterSpec.name,
+    filterDesc: filterSpec.desc,
+    opticalLens: state.lensFilter !== 'none' ? state.lensFilter.toUpperCase() : 'Clear (None)',
+    shutterSpeed: cam.exposure ? cam.exposure.shutter : '1/125s',
+    aperture: cam.exposure ? cam.exposure.aperture : 'f/2.8',
+    iso: cam.exposure ? cam.exposure.iso : 'ISO 100',
+    exposure: cam.exposure ? `${cam.exposure.shutter} • ${cam.exposure.aperture} • ${cam.exposure.iso}` : '1/125s • f/2.8 • ISO 100',
+    focalLength: cam.exposure ? cam.exposure.focal : '35mm eq.',
+    flashFired: state.flashMode === 'on',
+    width: captureCanvas.width,
+    height: captureCanvas.height,
+    aspectRatio: `${captureCanvas.width}:${captureCanvas.height} (3:4)`,
+    colorSpace: 'sRGB Display P3',
+    exif: {
+      camera: cam.name,
+      lens: cam.lensModel || 'Precision Optical Glass',
+      filter: filterSpec.name,
+      optical: state.lensFilter !== 'none' ? state.lensFilter.toUpperCase() : 'Clear (None)',
+      shutter: cam.exposure ? cam.exposure.shutter : '1/125s',
+      aperture: cam.exposure ? cam.exposure.aperture : 'f/2.8',
+      iso: cam.exposure ? cam.exposure.iso : 'ISO 100',
+      focal: cam.exposure ? cam.exposure.focal : '35mm eq.',
+      flash: state.flashMode === 'on' ? 'Fired' : 'Off',
+      timestamp: new Date().toISOString()
+    }
+  };
+
+  state.gallery.unshift(photoRecord);
+  state.selectedGalleryIndex = 0;
+  updateGalleryBadge();
+
   const thumbImg = document.getElementById('gallery-thumb');
   const thumbPlaceholder = document.getElementById('gallery-placeholder');
   thumbImg.src = dataUrl;
@@ -1467,8 +2014,142 @@ function executeCapture() {
   thumbPlaceholder.style.display = 'none';
 
   setTimeout(() => {
-    openReviewModal(dataUrl);
+    openGalleryModal();
   }, 350);
+}
+
+function updateGalleryBadge() {
+  const topBadge = document.getElementById('gallery-badge-num');
+  const sidebarCount = document.getElementById('sidebar-gallery-count');
+  const modalCount = document.getElementById('gallery-count-text');
+
+  const count = state.gallery.length;
+  if (topBadge) topBadge.textContent = count;
+  if (sidebarCount) sidebarCount.textContent = count;
+  if (modalCount) modalCount.textContent = count;
+}
+
+function openGalleryModal() {
+  soundEngine.playTick();
+  const modal = document.getElementById('gallery-modal');
+  const emptyState = document.getElementById('gallery-empty-state');
+  const contentContainer = document.getElementById('gallery-content-container');
+
+  if (state.gallery.length === 0) {
+    if (emptyState) emptyState.style.display = 'block';
+    if (contentContainer) contentContainer.style.display = 'none';
+  } else {
+    if (emptyState) emptyState.style.display = 'none';
+    if (contentContainer) contentContainer.style.display = 'block';
+    renderGalleryFilmStrip();
+    selectGalleryPhoto(state.selectedGalleryIndex || 0);
+  }
+
+  if (modal) modal.classList.add('open');
+}
+
+function closeGalleryModal() {
+  soundEngine.playTick();
+  const modal = document.getElementById('gallery-modal');
+  if (modal) modal.classList.remove('open');
+}
+
+function renderGalleryFilmStrip() {
+  const strip = document.getElementById('gallery-film-strip');
+  if (!strip) return;
+  strip.innerHTML = '';
+
+  state.gallery.forEach((item, index) => {
+    const thumb = document.createElement('div');
+    thumb.className = `gallery-film-thumb ${index === state.selectedGalleryIndex ? 'active' : ''}`;
+    thumb.style.position = 'relative';
+    thumb.innerHTML = `
+      <img src="${item.dataUrl}" alt="Item ${index + 1}">
+      ${item.isVideo ? `<div style="position: absolute; bottom: 4px; right: 4px; background: rgba(0,0,0,0.85); color: #fff; font-size: 8.5px; font-weight: 800; padding: 1px 5px; border-radius: 4px; border: 0.5px solid rgba(255,59,48,0.6); display: flex; align-items: center; gap: 3px;"><span style="color: #ff3b30;">●</span> ${item.duration || '00:03'}</div>` : ''}
+    `;
+    thumb.addEventListener('click', () => {
+      soundEngine.playTick();
+      selectGalleryPhoto(index);
+    });
+    strip.appendChild(thumb);
+  });
+}
+
+function selectGalleryPhoto(index) {
+  if (!state.gallery[index]) return;
+  state.selectedGalleryIndex = index;
+  const item = state.gallery[index];
+
+  // Update strip highlight
+  document.querySelectorAll('.gallery-film-thumb').forEach((t, i) => {
+    t.classList.toggle('active', i === index);
+  });
+
+  // Update Large Preview
+  const largeImg = document.getElementById('gallery-large-img');
+  if (largeImg) largeImg.src = item.dataUrl;
+
+  // Update EXIF Information
+  const camBadge = document.getElementById('exif-cam-badge');
+  const valCamera = document.getElementById('exif-val-camera');
+  const valLens = document.getElementById('exif-val-lens');
+  const valFilter = document.getElementById('exif-val-filter');
+  const valOptical = document.getElementById('exif-val-optical');
+  const valExposure = document.getElementById('exif-val-exposure');
+  const valFocal = document.getElementById('exif-val-focal');
+  const valFlash = document.getElementById('exif-val-flash');
+  const valRes = document.getElementById('exif-val-res');
+  const valTimestamp = document.getElementById('exif-val-timestamp');
+
+  const cam = CAMERAS[item.cameraKey] || { shortName: 'CAMERA' };
+  if (camBadge) camBadge.textContent = item.isVideo ? `▶ REC VIDEO (${item.duration})` : (cam.shortName || 'CAMERA');
+  if (valCamera) valCamera.textContent = item.isVideo ? `${item.cameraName} (QuickTake Video)` : item.cameraName;
+  if (valLens) valLens.textContent = item.lensModel;
+  if (valFilter) valFilter.textContent = `${item.filterName} (${item.filterDesc || '고유 톤'})`;
+  if (valOptical) valOptical.textContent = item.opticalLens;
+  if (valExposure) valExposure.textContent = item.exposure;
+  if (valFocal) valFocal.textContent = item.focalLength;
+  if (valFlash) valFlash.textContent = item.flashFired ? '발광 (Fired)' : '미발광 (Off)';
+  if (valRes) valRes.textContent = `${item.width} × ${item.height} (${item.aspectRatio || '3:4'})`;
+  if (valTimestamp) valTimestamp.textContent = `${item.formattedDate} • ${item.colorSpace}`;
+}
+
+function deleteCurrentGalleryPhoto() {
+  if (state.gallery.length === 0) return;
+  soundEngine.playTick();
+  state.gallery.splice(state.selectedGalleryIndex, 1);
+  if (state.selectedGalleryIndex >= state.gallery.length) {
+    state.selectedGalleryIndex = Math.max(0, state.gallery.length - 1);
+  }
+  updateGalleryBadge();
+
+  if (state.gallery.length === 0) {
+    const thumbImg = document.getElementById('gallery-thumb');
+    const thumbPlaceholder = document.getElementById('gallery-placeholder');
+    if (thumbImg) thumbImg.style.display = 'none';
+    if (thumbPlaceholder) thumbPlaceholder.style.display = 'block';
+    state.lastCapturedUrl = null;
+    openGalleryModal();
+  } else {
+    state.lastCapturedUrl = state.gallery[0].dataUrl;
+    const thumbImg = document.getElementById('gallery-thumb');
+    if (thumbImg) thumbImg.src = state.lastCapturedUrl;
+    renderGalleryFilmStrip();
+    selectGalleryPhoto(state.selectedGalleryIndex);
+  }
+}
+
+function downloadCurrentGalleryPhoto() {
+  if (state.gallery.length === 0) return;
+  soundEngine.playTick();
+  const item = state.gallery[state.selectedGalleryIndex];
+  const a = document.createElement('a');
+  a.href = item.dataUrl;
+  a.download = `SnapStudio_${item.cameraKey}_${Date.now()}.jpg`;
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  showDynamicIslandBanner('DOWNLOADED', 'PHOTO SAVED', 1800);
 }
 
 function openReviewModal(imgDataUrl) {
@@ -1591,6 +2272,428 @@ function useStudioModel(type = 'female') {
 }
 
 // ==========================================================================
+// QuickTake Long-Press Live Video Recording Engine (Apple HIG Gestures)
+// ==========================================================================
+let quickTakeHoldTimer = null;
+let quickTakeStartTime = 0;
+let quickTakeStream = null;
+
+function formatTimecode(totalSec) {
+  const m = Math.floor(totalSec / 60);
+  const s = totalSec % 60;
+  return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+}
+
+function startQuickTakeVideoRecording() {
+  if (state.isRecordingVideo) return;
+  state.isRecordingVideo = true;
+  state.recordingSeconds = 0;
+
+  soundEngine.playRecordStart();
+
+  // 1. Shutter Button UI morphing: circular ring -> pulsing red square
+  const shutterBtn = document.getElementById('shutter-btn');
+  if (shutterBtn) shutterBtn.classList.add('recording');
+
+  // 2. Viewfinder REC banner
+  const recBanner = document.getElementById('viewfinder-rec-banner');
+  const vfRecTime = document.getElementById('vf-rec-time');
+  if (recBanner) recBanner.classList.add('active');
+  if (vfRecTime) vfRecTime.textContent = '00:00';
+
+  // 3. Dynamic Island expansion into live REC banner
+  const island = document.getElementById('dynamic-island');
+  const label = document.getElementById('island-label');
+  const extra = document.getElementById('island-extra');
+  if (island) island.classList.add('recording', 'expanded');
+  if (label) label.innerHTML = '<span class="rec-dot-pulsing"></span>REC VIDEO';
+  if (extra) extra.textContent = '00:00';
+
+  // 4. Live media recording stream capture (MediaRecorder API)
+  state.recordedVideoChunks = [];
+  try {
+    const canvas = state.cameraSource === 'webcam'
+      ? document.getElementById('camera-video')
+      : document.getElementById('model-canvas');
+    if (canvas && canvas.captureStream) {
+      quickTakeStream = canvas.captureStream(30);
+      const mime = (typeof MediaRecorder !== 'undefined' && MediaRecorder.isTypeSupported('video/webm;codecs=vp9'))
+        ? 'video/webm;codecs=vp9'
+        : 'video/webm';
+      if (typeof MediaRecorder !== 'undefined') {
+        state.mediaRecorder = new MediaRecorder(quickTakeStream, { mimeType: mime });
+        state.mediaRecorder.ondataavailable = (e) => {
+          if (e.data && e.data.size > 0) state.recordedVideoChunks.push(e.data);
+        };
+        state.mediaRecorder.start(100);
+      }
+    }
+  } catch (e) {
+    console.warn('Canvas stream capture fallback:', e);
+  }
+
+  // 5. Timecode ticker
+  state.recordingTimerInterval = setInterval(() => {
+    state.recordingSeconds += 1;
+    const timeStr = formatTimecode(state.recordingSeconds);
+    if (vfRecTime) vfRecTime.textContent = timeStr;
+    if (extra) extra.textContent = timeStr;
+  }, 1000);
+}
+
+function stopQuickTakeVideoRecording() {
+  if (!state.isRecordingVideo) return;
+  state.isRecordingVideo = false;
+
+  clearInterval(state.recordingTimerInterval);
+  state.recordingTimerInterval = null;
+
+  soundEngine.playRecordStop();
+
+  // 1. Revert UI morphing
+  const shutterBtn = document.getElementById('shutter-btn');
+  if (shutterBtn) shutterBtn.classList.remove('recording');
+
+  const recBanner = document.getElementById('viewfinder-rec-banner');
+  if (recBanner) recBanner.classList.remove('active');
+
+  const island = document.getElementById('dynamic-island');
+  if (island) {
+    island.classList.remove('recording');
+    setTimeout(() => island.classList.remove('expanded'), 800);
+  }
+
+  // 2. Finalize Video Stream & Artifact
+  const recordedDuration = state.recordingSeconds;
+  const durationStr = formatTimecode(Math.max(1, recordedDuration));
+  const cam = CAMERAS[state.activeCamera];
+
+  const snapshotDataUrl = state.lastCapturedUrl || generateDefaultThumb();
+
+  let finalVideoUrl = null;
+  if (state.mediaRecorder && state.mediaRecorder.state !== 'inactive') {
+    state.mediaRecorder.onstop = () => {
+      if (state.recordedVideoChunks.length > 0) {
+        const blob = new Blob(state.recordedVideoChunks, { type: 'video/webm' });
+        finalVideoUrl = URL.createObjectURL(blob);
+      }
+      saveQuickTakeVideoRecord(finalVideoUrl || snapshotDataUrl, snapshotDataUrl, durationStr, recordedDuration, cam);
+    };
+    state.mediaRecorder.stop();
+  } else {
+    saveQuickTakeVideoRecord(snapshotDataUrl, snapshotDataUrl, durationStr, recordedDuration, cam);
+  }
+}
+
+function saveQuickTakeVideoRecord(videoUrl, posterUrl, durationStr, durationSec, cam) {
+  const fKey = state.selectedFilters[cam.id];
+  const filterSpec = (cam.filters && cam.filters[fKey]) ? cam.filters[fKey] : { name: 'Standard Pass', desc: '표준 렌더링' };
+
+  const videoRecord = {
+    id: 'video_' + Date.now(),
+    isVideo: true,
+    videoUrl: videoUrl,
+    dataUrl: posterUrl,
+    duration: durationStr,
+    durationSec: durationSec,
+    timestamp: new Date().toISOString(),
+    formattedDate: new Date().toLocaleString('ko-KR', {
+      year: 'numeric', month: '2-digit', day: '2-digit',
+      hour: '2-digit', minute: '2-digit', second: '2-digit'
+    }),
+    cameraKey: cam.id,
+    cameraName: cam.name,
+    lensModel: cam.lensModel || 'Precision Optical Glass',
+    filterName: filterSpec.name,
+    filterDesc: `${filterSpec.desc} (QuickTake Video Record)`,
+    opticalLens: state.lensFilter !== 'none' ? state.lensFilter.toUpperCase() : 'Clear (None)',
+    shutterSpeed: '1/60s (30 fps)',
+    aperture: cam.exposure ? cam.exposure.aperture : 'f/2.8',
+    iso: cam.exposure ? cam.exposure.iso : 'ISO 200',
+    exposure: `1/60s (30fps) • ${cam.exposure ? cam.exposure.aperture : 'f/2.8'} • Video Mode`,
+    focalLength: cam.exposure ? cam.exposure.focal : '35mm eq.',
+    flashFired: false,
+    width: 1080,
+    height: 1440,
+    aspectRatio: '3:4 Video',
+    colorSpace: 'sRGB Display P3 Video',
+    exif: {
+      camera: cam.name,
+      lens: cam.lensModel || 'Precision Optical Glass',
+      filter: filterSpec.name + ' (QuickTake)',
+      optical: state.lensFilter !== 'none' ? state.lensFilter.toUpperCase() : 'Clear (None)',
+      shutter: '1/60s',
+      aperture: cam.exposure ? cam.exposure.aperture : 'f/2.8',
+      iso: 'ISO 200',
+      focal: cam.exposure ? cam.exposure.focal : '35mm eq.',
+      flash: 'Off',
+      timestamp: new Date().toISOString()
+    }
+  };
+
+  state.gallery.unshift(videoRecord);
+  state.selectedGalleryIndex = 0;
+  updateGalleryBadge();
+
+  const thumbImg = document.getElementById('gallery-thumb');
+  const thumbPlaceholder = document.getElementById('gallery-placeholder');
+  if (thumbImg) {
+    thumbImg.src = posterUrl;
+    thumbImg.style.display = 'block';
+  }
+  if (thumbPlaceholder) thumbPlaceholder.style.display = 'none';
+
+  showDynamicIslandBanner('VIDEO SAVED', `QUICKTAKE ${durationStr}`, 2000);
+
+  setTimeout(() => {
+    openGalleryModal();
+  }, 400);
+}
+
+function initQuickTakeShutter() {
+  const shutterBtn = document.getElementById('shutter-btn');
+  if (!shutterBtn) return;
+
+  let isPointerHeld = false;
+  let didRecord = false;
+  let handledByPointer = false;
+
+  const handlePointerDown = (e) => {
+    isPointerHeld = true;
+    didRecord = false;
+    handledByPointer = false;
+    quickTakeStartTime = Date.now();
+    clearTimeout(quickTakeHoldTimer);
+    quickTakeHoldTimer = setTimeout(() => {
+      if (isPointerHeld) {
+        didRecord = true;
+        handledByPointer = true;
+        startQuickTakeVideoRecording();
+      }
+    }, 280);
+  };
+
+  const handlePointerUp = (e) => {
+    clearTimeout(quickTakeHoldTimer);
+    if (didRecord || state.isRecordingVideo) {
+      stopQuickTakeVideoRecording();
+      didRecord = false;
+      isPointerHeld = false;
+      handledByPointer = true;
+      return;
+    }
+
+    if (isPointerHeld) {
+      isPointerHeld = false;
+      handledByPointer = true;
+      triggerShutterCapture();
+    }
+  };
+
+  const handlePointerCancel = () => {
+    clearTimeout(quickTakeHoldTimer);
+    isPointerHeld = false;
+    if (didRecord || state.isRecordingVideo) {
+      stopQuickTakeVideoRecording();
+      didRecord = false;
+    }
+  };
+
+  const handleClick = (e) => {
+    // If pointer already handled the tap or recording, prevent duplicate capture
+    if (handledByPointer) {
+      handledByPointer = false;
+      return;
+    }
+    triggerShutterCapture();
+  };
+
+  shutterBtn.addEventListener('pointerdown', handlePointerDown);
+  shutterBtn.addEventListener('pointerup', handlePointerUp);
+  shutterBtn.addEventListener('pointerleave', handlePointerCancel);
+  shutterBtn.addEventListener('pointercancel', handlePointerCancel);
+  shutterBtn.addEventListener('click', handleClick);
+
+  // Fallback hardware volume buttons
+  const volUp = document.getElementById('hw-vol-up-btn');
+  const volDown = document.getElementById('hw-vol-down-btn');
+  if (volUp) volUp.addEventListener('click', triggerShutterCapture);
+  if (volDown) volDown.addEventListener('click', triggerShutterCapture);
+}
+
+// ==========================================================================
+// 5. Ergonomic Multi-Camera Switching Subsystems (4-Tier Architecture)
+// ==========================================================================
+
+// Tier 1: Viewfinder Horizontal Swipe Gesture (Left: Next, Right: Prev)
+function initViewfinderSwipe() {
+  const vf = document.getElementById('viewfinder');
+  if (!vf) return;
+
+  let startX = 0;
+  let startY = 0;
+  let isSwiping = false;
+
+  vf.addEventListener('pointerdown', (e) => {
+    if (e.target.closest('.camera-model-badge-container') || e.target.closest('button')) return;
+    startX = e.clientX;
+    startY = e.clientY;
+    isSwiping = true;
+  });
+
+  vf.addEventListener('pointerup', (e) => {
+    if (!isSwiping) return;
+    isSwiping = false;
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+
+    if (Math.abs(dx) > 35 && Math.abs(dx) > Math.abs(dy) * 1.2) {
+      if (dx < 0) {
+        switchNextCamera();
+      } else {
+        switchPrevCamera();
+      }
+    }
+  });
+
+  vf.addEventListener('pointercancel', () => {
+    isSwiping = false;
+  });
+}
+
+// Tier 3: Category Fast-Jump Bar (Bubble, Y2K, Medium Format, Studio)
+function initCameraCategoryBar() {
+  document.querySelectorAll('.camera-category-bar .cam-cat-pill').forEach(pill => {
+    pill.addEventListener('click', () => {
+      soundEngine.playTick();
+      const cat = pill.dataset.cat;
+      if (cat === 'all') {
+        document.querySelectorAll('.camera-category-bar .cam-cat-pill').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        return;
+      }
+
+      const camsInCat = CAMERA_CATEGORIES[cat] || [];
+      if (camsInCat.length === 0) return;
+
+      const currentIdx = camsInCat.indexOf(state.activeCamera);
+      if (currentIdx === -1) {
+        switchCamera(camsInCat[0]);
+      } else {
+        const nextIdx = (currentIdx + 1) % camsInCat.length;
+        switchCamera(camsInCat[nextIdx]);
+      }
+    });
+  });
+}
+
+// Tier 4: Visual Camera Bag / Rack Drawer Modal (16 Iconic Bodies)
+function openCameraBagModal() {
+  renderCameraBagGrid('all');
+  const modal = document.getElementById('camera-bag-modal');
+  if (modal) {
+    soundEngine.playTick();
+    modal.classList.add('open');
+    showDynamicIslandBanner('CAMERA BAG', '16 ICONIC CAMERAS', 1500);
+  }
+}
+
+function closeCameraBagModal() {
+  const modal = document.getElementById('camera-bag-modal');
+  if (modal) {
+    modal.classList.remove('open');
+  }
+}
+
+function renderCameraBagGrid(filterCat = 'all') {
+  const grid = document.getElementById('camera-bag-grid');
+  if (!grid) return;
+
+  grid.innerHTML = '';
+  CAMERA_ORDER.forEach(camId => {
+    const cam = CAMERAS[camId];
+    if (!cam) return;
+    const cat = getCameraCategory(camId);
+    if (filterCat !== 'all' && cat !== filterCat) return;
+
+    const isEquipped = state.activeCamera === camId;
+    const card = document.createElement('div');
+    card.className = `bag-cam-card ${isEquipped ? 'equipped' : ''}`;
+    card.dataset.cam = camId;
+    card.dataset.cat = cat;
+
+    let desc = cam.sub;
+    if (cam.filters) {
+      const firstFilter = Object.values(cam.filters)[0];
+      if (firstFilter) desc = `${cam.sub} • ${firstFilter.desc}`;
+    }
+
+    card.innerHTML = `
+      <div class="bag-card-top">
+        <span class="bag-card-icon">${cam.icon}</span>
+        <span class="bag-card-badge">${cam.badge}</span>
+      </div>
+      <div class="bag-card-title">${cam.name}</div>
+      <div class="bag-card-desc">${desc}</div>
+      <div class="bag-card-status">${isEquipped ? '● 장착 중 (EQUIPPED)' : '○ 탭하여 즉시 장착'}</div>
+    `;
+
+    card.addEventListener('click', () => {
+      soundEngine.playMount();
+      switchCamera(camId);
+      closeCameraBagModal();
+    });
+
+    grid.appendChild(card);
+  });
+}
+
+function initCameraBagModal() {
+  const btnBagTop = document.getElementById('btn-camera-bag');
+  if (btnBagTop) btnBagTop.addEventListener('click', openCameraBagModal);
+
+  const btnBagBottom = document.getElementById('bottom-camera-bag-btn');
+  if (btnBagBottom) btnBagBottom.addEventListener('click', openCameraBagModal);
+
+  const badgeHud = document.getElementById('camera-model-badge');
+  if (badgeHud) badgeHud.addEventListener('click', openCameraBagModal);
+
+  const btnCloseBag = document.getElementById('btn-close-camera-bag');
+  if (btnCloseBag) btnCloseBag.addEventListener('click', closeCameraBagModal);
+
+  const btnCloseBottom = document.getElementById('btn-bag-close-bottom');
+  if (btnCloseBottom) btnCloseBottom.addEventListener('click', closeCameraBagModal);
+
+  const modal = document.getElementById('camera-bag-modal');
+  if (modal) {
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeCameraBagModal();
+    });
+  }
+
+  document.querySelectorAll('#bag-category-filter .bag-cat-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      soundEngine.playTick();
+      document.querySelectorAll('#bag-category-filter .bag-cat-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      renderCameraBagGrid(btn.dataset.cat);
+    });
+  });
+
+  const btnPrev = document.getElementById('btn-cam-prev');
+  if (btnPrev) btnPrev.addEventListener('click', (e) => {
+    e.stopPropagation();
+    switchPrevCamera();
+  });
+
+  const btnNext = document.getElementById('btn-cam-next');
+  if (btnNext) btnNext.addEventListener('click', (e) => {
+    e.stopPropagation();
+    switchNextCamera();
+  });
+}
+
+// ==========================================================================
 // 6. Event Listeners & Bootstrapping
 // ==========================================================================
 
@@ -1605,20 +2708,50 @@ function initEventListeners() {
     btn.addEventListener('click', () => switchCamera(btn.dataset.cam));
   });
 
-  // 3. Shutter & Volume Hardware Buttons
-  const shutterBtn = document.getElementById('shutter-btn');
-  if (shutterBtn) shutterBtn.addEventListener('click', triggerShutterCapture);
+  // 3. Ergonomic Multi-Camera Systems (Swipe, Steppers, Category Jump, Visual Bag)
+  initViewfinderSwipe();
+  initCameraCategoryBar();
+  initCameraBagModal();
 
-  const volUp = document.getElementById('hw-vol-up-btn');
-  const volDown = document.getElementById('hw-vol-down-btn');
-  if (volUp) volUp.addEventListener('click', triggerShutterCapture);
-  if (volDown) volDown.addEventListener('click', triggerShutterCapture);
+  // 4. QuickTake Long-Press Shutter & Volume Hardware Buttons
+  initQuickTakeShutter();
 
-  // 4. Gallery Thumbnail
+  // 4. Gallery Triggers
   const galBtn = document.getElementById('gallery-btn');
   if (galBtn) {
-    galBtn.addEventListener('click', () => {
-      openReviewModal(state.lastCapturedUrl || generateDefaultThumb());
+    galBtn.addEventListener('click', openGalleryModal);
+  }
+
+  const galTopBtn = document.getElementById('btn-gallery-top');
+  if (galTopBtn) {
+    galTopBtn.addEventListener('click', openGalleryModal);
+  }
+
+  const galSidebarBtn = document.getElementById('sidebar-btn-gallery');
+  if (galSidebarBtn) {
+    galSidebarBtn.addEventListener('click', openGalleryModal);
+  }
+
+  const btnCloseGallery = document.getElementById('btn-close-gallery-modal');
+  if (btnCloseGallery) {
+    btnCloseGallery.addEventListener('click', closeGalleryModal);
+  }
+
+  const btnGalDelete = document.getElementById('btn-gallery-delete');
+  if (btnGalDelete) {
+    btnGalDelete.addEventListener('click', deleteCurrentGalleryPhoto);
+  }
+
+  const btnGalDownload = document.getElementById('btn-gallery-download');
+  if (btnGalDownload) {
+    btnGalDownload.addEventListener('click', downloadCurrentGalleryPhoto);
+  }
+
+  const btnGalPrint = document.getElementById('btn-gallery-print');
+  if (btnGalPrint) {
+    btnGalPrint.addEventListener('click', () => {
+      closeGalleryModal();
+      openPrintSheetModal();
     });
   }
 
@@ -1911,6 +3044,92 @@ function initEventListeners() {
     });
   }
 
+  // Hasselblad 500C/M Toggles
+  const hasselWaistToggle = document.getElementById('toggle-hassel-waist');
+  if (hasselWaistToggle) {
+    hasselWaistToggle.addEventListener('click', () => {
+      soundEngine.playTick();
+      const frameEl = document.querySelector('#hasselblad-osd .hasselblad-square-frame');
+      const active = hasselWaistToggle.classList.toggle('active');
+      if (frameEl) frameEl.style.display = active ? 'flex' : 'none';
+    });
+  }
+
+  const hasselCrossToggle = document.getElementById('toggle-hassel-cross');
+  if (hasselCrossToggle) {
+    hasselCrossToggle.addEventListener('click', () => {
+      soundEngine.playTick();
+      const crossEl = document.querySelector('#hasselblad-osd .hasselblad-crosshair');
+      const active = hasselCrossToggle.classList.toggle('active');
+      if (crossEl) crossEl.style.display = active ? 'block' : 'none';
+    });
+  }
+
+  // Polaroid SX-70 Toggles
+  const sx70SplitToggle = document.getElementById('toggle-sx70-split');
+  if (sx70SplitToggle) {
+    sx70SplitToggle.addEventListener('click', () => {
+      soundEngine.playTick();
+      const circleEl = document.querySelector('#polaroid-sx70-osd .sx70-split-circle');
+      const active = sx70SplitToggle.classList.toggle('active');
+      if (circleEl) circleEl.style.display = active ? 'flex' : 'none';
+    });
+  }
+
+  const sx70RainbowToggle = document.getElementById('toggle-sx70-rainbow');
+  if (sx70RainbowToggle) {
+    sx70RainbowToggle.addEventListener('click', () => {
+      soundEngine.playTick();
+      const rainbowEl = document.querySelector('#polaroid-sx70-osd .sx70-rainbow-stripe');
+      const active = sx70RainbowToggle.classList.toggle('active');
+      if (rainbowEl) rainbowEl.style.display = active ? 'flex' : 'none';
+    });
+  }
+
+  // Fuji QuickSnap Toggles
+  const quicksnapDateToggle = document.getElementById('toggle-quicksnap-date');
+  if (quicksnapDateToggle) {
+    quicksnapDateToggle.addEventListener('click', () => {
+      soundEngine.playTick();
+      const dateEl = document.getElementById('quicksnap-date-stamp');
+      const active = quicksnapDateToggle.classList.toggle('active');
+      if (dateEl) dateEl.style.display = active ? 'block' : 'none';
+    });
+  }
+
+  const quicksnapFlareToggle = document.getElementById('toggle-quicksnap-flare');
+  if (quicksnapFlareToggle) {
+    quicksnapFlareToggle.addEventListener('click', () => {
+      soundEngine.playTick();
+      const flashEl = document.querySelector('#quicksnap-osd .quicksnap-flash-indicator');
+      const active = quicksnapFlareToggle.classList.toggle('active');
+      if (flashEl) flashEl.style.display = active ? 'flex' : 'none';
+    });
+  }
+
+  // Kyocera Samurai Toggles
+  const samuraiHalfToggle = document.getElementById('toggle-samurai-halfline');
+  if (samuraiHalfToggle) {
+    samuraiHalfToggle.addEventListener('click', () => {
+      soundEngine.playTick();
+      const guideEl = document.querySelector('#kyocera-samurai-osd .samurai-half-frame-guide');
+      const active = samuraiHalfToggle.classList.toggle('active');
+      if (guideEl) guideEl.style.display = active ? 'block' : 'none';
+    });
+  }
+
+  const samuraiLcdToggle = document.getElementById('toggle-samurai-lcd');
+  if (samuraiLcdToggle) {
+    samuraiLcdToggle.addEventListener('click', () => {
+      soundEngine.playTick();
+      const brandEl = document.querySelector('#kyocera-samurai-osd .samurai-brand');
+      const expEl = document.querySelector('#kyocera-samurai-osd .samurai-exp-lcd');
+      const active = samuraiLcdToggle.classList.toggle('active');
+      if (brandEl) brandEl.style.display = active ? 'block' : 'none';
+      if (expEl) expEl.style.display = active ? 'block' : 'none';
+    });
+  }
+
   // Editable Moment Title
   const momentTitleEl = document.getElementById('sihyun-moment-title');
   if (momentTitleEl) {
@@ -2041,11 +3260,27 @@ function initEventListeners() {
   if (btnSave1) btnSave1.addEventListener('click', handleDownloadPhoto);
   if (btnSave2) btnSave2.addEventListener('click', handleDownloadPhoto);
 
-  // Keyboard Shortcuts (1~6 for Cameras)
+  // Keyboard Shortcuts (Arrow Keys for Switching, 'b' for Bag, 1~6 for Presets)
   window.addEventListener('keydown', (e) => {
-    if (e.code === 'Space' && e.target.tagName !== 'INPUT' && e.target.contentEditable !== 'true') {
+    if (e.target.tagName === 'INPUT' || e.target.contentEditable === 'true') return;
+
+    if (e.code === 'Space') {
       e.preventDefault();
       triggerShutterCapture();
+    } else if (e.key === 'ArrowLeft') {
+      e.preventDefault();
+      switchPrevCamera();
+    } else if (e.key === 'ArrowRight') {
+      e.preventDefault();
+      switchNextCamera();
+    } else if (e.key === 'b' || e.key === 'B') {
+      e.preventDefault();
+      const bagModal = document.getElementById('camera-bag-modal');
+      if (bagModal && bagModal.classList.contains('open')) {
+        closeCameraBagModal();
+      } else {
+        openCameraBagModal();
+      }
     } else if (e.key === '1') {
       switchCamera('canon-ixy');
     } else if (e.key === '2') {
@@ -2063,6 +3298,69 @@ function initEventListeners() {
 }
 
 // ==========================================================================
+// 8. Device Tier & iOS Version Switcher (Cross-Device & Cross-OS Preview)
+// ==========================================================================
+function initDeviceAndOSSwitcher() {
+  const deviceWrapper = document.querySelector('.device-wrapper');
+  const dimDisplay = document.getElementById('active-viewport-dim');
+  const deviceBtns = document.querySelectorAll('.device-select-btn');
+  const iosBtns = document.querySelectorAll('.ios-ver-btn');
+
+  deviceBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      deviceBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const dev = btn.dataset.device;
+      const w = btn.dataset.width;
+      const h = btn.dataset.height;
+      const r = btn.dataset.radius;
+
+      if (deviceWrapper) {
+        deviceWrapper.classList.remove('device-se', 'device-mini', 'device-standard', 'device-max');
+        deviceWrapper.classList.add(`device-${dev}`);
+        deviceWrapper.style.setProperty('--device-width', `${w}px`);
+        deviceWrapper.style.setProperty('--device-height', `${h}px`);
+        deviceWrapper.style.setProperty('--device-radius', `${r}px`);
+      }
+
+      if (dimDisplay) {
+        dimDisplay.textContent = `${w} × ${h} pt`;
+      }
+    });
+  });
+
+  iosBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      iosBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+
+      const ver = btn.dataset.ios;
+      if (deviceWrapper) {
+        deviceWrapper.classList.remove('ios-16', 'ios-17', 'ios-18');
+        deviceWrapper.classList.add(`ios-${ver}`);
+      }
+    });
+  });
+
+  // iOS Safari 100dvh & AudioContext First Touch Unlock
+  const unlockAudio = () => {
+    try {
+      if (window.AudioContext || window.webkitAudioContext) {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        if (ctx.state === 'suspended') {
+          ctx.resume();
+        }
+      }
+    } catch (e) {}
+    window.removeEventListener('touchstart', unlockAudio);
+    window.removeEventListener('click', unlockAudio);
+  };
+  window.addEventListener('touchstart', unlockAudio, { passive: true });
+  window.addEventListener('click', unlockAudio, { passive: true });
+}
+
+// ==========================================================================
 // 7. Application Bootstrap
 // ==========================================================================
 window.addEventListener('DOMContentLoaded', () => {
@@ -2076,6 +3374,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
   renderColorSwatches('sihyunhada');
   initEventListeners();
+  initDeviceAndOSSwitcher();
 
   // Start with iconic Canon IXY Digital 50
   switchCamera('canon-ixy');

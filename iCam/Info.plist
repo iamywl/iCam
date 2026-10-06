@@ -23,7 +23,7 @@
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>NSCameraUsageDescription</key>
-	<string>iCam에서 6대 명기 카메라 필터 및 프로필 사진을 촬영하기 위해 카메라 권한이 필요합니다.</string>
+	<string>iCam에서 14대 명기 카메라 필터 및 프로필 사진을 촬영하기 위해 카메라 권한이 필요합니다.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>iCam에서 촬영한 감성 사진 및 여권 규격 사진을 사진첩에 저장하기 위해 권한이 필요합니다.</string>
 	<key>UILaunchStoryboardName</key>

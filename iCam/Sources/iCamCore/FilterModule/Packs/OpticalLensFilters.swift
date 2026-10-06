@@ -8,6 +8,7 @@ public enum OpticalLensFilterPack {
         [
             BlackMistFilter(),
             CrossStarFilter(),
+            SixPointStarApertureFilter(),
             BlueStreakFilter(),
             PrismSpectrumFilter(),
             CPLPolarizerFilter()
@@ -76,6 +77,68 @@ public enum OpticalLensFilterPack {
                   let screenBlend = CIFilter(name: "CIScreenBlendMode") else { return inputImage }
 
             screenBlend.setValue(stars, forKey: kCIInputImageKey)
+            screenBlend.setValue(inputImage, forKey: kCIInputBackgroundImageKey)
+
+            return screenBlend.outputImage?.cropped(to: inputImage.extent) ?? inputImage
+        }
+    }
+
+    // MARK: - 2b. 6-Blade Sunstar Starburst (6날 조리개 스타버스트 회절)
+    public struct SixPointStarApertureFilter: OpticalFilter {
+        public let id = "lens_star6"
+        public let name = "6-Blade Sunstar"
+        public let localizedName = "6날 스타 조리개"
+        public let filterDescription = "6날 조리개 프라운호퍼 3축 회절 (0°, 60°, 120°) 및 광학 무지개 색분산"
+        public let iconName = "sun.max.fill"
+
+        public init() {}
+
+        public func apply(to inputImage: CIImage, context: CIContext, strength: Double) -> CIImage {
+            // AI Point-Light / Specular Highlight Saliency extraction
+            guard let highlight = CIFilter(name: "CIColorControls") else { return inputImage }
+            highlight.setValue(inputImage, forKey: kCIInputImageKey)
+            highlight.setValue(Float(0.35 * strength), forKey: kCIInputBrightnessKey)
+            highlight.setValue(Float(1.8 * strength), forKey: kCIInputContrastKey)
+
+            guard let highImg = highlight.outputImage else { return inputImage }
+
+            // 3-Axis Directional Fraunhofer Diffraction at 0°, 60° (π/3), 120° (2π/3)
+            let blurRadius = Float(32.0 * strength)
+            guard let blur0 = CIFilter(name: "CIMotionBlur"),
+                  let blur60 = CIFilter(name: "CIMotionBlur"),
+                  let blur120 = CIFilter(name: "CIMotionBlur") else { return inputImage }
+
+            blur0.setValue(highImg, forKey: kCIInputImageKey)
+            blur0.setValue(blurRadius, forKey: kCIInputRadiusKey)
+            blur0.setValue(0.0, forKey: kCIInputAngleKey)
+
+            blur60.setValue(highImg, forKey: kCIInputImageKey)
+            blur60.setValue(blurRadius, forKey: kCIInputRadiusKey)
+            blur60.setValue(Double.pi / 3.0, forKey: kCIInputAngleKey)
+
+            blur120.setValue(highImg, forKey: kCIInputImageKey)
+            blur120.setValue(blurRadius, forKey: kCIInputRadiusKey)
+            blur120.setValue(2.0 * Double.pi / 3.0, forKey: kCIInputAngleKey)
+
+            guard let img0 = blur0.outputImage,
+                  let img60 = blur60.outputImage,
+                  let img120 = blur120.outputImage else { return inputImage }
+
+            // Combine 3 diffraction axes
+            guard let add1 = CIFilter(name: "CIAdditionCompositing"),
+                  let add2 = CIFilter(name: "CIAdditionCompositing") else { return inputImage }
+
+            add1.setValue(img0, forKey: kCIInputImageKey)
+            add1.setValue(img60, forKey: kCIInputBackgroundImageKey)
+
+            guard let comb1 = add1.outputImage else { return inputImage }
+            add2.setValue(comb1, forKey: kCIInputImageKey)
+            add2.setValue(img120, forKey: kCIInputBackgroundImageKey)
+
+            guard let star6 = add2.outputImage,
+                  let screenBlend = CIFilter(name: "CIScreenBlendMode") else { return inputImage }
+
+            screenBlend.setValue(star6, forKey: kCIInputImageKey)
             screenBlend.setValue(inputImage, forKey: kCIInputBackgroundImageKey)
 
             return screenBlend.outputImage?.cropped(to: inputImage.extent) ?? inputImage

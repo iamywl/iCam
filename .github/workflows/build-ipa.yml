@@ -1,0 +1,103 @@
+name: 📱 Build iOS IPA (Sideloadly & TestFlight)
+
+on:
+  workflow_dispatch:
+    inputs:
+      create_release:
+        description: 'GitHub Release 생성 및 배포 여부'
+        required: false
+        default: 'false'
+        type: boolean
+  push:
+    branches: [ main, master ]
+    tags:
+      - 'v*'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-ios-ipa:
+    name: 🍎 Build iOS IPA for Sideloadly & Physical Device
+    runs-on: macos-14
+    timeout-minutes: 25
+
+    steps:
+      - name: 📥 Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: 🛠️ Select Xcode Version
+        run: |
+          if [ -d "/Applications/Xcode_15.4.app" ]; then
+            sudo xcode-select -s /Applications/Xcode_15.4.app
+          elif [ -d "/Applications/Xcode_16.0.app" ]; then
+            sudo xcode-select -s /Applications/Xcode_16.0.app
+          else
+            sudo xcode-select -s /Applications/Xcode.app
+          fi
+          xcodebuild -version
+          swift --version
+
+      - name: ⚙️ Install XcodeGen & Generate Xcode Project
+        run: |
+          if ! command -v xcodegen &> /dev/null; then
+            echo "Installing XcodeGen via Homebrew..."
+            brew install xcodegen
+          fi
+          echo "Generating iCam.xcodeproj via XcodeGen..."
+          xcodegen generate
+          ls -la iCam.xcodeproj
+
+      - name: 🔨 Build iOS Native App (Generic iOS Device)
+        run: |
+          xcodebuild -project iCam.xcodeproj \
+            -scheme iCam \
+            -configuration Release \
+            -destination "generic/platform=iOS" \
+            -derivedDataPath ./DerivedData \
+            CODE_SIGNING_ALLOWED=NO \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGN_IDENTITY="" \
+            clean build
+
+      - name: 📦 Package .app into Sideloadly-compatible .ipa
+        run: |
+          APP_PATH=$(find ./DerivedData/Build/Products/Release-iphoneos -name "iCam.app" -type d | head -n 1)
+          if [ -z "$APP_PATH" ]; then
+            echo "❌ Error: iCam.app not found in Release-iphoneos!"
+            exit 1
+          fi
+          echo "Found compiled app at: $APP_PATH"
+
+          mkdir -p Payload
+          cp -R "$APP_PATH" Payload/
+          zip -r -9 iCam.ipa Payload/
+          
+          echo "✅ Successfully created iCam.ipa:"
+          ls -lh iCam.ipa
+
+      - name: 📤 Upload iCam.ipa to GitHub Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: iCam-iOS-Sideloadly-IPA
+          path: iCam.ipa
+          retention-days: 30
+          if-no-files-found: error
+
+      - name: 🚀 Publish GitHub Release (if Tagged or Requested)
+        if: startsWith(github.ref, 'refs/tags/') || (github.event_name == 'workflow_dispatch' && inputs.create_release == true)
+        uses: softprops/action-gh-release@v2
+        with:
+          files: iCam.ipa
+          tag_name: ${{ github.ref_name }}
+          name: "iCam iOS Native App (${{ github.ref_name }})"
+          body: |
+            ### 📷 iCam iOS Native Build (Sideloadly / TestFlight)
+            - **타겟 기기**: iPhone 15 Pro Max, iPhone 16 Pro, iOS 17.0+
+            - **설치 방법**: 윈도우 PC에서 Sideloadly로 `iCam.ipa`를 USB-C 연결 후 설치
+            - 자세한 가이드는 [SIDELOADLY_GUIDE.md](./docs/SIDELOADLY_GUIDE.md)를 참조하세요.
+          draft: false
+          prerelease: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

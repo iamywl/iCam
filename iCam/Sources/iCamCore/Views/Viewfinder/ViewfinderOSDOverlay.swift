@@ -35,6 +35,10 @@ public struct ViewfinderOSDOverlay: View {
                 cityPopOverlay
             case .oldFilm:
                 oldFilmOverlay
+            case .hasselblad:
+                hasselbladOverlay
+            case .polaroidSX70:
+                polaroidSX70Overlay
             }
         }
         .allowsHitTesting(false)
@@ -670,6 +674,106 @@ public struct ViewfinderOSDOverlay: View {
                     .foregroundColor(Color(hex: "#D4A373"))
             }
             .padding(12)
+        }
+    }
+
+    // MARK: - 13. Hasselblad 500C/M Waist-Level Finder OSD
+    private var hasselbladOverlay: some View {
+        ZStack {
+            // 6x6 Square Waist-Level Crop Lines
+            Rectangle()
+                .stroke(Color.white.opacity(0.4), lineWidth: 1)
+                .aspectRatio(1, contentMode: .fit)
+                .padding(20)
+
+            // Center Crosshair
+            Image(systemName: "plus")
+                .font(.system(size: 16, weight: .light))
+                .foregroundColor(.white.opacity(0.6))
+
+            VStack {
+                HStack {
+                    Text("HASSELBLAD 500C/M")
+                        .font(.system(size: 10, weight: .heavy, design: .serif))
+                        .foregroundColor(Color(hex: "#9A8C98"))
+                        .padding(.horizontal, 6)
+                        .padding(.vertical, 2)
+                        .background(Color.black.opacity(0.5))
+                        .cornerRadius(3)
+                    Spacer()
+                    Text("A12 • 6x6")
+                        .font(.system(size: 10, weight: .bold, design: .monospaced))
+                        .foregroundColor(.white.opacity(0.85))
+                }
+                .padding(12)
+
+                Spacer()
+
+                HStack {
+                    Text("Carl Zeiss Planar 2.8/80 T*")
+                        .font(.system(size: 9, weight: .semibold, design: .serif))
+                        .foregroundColor(.white.opacity(0.75))
+                    Spacer()
+                    Text("1/250  f/2.8")
+                        .font(.system(size: 10, weight: .bold, design: .monospaced))
+                        .foregroundColor(Color(hex: "#9A8C98"))
+                }
+                .padding(12)
+            }
+        }
+    }
+
+    // MARK: - 14. Polaroid SX-70 Vintage Folding OSD
+    private var polaroidSX70Overlay: some View {
+        ZStack {
+            // Split-Image Rangefinder Central Focus Circle
+            Circle()
+                .stroke(Color(hex: "#C9A227").opacity(0.65), lineWidth: 1.5)
+                .frame(width: 54, height: 54)
+                .overlay(
+                    Rectangle()
+                        .frame(width: 48, height: 1)
+                        .foregroundColor(Color(hex: "#C9A227").opacity(0.5))
+                )
+
+            VStack {
+                HStack {
+                    HStack(spacing: 3) {
+                        Rectangle().frame(width: 4, height: 10).foregroundColor(.red)
+                        Rectangle().frame(width: 4, height: 10).foregroundColor(.orange)
+                        Rectangle().frame(width: 4, height: 10).foregroundColor(.yellow)
+                        Rectangle().frame(width: 4, height: 10).foregroundColor(.green)
+                        Rectangle().frame(width: 4, height: 10).foregroundColor(.blue)
+                        Text("SX-70 LAND CAMERA")
+                            .font(.system(size: 9, weight: .black, design: .sansSerif))
+                            .foregroundColor(.white)
+                    }
+                    .padding(.horizontal, 6)
+                    .padding(.vertical, 3)
+                    .background(Color.black.opacity(0.6))
+                    .cornerRadius(4)
+
+                    Spacer()
+
+                    Text("ALPHA 1")
+                        .font(.system(size: 9, weight: .bold, design: .monospaced))
+                        .foregroundColor(Color(hex: "#C9A227"))
+                }
+                .padding(12)
+
+                Spacer()
+
+                HStack {
+                    Text("116mm F/8 4-ELEMENT GLASS")
+                        .font(.system(size: 8, weight: .semibold, design: .monospaced))
+                        .foregroundColor(.white.opacity(0.7))
+                    Spacer()
+                    Text("10.4 INCH TO ∞")
+                        .font(.system(size: 9, weight: .bold, design: .monospaced))
+                        .foregroundColor(Color(hex: "#C9A227"))
+                }
+                .padding(12)
+            }
         }
     }
 }

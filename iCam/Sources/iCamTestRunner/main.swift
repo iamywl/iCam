@@ -37,7 +37,7 @@ func runTests() {
     // Test 2: Optical Filter Registration Check
     print("\n[Suite 2] Detachable Optical Lens Filters")
     let opticalFilters = registry.opticalFilters()
-    assertTest(opticalFilters.count == 5, "5 Modular Optical Lens Filters Registered")
+    assertTest(opticalFilters.count == 6, "6 Modular Optical Lens Filters Registered (including 6-Blade Sunstar)")
     for opt in opticalFilters {
         print("     -> [Lens] \(opt.name) (\(opt.localizedName)) [id: \(opt.id)]")
     }
@@ -112,20 +112,48 @@ func runTests() {
     assertTest(fetched != nil, "Dynamic filter plug-in registration succeeded")
     assertTest(fetched?.name == "Kodak Portra 400", "Dynamic filter properties verified")
 
-    // Test 7: Extended Vintage, City Pop, and Leica Camera Verification
-    print("\n[Suite 7] Extended Vintage, City Pop & Leica Lineup Verification")
+    // Test 7: Extended Vintage, Medium Format, and Instant Lineup Verification
+    print("\n[Suite 7] Extended Vintage, Medium Format & Instant Lineup Verification")
     let extendedCategories: [CameraCategory] = [
         .olympusMju,
         .contaxT2,
         .ricohGR,
         .leicaM,
         .cityPop80s,
-        .oldFilm
+        .oldFilm,
+        .hasselblad,
+        .polaroidSX70,
+        .fujiQuickSnap,
+        .kyoceraSamurai
     ]
     for category in extendedCategories {
         let filters = registry.filters(for: category)
         assertTest(filters.count >= 4, "\(category.displayName) verified with \(filters.count) dedicated filters")
     }
+
+    // Test 8: EXIF Metadata & Provenance Tracking Verification
+    print("\n[Suite 8] EXIF Metadata & Provenance Tracking Verification")
+    let testExif = ExifMetadata(
+        cameraName: "Hasselblad 500C/M",
+        categoryRaw: CameraCategory.hasselblad.rawValue,
+        lensModel: "Carl Zeiss Planar 80mm f/2.8 T* CB",
+        filterName: "Planar 80mm Soft-Pop",
+        filterIntensity: 1.0,
+        opticalLensName: "Black Mist",
+        opticalStrength: 0.8,
+        shutterSpeed: "1/250s",
+        aperture: "f/2.8",
+        iso: "ISO 100",
+        focalLength: "80mm eq.",
+        flashFired: false,
+        captureDate: Date(),
+        width: 780,
+        height: 1040,
+        colorSpace: "sRGB Display P3"
+    )
+    assertTest(testExif.cameraName == "Hasselblad 500C/M", "EXIF camera name correctly assigned")
+    assertTest(testExif.resolutionDisplay.contains("780 × 1040"), "EXIF resolution formatted correctly")
+    assertTest(testExif.exposureSummary == "1/250s • f/2.8 • ISO 100", "EXIF exposure summary validated")
 
     print("\n==================================================")
     print("📊 TEST SUMMARY: Passed: \(passedCount), Failed: \(failedCount)")

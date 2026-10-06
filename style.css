@@ -94,9 +94,27 @@ body::before {
 .showcase-panel {
   flex: 1;
   max-width: 360px;
+  max-height: calc(100vh - 40px);
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 16px;
+  padding-right: 6px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.showcase-panel::-webkit-scrollbar {
+  width: 5px;
+}
+
+.showcase-panel::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.showcase-panel::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
 }
 
 .panel-card {
@@ -160,8 +178,26 @@ body::before {
 .panel-modes {
   display: flex;
   flex-direction: column;
-  gap: 10px;
-  margin-top: 16px;
+  gap: 8px;
+  margin-top: 14px;
+  max-height: 380px;
+  overflow-y: auto;
+  padding-right: 4px;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+}
+
+.panel-modes::-webkit-scrollbar {
+  width: 4px;
+}
+
+.panel-modes::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.panel-modes::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 4px;
 }
 
 .panel-mode-btn {
@@ -457,10 +493,10 @@ body::before {
 /* Top Camera Utility Toolbar */
 .camera-top-toolbar {
   position: absolute;
-  top: 52px;
+  top: 60px;
   left: 0;
   right: 0;
-  height: 44px;
+  height: 40px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -502,7 +538,7 @@ body::before {
 /* Optical Lens Filter Popover Dropdown */
 .lens-filter-popover {
   position: absolute;
-  top: 96px;
+  top: 102px;
   left: 12px;
   right: 12px;
   background: rgba(20, 24, 33, 0.88);
@@ -580,15 +616,15 @@ body::before {
   box-shadow: 0 0 10px rgba(0, 229, 163, 0.3);
 }
 
-/* Live Viewfinder Area (Strict 3:4 Photographic Ratio - Exact 369 x 492px) */
+/* Live Viewfinder Area (Strict 3:4 Photographic Ratio - Exact 369 x 436px bounds) */
 .viewfinder-container {
   position: absolute;
-  top: 100px;
+  top: 98px;
   left: 8px;
   right: 8px;
   width: calc(100% - 16px);
-  height: 492px;
-  max-height: 492px;
+  height: 436px;
+  max-height: 436px;
   aspect-ratio: 3 / 4;
   background: #111;
   overflow: hidden;
@@ -632,6 +668,21 @@ body::before {
   mix-blend-mode: screen;
 }
 
+/* 6-Blade Sunstar Aperture Diffraction Layer (3-Axis 0°, 60°, 120° Fraunhofer Diffraction) */
+.lens-layer-star6,
+.lens-star6-layer {
+  background-image: 
+    radial-gradient(circle at 45% 38%, rgba(255, 255, 255, 0.95) 0%, rgba(255, 220, 180, 0.4) 1.5%, transparent 3%),
+    radial-gradient(circle at 55% 38%, rgba(255, 255, 255, 0.95) 0%, rgba(255, 220, 180, 0.4) 1.5%, transparent 3%),
+    linear-gradient(0deg, transparent 48.8%, rgba(255, 240, 220, 0.85) 50%, transparent 51.2%),
+    linear-gradient(60deg, transparent 48.8%, rgba(255, 200, 240, 0.85) 50%, transparent 51.2%),
+    linear-gradient(120deg, transparent 48.8%, rgba(200, 240, 255, 0.85) 50%, transparent 51.2%);
+  background-size: 100% 100%, 100% 100%, 200px 200px, 200px 200px, 200px 200px;
+  background-position: center center, center center, 45% 38%, 45% 38%, 45% 38%;
+  background-repeat: no-repeat;
+  mix-blend-mode: screen;
+}
+
 /* Anamorphic Blue Streak Flare Layer */
 .lens-layer-streak,
 .lens-streak-layer {
@@ -666,23 +717,70 @@ body::before {
   mix-blend-mode: multiply;
 }
 
-/* Active Camera Model Badge HUD inside Viewfinder */
-.camera-model-badge {
+/* Active Camera Model Badge HUD with Ergonomic Steppers */
+.camera-model-badge-container {
   position: absolute;
-  top: 12px;
-  left: 12px;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
+  z-index: 25;
+  white-space: nowrap;
+}
+
+.cam-badge-step-btn {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
   background: rgba(0, 0, 0, 0.65);
   border: 1px solid rgba(255, 255, 255, 0.22);
   backdrop-filter: blur(12px);
   -webkit-backdrop-filter: blur(12px);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+}
+
+.cam-badge-step-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.45);
+}
+
+.cam-badge-step-btn:active {
+  transform: scale(0.88);
+}
+
+.camera-model-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: rgba(0, 0, 0, 0.68);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   padding: 4px 10px;
   border-radius: 14px;
-  z-index: 25;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-  transition: all 0.25s ease;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.camera-model-badge:hover {
+  background: rgba(20, 24, 32, 0.85);
+  border-color: rgba(255, 214, 10, 0.5);
+  box-shadow: 0 0 12px rgba(255, 214, 10, 0.25);
+}
+
+.camera-model-badge:active {
+  transform: scale(0.96);
 }
 
 .cam-badge-icon {
@@ -703,6 +801,41 @@ body::before {
   background: rgba(255, 214, 10, 0.18);
   padding: 1px 6px;
   border-radius: 8px;
+}
+
+.cam-badge-bag-hint {
+  font-size: 11px;
+  margin-left: 2px;
+  opacity: 0.85;
+}
+
+/* ==========================================================================
+   Universal Camera OSD Top Clearance (Zero Overlap with HUD Badge)
+   ========================================================================== */
+.cam-top-row,
+.sony-cs-top,
+.canon-top-row,
+.olympus-top-row,
+.contax-led-bar,
+.ricoh-top-row,
+.leica-top-row,
+.citypop-top-banner,
+.hasselblad-top-bar,
+.sx70-top-bar,
+.quicksnap-top-bar,
+.samurai-top-row {
+  margin-top: 32px !important;
+}
+
+.sihyun-top-banner {
+  margin-top: 36px !important;
+}
+
+/* Film Sprocket Top text clearance */
+.film-sprocket-top .film-code-text {
+  position: absolute;
+  right: 28px;
+  font-size: 8.5px;
 }
 
 /* Background Replacement Layer (For Color ID Studio Live Background) */
@@ -1810,22 +1943,29 @@ body::before {
 
 .control-drawer {
   position: absolute;
-  top: 598px;
+  top: 540px;
   left: 8px;
   right: 8px;
-  height: 126px;
+  height: 142px;
   z-index: 40;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  padding: 8px 12px;
+  justify-content: flex-start;
+  padding: 6px 10px;
   background: var(--glass-bg-thin);
   backdrop-filter: var(--glass-blur-md);
   -webkit-backdrop-filter: var(--glass-blur-md);
   border: var(--glass-border);
   border-top: var(--glass-border-top);
-  border-radius: 22px;
+  border-radius: 20px;
   box-shadow: var(--glass-shadow), var(--glass-inner-bevel);
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: none;
+}
+
+.control-drawer::-webkit-scrollbar {
+  display: none;
 }
 
 .mode-control-panel {
@@ -1837,7 +1977,7 @@ body::before {
 .mode-control-panel.active {
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 4px;
 }
 
 @keyframes fadeIn {
@@ -1930,16 +2070,16 @@ body::before {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
+  gap: 1.5px;
   background: var(--glass-bg-ultra-thin);
   border: var(--glass-border);
   backdrop-filter: var(--glass-blur-sm);
   -webkit-backdrop-filter: var(--glass-blur-sm);
-  border-radius: 13px;
-  padding: 5px 10px;
+  border-radius: 12px;
+  padding: 3px 8px;
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  min-width: 72px;
+  min-width: 66px;
   box-shadow: var(--glass-inner-bevel);
   position: relative;
 }
@@ -1962,12 +2102,12 @@ body::before {
 
 /* Filter Chip Brand Tag Badge */
 .filter-chip-tag {
-  font-size: 8.5px;
+  font-size: 8px;
   font-weight: 800;
   letter-spacing: 0.5px;
   padding: 1px 4px;
   border-radius: 4px;
-  margin-bottom: 2px;
+  margin-bottom: 1px;
 }
 
 .sony-tag {
@@ -2055,28 +2195,40 @@ body::before {
 }
 
 .filter-chip-icon {
-  font-size: 15px;
+  font-size: 13px;
+  line-height: 1;
 }
 
 .filter-chip-name {
-  font-size: 10.5px;
+  font-size: 10px;
   font-weight: 600;
   color: #fff;
   white-space: nowrap;
+  line-height: 1.2;
 }
 
 .filter-chip-sub {
-  font-size: 8.5px;
+  font-size: 8px;
   color: var(--text-secondary);
   white-space: nowrap;
+  line-height: 1.1;
 }
 
 .vintage-toggles {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  margin-top: 1px;
+  gap: 6px;
+  margin-top: 3px;
+  padding: 1px 2px;
+  overflow-x: auto;
+  flex-wrap: nowrap;
+  white-space: nowrap;
+  scrollbar-width: none;
+}
+
+.vintage-toggles::-webkit-scrollbar {
+  display: none;
 }
 
 .toggle-pill {
@@ -2087,13 +2239,15 @@ body::before {
   border: var(--glass-border);
   backdrop-filter: var(--glass-blur-sm);
   -webkit-backdrop-filter: var(--glass-blur-sm);
-  padding: 3px 10px;
+  padding: 2.5px 8.5px;
   border-radius: 12px;
-  font-size: 10.5px;
+  font-size: 10px;
   color: var(--text-secondary);
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: var(--glass-inner-bevel);
+  flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .toggle-pill:hover {
@@ -2370,21 +2524,66 @@ body::before {
 
 .camera-bottom-section {
   position: absolute;
-  top: 728px;
+  top: 688px;
   left: 0;
   right: 0;
-  height: 104px;
+  height: 148px;
   z-index: 50;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  padding-bottom: 10px;
+  padding-bottom: 6px;
+}
+
+/* Camera Category Fast-Jump Tabs */
+.camera-category-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  padding: 0 8px;
+  height: 24px;
+  margin-bottom: 3px;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.camera-category-bar::-webkit-scrollbar {
+  display: none;
+}
+
+.cam-cat-pill {
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--text-secondary);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 7.5px;
+  border-radius: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.cam-cat-pill:hover {
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+}
+
+.cam-cat-pill.active {
+  background: rgba(255, 214, 10, 0.22);
+  color: var(--ios-yellow);
+  border-color: rgba(255, 214, 10, 0.65);
+  box-shadow: 0 0 10px rgba(255, 214, 10, 0.3);
 }
 
 /* Mode Switcher Dial */
 .mode-dial-wrapper {
   width: 100%;
-  height: 28px;
+  height: 22px;
+  margin-bottom: 4px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2395,14 +2594,14 @@ body::before {
 .mode-dial-list {
   display: flex;
   align-items: center;
-  gap: 22px;
+  gap: 20px;
   transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .mode-dial-item {
-  font-size: 12.5px;
+  font-size: 11.5px;
   font-weight: 700;
-  letter-spacing: 0.6px;
+  letter-spacing: 0.5px;
   text-transform: uppercase;
   color: rgba(255, 255, 255, 0.45);
   cursor: pointer;
@@ -2477,6 +2676,28 @@ body::before {
 .shutter-btn-outer:active .shutter-btn-inner {
   transform: scale(0.88);
   background: #e0e0e0;
+}
+
+/* QuickTake Long-Press Video Recording Active State */
+.shutter-btn-outer.recording {
+  border-color: #ff3b30;
+  box-shadow: 0 0 20px rgba(255, 59, 48, 0.7);
+  animation: recPulseRing 1.2s infinite ease-out;
+}
+
+.shutter-btn-outer.recording .shutter-btn-inner {
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
+  background: #ff3b30;
+  transform: scale(0.9);
+  box-shadow: 0 0 12px rgba(255, 59, 48, 0.9);
+}
+
+@keyframes recPulseRing {
+  0% { box-shadow: 0 0 0 0 rgba(255, 59, 48, 0.7); }
+  70% { box-shadow: 0 0 0 14px rgba(255, 59, 48, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(255, 59, 48, 0); }
 }
 
 /* Secondary Quick Action Button */
@@ -2823,6 +3044,14 @@ body::before {
 }
 
 @media (max-width: 500px) {
+  html, body {
+    height: 100%;
+    height: -webkit-fill-available;
+    height: 100dvh;
+    overscroll-behavior: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
   body {
     background: #000;
   }
@@ -2830,6 +3059,7 @@ body::before {
   .device-wrapper {
     width: 100vw;
     height: 100vh;
+    height: 100dvh;
     border-radius: 0;
     filter: none;
     transform: none !important;
@@ -2844,4 +3074,1019 @@ body::before {
   .hw-button {
     display: none;
   }
+
+  .camera-app {
+    height: 100%;
+    height: 100dvh;
+    -webkit-user-select: none;
+    user-select: none;
+    -webkit-touch-callout: none;
+    touch-action: manipulation;
+  }
+
+  /* Default Standard Mobile (iPhone 13 / 14 / 15 / 16) */
+  .camera-bottom-section {
+    position: absolute;
+    top: auto;
+    bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+    height: 148px;
+    padding-bottom: 6px;
+  }
+
+  .control-drawer {
+    position: absolute;
+    top: auto;
+    bottom: calc(164px + env(safe-area-inset-bottom, 0px));
+    height: 132px;
+    padding: 6px 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+  }
+
+  .viewfinder-container {
+    top: 98px;
+    bottom: calc(302px + env(safe-area-inset-bottom, 0px));
+    height: auto;
+    max-height: calc(100vh - 408px);
+    max-height: calc(100dvh - 408px);
+  }
 }
+
+/* ==========================================================================
+   iPhone Device Tiers Responsive Matrix (SE, Mini, Standard, Max)
+   ========================================================================== */
+
+/* Tier 1: iPhone SE 2/3 & iPhone 8 (375 x 667) Compact */
+@media (max-width: 500px) and (max-height: 680px) {
+  .ios-status-bar {
+    height: 24px;
+    padding: 4px 14px 0 14px;
+  }
+
+  .dynamic-island {
+    display: none !important;
+  }
+
+  .camera-top-toolbar {
+    top: 26px;
+    height: 38px;
+    padding: 0 10px;
+  }
+
+  .toolbar-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 13px;
+  }
+
+  .viewfinder-container {
+    top: 68px;
+    bottom: 254px;
+    max-height: calc(100vh - 260px);
+    max-height: calc(100dvh - 260px);
+    border-radius: 14px;
+  }
+
+  .control-drawer {
+    bottom: 136px;
+    height: 114px;
+    padding: 4px 8px;
+  }
+
+  .filter-chip {
+    padding: 2px 6px;
+    min-width: 56px;
+  }
+
+  .filter-chip-tag {
+    font-size: 7.5px;
+  }
+
+  .filter-chip-name {
+    font-size: 9.5px;
+  }
+
+  .camera-bottom-section {
+    bottom: 4px;
+    height: 128px;
+    padding-bottom: 2px;
+  }
+
+  .shutter-btn-outer {
+    width: 58px;
+    height: 58px;
+  }
+
+  .shutter-btn-inner {
+    width: 48px;
+    height: 48px;
+  }
+
+  .gallery-thumbnail-btn {
+    width: 38px;
+    height: 38px;
+  }
+}
+
+/* Tier 2: iPhone 12 mini / 13 mini (375 x 812) Compact Notch */
+@media (max-width: 500px) and (min-height: 681px) and (max-height: 820px) {
+  .ios-status-bar {
+    height: 44px;
+  }
+
+  .camera-top-toolbar {
+    top: 48px;
+    height: 40px;
+  }
+
+  .viewfinder-container {
+    top: 92px;
+    bottom: calc(286px + env(safe-area-inset-bottom, 0px));
+    max-height: calc(100vh - 388px);
+    max-height: calc(100dvh - 388px);
+  }
+
+  .control-drawer {
+    bottom: calc(154px + env(safe-area-inset-bottom, 0px));
+    height: 126px;
+  }
+
+  .camera-bottom-section {
+    bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+    height: 142px;
+  }
+}
+
+/* Tier 3: iPhone 14 Plus / 15 Pro Max / 16 Pro Max (430 x 932+) 대화면 */
+@media (max-width: 500px) and (min-height: 891px) {
+  .ios-status-bar {
+    height: 56px;
+  }
+
+  .camera-top-toolbar {
+    top: 60px;
+    height: 42px;
+  }
+
+  .viewfinder-container {
+    top: 106px;
+    bottom: calc(314px + env(safe-area-inset-bottom, 0px));
+    max-height: calc(100vh - 428px);
+    max-height: calc(100dvh - 428px);
+  }
+
+  .control-drawer {
+    bottom: calc(170px + env(safe-area-inset-bottom, 0px));
+    height: 136px;
+  }
+
+  .camera-bottom-section {
+    bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+    height: 152px;
+  }
+}
+
+/* ==========================================================================
+   Simulator Device Frame Class Overrides (SE, Mini, Standard, Max)
+   ========================================================================== */
+.device-wrapper.device-se {
+  --device-width: 375px;
+  --device-height: 667px;
+  --device-radius: 20px;
+}
+.device-wrapper.device-se .ios-status-bar { height: 24px; padding: 4px 14px 0 14px; }
+.device-wrapper.device-se .dynamic-island { display: none !important; }
+.device-wrapper.device-se .camera-top-toolbar { top: 26px; height: 38px; }
+.device-wrapper.device-se .viewfinder-container { top: 66px; height: 316px; max-height: 316px; border-radius: 14px; }
+.device-wrapper.device-se .control-drawer { top: 388px; height: 136px; padding: 4px 6px; }
+.device-wrapper.device-se .filter-chip { padding: 2px 4px; min-width: 52px; gap: 1px; }
+.device-wrapper.device-se .filter-chip-tag { font-size: 7px; padding: 0.5px 3px; }
+.device-wrapper.device-se .filter-chip-name { font-size: 8.5px; }
+.device-wrapper.device-se .filter-chip-sub { display: none; }
+.device-wrapper.device-se .vintage-toggles { margin-top: 2px; }
+.device-wrapper.device-se .toggle-pill { padding: 1.5px 6px; font-size: 8.5px; height: 18px; line-height: 18px; }
+.device-wrapper.device-se .camera-bottom-section { top: 530px; height: 130px; padding-bottom: 2px; }
+.device-wrapper.device-se .camera-category-bar { height: 20px; margin-bottom: 2px; }
+.device-wrapper.device-se .cam-cat-pill { font-size: 9px; padding: 1.5px 6px; }
+.device-wrapper.device-se .mode-dial-wrapper { height: 18px; margin-bottom: 2px; font-size: 9.5px; }
+.device-wrapper.device-se .shutter-btn-outer { width: 56px; height: 56px; }
+.device-wrapper.device-se .shutter-btn-inner { width: 46px; height: 46px; }
+.device-wrapper.device-se .gallery-thumbnail-btn { width: 36px; height: 36px; }
+
+.device-wrapper.device-mini {
+  --device-width: 375px;
+  --device-height: 812px;
+  --device-radius: 44px;
+}
+.device-wrapper.device-mini .ios-status-bar { height: 44px; }
+.device-wrapper.device-mini .camera-top-toolbar { top: 48px; height: 40px; }
+.device-wrapper.device-mini .viewfinder-container { top: 90px; height: 402px; max-height: 402px; }
+.device-wrapper.device-mini .control-drawer { top: 498px; height: 144px; }
+.device-wrapper.device-mini .camera-bottom-section { top: 648px; height: 146px; }
+
+.device-wrapper.device-standard {
+  --device-width: 393px;
+  --device-height: 852px;
+  --device-radius: 54px;
+}
+.device-wrapper.device-standard .viewfinder-container { top: 98px; height: 436px; max-height: 436px; }
+.device-wrapper.device-standard .control-drawer { top: 540px; height: 142px; }
+.device-wrapper.device-standard .camera-bottom-section { top: 688px; height: 148px; }
+
+.device-wrapper.device-max {
+  --device-width: 430px;
+  --device-height: 932px;
+  --device-radius: 55px;
+}
+.device-wrapper.device-max .ios-status-bar { height: 56px; }
+.device-wrapper.device-max .camera-top-toolbar { top: 60px; height: 42px; }
+.device-wrapper.device-max .viewfinder-container { top: 104px; height: 484px; max-height: 484px; }
+.device-wrapper.device-max .control-drawer { top: 594px; height: 148px; }
+.device-wrapper.device-max .camera-bottom-section { top: 748px; height: 152px; }
+
+/* ==========================================================================
+   Gallery Count Badge & Modals Extension
+   ========================================================================== */
+.gallery-count-badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  background: var(--ios-red);
+  color: #fff;
+  font-size: 9px;
+  font-weight: 800;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid #000;
+}
+
+.gallery-modal-dialog {
+  max-width: 680px;
+  width: 94%;
+}
+
+.gallery-film-strip-wrapper {
+  overflow-x: auto;
+  padding-bottom: 12px;
+  margin-bottom: 14px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.gallery-film-strip {
+  display: flex;
+  gap: 10px;
+  min-height: 72px;
+}
+
+.gallery-film-thumb {
+  width: 54px;
+  height: 72px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 2px solid transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+  background: #1a1a1e;
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+
+.gallery-film-thumb:hover {
+  transform: translateY(-2px);
+}
+
+.gallery-film-thumb.active {
+  border-color: var(--accent-mint);
+  box-shadow: 0 0 10px rgba(0, 229, 163, 0.4);
+}
+
+.gallery-film-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gallery-detail-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: start;
+}
+
+@media (max-width: 640px) {
+  .gallery-detail-layout {
+    grid-template-columns: 1fr;
+  }
+}
+
+.gallery-photo-preview-card {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  background: #000;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+}
+
+.gallery-large-preview-img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.gallery-exif-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 16px;
+  backdrop-filter: blur(12px);
+}
+
+.exif-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.exif-card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+}
+
+.exif-badge-pill {
+  font-size: 9.5px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 10px;
+  background: rgba(0, 229, 163, 0.15);
+  color: var(--accent-mint);
+  border: 1px solid rgba(0, 229, 163, 0.35);
+  text-transform: uppercase;
+}
+
+.exif-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.exif-grid-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.exif-label {
+  font-size: 10px;
+  color: var(--text-secondary);
+  font-weight: 500;
+}
+
+.exif-val {
+  font-size: 11.5px;
+  font-weight: 600;
+  color: #fff;
+  font-family: -apple-system, monospace;
+}
+
+/* Hasselblad & Polaroid SX-70 Tag & OSD */
+.hassel-tag {
+  background: rgba(154, 140, 152, 0.2);
+  color: #c9ada7;
+  border: 1px solid rgba(154, 140, 152, 0.4);
+}
+
+.hasselblad-osd {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 14px;
+}
+
+.hasselblad-osd.active {
+  display: flex;
+}
+
+.hasselblad-square-frame {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  right: 14px;
+  bottom: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hasselblad-crosshair {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 20px;
+  font-weight: 300;
+}
+
+.hasselblad-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 2;
+}
+
+.hassel-brand {
+  font-size: 10.5px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  color: #9a8c98;
+  background: rgba(0, 0, 0, 0.55);
+  padding: 2px 7px;
+  border-radius: 4px;
+  font-family: serif;
+}
+
+.hassel-format {
+  font-size: 10px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.85);
+  font-family: monospace;
+}
+
+.hasselblad-bottom-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 9.5px;
+  color: rgba(255, 255, 255, 0.75);
+  z-index: 2;
+}
+
+.hassel-shutter {
+  color: #9a8c98;
+  font-weight: 700;
+  font-family: monospace;
+}
+
+.polaroid-sx70-osd {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 14px;
+}
+
+.polaroid-sx70-osd.active {
+  display: flex;
+}
+
+.sx70-split-circle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 58px;
+  height: 58px;
+  border: 1.5px solid rgba(201, 162, 39, 0.65);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sx70-split-line {
+  width: 48px;
+  height: 1px;
+  background: rgba(201, 162, 39, 0.5);
+}
+
+.sx70-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 2;
+}
+
+.sx70-rainbow-stripe {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 3px 6px;
+  border-radius: 4px;
+}
+
+.sx70-rainbow-stripe span[class^="stripe-"] {
+  width: 3px;
+  height: 9px;
+  border-radius: 1px;
+}
+
+.stripe-red { background: #ff3b30; }
+.stripe-orange { background: #ff9500; }
+.stripe-yellow { background: #ffcc00; }
+.stripe-green { background: #34c759; }
+.stripe-blue { background: #007aff; }
+
+.sx70-badge-txt {
+  font-size: 8.5px;
+  font-weight: 900;
+  color: #fff;
+  margin-left: 4px;
+  letter-spacing: 0.5px;
+}
+
+.sx70-alpha {
+  font-size: 9px;
+  font-weight: 700;
+  color: #c9a227;
+  font-family: monospace;
+}
+
+.sx70-bottom-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 8.5px;
+  color: rgba(255, 255, 255, 0.7);
+  font-family: monospace;
+  z-index: 2;
+}
+
+.sx70-dist {
+  color: #c9a227;
+  font-weight: 700;
+}
+
+/* ==========================================================================
+   QuickTake Live Video Recording Viewfinder & Dynamic Island Overlays
+   ========================================================================== */
+
+.dynamic-island.recording {
+  width: 250px;
+  height: 44px;
+  background: rgba(18, 18, 22, 0.98);
+  border: 1px solid rgba(255, 59, 48, 0.5);
+  box-shadow: 0 0 16px rgba(255, 59, 48, 0.4);
+}
+
+.dynamic-island.recording .island-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.rec-dot-pulsing {
+  display: inline-block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #ff3b30;
+  box-shadow: 0 0 8px #ff3b30;
+  animation: pulseDot 0.8s infinite alternate;
+  margin-right: 6px;
+}
+
+.rec-badge-island {
+  display: flex;
+  align-items: center;
+  color: #ff3b30;
+  font-weight: 800;
+  font-size: 11.5px;
+  letter-spacing: 0.5px;
+}
+
+.rec-timer-island {
+  font-family: 'Courier New', monospace;
+  font-weight: 800;
+  font-size: 13px;
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+/* Viewfinder Live Video Recording Banner */
+.viewfinder-rec-banner {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  background: rgba(0, 0, 0, 0.65);
+  border: 1px solid rgba(255, 59, 48, 0.45);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  padding: 4px 10px;
+  border-radius: 12px;
+  display: none;
+  align-items: center;
+  gap: 6px;
+  z-index: 35;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+}
+
+.viewfinder-rec-banner.active {
+  display: flex;
+}
+
+.vf-rec-text {
+  font-size: 11px;
+  font-weight: 800;
+  color: #ff3b30;
+  letter-spacing: 0.5px;
+}
+
+.vf-rec-time {
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 1px;
+}
+
+/* ==========================================================================
+   [Camera 15] Fuji QuickSnap (写ルンです 1986) OSD & Styles
+   ========================================================================== */
+
+.quicksnap-tag {
+  background: rgba(0, 180, 80, 0.25);
+  color: #00e676;
+  border: 0.5px solid rgba(0, 230, 118, 0.5);
+}
+
+.quicksnap-osd {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  pointer-events: none;
+  display: none;
+  padding: 16px;
+}
+
+.quicksnap-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+}
+
+.quicksnap-brand-pill {
+  background: rgba(0, 100, 40, 0.7);
+  border: 1px solid rgba(0, 230, 118, 0.4);
+  color: #fff;
+  font-size: 10px;
+  font-weight: 900;
+  letter-spacing: 0.6px;
+  padding: 3px 8px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.quicksnap-frame-counter {
+  background: rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffd60a;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+/* Amber Quartz Date Stamp (写ルンです '89 11 24) */
+.quicksnap-date-stamp {
+  position: absolute;
+  bottom: 16px;
+  right: 18px;
+  font-family: 'Impact', 'Arial Black', sans-serif;
+  font-size: 18px;
+  letter-spacing: 2px;
+  color: #ff9100;
+  text-shadow: 0 0 8px rgba(255, 145, 0, 0.8), 1px 1px 2px #000;
+}
+
+.quicksnap-flash-indicator {
+  position: absolute;
+  bottom: 18px;
+  left: 18px;
+  font-size: 10.5px;
+  font-weight: 800;
+  color: #ffd60a;
+  background: rgba(0, 0, 0, 0.6);
+  padding: 3px 8px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+/* ==========================================================================
+   [Camera 16] Kyocera Samurai X3.0 (1988) Cyber Half-Frame OSD
+   ========================================================================== */
+
+.samurai-tag {
+  background: rgba(0, 229, 255, 0.25);
+  color: #00e5ff;
+  border: 0.5px solid rgba(0, 229, 255, 0.5);
+}
+
+.kyocera-samurai-osd {
+  position: absolute;
+  inset: 0;
+  z-index: 15;
+  pointer-events: none;
+  display: none;
+  padding: 14px 16px;
+}
+
+/* Half-frame vertical dividing center guide */
+.samurai-half-frame-guide {
+  position: absolute;
+  top: 10%;
+  bottom: 10%;
+  left: 50%;
+  width: 1px;
+  background: dashed rgba(0, 229, 255, 0.35);
+  transform: translateX(-50%);
+}
+
+.samurai-half-frame-guide::before,
+.samurai-half-frame-guide::after {
+  content: "";
+  position: absolute;
+  left: -8px;
+  width: 17px;
+  height: 1px;
+  background: rgba(0, 229, 255, 0.6);
+}
+
+.samurai-half-frame-guide::before { top: 0; }
+.samurai-half-frame-guide::after { bottom: 0; }
+
+.samurai-top-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.samurai-brand {
+  background: rgba(10, 25, 35, 0.85);
+  border: 1px solid rgba(0, 229, 255, 0.4);
+  color: #00e5ff;
+  font-family: 'Courier New', monospace;
+  font-size: 10.5px;
+  font-weight: 900;
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 1px;
+  box-shadow: 0 0 10px rgba(0, 229, 255, 0.25);
+}
+
+.samurai-exp-lcd {
+  background: #041014;
+  border: 1px solid rgba(0, 255, 128, 0.5);
+  color: #00ff80;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 4px;
+  text-shadow: 0 0 6px #00ff80;
+}
+
+.samurai-center-hud {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+}
+
+.samurai-af-box {
+  width: 44px;
+  height: 30px;
+  border: 1px solid rgba(0, 255, 128, 0.6);
+  border-radius: 2px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #00ff80;
+  font-size: 9px;
+  font-family: monospace;
+}
+
+.samurai-bottom-row {
+  position: absolute;
+  bottom: 14px;
+  left: 16px;
+  right: 16px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: 'Courier New', monospace;
+  font-size: 9.5px;
+  color: #00e5ff;
+  text-shadow: 0 0 4px rgba(0, 229, 255, 0.5);
+  letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   Modal 4: Visual Camera Bag / Rack Selector Modal (16 Iconic Cameras)
+   ========================================================================== */
+
+.camera-bag-dialog {
+  max-width: 560px;
+  width: 94%;
+}
+
+.bag-category-filter {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  padding: 4px 2px 10px 2px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+}
+
+.bag-category-filter::-webkit-scrollbar {
+  display: none;
+}
+
+.bag-cat-btn {
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: #fff;
+  font-size: 11.5px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.bag-cat-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.4);
+}
+
+.bag-cat-btn.active {
+  background: rgba(0, 229, 163, 0.28);
+  color: var(--accent-mint);
+  border-color: rgba(0, 229, 163, 0.7);
+  box-shadow: 0 0 12px rgba(0, 229, 163, 0.35);
+  font-weight: 700;
+}
+
+.camera-bag-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+@media (max-width: 480px) {
+  .camera-bag-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.bag-cam-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 12px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  position: relative;
+  transition: all 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.bag-cam-card:hover {
+  background: rgba(255, 255, 255, 0.09);
+  border-color: rgba(255, 255, 255, 0.25);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+}
+
+.bag-cam-card.equipped {
+  background: rgba(255, 214, 10, 0.1);
+  border-color: rgba(255, 214, 10, 0.65);
+  box-shadow: 0 0 16px rgba(255, 214, 10, 0.25);
+}
+
+.bag-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.bag-card-icon {
+  font-size: 22px;
+}
+
+.bag-card-badge {
+  font-size: 8.5px;
+  font-weight: 800;
+  letter-spacing: 0.5px;
+  padding: 2px 6px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+}
+
+.bag-cam-card.equipped .bag-card-badge {
+  background: rgba(255, 214, 10, 0.25);
+  color: var(--ios-yellow);
+  border-color: rgba(255, 214, 10, 0.5);
+}
+
+.bag-card-title {
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+  margin-top: 2px;
+}
+
+.bag-card-desc {
+  font-size: 10.5px;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.bag-card-status {
+  margin-top: 4px;
+  font-size: 10px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.bag-cam-card.equipped .bag-card-status {
+  color: var(--ios-yellow);
+}
+
+.bag-cam-card:not(.equipped) .bag-card-status {
+  color: var(--text-muted);
+}
+
+.camera-bag-dialog .modal-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 14px 20px 18px 20px;
+}
+
+.camera-bag-dialog .modal-footer .btn-primary {
+  flex: none;
+  min-width: 100px;
+  white-space: nowrap;
+  padding: 10px 20px;
+  font-size: 13px;
+  border-radius: 12px;
+}
+
+/* ==========================================================================
+   Desktop Responsive Scaling - Full Vertical Viewport Fit (HIG Compliance)
+   ========================================================================== */
+
+@media (min-width: 1024px) {
+  body {
+    overflow: hidden;
+  }
+
+  .showcase-container {
+    height: 100vh;
+    min-height: unset;
+    padding: 10px 24px;
+    overflow: hidden;
+  }
+
+  .device-wrapper {
+    transform-origin: center center;
+    transform: scale(min(1, calc((100vh - 28px) / 852px)));
+  }
+}
+
+

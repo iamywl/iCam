@@ -2,7 +2,12 @@
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="SnapStudio">
+  <meta name="format-detection" content="telephone=no">
+  <meta name="theme-color" content="#000000">
   <title>SnapStudio - 올인원 감성 & 프로필 카메라 (iPhone 16 Pro MVP)</title>
   <link rel="stylesheet" href="style.css">
   <!-- Phosphor Icons or Clean SVG icons embedded -->
@@ -121,6 +126,38 @@
               <div style="font-size: 11px; color: var(--text-secondary);">정수리·눈·턱 정밀 규격선 & 4x6 인화 시트</div>
             </div>
           </button>
+
+          <button class="panel-mode-btn" data-cam="hasselblad-500cm" id="p-cam-hassel">
+            <div class="panel-mode-icon">📷</div>
+            <div>
+              <div style="font-weight: 600;">Hasselblad 500C/M</div>
+              <div style="font-size: 11px; color: var(--text-secondary);">6x6 중형 웨이스트파인더 & 칼자이스 플라나 80mm</div>
+            </div>
+          </button>
+
+          <button class="panel-mode-btn" data-cam="polaroid-sx70" id="p-cam-sx70">
+            <div class="panel-mode-icon">📸</div>
+            <div>
+              <div style="font-weight: 600;">Polaroid SX-70</div>
+              <div style="font-size: 11px; color: var(--text-secondary);">1972 빈티지 접이식 랜드 카메라 & 에이징 즉석사진</div>
+            </div>
+          </button>
+
+          <button class="panel-mode-btn" data-cam="fuji-quicksnap" id="p-cam-quicksnap">
+            <div class="panel-mode-icon">📸</div>
+            <div>
+              <div style="font-weight: 600;">Fuji QuickSnap (写ルンです)</div>
+              <div style="font-size: 11px; color: var(--accent-mint); font-weight: 700;">1986 버블시대 일회용 데이트스탬프</div>
+            </div>
+          </button>
+
+          <button class="panel-mode-btn" data-cam="kyocera-samurai" id="p-cam-samurai">
+            <div class="panel-mode-icon">🗡️</div>
+            <div>
+              <div style="font-weight: 600;">Kyocera Samurai X3.0</div>
+              <div style="font-size: 11px; color: var(--accent-mint); font-weight: 700;">1988 사이버 하프프레임 72컷 SLR</div>
+            </div>
+          </button>
         </div>
 
         <div style="margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border-subtle);">
@@ -154,6 +191,40 @@
         <button class="panel-action-btn" id="btn-open-print-sheet-sidebar">
           <span>🖨️ 4x6인치 8분할 인쇄 시트 열기</span>
         </button>
+
+        <button class="panel-action-btn" id="sidebar-btn-gallery" style="margin-top: 8px; background: linear-gradient(135deg, rgba(0,229,255,0.18), rgba(0,180,216,0.18)); border-color: rgba(0,229,255,0.4);">
+          <span>🖼️ 사진 갤러리 & EXIF 뷰어 (<span id="sidebar-gallery-count">0</span>)</span>
+        </button>
+        <!-- iPhone Device Tier & iOS Version Switcher (점유율 기반 전 기기 / OS 검증) -->
+        <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border-subtle);">
+          <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+            <div style="font-size: 12px; font-weight: 700; color: var(--accent-mint);">📱 iPhone 기기 뷰포트 프리뷰</div>
+            <span style="font-size: 10px; color: var(--text-secondary);" id="active-viewport-dim">393 × 852 pt</span>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 8px;">
+            <button class="btn-secondary device-select-btn active" data-device="standard" data-width="393" data-height="852" data-radius="54" style="padding: 6px; font-size: 10.5px; text-align: left;">
+              <b>iPhone 15/16 Pro</b><br><span style="font-size: 9px; color: var(--text-secondary);">393×852 (국내 1위)</span>
+            </button>
+            <button class="btn-secondary device-select-btn" data-device="max" data-width="430" data-height="932" data-radius="55" style="padding: 6px; font-size: 10.5px; text-align: left;">
+              <b>15/16 Pro Max</b><br><span style="font-size: 9px; color: var(--text-secondary);">430×932 (대화면 1위)</span>
+            </button>
+            <button class="btn-secondary device-select-btn" data-device="mini" data-width="375" data-height="812" data-radius="44" style="padding: 6px; font-size: 10.5px; text-align: left;">
+              <b>iPhone 13 mini</b><br><span style="font-size: 9px; color: var(--text-secondary);">375×812 (컴팩트 노치)</span>
+            </button>
+            <button class="btn-secondary device-select-btn" data-device="se" data-width="375" data-height="667" data-radius="20" style="padding: 6px; font-size: 10.5px; text-align: left;">
+              <b>iPhone SE 2/3</b><br><span style="font-size: 9px; color: var(--text-secondary);">375×667 (홈버튼 SE)</span>
+            </button>
+          </div>
+
+          <div style="font-size: 11px; font-weight: 700; color: var(--text-secondary); margin-bottom: 5px;">
+            🍎 iOS 버전 에뮬레이션
+          </div>
+          <div style="display: flex; gap: 5px;">
+            <button class="btn-secondary ios-ver-btn active" data-ios="18" style="flex: 1; padding: 5px; font-size: 10px;">iOS 18</button>
+            <button class="btn-secondary ios-ver-btn" data-ios="17" style="flex: 1; padding: 5px; font-size: 10px;">iOS 17</button>
+            <button class="btn-secondary ios-ver-btn" data-ios="16" style="flex: 1; padding: 5px; font-size: 10px;">iOS 16</button>
+          </div>
+        </div>
       </div>
 
       <!-- Quick Tips Card -->
@@ -219,6 +290,9 @@
             <button class="toolbar-btn" id="btn-lens" title="광학 렌즈 필터 (미스트, 스타, 스트릭, 프리즘, CPL)">
               <span style="font-size: 13px; font-weight: 700;">◎</span>
             </button>
+            <button class="toolbar-btn" id="btn-camera-bag" title="16종 카메라 보관함 (Camera Bag)">
+              <span style="font-size: 14px;">🎒</span>
+            </button>
             <button class="toolbar-btn" id="btn-grid" title="격자 안내선">
               <span>▦</span>
             </button>
@@ -237,6 +311,7 @@
               <button class="lens-pill-btn active" data-lens="none">기본 (Clear)</button>
               <button class="lens-pill-btn" data-lens="mist">✨ 블랙 미스트</button>
               <button class="lens-pill-btn" data-lens="star">✦ 크로스 4X</button>
+              <button class="lens-pill-btn" data-lens="star6">☀️ 6날 스타 조리개</button>
               <button class="lens-pill-btn" data-lens="streak">━ 블루 스트릭</button>
               <button class="lens-pill-btn" data-lens="prism">🌈 프리즘 분광</button>
               <button class="lens-pill-btn" data-lens="cpl">🪞 CPL 편광</button>
@@ -246,11 +321,16 @@
           <!-- Central Viewfinder Area -->
           <div class="viewfinder-container" id="viewfinder">
             
-            <!-- Real-time Active Camera Model Badge HUD -->
-            <div class="camera-model-badge" id="camera-model-badge">
-              <span class="cam-badge-icon" id="cam-badge-icon">📸</span>
-              <span class="cam-badge-title" id="cam-badge-title">Canon IXY Digital 50</span>
-              <span class="cam-badge-sub" id="cam-badge-sub">Peach Glow</span>
+            <!-- Real-time Active Camera Model Badge HUD with Ergonomic Steppers -->
+            <div class="camera-model-badge-container">
+              <button class="cam-badge-step-btn" id="btn-cam-prev" title="이전 카메라 (좌로 스와이프)">❮</button>
+              <div class="camera-model-badge" id="camera-model-badge" title="탭하여 16종 카메라 보관함(Camera Bag) 열기">
+                <span class="cam-badge-icon" id="cam-badge-icon">📸</span>
+                <span class="cam-badge-title" id="cam-badge-title">Canon IXY Digital 50</span>
+                <span class="cam-badge-sub" id="cam-badge-sub">Peach Glow</span>
+                <span class="cam-badge-bag-hint">🎒</span>
+              </div>
+              <button class="cam-badge-step-btn" id="btn-cam-next" title="다음 카메라 (우로 스와이프)">❯</button>
             </div>
 
             <!-- Real-time Background Layer (Color ID Studio Live Background) -->
@@ -263,6 +343,7 @@
             <!-- Optical Lens Filter Overlay FX Layers -->
             <div class="lens-fx-layer lens-mist-layer" id="lens-layer-mist"></div>
             <div class="lens-fx-layer lens-star-layer" id="lens-layer-star"></div>
+            <div class="lens-fx-layer lens-star6-layer" id="lens-layer-star6"></div>
             <div class="lens-fx-layer lens-streak-layer" id="lens-layer-streak"></div>
             <div class="lens-fx-layer lens-prism-layer" id="lens-layer-prism"></div>
             <div class="lens-fx-layer lens-cpl-layer" id="lens-layer-cpl"></div>
@@ -462,6 +543,74 @@
                 <span class="film-code-text">35mm • 24A • PORTRA 400</span>
                 <span class="sprocket-hole"></span><span class="sprocket-hole"></span>
               </div>
+            </div>
+
+            <!-- [Camera 13 OSD] Hasselblad 500C/M Waist-Level Finder OSD -->
+            <div class="hasselblad-osd" id="hasselblad-osd">
+              <div class="hasselblad-square-frame">
+                <div class="hasselblad-crosshair">+</div>
+              </div>
+              <div class="hasselblad-top-bar">
+                <span class="hassel-brand">HASSELBLAD 500C/M</span>
+                <span class="hassel-format">A12 • 6x6</span>
+              </div>
+              <div class="hasselblad-bottom-bar">
+                <span>Carl Zeiss Planar 2.8/80</span>
+                <span class="hassel-shutter">1/250  f/2.8</span>
+              </div>
+            </div>
+
+            <!-- [Camera 14 OSD] Polaroid SX-70 Vintage Folding OSD -->
+            <div class="polaroid-sx70-osd" id="polaroid-sx70-osd">
+              <div class="sx70-split-circle">
+                <div class="sx70-split-line"></div>
+              </div>
+              <div class="sx70-top-bar">
+                <div class="sx70-rainbow-stripe">
+                  <span class="stripe-red"></span><span class="stripe-orange"></span><span class="stripe-yellow"></span><span class="stripe-green"></span><span class="stripe-blue"></span>
+                  <span class="sx70-badge-txt">SX-70 LAND CAMERA</span>
+                </div>
+                <span class="sx70-alpha">ALPHA 1</span>
+              </div>
+              <div class="sx70-bottom-bar">
+                <span>116mm F/8 GLASS</span>
+                <span class="sx70-dist">10.4 INCH TO ∞</span>
+              </div>
+            </div>
+
+            <!-- [Camera 15 OSD] Fuji QuickSnap (写ルンです 1986) OSD -->
+            <div class="quicksnap-osd" id="quicksnap-osd">
+              <div class="quicksnap-top-bar">
+                <span class="quicksnap-brand-pill">FUJICOLOR 写ルンです 1986</span>
+                <span class="quicksnap-frame-counter">EXP [ 24 / 27 ]</span>
+              </div>
+              <div class="quicksnap-flash-indicator">
+                <span>⚡ FLASH READY</span>
+              </div>
+              <div class="quicksnap-date-stamp" id="quicksnap-date-stamp">'89 11 24</div>
+            </div>
+
+            <!-- [Camera 16 OSD] Kyocera Samurai X3.0 (1988) Cyber Half-Frame OSD -->
+            <div class="kyocera-samurai-osd" id="kyocera-samurai-osd">
+              <div class="samurai-half-frame-guide"></div>
+              <div class="samurai-top-row">
+                <span class="samurai-brand">KYOCERA SAMURAI X3.0</span>
+                <span class="samurai-exp-lcd">FRAME 48 / 72</span>
+              </div>
+              <div class="samurai-center-hud">
+                <div class="samurai-af-box">AF [ ● ]</div>
+              </div>
+              <div class="samurai-bottom-row">
+                <span>YASHICA ZOOM 25-75mm MACRO</span>
+                <span>ISO 100 • HALF FRAME</span>
+              </div>
+            </div>
+
+            <!-- QuickTake Live Video Recording Viewfinder Indicator -->
+            <div class="viewfinder-rec-banner" id="viewfinder-rec-banner">
+              <span class="rec-dot-pulsing"></span>
+              <span class="vf-rec-text">REC</span>
+              <span class="vf-rec-time" id="vf-rec-time">00:00</span>
             </div>
 
             <!-- Super 8mm Cine Vignette -->
@@ -722,6 +871,12 @@
                   <span class="filter-chip-name">μ Chrome Slide</span>
                   <span class="filter-chip-sub">선명한 슬라이드</span>
                 </div>
+                <div class="filter-chip" data-filter="mju-gold">
+                  <div class="filter-chip-tag olympus-tag">GOLD</div>
+                  <span class="filter-chip-icon">☀️</span>
+                  <span class="filter-chip-name">μ Gold 200</span>
+                  <span class="filter-chip-sub">황금빛 웜톤</span>
+                </div>
               </div>
               <div class="vintage-toggles">
                 <div class="toggle-pill active" id="toggle-mju-date">📅 쿼츠 데이트</div>
@@ -753,6 +908,12 @@
                   <span class="filter-chip-icon">🏛️</span>
                   <span class="filter-chip-name">Titanium Classic</span>
                   <span class="filter-chip-sub">클래식 티타늄</span>
+                </div>
+                <div class="filter-chip" data-filter="zeiss-mono">
+                  <div class="filter-chip-tag contax-tag">B&W</div>
+                  <span class="filter-chip-icon">🖤</span>
+                  <span class="filter-chip-name">Zeiss T* B&W</span>
+                  <span class="filter-chip-sub">독일 흑백 계조</span>
                 </div>
               </div>
               <div class="vintage-toggles">
@@ -786,6 +947,12 @@
                   <span class="filter-chip-name">Street Snap</span>
                   <span class="filter-chip-sub">신속 스냅 룩</span>
                 </div>
+                <div class="filter-chip" data-filter="gr-cross">
+                  <div class="filter-chip-tag ricoh-tag">CROSS</div>
+                  <span class="filter-chip-icon">🧪</span>
+                  <span class="filter-chip-name">Cross Process</span>
+                  <span class="filter-chip-sub">교차현상 발색</span>
+                </div>
               </div>
               <div class="vintage-toggles">
                 <div class="toggle-pill active" id="toggle-ricoh-level">⚖️ 수평계 레벨러</div>
@@ -817,6 +984,12 @@
                   <span class="filter-chip-icon">✨</span>
                   <span class="filter-chip-name">Classic M 35</span>
                   <span class="filter-chip-sub">투명한 선예도</span>
+                </div>
+                <div class="filter-chip" data-filter="leica-red">
+                  <div class="filter-chip-tag leica-tag">RED DOT</div>
+                  <span class="filter-chip-icon">🔴</span>
+                  <span class="filter-chip-name">Red Dot Color</span>
+                  <span class="filter-chip-sub">선명한 원색</span>
                 </div>
               </div>
               <div class="vintage-toggles">
@@ -850,6 +1023,12 @@
                   <span class="filter-chip-name">Pastel Breeze</span>
                   <span class="filter-chip-sub">해변 시티팝</span>
                 </div>
+                <div class="filter-chip" data-filter="city-plastic">
+                  <div class="filter-chip-tag citypop-tag">LOVE</div>
+                  <span class="filter-chip-icon">📻</span>
+                  <span class="filter-chip-name">Plastic Love</span>
+                  <span class="filter-chip-sub">80s 레트로 신스</span>
+                </div>
               </div>
               <div class="vintage-toggles">
                 <div class="toggle-pill active" id="toggle-citypop-cassette">📼 카세트 테이프 HUD</div>
@@ -881,6 +1060,12 @@
                   <span class="filter-chip-icon">🌈</span>
                   <span class="filter-chip-name">Ektar 100</span>
                   <span class="filter-chip-sub">극채도 원색</span>
+                </div>
+                <div class="filter-chip" data-filter="film-superia">
+                  <div class="filter-chip-tag fuji-tag">SUPERIA</div>
+                  <span class="filter-chip-icon">🌿</span>
+                  <span class="filter-chip-name">Superia 400</span>
+                  <span class="filter-chip-sub">에메랄드 그린</span>
                 </div>
               </div>
               <div class="vintage-toggles">
@@ -949,23 +1134,188 @@
               </div>
             </div>
 
+            <!-- [Camera 13 Drawer] Hasselblad 500C/M Medium Format -->
+            <div class="mode-control-panel" id="drawer-hasselblad">
+              <div class="cam-drawer-header">
+                <span class="cam-drawer-title">📷 Hasselblad 500C/M 중형 필름 필터</span>
+                <span class="cam-drawer-badge">6x6 MEDIUM FORMAT</span>
+              </div>
+              <div class="filter-carousel">
+                <div class="filter-chip active" data-filter="hassel-planar">
+                  <div class="filter-chip-tag hassel-tag">PLANAR</div>
+                  <span class="filter-chip-icon">✨</span>
+                  <span class="filter-chip-name">Planar 80mm Pop</span>
+                  <span class="filter-chip-sub">중형 인물 분리감</span>
+                </div>
+                <div class="filter-chip" data-filter="hassel-trix">
+                  <div class="filter-chip-tag bw-tag">TRI-X</div>
+                  <span class="filter-chip-icon">🖤</span>
+                  <span class="filter-chip-name">Tri-X 400 MF</span>
+                  <span class="filter-chip-sub">깊은 은염 흑백</span>
+                </div>
+                <div class="filter-chip" data-filter="hassel-astia">
+                  <div class="filter-chip-tag fuji-tag">ASTIA</div>
+                  <span class="filter-chip-icon">🌸</span>
+                  <span class="filter-chip-name">Astia 100F Slide</span>
+                  <span class="filter-chip-sub">부드러운 슬라이드</span>
+                </div>
+                <div class="filter-chip" data-filter="hassel-chromium">
+                  <div class="filter-chip-tag hassel-tag">CHROME</div>
+                  <span class="filter-chip-icon">🏛️</span>
+                  <span class="filter-chip-name">Chromium Silver</span>
+                  <span class="filter-chip-sub">쿨톤 메탈릭 질감</span>
+                </div>
+              </div>
+              <div class="vintage-toggles">
+                <div class="toggle-pill active" id="toggle-hassel-waist">📐 6x6 웨이스트파인더</div>
+                <div class="toggle-pill active" id="toggle-hassel-cross">➕ 중앙 크로스헤어</div>
+              </div>
+            </div>
+
+            <!-- [Camera 14 Drawer] Polaroid SX-70 Vintage Folding -->
+            <div class="mode-control-panel" id="drawer-polaroid-sx70">
+              <div class="cam-drawer-header">
+                <span class="cam-drawer-title">📸 Polaroid SX-70 빈티지 랜드 카메라</span>
+                <span class="cam-drawer-badge">1972 VINTAGE</span>
+              </div>
+              <div class="filter-carousel">
+                <div class="filter-chip active" data-filter="sx70-fade">
+                  <div class="filter-chip-tag polaroid-tag">1972</div>
+                  <span class="filter-chip-icon">🎞️</span>
+                  <span class="filter-chip-name">SX-70 Vintage Fade</span>
+                  <span class="filter-chip-sub">따뜻하게 바랜 유제</span>
+                </div>
+                <div class="filter-chip" data-filter="sx70-color600">
+                  <div class="filter-chip-tag polaroid-tag">COLOR</div>
+                  <span class="filter-chip-icon">🌈</span>
+                  <span class="filter-chip-name">Color Protection 600</span>
+                  <span class="filter-chip-sub">사이언/마젠타 발색</span>
+                </div>
+                <div class="filter-chip" data-filter="sx70-expired">
+                  <div class="filter-chip-tag polaroid-tag">EXPIRED</div>
+                  <span class="filter-chip-icon">⏳</span>
+                  <span class="filter-chip-name">Expired Film 1979</span>
+                  <span class="filter-chip-sub">유통기한 만료 변색</span>
+                </div>
+                <div class="filter-chip" data-filter="sx70-sepia">
+                  <div class="filter-chip-tag bw-tag">SEPIA</div>
+                  <span class="filter-chip-icon">☕</span>
+                  <span class="filter-chip-name">Sepia Dream</span>
+                  <span class="filter-chip-sub">클래식 세피아 틴트</span>
+                </div>
+              </div>
+              <div class="vintage-toggles">
+                <div class="toggle-pill active" id="toggle-sx70-split">🎯 이중원형 포커스링</div>
+                <div class="toggle-pill active" id="toggle-sx70-rainbow">🌈 레인보우 스트라이프</div>
+              </div>
+            </div>
+
+            <!-- [Camera 15 Drawer] Fuji QuickSnap (写ルンです 1986) -->
+            <div class="mode-control-panel" id="drawer-fuji-quicksnap">
+              <div class="cam-drawer-header">
+                <span class="cam-drawer-title">📸 Fuji QuickSnap (写ルンです 1986)</span>
+                <span class="cam-drawer-badge">1986 BUBBLE ERA</span>
+              </div>
+              <div class="filter-carousel">
+                <div class="filter-chip active" data-filter="quicksnap-86">
+                  <div class="filter-chip-tag quicksnap-tag">1986</div>
+                  <span class="filter-chip-icon">🎞️</span>
+                  <span class="filter-chip-name">写ルンです 1986</span>
+                  <span class="filter-chip-sub">청록색 암부 틴트</span>
+                </div>
+                <div class="filter-chip" data-filter="quicksnap-flash">
+                  <div class="filter-chip-tag quicksnap-tag">FLASH</div>
+                  <span class="filter-chip-icon">⚡</span>
+                  <span class="filter-chip-name">深夜の直焚き</span>
+                  <span class="filter-chip-sub">도쿄 심야 직광</span>
+                </div>
+                <div class="filter-chip" data-filter="quicksnap-nostalgia">
+                  <div class="filter-chip-tag quicksnap-tag">NOSTAL</div>
+                  <span class="filter-chip-icon">🌅</span>
+                  <span class="filter-chip-name">ノスタルジック</span>
+                  <span class="filter-chip-sub">바랜 레트로 골드</span>
+                </div>
+                <div class="filter-chip" data-filter="quicksnap-neon">
+                  <div class="filter-chip-tag quicksnap-tag">NEON</div>
+                  <span class="filter-chip-icon">🌃</span>
+                  <span class="filter-chip-name">六本木ネオン</span>
+                  <span class="filter-chip-sub">1988 네온 팝</span>
+                </div>
+              </div>
+              <div class="vintage-toggles">
+                <div class="toggle-pill active" id="toggle-quicksnap-date">📅 '89 11 24 데이트스탬프</div>
+                <div class="toggle-pill active" id="toggle-quicksnap-flare">✨ 플라스틱 렌즈 플레어</div>
+              </div>
+            </div>
+
+            <!-- [Camera 16 Drawer] Kyocera Samurai X3.0 (1988) -->
+            <div class="mode-control-panel" id="drawer-kyocera-samurai">
+              <div class="cam-drawer-header">
+                <span class="cam-drawer-title">🗡️ Kyocera Samurai X3.0 (1988)</span>
+                <span class="cam-drawer-badge">CYBER HALF-FRAME</span>
+              </div>
+              <div class="filter-carousel">
+                <div class="filter-chip active" data-filter="samurai-half">
+                  <div class="filter-chip-tag samurai-tag">HALF</div>
+                  <span class="filter-chip-icon">📐</span>
+                  <span class="filter-chip-name">Half 72 Split</span>
+                  <span class="filter-chip-sub">72컷 분할 고대비</span>
+                </div>
+                <div class="filter-chip" data-filter="samurai-cyber">
+                  <div class="filter-chip-tag samurai-tag">CYBER</div>
+                  <span class="filter-chip-icon">🟢</span>
+                  <span class="filter-chip-name">サイバー 1988</span>
+                  <span class="filter-chip-sub">에메랄드 그린 HUD</span>
+                </div>
+                <div class="filter-chip" data-filter="samurai-tokyo">
+                  <div class="filter-chip-tag samurai-tag">TOKYO</div>
+                  <span class="filter-chip-icon">🏙️</span>
+                  <span class="filter-chip-name">バブル トワイライト</span>
+                  <span class="filter-chip-sub">신주쿠 매직아워</span>
+                </div>
+                <div class="filter-chip" data-filter="samurai-titanium">
+                  <div class="filter-chip-tag samurai-tag">TITAN</div>
+                  <span class="filter-chip-icon">⚔️</span>
+                  <span class="filter-chip-name">チタン ハード</span>
+                  <span class="filter-chip-sub">다크 그래파이트 톤</span>
+                </div>
+              </div>
+              <div class="vintage-toggles">
+                <div class="toggle-pill active" id="toggle-samurai-halfline">📐 하프프레임 72컷 분할선</div>
+                <div class="toggle-pill active" id="toggle-samurai-lcd">📟 80년대 LCD 그린 HUD</div>
+              </div>
+            </div>
+
           </div>
 
           <!-- Bottom Action Bar & Camera Switcher Wheel -->
           <footer class="camera-bottom-section">
             
-            <!-- 12 Iconic Cameras Switcher Dial -->
+            <!-- Camera Category Fast-Jump Tabs -->
+            <div class="camera-category-bar" id="camera-category-bar">
+              <button class="cam-cat-pill active" data-cat="all">전체 16종</button>
+              <button class="cam-cat-pill" data-cat="bubble">🇯🇵 버블&필름</button>
+              <button class="cam-cat-pill" data-cat="y2k">💿 Y2K 디카</button>
+              <button class="cam-cat-pill" data-cat="medium">🪐 중형&즉석</button>
+              <button class="cam-cat-pill" data-cat="studio">🎨 스튜디오</button>
+            </div>
+
+            <!-- 16 Iconic Cameras Switcher Dial -->
             <div class="mode-dial-wrapper">
               <div class="mode-dial-list" id="mode-dial-list">
                 <div class="mode-dial-item active" data-cam="canon-ixy">CANON IXY</div>
                 <div class="mode-dial-item" data-cam="sony-handycam">HANDYCAM</div>
                 <div class="mode-dial-item" data-cam="sony-cybershot">CYBER-SHOT</div>
-                <div class="mode-dial-item" data-cam="olympus-mju">OLYMPUS μ2</div>
+                <div class="mode-dial-item" data-cam="olympus-mju">OLYMPUS μ-II</div>
                 <div class="mode-dial-item" data-cam="contax-t2">CONTAX T2</div>
                 <div class="mode-dial-item" data-cam="ricoh-gr">RICOH GRD</div>
                 <div class="mode-dial-item" data-cam="leica-m">LEICA M</div>
                 <div class="mode-dial-item" data-cam="citypop-80s">CITY POP 80s</div>
                 <div class="mode-dial-item" data-cam="oldfilm-35mm">OLD FILM 35</div>
+                <div class="mode-dial-item" data-cam="hasselblad-500cm">HASSELBLAD</div>
+                <div class="mode-dial-item" data-cam="polaroid-sx70">POLAROID SX-70</div>
+                <div class="mode-dial-item" data-cam="fuji-quicksnap">QUICKSNAP '86</div>
+                <div class="mode-dial-item" data-cam="kyocera-samurai">SAMURAI 1988</div>
                 <div class="mode-dial-item" data-cam="instax-mini">INSTAX</div>
                 <div class="mode-dial-item" data-cam="sihyun-color">COLOR STUDIO</div>
                 <div class="mode-dial-item" data-cam="passport-id">PASSPORT ID</div>
@@ -975,19 +1325,19 @@
             <!-- Shutter Controls Row -->
             <div class="shutter-row">
               <!-- Left: Gallery Thumbnail -->
-              <div class="gallery-thumbnail-btn" id="gallery-btn" title="촬영된 사진 미리보기">
+              <div class="gallery-thumbnail-btn" id="gallery-btn" title="촬영된 사진 갤러리 열기">
                 <img src="" alt="Thumb" class="gallery-thumb-img" id="gallery-thumb" style="display: none;">
                 <span id="gallery-placeholder" style="font-size: 18px;">🖼️</span>
               </div>
 
-              <!-- Center: Shutter Button -->
-              <button class="shutter-btn-outer" id="shutter-btn" title="사진 촬영">
+              <!-- Center: Shutter Button (Tap = Photo, Hold >280ms = QuickTake Video) -->
+              <button class="shutter-btn-outer" id="shutter-btn" title="사진 촬영 (길게 누르면 QuickTake 비디오)">
                 <div class="shutter-btn-inner"></div>
               </button>
 
-              <!-- Right: Mode Extra Action -->
-              <button class="bottom-quick-btn" id="bottom-quick-action" title="추가 옵션">
-                <span>🪄</span>
+              <!-- Right: Visual Camera Bag Trigger -->
+              <button class="bottom-quick-btn" id="bottom-camera-bag-btn" title="16종 카메라 보관함 (Camera Bag) 열기">
+                <span style="font-size: 18px;">🎒</span>
               </button>
             </div>
 
@@ -1124,6 +1474,139 @@
         <button class="btn-primary" id="btn-save-photo">
           <span>💾 사진첩 저장</span>
         </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 3: Photo Gallery & Rich EXIF Metadata Inspector Modal -->
+  <div class="modal-backdrop" id="gallery-modal">
+    <div class="modal-dialog gallery-modal-dialog">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">🖼️ 스튜디오 사진 갤러리 & EXIF 뷰어</div>
+          <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;" id="gallery-modal-subtitle">
+            총 <span id="gallery-count-text">0</span>장의 고해상도 아카이브
+          </div>
+        </div>
+        <button class="modal-close-btn" id="btn-close-gallery-modal">✕</button>
+      </div>
+
+      <div class="modal-body" style="padding: 16px 20px;">
+        <!-- Empty State -->
+        <div id="gallery-empty-state" style="text-align: center; padding: 48px 16px; display: none;">
+          <div style="font-size: 42px; margin-bottom: 12px; opacity: 0.6;">📸</div>
+          <div style="font-size: 15px; font-weight: 600; color: #fff; margin-bottom: 6px;">저장된 사진이 없습니다</div>
+          <div style="font-size: 12px; color: var(--text-secondary);">하단 셔터 버튼을 눌러 레트로 감성의 사진을 촬영해보세요!</div>
+        </div>
+
+        <!-- Gallery Content: Thumbnails Strip + Active Photo View + EXIF Inspector -->
+        <div id="gallery-content-container">
+          <!-- Horizontal Thumbnail Film Strip -->
+          <div class="gallery-film-strip-wrapper">
+            <div class="gallery-film-strip" id="gallery-film-strip">
+              <!-- Thumbnails injected here -->
+            </div>
+          </div>
+
+          <!-- Main Selected Photo & EXIF Split View -->
+          <div class="gallery-detail-layout">
+            <!-- Left: Large Preview Card -->
+            <div class="gallery-photo-preview-card">
+              <img src="" alt="Selected Archive" class="gallery-large-preview-img" id="gallery-large-img">
+            </div>
+
+            <!-- Right: Glassmorphism EXIF Metadata Card -->
+            <div class="gallery-exif-card">
+              <div class="exif-card-header">
+                <span class="exif-card-title">🔍 EXIF 광학 메타데이터 명세</span>
+                <span class="exif-badge-pill" id="exif-cam-badge">CANON IXY</span>
+              </div>
+
+              <div class="exif-grid">
+                <div class="exif-grid-item">
+                  <span class="exif-label">📷 카메라 기종</span>
+                  <span class="exif-val" id="exif-val-camera">Canon IXY Digital 50</span>
+                </div>
+                <div class="exif-grid-item">
+                  <span class="exif-label">🔍 장착 렌즈 규격</span>
+                  <span class="exif-val" id="exif-val-lens">Canon Zoom Lens 5.8-17.4mm</span>
+                </div>
+                <div class="exif-grid-item">
+                  <span class="exif-label">🧪 고유 필터 팩</span>
+                  <span class="exif-val" id="exif-val-filter" style="color: var(--accent-mint);">Peach Glow</span>
+                </div>
+                <div class="exif-grid-item">
+                  <span class="exif-label">👓 탈부착 광학 렌즈</span>
+                  <span class="exif-val" id="exif-val-optical">Clear (None)</span>
+                </div>
+                <div class="exif-grid-item">
+                  <span class="exif-label">⚡ 셔터 스피드 & 조리개</span>
+                  <span class="exif-val" id="exif-val-exposure">1/125s • f/2.8 • ISO 100</span>
+                </div>
+                <div class="exif-grid-item">
+                  <span class="exif-label">🎯 환산 화각 (Focal)</span>
+                  <span class="exif-val" id="exif-val-focal">38mm eq.</span>
+                </div>
+                <div class="exif-grid-item">
+                  <span class="exif-label">💡 플래시 발광 여부</span>
+                  <span class="exif-val" id="exif-val-flash">미발광 (Off)</span>
+                </div>
+                <div class="exif-grid-item">
+                  <span class="exif-label">📐 해상도 및 화면비</span>
+                  <span class="exif-val" id="exif-val-res">3:4 (780 × 1040)</span>
+                </div>
+                <div class="exif-grid-item" style="grid-column: span 2;">
+                  <span class="exif-label">📅 촬영 일시 & 색공간</span>
+                  <span class="exif-val" id="exif-val-timestamp">2026.10.06 09:30 • sRGB Display P3</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button class="btn-secondary" id="btn-gallery-delete" style="color: #ff453a; border-color: rgba(255, 69, 58, 0.4);">🗑️ 사진 삭제</button>
+        <button class="btn-secondary" id="btn-gallery-print">📄 4x6 인화 시트</button>
+        <button class="btn-primary" id="btn-gallery-download">💾 원본 다운로드</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal 4: Visual Camera Bag / Rack Selector Modal (16 Iconic Cameras) -->
+  <div class="modal-backdrop" id="camera-bag-modal">
+    <div class="modal-dialog camera-bag-dialog">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title">🎒 16대 아이코닉 카메라 보관함 (Camera Bag)</div>
+          <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">
+            원하는 카메라를 탭하면 즉시 교체 장착됩니다 • 뷰파인더 좌우 스와이프로도 전환 가능
+          </div>
+        </div>
+        <button class="modal-close-btn" id="btn-close-camera-bag">✕</button>
+      </div>
+
+      <div class="modal-body" style="padding: 14px 18px; max-height: 520px; overflow-y: auto;">
+        <!-- Category Filter Pills inside Bag -->
+        <div class="bag-category-filter" id="bag-category-filter">
+          <button class="bag-cat-btn active" data-cat="all">전체 (16)</button>
+          <button class="bag-cat-btn" data-cat="bubble">🇯🇵 버블&필름 (6)</button>
+          <button class="bag-cat-btn" data-cat="y2k">💿 Y2K 디카 (5)</button>
+          <button class="bag-cat-btn" data-cat="medium">🪐 중형&즉석 (3)</button>
+          <button class="bag-cat-btn" data-cat="studio">🎨 프로 스튜디오 (2)</button>
+        </div>
+
+        <!-- 16 Visual Camera Cards Grid -->
+        <div class="camera-bag-grid" id="camera-bag-grid">
+          <!-- Dynamic or pre-rendered cards with full visual styles -->
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <div style="font-size: 11.5px; color: var(--text-secondary); display: flex; align-items: center; gap: 8px;">
+          <span>💡 <strong>Tip</strong>: 뷰파인더를 좌우로 스와이프하거나 상단 ❮ ❯ 버튼을 눌러도 즉시 카메라가 바뀝니다!</span>
+        </div>
+        <button class="btn-primary" id="btn-bag-close-bottom">선택 완료</button>
       </div>
     </div>
   </div>

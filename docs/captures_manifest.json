@@ -1,0 +1,130 @@
+[
+  {
+    "id": "canon-ixy",
+    "name": "Canon IXY Digital 50",
+    "sub": "Y2K CCD DigiCam",
+    "ui_screenshot": "docs/screenshots/camera_canon-ixy.png",
+    "photo_capture": "docs/captures/capture_canon-ixy.png",
+    "exif": null
+  },
+  {
+    "id": "sony-handycam",
+    "name": "Sony DCR Handycam",
+    "sub": "MiniDV Camcorder",
+    "ui_screenshot": "docs/screenshots/camera_sony-handycam.png",
+    "photo_capture": "docs/captures/capture_sony-handycam.png",
+    "exif": null
+  },
+  {
+    "id": "sony-cybershot",
+    "name": "Sony Cyber-shot DSC-P",
+    "sub": "2000s Cyber Blue CCD",
+    "ui_screenshot": "docs/screenshots/camera_sony-cybershot.png",
+    "photo_capture": "docs/captures/capture_sony-cybershot.png",
+    "exif": null
+  },
+  {
+    "id": "instax-mini",
+    "name": "Fujifilm Instax Mini",
+    "sub": "Instant Film Card",
+    "ui_screenshot": "docs/screenshots/camera_instax-mini.png",
+    "photo_capture": "docs/captures/capture_instax-mini.png",
+    "exif": null
+  },
+  {
+    "id": "olympus-mju",
+    "name": "Olympus [mju:] II",
+    "sub": "All-Weather 35mm P&S",
+    "ui_screenshot": "docs/screenshots/camera_olympus-mju.png",
+    "photo_capture": "docs/captures/capture_olympus-mju.png",
+    "exif": null
+  },
+  {
+    "id": "contax-t2",
+    "name": "Contax T2 Carl Zeiss",
+    "sub": "Sonnar 38mm T* Luxury",
+    "ui_screenshot": "docs/screenshots/camera_contax-t2.png",
+    "photo_capture": "docs/captures/capture_contax-t2.png",
+    "exif": null
+  },
+  {
+    "id": "ricoh-gr",
+    "name": "Ricoh GR III Street",
+    "sub": "High Contrast B&W Snap",
+    "ui_screenshot": "docs/screenshots/camera_ricoh-gr.png",
+    "photo_capture": "docs/captures/capture_ricoh-gr.png",
+    "exif": null
+  },
+  {
+    "id": "leica-m",
+    "name": "Leica M6 Classic",
+    "sub": "Summicron 35mm Rangefinder",
+    "ui_screenshot": "docs/screenshots/camera_leica-m.png",
+    "photo_capture": "docs/captures/capture_leica-m.png",
+    "exif": null
+  },
+  {
+    "id": "citypop-80s",
+    "name": "City Pop 80s Disco",
+    "sub": "Neon Tokyo Sunset Aesthetic",
+    "ui_screenshot": "docs/screenshots/camera_citypop-80s.png",
+    "photo_capture": "docs/captures/capture_citypop-80s.png",
+    "exif": null
+  },
+  {
+    "id": "oldfilm-35mm",
+    "name": "Classic 35mm Film",
+    "sub": "CineStill 800T Halation",
+    "ui_screenshot": "docs/screenshots/camera_oldfilm-35mm.png",
+    "photo_capture": "docs/captures/capture_oldfilm-35mm.png",
+    "exif": null
+  },
+  {
+    "id": "hasselblad",
+    "name": "Hasselblad 500C/M",
+    "sub": "6x6 Medium Format Planar",
+    "ui_screenshot": "docs/screenshots/camera_hasselblad.png",
+    "photo_capture": "docs/captures/capture_hasselblad.png",
+    "exif": null
+  },
+  {
+    "id": "polaroid-sx70",
+    "name": "Polaroid SX-70 (1972)",
+    "sub": "Folding SLR Land Camera",
+    "ui_screenshot": "docs/screenshots/camera_polaroid-sx70.png",
+    "photo_capture": "docs/captures/capture_polaroid-sx70.png",
+    "exif": null
+  },
+  {
+    "id": "fuji-quicksnap",
+    "name": "Fuji QuickSnap (写ルンです 1986)",
+    "sub": "1986 Bubble Disposable Icon",
+    "ui_screenshot": "docs/screenshots/camera_fuji-quicksnap.png",
+    "photo_capture": "docs/captures/capture_fuji-quicksnap.png",
+    "exif": null
+  },
+  {
+    "id": "kyocera-samurai",
+    "name": "Kyocera Samurai X3.0 (1988)",
+    "sub": "Cyber Half-Frame 72-Shot SLR",
+    "ui_screenshot": "docs/screenshots/camera_kyocera-samurai.png",
+    "photo_capture": "docs/captures/capture_kyocera-samurai.png",
+    "exif": null
+  },
+  {
+    "id": "sihyun-color",
+    "name": "Sihyunhada Signature",
+    "sub": "Real-time Identity Hue",
+    "ui_screenshot": "docs/screenshots/camera_sihyun-color.png",
+    "photo_capture": "docs/captures/capture_sihyun-color.png",
+    "exif": null
+  },
+  {
+    "id": "passport-id",
+    "name": "Official Biometric ID",
+    "sub": "Korean Passport Standard HUD",
+    "ui_screenshot": "docs/screenshots/camera_passport-id.png",
+    "photo_capture": "docs/captures/capture_passport-id.png",
+    "exif": null
+  }
+]

@@ -8,6 +8,14 @@ import os
 import sys
 import re
 
+if sys.platform == 'win32':
+    try:
+        sys.stdout.reconfigure(encoding='utf-8', errors='replace')
+        sys.stderr.reconfigure(encoding='utf-8', errors='replace')
+    except Exception:
+        pass
+
+
 def test_files_exist():
     required_files = [
         'index.html',
@@ -46,8 +54,15 @@ def test_html_dom_integrity():
         'drawer-leica-m',
         'drawer-citypop-80s',
         'drawer-oldfilm-35mm',
+        'drawer-hasselblad',
+        'drawer-polaroid-sx70',
+        'drawer-fuji-quicksnap',
+        'drawer-kyocera-samurai',
         'drawer-sihyun-color',
         'drawer-passport-id',
+        'gallery-modal',
+        'gallery-film-strip',
+        'exif-val-camera',
         'dynamic-island',
         'mood-card-frame',
         'sihyun-moment-title',
@@ -56,16 +71,20 @@ def test_html_dom_integrity():
         'lens-filter-popover',
         'lens-layer-mist',
         'lens-layer-star',
+        'lens-layer-star6',
         'lens-layer-streak',
         'lens-layer-prism',
-        'lens-layer-cpl'
+        'lens-layer-cpl',
+        'quicksnap-osd',
+        'kyocera-samurai-osd',
+        'viewfinder-rec-banner'
     ]
 
     missing_ids = [eid for eid in required_ids if f'id="{eid}"' not in html]
     if missing_ids:
         print(f"❌ HTML missing critical DOM IDs: {missing_ids}")
         return False
-    print("✅ HTML DOM IDs & 12 Iconic Camera Racks integrity passed.")
+    print("✅ HTML DOM IDs & 16 Iconic Camera Racks & QuickTake integrity passed.")
     return True
 
 def test_css_tokens():
@@ -79,7 +98,7 @@ def test_css_tokens():
         '--glass-blur-md',
         '--glass-border',
         '--accent-mint',
-        'height: 492px;',
+        'height: 460px;',
         'aspect-ratio: 3 / 4;'
     ]
 

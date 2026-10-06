@@ -130,6 +130,18 @@ public final class FilterRegistry: @unchecked Sendable {
         // Old Analog Film Pack
         register(filters: OldFilmFilterPack.allFilters)
 
+        // Hasselblad 500C/M Pack
+        register(filters: HasselbladFilterPack.allFilters)
+
+        // Polaroid SX-70 Pack
+        register(filters: PolaroidSX70FilterPack.allFilters)
+
+        // Fuji QuickSnap Pack (1986 Japanese Bubble Economy)
+        register(filters: FujiQuickSnapFilterPack.allFilters)
+
+        // Kyocera Samurai X3.0 Pack (1988 Cyber Half-Frame SLR)
+        register(filters: KyoceraSamuraiFilterPack.allFilters)
+
         // Optical Lenses Pack
         for opt in OpticalLensFilterPack.allFilters {
             register(opticalFilter: opt)
