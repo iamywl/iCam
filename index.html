@@ -20,13 +20,13 @@
     <!-- Left Sidebar: Project Overview & Mode Navigation -->
     <aside class="showcase-panel left-panel">
       <div class="panel-card">
-        <div class="brand-badge">SnapStudio v1.0 MVP</div>
+        <div class="brand-badge">ARCHIVE 16 // ED.2026</div>
         <h1 class="panel-title">
-          <span>SnapStudio</span>
-          <span style="font-size: 14px; color: var(--accent-mint); font-weight: 500;">All-in-Cam</span>
+          <span>iCam Studio</span>
+          <span style="font-size: 12px; color: var(--accent-gold); font-weight: 700; letter-spacing: 1.5px; text-transform: uppercase;">Analog & Y2K Archive</span>
         </h1>
         <p class="panel-desc">
-          일상의 아날로그 필름 감성부터 공공기관 여권 증명사진, MZ세대 트렌디 퍼스널 컬러 프로필까지 하나의 앱으로 완성하는 올인원 iOS 카메라 솔루션.
+          1986년 도쿄 버블 시대의 35mm 필름부터 2000년대 Y2K 디카, 중형 6x6, 라이카 레인지파인더까지 — 찰나의 순간을 빈티지 아날로그 감성으로 담아내는 포토 아카이브.
         </p>
 
         <!-- 6 Iconic Cameras Rack Selectors -->
@@ -340,11 +340,31 @@
 
           <!-- Central Viewfinder Area -->
           <div class="viewfinder-container" id="viewfinder">
+            <!-- Hip Rangefinder Optical Viewfinder Overlay (Fine Crop Brackets & Exposure HUD) -->
+            <div class="rangefinder-hud-overlay" id="rangefinder-hud">
+              <div class="rf-bracket rf-tl"></div>
+              <div class="rf-bracket rf-tr"></div>
+              <div class="rf-bracket rf-bl"></div>
+              <div class="rf-bracket rf-br"></div>
+              <div class="rf-center-target">
+                <div class="rf-target-ring"></div>
+                <div class="rf-target-cross"></div>
+              </div>
+              <div class="rf-hud-top">
+                <span class="rf-hud-pill">35mm F/2.0</span>
+                <span class="rf-hud-pill" id="rf-exp-counter">[ 24 / 36 ]</span>
+              </div>
+              <div class="rf-hud-bottom">
+                <span class="rf-meter-status">● OPTICAL READY</span>
+                <span class="rf-meter-iso">ISO 400 • 1/125s</span>
+              </div>
+            </div>
+
             <!-- Camera Enable Prompt Overlay -->
             <div class="camera-prompt-overlay" id="camera-prompt-overlay" style="display: none;">
               <button class="btn-start-camera" id="btn-start-camera" title="실제 카메라(웹캠) 시작">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
-                <span>📷 실제 카메라 켜기</span>
+                <span>실제 카메라 시작</span>
               </button>
             </div>
 
