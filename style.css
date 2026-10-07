@@ -3161,236 +3161,202 @@ body::before {
   }
 
   .camera-top-toolbar {
-    top: max(8px, env(safe-area-inset-top, 8px)) !important;
-    height: 40px;
+    position: relative !important;
+    top: auto !important;
+    left: auto !important;
+    right: auto !important;
+    width: 100% !important;
+    height: 42px !important;
+    padding: 0 16px !important;
+    box-sizing: border-box;
+    flex-shrink: 0;
+    z-index: 50;
   }
 
   .camera-model-badge-container {
-    top: calc(max(8px, env(safe-area-inset-top, 8px)) + 44px) !important;
+    position: absolute;
+    top: calc(max(8px, env(safe-area-inset-top, 8px)) + 46px);
+    left: 50%;
+    transform: translateX(-50%);
+    z-index: 25;
   }
 
+  /* Strict Non-Clipping 3:4 Viewfinder Container */
   .viewfinder-container {
-    top: calc(max(8px, env(safe-area-inset-top, 8px)) + 76px) !important;
-    bottom: calc(296px + env(safe-area-inset-bottom, 0px));
-    height: auto;
-    max-height: calc(100vh - 380px);
-    max-height: calc(100dvh - 380px);
+    position: relative !important;
+    top: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    right: auto !important;
+    transform: none !important;
+    aspect-ratio: 3 / 4 !important;
+    height: min(calc(100dvh - 195px), calc((100vw - 16px) * 4 / 3)) !important;
+    height: min(calc(100vh - 195px), calc((100vw - 16px) * 4 / 3)) !important;
+    width: calc(min(calc(100dvh - 195px), calc((100vw - 16px) * 4 / 3)) * 3 / 4) !important;
+    width: calc(min(calc(100vh - 195px), calc((100vw - 16px) * 4 / 3)) * 3 / 4) !important;
+    max-height: calc(100dvh - 195px) !important;
+    max-width: calc(100vw - 16px) !important;
+    margin: auto !important;
+    border-radius: 18px !important;
+    box-sizing: border-box;
+    overflow: hidden;
+    flex-shrink: 0;
+    z-index: 5;
   }
 
   .control-drawer {
     position: absolute;
-    top: auto;
-    bottom: calc(156px + env(safe-area-inset-bottom, 0px));
-    height: 132px;
-    padding: 6px 10px;
-    overflow-y: auto;
-    overflow-x: hidden;
+    bottom: calc(136px + env(safe-area-inset-bottom, 6px));
+    left: 10px;
+    right: 10px;
+    height: 120px;
+    max-height: 120px;
+    z-index: 55;
   }
 
   .camera-bottom-section {
-    position: absolute;
-    top: auto;
-    bottom: calc(10px + env(safe-area-inset-bottom, 0px));
-    height: 144px;
-    padding-bottom: 6px;
-  }
-}
-
-/* ==========================================================================
-   iPhone Device Tiers Responsive Matrix (SE, Mini, Standard, Max)
-   ========================================================================== */
-
-/* Tier 1: iPhone SE 2/3 & iPhone 8 (375 x 667) Compact */
-@media (max-width: 500px) and (max-height: 680px) {
-  .ios-status-bar {
-    height: 24px;
-    padding: 4px 14px 0 14px;
-  }
-
-  .dynamic-island {
-    display: none !important;
-  }
-
-  .camera-top-toolbar {
-    top: 26px;
-    height: 38px;
-    padding: 0 10px;
-  }
-
-  .toolbar-btn {
-    width: 32px;
-    height: 32px;
-    font-size: 13px;
-  }
-
-  .viewfinder-container {
-    top: 68px;
-    bottom: 254px;
-    max-height: calc(100vh - 260px);
-    max-height: calc(100dvh - 260px);
-    border-radius: 14px;
-  }
-
-  .control-drawer {
-    bottom: 136px;
-    height: 114px;
-    padding: 4px 8px;
-  }
-
-  .filter-chip {
-    padding: 2px 6px;
-    min-width: 56px;
-  }
-
-  .filter-chip-tag {
-    font-size: 7.5px;
-  }
-
-  .filter-chip-name {
-    font-size: 9.5px;
-  }
-
-  .camera-bottom-section {
-    bottom: 4px;
-    height: 128px;
+    position: relative !important;
+    top: auto !important;
+    bottom: auto !important;
+    left: auto !important;
+    right: auto !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 126px !important;
+    flex-shrink: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 4px;
     padding-bottom: 2px;
-  }
-
-  .shutter-btn-outer {
-    width: 58px;
-    height: 58px;
-  }
-
-  .shutter-btn-inner {
-    width: 48px;
-    height: 48px;
-  }
-
-  .gallery-thumbnail-btn {
-    width: 38px;
-    height: 38px;
-  }
-}
-
-/* Tier 2: iPhone 12 mini / 13 mini (375 x 812) Compact Notch */
-@media (max-width: 500px) and (min-height: 681px) and (max-height: 820px) {
-  .ios-status-bar {
-    height: 44px;
-  }
-
-  .camera-top-toolbar {
-    top: 48px;
-    height: 40px;
-  }
-
-  .viewfinder-container {
-    top: 92px;
-    bottom: calc(286px + env(safe-area-inset-bottom, 0px));
-    max-height: calc(100vh - 388px);
-    max-height: calc(100dvh - 388px);
-  }
-
-  .control-drawer {
-    bottom: calc(154px + env(safe-area-inset-bottom, 0px));
-    height: 126px;
-  }
-
-  .camera-bottom-section {
-    bottom: calc(8px + env(safe-area-inset-bottom, 0px));
-    height: 142px;
-  }
-}
-
-/* Tier 3: iPhone 14 Plus / 15 Pro Max / 16 Pro Max (430 x 932+) 대화면 */
-@media (max-width: 500px) and (min-height: 891px) {
-  .ios-status-bar {
-    height: 56px;
-  }
-
-  .camera-top-toolbar {
-    top: 60px;
-    height: 42px;
-  }
-
-  .viewfinder-container {
-    top: 106px;
-    bottom: calc(314px + env(safe-area-inset-bottom, 0px));
-    max-height: calc(100vh - 428px);
-    max-height: calc(100dvh - 428px);
-  }
-
-  .control-drawer {
-    bottom: calc(170px + env(safe-area-inset-bottom, 0px));
-    height: 136px;
-  }
-
-  .camera-bottom-section {
-    bottom: calc(14px + env(safe-area-inset-bottom, 0px));
-    height: 152px;
+    z-index: 50;
   }
 }
 
 /* ==========================================================================
    Simulator Device Frame Class Overrides (SE, Mini, Standard, Max)
+   Strict 3:4 Photographic Ratio & Zero-Clipping Ergonomic Bounds
    ========================================================================== */
+
+/* Tier 1: iPhone SE 2/3 (375 x 667) */
 .device-wrapper.device-se {
   --device-width: 375px;
   --device-height: 667px;
   --device-radius: 20px;
 }
-.device-wrapper.device-se .ios-status-bar { height: 24px; padding: 4px 14px 0 14px; }
+.device-wrapper.device-se .ios-status-bar { height: 20px; padding: 2px 14px 0 14px; }
 .device-wrapper.device-se .dynamic-island { display: none !important; }
-.device-wrapper.device-se .camera-top-toolbar { top: 26px; height: 38px; }
-.device-wrapper.device-se .camera-model-badge-container { top: 32px; }
-.device-wrapper.device-se .viewfinder-container { top: 66px; height: 316px; max-height: 316px; border-radius: 14px; }
-.device-wrapper.device-se .control-drawer { top: 388px; height: 136px; padding: 4px 6px; }
-.device-wrapper.device-se .filter-chip { padding: 2px 4px; min-width: 52px; gap: 1px; }
-.device-wrapper.device-se .filter-chip-tag { font-size: 7px; padding: 0.5px 3px; }
-.device-wrapper.device-se .filter-chip-name { font-size: 8.5px; }
+.device-wrapper.device-se .camera-top-toolbar { top: 20px; height: 34px; padding: 0 8px; }
+.device-wrapper.device-se .toolbar-btn { width: 30px; height: 30px; font-size: 13px; }
+.device-wrapper.device-se .camera-model-badge-container { top: 56px; }
+.device-wrapper.device-se .camera-model-badge { padding: 2px 8px; font-size: 10px; height: 24px; }
+.device-wrapper.device-se .cam-badge-step-btn { width: 22px; height: 22px; }
+.device-wrapper.device-se .viewfinder-container {
+  top: 84px;
+  width: 288px;
+  height: 384px;
+  max-height: 384px;
+  aspect-ratio: 3 / 4;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 14px;
+}
+.device-wrapper.device-se .control-drawer { top: 472px; height: 90px; padding: 2px 6px; }
+.device-wrapper.device-se .cam-drawer-header { margin-bottom: 0px; }
+.device-wrapper.device-se .cam-drawer-title { font-size: 9.5px; }
+.device-wrapper.device-se .cam-drawer-badge { font-size: 7.5px; padding: 1px 4px; }
+.device-wrapper.device-se .filter-chip { padding: 1px 3px; min-width: 46px; gap: 1px; height: 32px; }
+.device-wrapper.device-se .filter-chip-tag { font-size: 6.5px; padding: 0.5px 2px; }
+.device-wrapper.device-se .filter-chip-name { font-size: 8px; }
 .device-wrapper.device-se .filter-chip-sub { display: none; }
-.device-wrapper.device-se .vintage-toggles { margin-top: 2px; }
-.device-wrapper.device-se .toggle-pill { padding: 1.5px 6px; font-size: 8.5px; height: 18px; line-height: 18px; }
-.device-wrapper.device-se .camera-bottom-section { top: 530px; height: 130px; padding-bottom: 2px; }
-.device-wrapper.device-se .camera-category-bar { height: 20px; margin-bottom: 2px; }
-.device-wrapper.device-se .cam-cat-pill { font-size: 9px; padding: 1.5px 6px; }
-.device-wrapper.device-se .mode-dial-wrapper { height: 18px; margin-bottom: 2px; font-size: 9.5px; }
-.device-wrapper.device-se .shutter-btn-outer { width: 56px; height: 56px; }
-.device-wrapper.device-se .shutter-btn-inner { width: 46px; height: 46px; }
-.device-wrapper.device-se .gallery-thumbnail-btn { width: 36px; height: 36px; }
+.device-wrapper.device-se .vintage-toggles { margin-top: 1px; }
+.device-wrapper.device-se .toggle-pill { padding: 1px 5px; font-size: 8px; height: 16px; line-height: 16px; }
+.device-wrapper.device-se .camera-bottom-section { top: 565px; height: 100px; padding-bottom: 2px; }
+.device-wrapper.device-se .camera-category-bar { height: 18px; margin-bottom: 2px; }
+.device-wrapper.device-se .cam-cat-pill { font-size: 8.5px; padding: 1px 5px; }
+.device-wrapper.device-se .mode-dial-wrapper { height: 18px; margin-bottom: 2px; font-size: 9px; }
+.device-wrapper.device-se .shutter-row { height: 56px; }
+.device-wrapper.device-se .shutter-btn-outer { width: 50px; height: 50px; }
+.device-wrapper.device-se .shutter-btn-inner { width: 40px; height: 40px; }
+.device-wrapper.device-se .gallery-thumbnail-btn { width: 34px; height: 34px; }
+.device-wrapper.device-se .bottom-quick-btn { width: 34px; height: 34px; }
 
+/* Tier 2: iPhone 12 mini / 13 mini (375 x 812) */
 .device-wrapper.device-mini {
   --device-width: 375px;
   --device-height: 812px;
   --device-radius: 44px;
 }
 .device-wrapper.device-mini .ios-status-bar { height: 44px; }
-.device-wrapper.device-mini .camera-top-toolbar { top: 48px; height: 40px; }
-.device-wrapper.device-mini .camera-model-badge-container { top: 52px; }
-.device-wrapper.device-mini .viewfinder-container { top: 90px; height: 402px; max-height: 402px; }
-.device-wrapper.device-mini .control-drawer { top: 498px; height: 144px; }
-.device-wrapper.device-mini .camera-bottom-section { top: 648px; height: 146px; }
+.device-wrapper.device-mini .camera-top-toolbar { top: 46px; height: 38px; }
+.device-wrapper.device-mini .camera-model-badge-container { top: 86px; }
+.device-wrapper.device-mini .viewfinder-container {
+  top: 114px;
+  width: 336px;
+  height: 448px;
+  max-height: 448px;
+  aspect-ratio: 3 / 4;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 18px;
+}
+.device-wrapper.device-mini .control-drawer { top: 566px; height: 118px; padding: 3px 8px; }
+.device-wrapper.device-mini .cam-drawer-header { margin-bottom: 1px; }
+.device-wrapper.device-mini .filter-chip { padding: 2px 4px; min-width: 50px; gap: 1px; }
+.device-wrapper.device-mini .filter-chip-name { font-size: 9px; }
+.device-wrapper.device-mini .filter-chip-sub { display: none; }
+.device-wrapper.device-mini .vintage-toggles { margin-top: 2px; }
+.device-wrapper.device-mini .toggle-pill { padding: 2px 6px; font-size: 9px; height: 18px; line-height: 18px; }
+.device-wrapper.device-mini .camera-bottom-section { top: 688px; height: 120px; }
 
+/* Tier 3: iPhone 14 Pro / 15 Pro / 16 Pro (393 x 852) */
 .device-wrapper.device-standard {
   --device-width: 393px;
   --device-height: 852px;
   --device-radius: 54px;
 }
-.device-wrapper.device-standard .camera-model-badge-container { top: 58px; }
-.device-wrapper.device-standard .viewfinder-container { top: 98px; height: 436px; max-height: 436px; }
-.device-wrapper.device-standard .control-drawer { top: 540px; height: 142px; }
-.device-wrapper.device-standard .camera-bottom-section { top: 688px; height: 148px; }
+.device-wrapper.device-standard .ios-status-bar { height: 50px; }
+.device-wrapper.device-standard .camera-top-toolbar { top: 52px; height: 40px; }
+.device-wrapper.device-standard .camera-model-badge-container { top: 94px; }
+.device-wrapper.device-standard .viewfinder-container {
+  top: 124px;
+  width: 351px;
+  height: 468px;
+  max-height: 468px;
+  aspect-ratio: 3 / 4;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 20px;
+}
+.device-wrapper.device-standard .control-drawer { top: 596px; height: 122px; padding: 4px 8px; }
+.device-wrapper.device-standard .cam-drawer-header { margin-bottom: 2px; }
+.device-wrapper.device-standard .filter-chip { padding: 2px 5px; min-width: 54px; gap: 1px; }
+.device-wrapper.device-standard .filter-chip-name { font-size: 9.5px; }
+.device-wrapper.device-standard .vintage-toggles { margin-top: 2px; }
+.device-wrapper.device-standard .toggle-pill { padding: 2px 7px; font-size: 9px; height: 18px; line-height: 18px; }
+.device-wrapper.device-standard .camera-bottom-section { top: 722px; height: 124px; }
 
+/* Tier 4: iPhone 14 Plus / 15 Pro Max / 16 Pro Max (430 x 932) */
 .device-wrapper.device-max {
   --device-width: 430px;
   --device-height: 932px;
   --device-radius: 55px;
 }
 .device-wrapper.device-max .ios-status-bar { height: 56px; }
-.device-wrapper.device-max .camera-top-toolbar { top: 60px; height: 42px; }
-.device-wrapper.device-max .camera-model-badge-container { top: 64px; }
-.device-wrapper.device-max .viewfinder-container { top: 104px; height: 484px; max-height: 484px; }
-.device-wrapper.device-max .control-drawer { top: 594px; height: 148px; }
-.device-wrapper.device-max .camera-bottom-section { top: 748px; height: 152px; }
+.device-wrapper.device-max .camera-top-toolbar { top: 58px; height: 42px; }
+.device-wrapper.device-max .camera-model-badge-container { top: 102px; }
+.device-wrapper.device-max .viewfinder-container {
+  top: 136px;
+  width: 384px;
+  height: 512px;
+  max-height: 512px;
+  aspect-ratio: 3 / 4;
+  left: 50%;
+  transform: translateX(-50%);
+  border-radius: 22px;
+}
+.device-wrapper.device-max .control-drawer { top: 654px; height: 128px; }
+.device-wrapper.device-max .camera-bottom-section { top: 788px; height: 136px; }
 
 /* ==========================================================================
    Gallery Count Badge & Modals Extension

@@ -120,12 +120,18 @@ async def main():
                 layout_check = await eval_js(ws, msg_id, """
                     (() => {
                         const vf = document.querySelector('.viewfinder-container').getBoundingClientRect();
+                        const tb = document.querySelector('.camera-top-toolbar').getBoundingClientRect();
+                        const badge = document.querySelector('.camera-model-badge-container').getBoundingClientRect();
                         const drawer = document.querySelector('.control-drawer').getBoundingClientRect();
                         const bottom = document.querySelector('.camera-bottom-section').getBoundingClientRect();
                         const catBar = document.querySelector('.camera-category-bar').getBoundingClientRect();
                         const modeDial = document.querySelector('.mode-dial-wrapper').getBoundingClientRect();
 
                         return {
+                            vf_width: vf.width,
+                            vf_height: vf.height,
+                            vf_ratio: vf.width / vf.height,
+                            tb_badge_gap: badge.top - tb.bottom,
                             vf_bottom: vf.bottom,
                             drawer_top: drawer.top,
                             drawer_bottom: drawer.bottom,
@@ -139,7 +145,27 @@ async def main():
                     })()
                 """)
 
-                # Audit 1: Drawer must be BELOW viewfinder
+                # Audit 1: Viewfinder must maintain strict 3:4 photographic aspect ratio (0.7500)
+                total_checks += 1
+                vf_ratio = layout_check['vf_ratio']
+                if abs(vf_ratio - 0.75) <= 0.02:
+                    passed_checks += 1
+                    print(f"  [PASS] Viewfinder 3:4 Photographic Ratio: {vf_ratio:.4f} (target: 0.7500 ± 0.02, {layout_check['vf_width']:.0f}x{layout_check['vf_height']:.0f})")
+                else:
+                    all_passed = False
+                    print(f"  [FAIL] Viewfinder aspect ratio is distorted! Ratio: {vf_ratio:.4f} (target: 0.7500)")
+
+                # Audit 2: Top Toolbar must not collide with Camera Model Badge
+                total_checks += 1
+                tb_badge_gap = layout_check['tb_badge_gap']
+                if tb_badge_gap >= 1.5:
+                    passed_checks += 1
+                    print(f"  [PASS] Top Toolbar to Badge gap: {tb_badge_gap:.1f}px (>= 1.5px)")
+                else:
+                    all_passed = False
+                    print(f"  [FAIL] Top Toolbar collides with Camera Badge! Gap: {tb_badge_gap:.1f}px")
+
+                # Audit 3: Drawer must be BELOW viewfinder
                 total_checks += 1
                 drawer_vf_gap = layout_check['drawer_vf_gap']
                 if drawer_vf_gap >= 2:
@@ -149,7 +175,7 @@ async def main():
                     all_passed = False
                     print(f"  [FAIL] Viewfinder overlaps Drawer! Gap: {drawer_vf_gap:.1f}px")
 
-                # Audit 2: Bottom Section must be BELOW drawer
+                # Audit 4: Bottom Section must be BELOW drawer
                 total_checks += 1
                 bottom_drawer_gap = layout_check['bottom_drawer_gap']
                 if bottom_drawer_gap >= 2:
@@ -159,7 +185,7 @@ async def main():
                     all_passed = False
                     print(f"  [FAIL] Drawer overlaps Bottom Section! Gap: {bottom_drawer_gap:.1f}px")
 
-                # Audit 3: Mode dial must not collide with category bar
+                # Audit 5: Mode dial must not collide with category bar
                 total_checks += 1
                 dial_cat_gap = layout_check['dial_cat_gap']
                 if dial_cat_gap >= 0:
