@@ -20,3 +20,4 @@ node_modules/
 *.ipa
 iCam-iOS-Sideloadly-IPA/
 *screenshot*.png
+*diag*.png
