@@ -123,10 +123,10 @@ const CAMERAS = {
         tintRgba: 'rgba(255, 235, 240, 0.1)'
       },
       'ixy-night': {
-        name: 'Night Party',
-        desc: '밤거리 감성 노이즈',
-        css: 'brightness(0.98) contrast(1.25) saturate(1.25) sepia(0.14)',
-        tintRgba: 'rgba(240, 160, 60, 0.12)'
+        name: 'Clear Sunlight',
+        desc: '창가 자연광 투명 얼짱 톤',
+        css: 'brightness(1.12) contrast(1.08) saturate(1.24) sepia(0.02)',
+        tintRgba: 'rgba(255, 230, 195, 0.08)'
       }
     }
   },
@@ -144,26 +144,26 @@ const CAMERAS = {
       'handy-minidv': {
         name: 'MiniDV Classic',
         desc: '소니 3CCD 비디오 톤',
-        css: 'brightness(1.05) contrast(1.12) saturate(1.22) sepia(0.08)',
+        css: 'brightness(1.08) contrast(1.12) saturate(1.22) sepia(0.06)',
         tintRgba: 'rgba(255, 235, 180, 0.08)'
       },
       'handy-vhs': {
         name: 'Hi8 Tape Glitch',
         desc: '스캔라인 테이프 글리치',
-        css: 'brightness(1.05) contrast(1.15) saturate(1.18) sepia(0.12)',
+        css: 'brightness(1.06) contrast(1.15) saturate(1.18) sepia(0.10)',
         tintRgba: 'rgba(255, 210, 150, 0.1)'
       },
       'handy-super8': {
         name: 'Super 8mm Cine',
         desc: '골든 앰버 홈무비',
-        css: 'brightness(0.96) contrast(1.22) saturate(1.15) sepia(0.32)',
-        tintRgba: 'rgba(240, 160, 60, 0.15)'
+        css: 'brightness(1.04) contrast(1.18) saturate(1.20) sepia(0.20)',
+        tintRgba: 'rgba(240, 180, 80, 0.12)'
       },
       'handy-nightshot': {
-        name: 'NightShot Green',
-        desc: '적외선 0 Lux 야간투시',
-        css: 'brightness(1.15) contrast(1.3) saturate(2.0) hue-rotate(90deg)',
-        tintRgba: 'rgba(0, 255, 120, 0.15)'
+        name: 'Retro Sunshine 90s',
+        desc: '90s 여름 바캉스 햇살 캠코더',
+        css: 'brightness(1.10) contrast(1.08) saturate(1.26) sepia(0.05)',
+        tintRgba: 'rgba(255, 225, 160, 0.10)'
       }
     }
   },
@@ -181,26 +181,26 @@ const CAMERAS = {
       'cyber-cool': {
         name: 'CCD Cool Blue',
         desc: '차가운 블루 틴트',
-        css: 'brightness(1.06) contrast(1.16) saturate(1.12) hue-rotate(-8deg)',
-        tintRgba: 'rgba(160, 205, 255, 0.12)'
+        css: 'brightness(1.08) contrast(1.16) saturate(1.14) hue-rotate(-6deg)',
+        tintRgba: 'rgba(160, 205, 255, 0.10)'
       },
       'cyber-magenta': {
-        name: 'Cyber Magenta',
-        desc: '테크노 네온 마젠타',
-        css: 'brightness(1.05) contrast(1.2) saturate(1.35) hue-rotate(295deg)',
-        tintRgba: 'rgba(255, 50, 200, 0.12)'
+        name: 'Clean Cyber White',
+        desc: 'CCD 센서 투명하고 새하얀 피부',
+        css: 'brightness(1.12) contrast(1.15) saturate(1.16) sepia(0.02)',
+        tintRgba: 'rgba(225, 240, 255, 0.08)'
       },
       'cyber-flash': {
         name: 'Flash Sharp',
         desc: '선명하고 쨍한 플래시',
-        css: 'brightness(1.08) contrast(1.26) saturate(1.2) sepia(0.02)',
+        css: 'brightness(1.12) contrast(1.24) saturate(1.20) sepia(0.02)',
         tintRgba: 'rgba(255, 240, 220, 0.08)'
       },
       'cyber-matrix': {
-        name: 'Matrix Green',
-        desc: '세기말 매트릭스 그린',
-        css: 'brightness(1.02) contrast(1.25) saturate(1.3) hue-rotate(75deg)',
-        tintRgba: 'rgba(50, 255, 100, 0.12)'
+        name: 'Y2K Pastel Glow',
+        desc: '부드러운 라벤더-핑크 파스텔',
+        css: 'brightness(1.12) contrast(1.06) saturate(1.22) sepia(0.03)',
+        tintRgba: 'rgba(245, 215, 255, 0.08)'
       }
     }
   },
@@ -259,10 +259,10 @@ const CAMERAS = {
         tintRgba: 'rgba(255, 235, 200, 0.06)'
       },
       'mju-night': {
-        name: 'μ Night Street',
-        desc: '플래시 야경 스트리트 룩',
-        css: 'brightness(1.12) contrast(1.32) saturate(1.25)',
-        tintRgba: 'rgba(255, 240, 210, 0.08)'
+        name: 'Daylight Street Flash',
+        desc: '긴자 스트리트 한낮의 직광 플래시',
+        css: 'brightness(1.14) contrast(1.22) saturate(1.20) sepia(0.03)',
+        tintRgba: 'rgba(255, 235, 205, 0.08)'
       },
       'mju-chrome': {
         name: 'μ Chrome Slide',
@@ -394,35 +394,35 @@ const CAMERAS = {
     id: 'citypop-80s',
     name: 'City Pop 80s',
     shortName: 'CITY POP 80s',
-    sub: 'Sunset Neon',
+    sub: 'Shonan Sunset 1986',
     icon: '📼',
-    badge: 'RETRO SYNTH 80s',
+    badge: '1986 BUBBLE SOUND',
     osdId: 'citypop-osd',
     drawerId: 'drawer-citypop-80s',
     filters: {
       'city-sunset': {
-        name: 'Sunset Neon',
-        desc: '퍼플 앰버 선셋 시티팝',
-        css: 'brightness(1.04) contrast(1.25) saturate(1.4) hue-rotate(-20deg)',
-        tintRgba: 'rgba(255, 45, 185, 0.12)'
+        name: 'Shonan Sunset 1986',
+        desc: '나가이 히로시 감성의 쇼난 코스트 샴페인 선셋과 청명한 하늘',
+        css: 'brightness(1.10) contrast(1.14) saturate(1.35) sepia(0.04)',
+        tintRgba: 'rgba(255, 175, 120, 0.12)'
       },
       'city-tokyo': {
-        name: 'Tokyo Night',
-        desc: '네온 바이올렛 & 사이언 섀도우',
-        css: 'brightness(0.98) contrast(1.3) saturate(1.35) hue-rotate(15deg)',
-        tintRgba: 'rgba(120, 0, 255, 0.14)'
+        name: 'Showa Idol Glow',
+        desc: '80s 쇼와 아이돌 앨범 자켓의 투명하고 화사한 도자기 복숭아빛 피부',
+        css: 'brightness(1.15) contrast(1.02) saturate(1.22) sepia(0.03)',
+        tintRgba: 'rgba(255, 215, 200, 0.14)'
       },
       'city-pastel': {
-        name: 'Pastel Breeze',
-        desc: '해변 드라이브 파스텔',
-        css: 'brightness(1.12) contrast(1.08) saturate(1.22) sepia(0.06)',
-        tintRgba: 'rgba(0, 240, 255, 0.08)'
+        name: 'Pacific Breeze',
+        desc: '타츠로 야마시타 감성의 눈부신 한낮 코발트 블루와 청량한 해변 바람',
+        css: 'brightness(1.12) contrast(1.15) saturate(1.32) sepia(0.02)',
+        tintRgba: 'rgba(0, 200, 245, 0.10)'
       },
       'city-plastic': {
-        name: 'Plastic Love',
-        desc: '80년대 카세트 레트로 감성',
-        css: 'brightness(1.06) contrast(1.28) saturate(1.3) hue-rotate(-35deg)',
-        tintRgba: 'rgba(255, 100, 200, 0.1)'
+        name: 'Plastic Love \'88',
+        desc: '타케우치 마리야 감성의 감미롭고 온화한 80s 아날로그 카세트 질감',
+        css: 'brightness(1.08) contrast(1.10) saturate(1.25) sepia(0.06)',
+        tintRgba: 'rgba(255, 205, 160, 0.12)'
       }
     }
   },
@@ -545,8 +545,8 @@ const CAMERAS = {
   'fuji-quicksnap': {
     id: 'fuji-quicksnap',
     name: 'Fuji QuickSnap (写ルンです 1986)',
-    shortName: 'QUICKSNAP',
-    sub: '1986 Disposable Icon',
+    shortName: 'QUICKSNAP 1986',
+    sub: 'Daylight 1986',
     icon: '📸',
     badge: '1986 BUBBLE ERA',
     osdId: 'quicksnap-osd',
@@ -555,28 +555,28 @@ const CAMERAS = {
     exposure: { shutter: '1/100s', aperture: 'f/11', iso: 'ISO 400', focal: '32mm (Plastic)' },
     filters: {
       'quicksnap-86': {
-        name: '写ルンです 1986 Original',
-        desc: '후지 Superia 400 특유의 청록색 암부 틴트와 플라스틱 렌즈의 따뜻한 소프트함',
-        css: 'brightness(1.08) contrast(1.12) saturate(1.24) hue-rotate(-6deg) sepia(0.08)',
-        tintRgba: 'rgba(50, 180, 120, 0.12)'
+        name: '写ルンです 1986 Daylight',
+        desc: '1986년 원작 우츠룬데스의 청량한 에메랄드 풀잎과 맑은 피부톤',
+        css: 'brightness(1.10) contrast(1.12) saturate(1.28) sepia(0.04)',
+        tintRgba: 'rgba(40, 195, 140, 0.10)'
       },
       'quicksnap-flash': {
-        name: '深夜の直焚きフラッシュ',
-        desc: '버블시대 도쿄 심야 거리의 거친 직광 플래시와 강렬한 비네팅',
-        css: 'brightness(1.18) contrast(1.32) saturate(1.15) sepia(0.04)',
-        tintRgba: 'rgba(255, 230, 190, 0.14)'
+        name: 'Sun Flash Pop',
+        desc: '버블시대 거리와 카페에서 터뜨린 또렷하고 화사한 고광량 직광 플래시',
+        css: 'brightness(1.16) contrast(1.22) saturate(1.18) sepia(0.02)',
+        tintRgba: 'rgba(255, 240, 220, 0.10)'
       },
       'quicksnap-nostalgia': {
-        name: 'ノスタルジック・メモリー',
-        desc: '바랜 감열 인화지와 따스한 쇼와-헤이세이 레트로 골드 톤',
-        css: 'brightness(1.04) contrast(0.96) saturate(1.10) sepia(0.24)',
-        tintRgba: 'rgba(255, 200, 130, 0.15)'
+        name: 'Bubble Resort \'87',
+        desc: '80년대 버블 부유층의 여름 별장 휴양지 따사로운 햇살과 비비드 톤',
+        css: 'brightness(1.08) contrast(1.14) saturate(1.26) sepia(0.06)',
+        tintRgba: 'rgba(255, 215, 145, 0.12)'
       },
       'quicksnap-neon': {
-        name: '六本木ネオン 1988',
-        desc: '1988년 롯폰기 나이트라이프의 사이언과 마젠타 네온 발색',
-        css: 'brightness(1.10) contrast(1.22) saturate(1.40) hue-rotate(12deg)',
-        tintRgba: 'rgba(255, 60, 160, 0.12)'
+        name: 'Showa Memory \'86',
+        desc: '선명한 오렌지 쿼츠데이트와 따스한 쇼와 61년 아날로그 인화지 감성',
+        css: 'brightness(1.08) contrast(1.10) saturate(1.20) sepia(0.08)',
+        tintRgba: 'rgba(255, 195, 130, 0.12)'
       }
     }
   },
@@ -585,37 +585,37 @@ const CAMERAS = {
     id: 'kyocera-samurai',
     name: 'Kyocera Samurai X3.0 (1988)',
     shortName: 'SAMURAI 1988',
-    sub: 'Cyber Half-Frame 72-Shot SLR',
+    sub: 'Half-Frame Crisp 72',
     icon: '🗡️',
-    badge: 'CYBER HALF-FRAME',
+    badge: '1988 CYBER HALF-FRAME',
     osdId: 'kyocera-samurai-osd',
     drawerId: 'drawer-kyocera-samurai',
     lensModel: 'Yashica Zoom 25-75mm F/3.5-4.3 Macro',
     exposure: { shutter: '1/250s', aperture: 'f/3.5', iso: 'ISO 100', focal: '35mm eq. (Half Frame)' },
     filters: {
       'samurai-half': {
-        name: 'Half-Frame 72 Split',
-        desc: '세로 분할 하프프레임 72컷과 고선명 야시카 줌 렌즈 콘트라스트',
-        css: 'brightness(1.05) contrast(1.25) saturate(1.15) sepia(0.04)',
-        tintRgba: 'rgba(180, 220, 240, 0.10)'
+        name: 'Half-Frame Crisp 72',
+        desc: '야시카 광학 줌 렌즈의 또렷한 선예도와 세로 분할 72컷 하프프레임',
+        css: 'brightness(1.08) contrast(1.18) saturate(1.22) sepia(0.02)',
+        tintRgba: 'rgba(215, 235, 255, 0.08)'
       },
       'samurai-cyber': {
-        name: 'サイバー・トーキョー 1988',
-        desc: '미래지향 에메랄드 그린 HUD와 하이테크 사이버펑크 고대비 톤',
-        css: 'brightness(1.08) contrast(1.28) saturate(1.22) hue-rotate(-12deg)',
-        tintRgba: 'rgba(0, 240, 160, 0.12)'
+        name: 'Bubble High-Tech \'88',
+        desc: '1988년 도쿄 하이테크 열풍의 미래지향 에메랄드 HUD와 맑은 선예도',
+        css: 'brightness(1.10) contrast(1.20) saturate(1.24) sepia(0.02)',
+        tintRgba: 'rgba(0, 225, 195, 0.08)'
       },
       'samurai-tokyo': {
-        name: 'バブル・トワイライト',
-        desc: '신주쿠 고층빌딩 매직아워의 쿨블루 섀도우와 황금빛 가로등 대비',
-        css: 'brightness(1.02) contrast(1.20) saturate(1.30) hue-rotate(200deg)',
-        tintRgba: 'rgba(40, 120, 255, 0.14)'
+        name: 'Shinjuku Golden Hour',
+        desc: '신주쿠 마천루에 반사되는 찬란한 황혼의 황금빛 햇살과 고급스러운 웜톤',
+        css: 'brightness(1.08) contrast(1.16) saturate(1.30) sepia(0.05)',
+        tintRgba: 'rgba(255, 190, 100, 0.12)'
       },
       'samurai-titanium': {
-        name: 'チタン・ハードトーン',
-        desc: '다크 그래파이트 티타늄 바디의 묵직한 하드 콘트라스트와 딥 블랙',
-        css: 'brightness(0.96) contrast(1.38) saturate(0.85) sepia(0.06)',
-        tintRgba: 'rgba(160, 170, 185, 0.12)'
+        name: 'Ryuichi B&W 1988',
+        desc: '80s 뉴웨이브 사카모토 류이치 감성의 지적이고 정제된 하이콘트라스트 흑백',
+        css: 'grayscale(1) contrast(1.45) brightness(1.04)',
+        tintRgba: null
       }
     }
   },
@@ -1734,9 +1734,9 @@ function executeCapture() {
     // Bottom Badge
     ctx.font = 'bold 20px "Courier New", monospace';
     ctx.fillStyle = '#00f0ff';
-    ctx.fillText('NIGHT CRUISING 1986', 40, captureCanvas.height - 40);
-    ctx.fillStyle = '#ff2db9';
-    ctx.fillText('◷ ◷ C-60', captureCanvas.width - 150, captureCanvas.height - 40);
+    ctx.fillText('PACIFIC BREEZE 1986 • SHONAN', 40, captureCanvas.height - 40);
+    ctx.fillStyle = '#ffd60a';
+    ctx.fillText('◷ C-60 TAPE', captureCanvas.width - 150, captureCanvas.height - 40);
   } else if (cam.id === 'oldfilm-35mm') {
     // Top & Bottom Film Sprocket Borders
     const sprocketH = 34;
