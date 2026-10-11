@@ -4785,301 +4785,54 @@ body::before {
 }
 
 /* ==========================================================================
-   Modal 4: Visual Camera Bag / Rack Selector Modal (16 Iconic Cameras)
+   Modal 4: Visual Camera Bag / Collector Showcase Modal (16 Iconic Cameras)
    ========================================================================== */
 
 .camera-bag-dialog {
-  max-width: 560px;
+  max-width: 580px;
   width: 94%;
-}
-
-.bag-category-filter {
-  display: flex;
-  gap: 6px;
-  overflow-x: auto;
-  scrollbar-width: none;
-  padding: 4px 2px 10px 2px;
-  margin-bottom: 12px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-.bag-category-filter::-webkit-scrollbar {
-  display: none;
-}
-
-.bag-cat-btn {
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  color: #fff;
-  font-size: 11.5px;
-  font-weight: 600;
-  padding: 6px 14px;
-  border-radius: 14px;
-  cursor: pointer;
-  white-space: nowrap;
-  transition: all 0.2s ease;
-}
-
-.bag-cat-btn:hover {
-  background: rgba(255, 255, 255, 0.22);
-  border-color: rgba(255, 255, 255, 0.4);
-}
-
-.bag-cat-btn.active {
-  background: rgba(0, 229, 163, 0.28);
-  color: var(--accent-mint);
-  border-color: rgba(0, 229, 163, 0.7);
-  box-shadow: 0 0 12px rgba(0, 229, 163, 0.35);
-  font-weight: 700;
-}
-
-.camera-bag-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 14px;
-}
-
-/* Brand Section Container */
-.bag-brand-section {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  background: rgba(255, 255, 255, 0.025);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 18px;
-  padding: 12px 14px;
-  transition: all 0.2s ease;
-}
-
-.bag-brand-section:hover {
-  border-color: rgba(255, 255, 255, 0.16);
-  background: rgba(255, 255, 255, 0.04);
-}
-
-.bag-brand-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-bottom: 7px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.bag-brand-left {
-  display: flex;
-  align-items: baseline;
-  gap: 7px;
-  flex-wrap: wrap;
-}
-
-.bag-brand-icon-pill {
-  font-size: 13px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.bag-brand-title {
-  font-size: 13.5px;
-  font-weight: 800;
-  color: #fff;
-  letter-spacing: 0.6px;
-}
-
-.bag-brand-kor {
-  font-size: 11.5px;
-  font-weight: 700;
-  color: #f5c767;
-}
-
-.bag-brand-origin {
-  font-size: 10px;
-  color: var(--text-secondary);
-}
-
-.bag-brand-badge-count {
-  font-size: 10px;
-  font-weight: 700;
-  padding: 2px 7px;
-  border-radius: 10px;
-  background: rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.bag-brand-cards {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 10px;
-}
-
-@media (max-width: 520px) {
-  .bag-brand-cards {
-    grid-template-columns: 1fr;
-  }
-}
-
-.bag-cam-card {
-  background: rgba(18, 20, 26, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.10);
-  border-radius: 16px;
-  padding: 12px 14px;
-  cursor: pointer;
-  display: flex;
-  flex-direction: column;
-  gap: 7px;
-  position: relative;
-  transition: all 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-
-.bag-cam-card:hover {
-  background: rgba(28, 32, 42, 0.95);
-  border-color: rgba(245, 199, 103, 0.55);
-  transform: translateY(-2px);
-  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.5);
-}
-
-.bag-cam-card.equipped {
-  background: rgba(40, 32, 14, 0.9);
-  border-color: #f5c767;
-  box-shadow: 0 0 18px rgba(245, 199, 103, 0.3);
-}
-
-.bag-card-top {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-}
-
-.bag-card-icon-container {
-  width: 46px;
-  height: 46px;
-  padding: 3px;
-  border-radius: 12px;
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(14, 16, 22, 0.96);
+  backdrop-filter: blur(36px);
+  -webkit-backdrop-filter: blur(36px);
   border: 1px solid rgba(255, 255, 255, 0.12);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.1);
+  border-radius: 26px;
+  box-shadow: 0 32px 80px rgba(0, 0, 0, 0.85), inset 0 1px 1px rgba(255, 255, 255, 0.2);
+  overflow: hidden;
+  box-sizing: border-box;
 }
 
-.bag-card-icon {
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.camera-bag-dialog .modal-header {
+  padding: 16px 20px 12px 20px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-.bag-card-icon svg {
-  width: 40px;
-  height: 40px;
-  display: block;
-}
-
-.bag-card-top-meta {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-end;
-  gap: 3px;
-}
-
-.bag-card-brand-badge {
-  font-size: 9.5px;
-  font-weight: 800;
-  color: #f5c767;
-  letter-spacing: 0.6px;
-}
-
-.bag-card-badge {
-  font-size: 8.5px;
-  font-weight: 700;
-  letter-spacing: 0.4px;
-  padding: 2px 6px;
-  border-radius: 5px;
-  background: rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.65);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-}
-
-.bag-cam-card.equipped .bag-card-badge {
-  background: rgba(245, 199, 103, 0.25);
-  color: #f5c767;
-  border-color: rgba(245, 199, 103, 0.6);
-}
-
-.bag-card-title {
-  font-size: 13.5px;
-  font-weight: 800;
+.camera-bag-dialog .modal-title {
+  font-size: 15px;
+  font-weight: 900;
+  letter-spacing: 0.8px;
   color: #fff;
-  letter-spacing: 0.2px;
-  margin-top: 2px;
+  text-transform: uppercase;
 }
 
-.bag-card-desc {
-  font-size: 11px;
-  color: rgba(255, 255, 255, 0.6);
-  line-height: 1.4;
-}
-
-.bag-card-action-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-top: 5px;
-  padding-top: 6px;
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
-}
-
-.bag-card-status {
-  font-size: 10px;
-  font-weight: 600;
-  color: rgba(255, 255, 255, 0.45);
-}
-
-.bag-cam-card.equipped .bag-card-status {
-  color: #f5c767;
-  font-weight: 800;
-}
-
-.bag-card-equip-btn {
-  font-size: 10px;
-  font-weight: 700;
-  padding: 3px 10px;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  color: #fff;
-  cursor: pointer;
-  transition: all 0.18s ease;
-}
-
-.bag-cam-card.equipped .bag-card-equip-btn {
-  background: #f5c767;
-  color: #111;
-  border-color: #f5c767;
-  font-weight: 800;
-}
-
-/* Brand Filter Bar in Camera Bag Modal */
+/* Brand Selector Bar in Camera Bag Modal */
 .bag-brand-filter-wrapper {
-  margin-bottom: 12px;
-  background: rgba(0, 0, 0, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.06);
-  border-radius: 14px;
-  padding: 8px 10px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  min-height: 56px;
+  margin-bottom: 8px;
 }
 
 .bag-brand-filter-label {
-  font-size: 10.5px;
-  font-weight: 700;
+  font-size: 10px;
+  font-weight: 800;
   color: #f5c767;
-  margin-bottom: 6px;
+  letter-spacing: 0.6px;
+  margin-bottom: 5px;
   display: flex;
   align-items: center;
   gap: 4px;
+  text-transform: uppercase;
 }
 
 .bag-brand-filter {
@@ -5087,8 +4840,12 @@ body::before {
   align-items: center;
   gap: 6px;
   overflow-x: auto;
-  padding-bottom: 2px;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding: 2px 2px 6px 2px;
   scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 .bag-brand-filter::-webkit-scrollbar {
@@ -5099,21 +4856,22 @@ body::before {
   background: rgba(255, 255, 255, 0.05);
   border: 1px solid rgba(255, 255, 255, 0.12);
   color: rgba(255, 255, 255, 0.7);
-  font-size: 10px;
-  font-weight: 600;
-  padding: 5px 10px;
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 6px 12px;
   border-radius: 12px;
   cursor: pointer;
   white-space: nowrap;
+  flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   gap: 4px;
-  transition: all 0.18s ease;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .bag-brand-btn:hover {
-  background: rgba(255, 255, 255, 0.14);
-  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.28);
   color: #fff;
 }
 
@@ -5122,7 +4880,359 @@ body::before {
   border-color: #f5c767;
   color: #f5c767;
   font-weight: 800;
-  box-shadow: 0 0 10px rgba(245, 199, 103, 0.35);
+  box-shadow: 0 0 12px rgba(245, 199, 103, 0.35);
+}
+
+/* Category Filter Pills (Preserved for tests & chic sub-segment) */
+.bag-category-filter {
+  display: flex;
+  gap: 6px;
+  overflow-x: auto;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  padding: 2px 2px 10px 2px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  min-height: 32px;
+}
+
+.bag-category-filter::-webkit-scrollbar {
+  display: none;
+}
+
+.bag-cat-btn {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  height: 28px;
+  line-height: 28px;
+  padding: 0 10px;
+  border-radius: 14px;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all 0.15s ease;
+}
+
+.bag-cat-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.bag-cat-btn.active {
+  color: var(--accent-mint);
+  background: rgba(0, 229, 163, 0.16);
+  border-color: rgba(0, 229, 163, 0.5);
+  box-shadow: 0 0 10px rgba(0, 229, 163, 0.25);
+}
+
+/* Camera Bag Showcase Container */
+.camera-bag-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Brand Section Container */
+.bag-brand-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* Full-Width Brand Header Divider */
+.bag-brand-divider {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 4px 6px 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.brand-divider-left {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+}
+
+.brand-divider-ico {
+  font-size: 13px;
+}
+
+.brand-divider-title {
+  font-size: 13.5px;
+  font-weight: 900;
+  color: #fff;
+  letter-spacing: 0.8px;
+}
+
+.brand-divider-kor {
+  font-size: 11px;
+  font-weight: 700;
+  color: #f5c767;
+}
+
+.brand-divider-right {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.brand-divider-origin {
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+.brand-divider-count {
+  font-size: 9.5px;
+  font-weight: 800;
+  padding: 2px 7px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Cards Stack per Brand */
+.bag-brand-cards {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  width: 100%;
+}
+
+/* Collector Camera Showcase Horizontal Card */
+.bag-cam-card {
+  background: linear-gradient(145deg, rgba(26, 29, 38, 0.88) 0%, rgba(14, 16, 22, 0.98) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 18px;
+  padding: 10px 14px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  position: relative;
+  overflow: hidden;
+  transition: all 0.24s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35), inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  box-sizing: border-box;
+  width: 100%;
+}
+
+.bag-cam-card:hover {
+  background: linear-gradient(145deg, rgba(34, 38, 52, 0.95) 0%, rgba(18, 20, 28, 1) 100%);
+  border-color: rgba(245, 199, 103, 0.55);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.55), 0 0 20px rgba(245, 199, 103, 0.15);
+}
+
+.bag-cam-card.equipped {
+  border: 1.5px solid #f5c767;
+  background: linear-gradient(145deg, rgba(42, 34, 16, 0.92) 0%, rgba(18, 16, 12, 0.98) 100%);
+  box-shadow: 0 0 24px rgba(245, 199, 103, 0.25), inset 0 1px 1px rgba(255, 255, 255, 0.25);
+}
+
+/* Hero Camera Stage with Ambient Spotlight */
+.card-hero-stage {
+  width: 110px;
+  height: 76px;
+  flex-shrink: 0;
+  border-radius: 14px;
+  background: rgba(0, 0, 0, 0.45);
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.card-ambient-spotlight {
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  filter: blur(18px);
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.spotlight-leica { background: #ef4444; }
+.spotlight-contax { background: #f59e0b; }
+.spotlight-ricoh { background: #10b981; }
+.spotlight-olympus { background: #3b82f6; }
+.spotlight-sony { background: #06b6d4; }
+.spotlight-canon { background: #f43f5e; }
+.spotlight-fujifilm { background: #10b981; }
+.spotlight-hasselblad { background: #cbd5e1; }
+.spotlight-polaroid { background: radial-gradient(circle, #ef4444, #f59e0b, #10b981, #3b82f6); }
+.spotlight-kyocera { background: #dc2626; }
+.spotlight-studio { background: #ec4899; }
+
+.card-camera-render {
+  width: 94px;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 6px 14px rgba(0, 0, 0, 0.65));
+  transition: transform 0.25s ease;
+  position: relative;
+  z-index: 2;
+}
+
+.bag-cam-card:hover .card-camera-render {
+  transform: scale(1.06);
+}
+
+.card-camera-render svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Card Info Middle Content */
+.card-info-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.card-brand-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.card-brand-tag {
+  font-size: 9.5px;
+  font-weight: 800;
+  color: #f5c767;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+.card-badge-pill {
+  font-size: 8.5px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+  padding: 1.5px 5.5px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.7);
+  border: 0.5px solid rgba(255, 255, 255, 0.12);
+}
+
+.bag-cam-card.equipped .card-badge-pill {
+  background: rgba(245, 199, 103, 0.25);
+  color: #f5c767;
+  border-color: rgba(245, 199, 103, 0.6);
+}
+
+.card-title {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 0.2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-desc {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1.35;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.card-filter-summary {
+  font-size: 9.5px;
+  color: rgba(255, 255, 255, 0.45);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Mount Action Right Side */
+.card-mount-action {
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 5px;
+}
+
+.card-mount-status {
+  font-size: 9.5px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.4);
+}
+
+.card-mount-status.mounted {
+  color: #f5c767;
+  font-weight: 800;
+}
+
+.card-mount-btn {
+  font-size: 11px;
+  font-weight: 800;
+  padding: 6px 14px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+}
+
+.bag-cam-card:hover .card-mount-btn {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(255, 255, 255, 0.3);
+}
+
+.card-mount-btn.active {
+  background: #f5c767;
+  color: #111;
+  border-color: #f5c767;
+  font-weight: 900;
+  box-shadow: 0 0 14px rgba(245, 199, 103, 0.4);
+}
+
+@media (max-width: 480px) {
+  .card-hero-stage {
+    width: 86px;
+    height: 64px;
+  }
+  .card-camera-render {
+    width: 76px;
+    height: 52px;
+  }
+  .card-title {
+    font-size: 12.5px;
+  }
+  .card-desc {
+    font-size: 10px;
+  }
+  .card-mount-btn {
+    padding: 5px 10px;
+    font-size: 10px;
+  }
 }
 
 /* Category bar camera bag trigger pill */
