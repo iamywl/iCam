@@ -1256,18 +1256,21 @@ function switchCamera(camId) {
   const cam = CAMERAS[camId];
   soundEngine.playMount();
 
-  // 1. Update Dial Active Class & Position Shift
-  const dialItems = document.querySelectorAll('#mode-dial-list .mode-dial-item');
-  dialItems.forEach(item => {
-    item.classList.toggle('active', item.dataset.cam === camId);
-  });
-
-  const dialList = document.getElementById('mode-dial-list');
-  const activeItem = document.querySelector(`#mode-dial-list .mode-dial-item[data-cam="${camId}"]`);
-  if (dialList && activeItem) {
-    const wrapper = dialList.parentElement;
-    const offset = (wrapper.offsetWidth / 2) - (activeItem.offsetLeft + activeItem.offsetWidth / 2);
-    dialList.style.transform = `translateX(${offset}px)`;
+  // 1. Update Dial Active Class & Smooth Perspective Shift
+  if (window.alignModeDial) {
+    window.alignModeDial(camId, true);
+  } else {
+    const dialItems = document.querySelectorAll('#mode-dial-list .mode-dial-item');
+    dialItems.forEach(item => {
+      item.classList.toggle('active', item.dataset.cam === camId);
+    });
+    const dialList = document.getElementById('mode-dial-list');
+    const activeItem = document.querySelector(`#mode-dial-list .mode-dial-item[data-cam="${camId}"]`);
+    if (dialList && activeItem) {
+      const wrapper = dialList.parentElement;
+      const offset = (wrapper.offsetWidth / 2) - (activeItem.offsetLeft + activeItem.offsetWidth / 2);
+      dialList.style.transform = `translateX(${offset}px)`;
+    }
   }
 
   // 2. Synchronize Category Fast-Jump Bar Active Pill
@@ -1580,6 +1583,461 @@ function updateRightSpecCard(camId) {
   }
 }
 
+// ==========================================================================
+// Optical Highlight & Real-Time Light-Source Flare Engine
+// Dynamically detects specular highlights / lamps / sun in video/canvas
+// and renders Fraunhofer 6-Blade Sunstar and Newtonian Prism Dispersion
+// ==========================================================================
+
+const opticalFlareEngine = {
+  activeFilter: 'none',
+  animFrameId: null,
+  analysisCanvas: null,
+  analysisCtx: null,
+  dynamicCanvas: null,
+  dynamicCtx: null,
+  smoothedLights: [],
+  tiltAngle: 0,
+
+  init() {
+    if (!this.analysisCanvas) {
+      this.analysisCanvas = document.createElement('canvas');
+      this.analysisCanvas.width = 150;
+      this.analysisCanvas.height = 200;
+      this.analysisCtx = this.analysisCanvas.getContext('2d', { willReadFrequently: true });
+    }
+    this.dynamicCanvas = document.getElementById('lens-dynamic-canvas');
+    if (this.dynamicCanvas) {
+      this.dynamicCtx = this.dynamicCanvas.getContext('2d');
+    }
+  },
+
+  start(filterKey) {
+    this.activeFilter = filterKey;
+    if (!this.dynamicCanvas || !this.analysisCtx) this.init();
+    if (this.animFrameId) cancelAnimationFrame(this.animFrameId);
+
+    if (filterKey === 'none' || filterKey === 'cpl') {
+      this.clear();
+      return;
+    }
+
+    const loop = () => {
+      if (state.lensFilter !== this.activeFilter || this.activeFilter === 'none') {
+        this.clear();
+        return;
+      }
+      this.updateAndRender();
+      this.animFrameId = requestAnimationFrame(loop);
+    };
+    this.animFrameId = requestAnimationFrame(loop);
+  },
+
+  stop() {
+    if (this.animFrameId) {
+      cancelAnimationFrame(this.animFrameId);
+      this.animFrameId = null;
+    }
+    this.clear();
+  },
+
+  clear() {
+    if (this.dynamicCtx && this.dynamicCanvas) {
+      this.dynamicCtx.clearRect(0, 0, this.dynamicCanvas.width, this.dynamicCanvas.height);
+    }
+    this.smoothedLights = [];
+  },
+
+  // Real-time Specular Highlight Detection from Video or Canvas
+  detectHighlights(sourceEl) {
+    if (!sourceEl) return [];
+    if (!this.analysisCtx) this.init();
+    if (!this.analysisCtx) return [];
+
+    const aW = this.analysisCanvas.width;
+    const aH = this.analysisCanvas.height;
+
+    try {
+      this.analysisCtx.drawImage(sourceEl, 0, 0, aW, aH);
+      const imgData = this.analysisCtx.getImageData(0, 0, aW, aH);
+      const data = imgData.data;
+
+      // 1. Pass 1: Find maximum brightness and identify bright candidates
+      let maxBright = 0;
+      const candidates = [];
+
+      for (let y = 4; y < aH - 4; y += 2) {
+        for (let x = 4; x < aW - 4; x += 2) {
+          const idx = (y * aW + x) * 4;
+          const r = data[idx];
+          const g = data[idx + 1];
+          const b = data[idx + 2];
+          // Luminance + white saturation score
+          const lum = 0.299 * r + 0.587 * g + 0.114 * b;
+          const minCh = Math.min(r, g, b);
+          const score = lum * 0.65 + minCh * 0.35;
+
+          if (score > maxBright) maxBright = score;
+          if (score > 185) {
+            candidates.push({ x: x / aW, y: y / aH, score });
+          }
+        }
+      }
+
+      // If the scene is very dim (no light source / specular reflection > 130), return no lights
+      if (maxBright < 130) return [];
+
+      // Adaptive threshold: at least 195, or within 25 of peak brightness
+      const thresh = Math.max(195, maxBright - 25);
+      const filtered = candidates.filter(c => c.score >= thresh);
+
+      // 2. Sort descending by brightness
+      filtered.sort((a, b) => b.score - a.score);
+
+      // 3. Cluster / Non-Maximum Suppression (group nearby pixels into single light source)
+      const clusters = [];
+      const minDist = 0.12; // Normalized distance
+
+      for (const pt of filtered) {
+        let isMerged = false;
+        for (const cl of clusters) {
+          const dx = pt.x - cl.x;
+          const dy = pt.y - cl.y;
+          if (Math.hypot(dx, dy) < minDist) {
+            cl.count += 1;
+            cl.totalScore += pt.score;
+            isMerged = true;
+            break;
+          }
+        }
+        if (!isMerged && clusters.length < 5) {
+          clusters.push({
+            x: pt.x,
+            y: pt.y,
+            score: pt.score,
+            count: 1,
+            totalScore: pt.score
+          });
+        }
+      }
+
+      // 4. Normalize intensity [0.35, 1.0]
+      return clusters.map(c => ({
+        x: c.x,
+        y: c.y,
+        intensity: Math.min(1.0, 0.4 + (c.score - 180) / 75 + Math.min(0.25, c.count * 0.03)),
+        radius: Math.min(18, 6 + c.count * 0.8)
+      }));
+    } catch (e) {
+      return [];
+    }
+  },
+
+  updateAndRender() {
+    const sourceEl = state.cameraSource === 'webcam'
+      ? document.getElementById('camera-video')
+      : document.getElementById('model-canvas');
+
+    if (!sourceEl || !this.dynamicCtx) return;
+
+    // Detect light sources in current frame
+    const rawLights = this.detectHighlights(sourceEl);
+
+    // Smooth temporal tracking (Exponential Moving Average) to eliminate jitter
+    if (rawLights.length === 0) {
+      this.smoothedLights = this.smoothedLights.map(l => ({ ...l, intensity: l.intensity * 0.8 })).filter(l => l.intensity > 0.05);
+    } else {
+      if (this.smoothedLights.length === 0) {
+        this.smoothedLights = rawLights.map(l => ({ ...l }));
+      } else {
+        const nextList = [];
+        for (const raw of rawLights) {
+          let closest = null;
+          let minD = 0.2;
+          for (const prev of this.smoothedLights) {
+            const d = Math.hypot(raw.x - prev.x, raw.y - prev.y);
+            if (d < minD) {
+              minD = d;
+              closest = prev;
+            }
+          }
+          if (closest) {
+            nextList.push({
+              x: closest.x + (raw.x - closest.x) * 0.35,
+              y: closest.y + (raw.y - closest.y) * 0.35,
+              intensity: closest.intensity + (raw.intensity - closest.intensity) * 0.35,
+              radius: closest.radius + (raw.radius - closest.radius) * 0.35
+            });
+          } else {
+            nextList.push({ ...raw });
+          }
+        }
+        this.smoothedLights = nextList;
+      }
+    }
+
+    this.tiltAngle = (this.tiltAngle + 0.002) % (Math.PI * 2);
+
+    const w = this.dynamicCanvas.width;
+    const h = this.dynamicCanvas.height;
+    this.dynamicCtx.clearRect(0, 0, w, h);
+
+    this.renderFlaresToContext(this.dynamicCtx, w, h, this.smoothedLights, this.activeFilter, this.tiltAngle);
+  },
+
+  // Reusable Flare Rendering (Used by live 60fps loop AND capturePhoto canvas)
+  renderFlaresToContext(ctx, width, height, lights, filterKey, tilt = 0) {
+    if (!lights || lights.length === 0) return;
+
+    ctx.save();
+    ctx.globalCompositeOperation = 'screen';
+
+    for (const light of lights) {
+      const cx = light.x * width;
+      const cy = light.y * height;
+      const intensity = Math.max(0.2, Math.min(1.0, light.intensity));
+
+      if (filterKey === 'star6') {
+        this.draw6BladeSunstar(ctx, cx, cy, intensity, tilt);
+      } else if (filterKey === 'prism') {
+        this.drawNewtonianPrismDispersion(ctx, cx, cy, intensity, width, height);
+      } else if (filterKey === 'star') {
+        this.draw4XCrossStar(ctx, cx, cy, intensity, tilt);
+      } else if (filterKey === 'streak') {
+        this.drawAnamorphicBlueStreak(ctx, cx, cy, intensity, width);
+      } else if (filterKey === 'mist') {
+        this.drawBlackMistBloom(ctx, cx, cy, intensity);
+      }
+    }
+
+    ctx.restore();
+  },
+
+  // 1. Fraunhofer 6-Blade Sunstar Diffraction (0°, 60°, 120° Diffraction Spikes + Chromatic Fringes)
+  draw6BladeSunstar(ctx, cx, cy, intensity, tilt) {
+    const spikeLen = (90 + 130 * intensity);
+    const coreR = Math.max(6, 12 * intensity);
+
+    // Incandescent Hot Core & Corona
+    const coreGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, coreR * 2.2);
+    coreGrad.addColorStop(0, '#ffffff');
+    coreGrad.addColorStop(0.25, 'rgba(255, 250, 230, 0.95)');
+    coreGrad.addColorStop(0.55, 'rgba(255, 200, 110, 0.45)');
+    coreGrad.addColorStop(1, 'rgba(255, 140, 40, 0)');
+    ctx.fillStyle = coreGrad;
+    ctx.beginPath();
+    ctx.arc(cx, cy, coreR * 2.2, 0, Math.PI * 2);
+    ctx.fill();
+
+    // 6 Diffraction Spikes at 60° increments (0°, 60°, 120°, 180°, 240°, 300°)
+    const angles = [0, Math.PI / 3, (2 * Math.PI) / 3];
+
+    angles.forEach(baseAng => {
+      const ang = baseAng + tilt;
+      const cos = Math.cos(ang);
+      const sin = Math.sin(ang);
+
+      // Needle-sharp central white spike
+      const needleGrad = ctx.createLinearGradient(cx - cos * spikeLen, cy - sin * spikeLen, cx + cos * spikeLen, cy + sin * spikeLen);
+      needleGrad.addColorStop(0, 'rgba(255, 255, 255, 0)');
+      needleGrad.addColorStop(0.35, 'rgba(255, 255, 255, 0.75)');
+      needleGrad.addColorStop(0.5, '#ffffff');
+      needleGrad.addColorStop(0.65, 'rgba(255, 255, 255, 0.75)');
+      needleGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+
+      ctx.strokeStyle = needleGrad;
+      ctx.lineWidth = 1.6;
+      ctx.beginPath();
+      ctx.moveTo(cx - cos * spikeLen, cy - sin * spikeLen);
+      ctx.lineTo(cx + cos * spikeLen, cy + sin * spikeLen);
+      ctx.stroke();
+
+      // Soft diffraction envelope
+      ctx.lineWidth = 4.5;
+      ctx.strokeStyle = 'rgba(255, 240, 200, 0.22)';
+      ctx.beginPath();
+      ctx.moveTo(cx - cos * spikeLen * 0.75, cy - sin * spikeLen * 0.75);
+      ctx.lineTo(cx + cos * spikeLen * 0.75, cy + sin * spikeLen * 0.75);
+      ctx.stroke();
+
+      // Chromatic fringe 1 (Cyan split along +0.7° offset)
+      const cCos = Math.cos(ang + 0.012);
+      const cSin = Math.sin(ang + 0.012);
+      ctx.lineWidth = 1.0;
+      ctx.strokeStyle = 'rgba(100, 220, 255, 0.38)';
+      ctx.beginPath();
+      ctx.moveTo(cx - cCos * spikeLen * 0.9, cy - cSin * spikeLen * 0.9);
+      ctx.lineTo(cx + cCos * spikeLen * 0.9, cy + cSin * spikeLen * 0.9);
+      ctx.stroke();
+
+      // Chromatic fringe 2 (Magenta/Amber split along -0.7° offset)
+      const mCos = Math.cos(ang - 0.012);
+      const mSin = Math.sin(ang - 0.012);
+      ctx.lineWidth = 1.0;
+      ctx.strokeStyle = 'rgba(255, 150, 100, 0.38)';
+      ctx.beginPath();
+      ctx.moveTo(cx - mCos * spikeLen * 0.9, cy - mSin * spikeLen * 0.9);
+      ctx.lineTo(cx + mCos * spikeLen * 0.9, cy + mSin * spikeLen * 0.9);
+      ctx.stroke();
+    });
+
+    // Secondary 30° micro-glints
+    const subAngles = [Math.PI / 6, Math.PI / 2, (5 * Math.PI) / 6];
+    subAngles.forEach(baseAng => {
+      const ang = baseAng + tilt;
+      const subLen = spikeLen * 0.38;
+      const cos = Math.cos(ang);
+      const sin = Math.sin(ang);
+      ctx.lineWidth = 1.0;
+      ctx.strokeStyle = 'rgba(255, 245, 220, 0.45)';
+      ctx.beginPath();
+      ctx.moveTo(cx - cos * subLen, cy - sin * subLen);
+      ctx.lineTo(cx + cos * subLen, cy + sin * subLen);
+      ctx.stroke();
+    });
+  },
+
+  // 2. Newtonian Spectral Prism Dispersion (Rainbow Refraction Fan & Internal Caustic Glint)
+  drawNewtonianPrismDispersion(ctx, cx, cy, intensity, width, height) {
+    const midX = width / 2;
+    const midY = height / 2;
+    let dirX = cx - midX;
+    let dirY = cy - midY;
+    const distToCenter = Math.hypot(dirX, dirY) || 1;
+    dirX /= distToCenter;
+    dirY /= distToCenter;
+
+    const perpX = -dirY;
+    const perpY = dirX;
+
+    const fanLen = 140 + 180 * intensity;
+    const spreadW = 35 + 45 * intensity;
+
+    // Newton's Spectrum: Red -> Orange -> Yellow -> Green -> Cyan -> Blue -> Violet
+    const spectrum = [
+      { col: 'rgba(255, 45, 45, ', offset: -1.0 },
+      { col: 'rgba(255, 140, 20, ', offset: -0.66 },
+      { col: 'rgba(255, 235, 30, ', offset: -0.33 },
+      { col: 'rgba(40, 240, 90, ',  offset: 0.0 },
+      { col: 'rgba(20, 230, 255, ', offset: 0.33 },
+      { col: 'rgba(60, 110, 255, ', offset: 0.66 },
+      { col: 'rgba(180, 50, 255, ', offset: 1.0 }
+    ];
+
+    spectrum.forEach(band => {
+      const bandOffset = band.offset * spreadW;
+      const tipX = cx + dirX * fanLen + perpX * bandOffset;
+      const tipY = cy + dirY * fanLen + perpY * bandOffset;
+
+      const grad = ctx.createLinearGradient(cx, cy, tipX, tipY);
+      grad.addColorStop(0, band.col + (0.75 * intensity) + ')');
+      grad.addColorStop(0.3, band.col + (0.55 * intensity) + ')');
+      grad.addColorStop(0.7, band.col + (0.25 * intensity) + ')');
+      grad.addColorStop(1, band.col + '0)');
+
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 7.5;
+      ctx.beginPath();
+      ctx.moveTo(cx, cy);
+      ctx.quadraticCurveTo(
+        cx + dirX * (fanLen * 0.4) + perpX * (bandOffset * 0.4),
+        cy + dirY * (fanLen * 0.4) + perpY * (bandOffset * 0.4),
+        tipX,
+        tipY
+      );
+      ctx.stroke();
+    });
+
+    const coreGrad = ctx.createRadialGradient(cx, cy, 0, cx, cy, 18 * intensity);
+    coreGrad.addColorStop(0, '#ffffff');
+    coreGrad.addColorStop(0.3, 'rgba(255, 255, 255, 0.9)');
+    coreGrad.addColorStop(0.6, 'rgba(200, 240, 255, 0.4)');
+    coreGrad.addColorStop(1, 'rgba(255, 255, 255, 0)');
+    ctx.fillStyle = coreGrad;
+    ctx.beginPath();
+    ctx.arc(cx, cy, 18 * intensity, 0, Math.PI * 2);
+    ctx.fill();
+
+    const ghostDist = distToCenter * 0.65;
+    const ghostX = midX - dirX * ghostDist;
+    const ghostY = midY - dirY * ghostDist;
+
+    const ghostGrad = ctx.createRadialGradient(ghostX, ghostY, 0, ghostX, ghostY, 32 * intensity);
+    ghostGrad.addColorStop(0, 'rgba(255, 255, 255, 0.45)');
+    ghostGrad.addColorStop(0.3, 'rgba(255, 120, 200, 0.3)');
+    ghostGrad.addColorStop(0.6, 'rgba(0, 240, 255, 0.2)');
+    ghostGrad.addColorStop(1, 'transparent');
+    ctx.fillStyle = ghostGrad;
+    ctx.beginPath();
+    ctx.arc(ghostX, ghostY, 32 * intensity, 0, Math.PI * 2);
+    ctx.fill();
+  },
+
+  // 3. 4X Cross Star Flare
+  draw4XCrossStar(ctx, cx, cy, intensity, tilt) {
+    const spikeLen = 80 + 110 * intensity;
+    const angles = [Math.PI / 4, (3 * Math.PI) / 4];
+
+    angles.forEach(ang => {
+      const cos = Math.cos(ang + tilt);
+      const sin = Math.sin(ang + tilt);
+      const grad = ctx.createLinearGradient(cx - cos * spikeLen, cy - sin * spikeLen, cx + cos * spikeLen, cy + sin * spikeLen);
+      grad.addColorStop(0, 'transparent');
+      grad.addColorStop(0.5, 'rgba(255, 255, 255, 0.92)');
+      grad.addColorStop(1, 'transparent');
+
+      ctx.strokeStyle = grad;
+      ctx.lineWidth = 1.8;
+      ctx.beginPath();
+      ctx.moveTo(cx - cos * spikeLen, cy - sin * spikeLen);
+      ctx.lineTo(cx + cos * spikeLen, cy + sin * spikeLen);
+      ctx.stroke();
+    });
+
+    ctx.fillStyle = '#ffffff';
+    ctx.beginPath();
+    ctx.arc(cx, cy, 3.5, 0, Math.PI * 2);
+    ctx.fill();
+  },
+
+  // 4. Anamorphic Blue Streak Flare
+  drawAnamorphicBlueStreak(ctx, cx, cy, intensity, width) {
+    const streakH = 14 * intensity;
+    const grad = ctx.createLinearGradient(0, cy - streakH, 0, cy + streakH);
+    grad.addColorStop(0, 'transparent');
+    grad.addColorStop(0.35, 'rgba(0, 210, 255, 0.7)');
+    grad.addColorStop(0.5, 'rgba(255, 255, 255, 0.98)');
+    grad.addColorStop(0.65, 'rgba(0, 210, 255, 0.7)');
+    grad.addColorStop(1, 'transparent');
+
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, cy - streakH, width, streakH * 2);
+
+    const halo = ctx.createRadialGradient(cx, cy, 0, cx, cy, 40 * intensity);
+    halo.addColorStop(0, '#ffffff');
+    halo.addColorStop(0.4, 'rgba(0, 229, 255, 0.75)');
+    halo.addColorStop(1, 'transparent');
+    ctx.fillStyle = halo;
+    ctx.beginPath();
+    ctx.arc(cx, cy, 40 * intensity, 0, Math.PI * 2);
+    ctx.fill();
+  },
+
+  // 5. Black Mist Highlight Halation Bloom
+  drawBlackMistBloom(ctx, cx, cy, intensity) {
+    const bloomR = 40 + 60 * intensity;
+    const grad = ctx.createRadialGradient(cx, cy, 0, cx, cy, bloomR);
+    grad.addColorStop(0, 'rgba(255, 255, 255, 0.42)');
+    grad.addColorStop(0.3, 'rgba(255, 240, 215, 0.22)');
+    grad.addColorStop(0.7, 'rgba(255, 220, 180, 0.08)');
+    grad.addColorStop(1, 'transparent');
+    ctx.fillStyle = grad;
+    ctx.beginPath();
+    ctx.arc(cx, cy, bloomR, 0, Math.PI * 2);
+    ctx.fill();
+  }
+};
+
 // Optical Lens Filter System (Black Mist, Star, Streak, Prism, CPL)
 function applyLensFilter(filterKey = 'none') {
   soundEngine.playTick();
@@ -1594,9 +2052,15 @@ function applyLensFilter(filterKey = 'none') {
     cpl: document.getElementById('lens-layer-cpl')
   };
 
+  // Only CPL uses static CSS layer; Star, Star6, Prism, Streak use dynamic light-source canvas
   Object.entries(layers).forEach(([k, el]) => {
-    if (el) el.style.display = (k === filterKey) ? 'block' : 'none';
+    if (el) el.style.display = (k === filterKey && k === 'cpl') ? 'block' : 'none';
   });
+
+  // Start real-time optical highlight engine for dynamic light-source tracking flares
+  if (opticalFlareEngine) {
+    opticalFlareEngine.start(filterKey);
+  }
 
   document.querySelectorAll('.lens-pill-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.lens === filterKey);
@@ -2188,93 +2652,18 @@ function executeCapture() {
     ctx.fillText('Studio Signature', captureCanvas.width - 270, captureCanvas.height - 45);
   }
 
-  // 6. Optical Lens Filter Synthesis (Mist, Star, Streak, Prism, CPL)
-  if (state.lensFilter === 'mist') {
-    ctx.save();
-    ctx.globalCompositeOperation = 'screen';
-    const mistGrad = ctx.createRadialGradient(
-      captureCanvas.width / 2, captureCanvas.height * 0.38, 10,
-      captureCanvas.width / 2, captureCanvas.height * 0.38, captureCanvas.width * 0.7
-    );
-    mistGrad.addColorStop(0, 'rgba(255, 255, 255, 0.28)');
-    mistGrad.addColorStop(0.5, 'rgba(255, 230, 200, 0.12)');
-    mistGrad.addColorStop(1, 'transparent');
-    ctx.fillStyle = mistGrad;
-    ctx.fillRect(0, 0, captureCanvas.width, captureCanvas.height);
-    ctx.restore();
-  } else if (state.lensFilter === 'star') {
-    ctx.save();
-    ctx.globalCompositeOperation = 'screen';
-    const drawStar = (cx, cy, r) => {
-      ctx.strokeStyle = 'rgba(255, 255, 255, 0.85)';
-      ctx.lineWidth = 1.5;
-      ctx.beginPath();
-      ctx.moveTo(cx - r, cy - r); ctx.lineTo(cx + r, cy + r);
-      ctx.moveTo(cx - r, cy + r); ctx.lineTo(cx + r, cy - r);
-      ctx.stroke();
-      ctx.fillStyle = '#ffffff';
-      ctx.beginPath();
-      ctx.arc(cx, cy, 3, 0, Math.PI * 2);
-      ctx.fill();
-    };
-    drawStar(captureCanvas.width * 0.42, captureCanvas.height * 0.36, 45);
-    drawStar(captureCanvas.width * 0.58, captureCanvas.height * 0.36, 45);
-    ctx.restore();
-  } else if (state.lensFilter === 'star6') {
-    ctx.save();
-    ctx.globalCompositeOperation = 'screen';
-    const drawStar6 = (cx, cy, r) => {
-      const angles = [0, Math.PI / 3, (2 * Math.PI) / 3];
-      angles.forEach(ang => {
-        const dx = Math.cos(ang) * r;
-        const dy = Math.sin(ang) * r;
-        ctx.lineWidth = 1.8;
-        ctx.strokeStyle = 'rgba(255, 248, 235, 0.92)';
-        ctx.beginPath();
-        ctx.moveTo(cx - dx, cy - dy); ctx.lineTo(cx + dx, cy + dy);
-        ctx.stroke();
-
-        // Chromatic spectral dispersion fringe
-        ctx.lineWidth = 1.0;
-        ctx.strokeStyle = 'rgba(255, 180, 220, 0.5)';
-        ctx.beginPath();
-        ctx.moveTo(cx - dx * 1.08, cy - dy * 1.08); ctx.lineTo(cx + dx * 1.08, cy + dy * 1.08);
-        ctx.stroke();
-      });
-      ctx.fillStyle = '#ffffff';
-      ctx.beginPath();
-      ctx.arc(cx, cy, 3.5, 0, Math.PI * 2);
-      ctx.fill();
-    };
-    drawStar6(captureCanvas.width * 0.42, captureCanvas.height * 0.36, 55);
-    drawStar6(captureCanvas.width * 0.58, captureCanvas.height * 0.36, 55);
-    ctx.restore();
-  } else if (state.lensFilter === 'streak') {
-    ctx.save();
-    ctx.globalCompositeOperation = 'screen';
-    const streakGrad = ctx.createLinearGradient(0, captureCanvas.height * 0.45 - 6, 0, captureCanvas.height * 0.45 + 6);
-    streakGrad.addColorStop(0, 'transparent');
-    streakGrad.addColorStop(0.4, 'rgba(0, 229, 255, 0.8)');
-    streakGrad.addColorStop(0.5, 'rgba(255, 255, 255, 0.95)');
-    streakGrad.addColorStop(0.6, 'rgba(0, 229, 255, 0.8)');
-    streakGrad.addColorStop(1, 'transparent');
-    ctx.fillStyle = streakGrad;
-    ctx.fillRect(0, captureCanvas.height * 0.45 - 8, captureCanvas.width, 16);
-    ctx.restore();
-  } else if (state.lensFilter === 'prism') {
-    ctx.save();
-    ctx.globalCompositeOperation = 'screen';
-    const prismGrad = ctx.createRadialGradient(
-      captureCanvas.width * 0.8, captureCanvas.height * 0.2, 50,
-      captureCanvas.width * 0.8, captureCanvas.height * 0.2, 280
-    );
-    prismGrad.addColorStop(0, 'rgba(255, 0, 128, 0.35)');
-    prismGrad.addColorStop(0.4, 'rgba(0, 255, 255, 0.35)');
-    prismGrad.addColorStop(0.7, 'rgba(255, 255, 0, 0.25)');
-    prismGrad.addColorStop(1, 'transparent');
-    ctx.fillStyle = prismGrad;
-    ctx.fillRect(0, 0, captureCanvas.width, captureCanvas.height);
-    ctx.restore();
+  // 6. Dynamic Optical Lens Filter Synthesis with Light-Source Detection
+  if (state.lensFilter && state.lensFilter !== 'none' && state.lensFilter !== 'cpl') {
+    if (opticalFlareEngine) {
+      const detectedLights = opticalFlareEngine.detectHighlights(captureCanvas);
+      if (detectedLights.length > 0) {
+        opticalFlareEngine.renderFlaresToContext(ctx, captureCanvas.width, captureCanvas.height, detectedLights, state.lensFilter, 0);
+      } else {
+        // Fallback subtle highlight if in dark environment
+        const fallback = [{ x: 0.5, y: 0.38, intensity: 0.45, radius: 10 }];
+        opticalFlareEngine.renderFlaresToContext(ctx, captureCanvas.width, captureCanvas.height, fallback, state.lensFilter, 0);
+      }
+    }
   } else if (state.lensFilter === 'cpl') {
     ctx.save();
     ctx.globalCompositeOperation = 'multiply';
@@ -3237,6 +3626,165 @@ function initCarouselElasticPhysics() {
   });
 }
 
+// Tactile Rotary Camera Switcher Dial with Horizontal Drag, Inertia & Centering
+function initSmoothModeDial() {
+  const wrapper = document.getElementById('mode-dial-wrapper');
+  const dialList = document.getElementById('mode-dial-list');
+  if (!wrapper || !dialList) return;
+
+  const items = Array.from(dialList.querySelectorAll('.mode-dial-item'));
+  if (items.length === 0) return;
+
+  let isDragging = false;
+  let startX = 0;
+  let currentTranslateX = 0;
+  let startTranslateX = 0;
+  let lastMoveTime = 0;
+  let lastMoveX = 0;
+  let velocity = 0;
+  let activeCamId = state.activeCamera || 'canon-ixy';
+
+  function getCenterOffset(item) {
+    const wrapperW = wrapper.offsetWidth;
+    const itemCenter = item.offsetLeft + item.offsetWidth / 2;
+    return (wrapperW / 2) - itemCenter;
+  }
+
+  function updateDialVisuals(currentOffset) {
+    const wrapperCenter = wrapper.offsetWidth / 2;
+    let closestItem = null;
+    let closestDist = Infinity;
+
+    items.forEach(item => {
+      const itemVisualCenter = item.offsetLeft + item.offsetWidth / 2 + currentOffset;
+      const dist = Math.abs(wrapperCenter - itemVisualCenter);
+
+      if (dist < closestDist) {
+        closestDist = dist;
+        closestItem = item;
+      }
+
+      // 3D perspective / distance curve
+      const normDist = Math.min(1, dist / 140);
+      const scale = 1.12 - normDist * 0.22;
+      const opacity = 1.0 - normDist * 0.65;
+
+      item.style.transform = `scale(${scale.toFixed(3)})`;
+      item.style.opacity = opacity.toFixed(3);
+    });
+
+    return closestItem;
+  }
+
+  window.alignModeDial = function(camId, smooth = true) {
+    const targetItem = dialList.querySelector(`.mode-dial-item[data-cam="${camId}"]`);
+    if (!targetItem) return;
+
+    items.forEach(it => it.classList.toggle('active', it.dataset.cam === camId));
+    const targetOffset = getCenterOffset(targetItem);
+    currentTranslateX = targetOffset;
+
+    dialList.style.transition = smooth ? 'transform 0.36s cubic-bezier(0.175, 0.885, 0.32, 1.275)' : 'none';
+    dialList.style.transform = `translateX(${targetOffset}px)`;
+    updateDialVisuals(targetOffset);
+  };
+
+  // Drag Interactions
+  wrapper.addEventListener('pointerdown', (e) => {
+    isDragging = true;
+    startX = e.clientX;
+    lastMoveX = e.clientX;
+    lastMoveTime = Date.now();
+    velocity = 0;
+    dialList.style.transition = 'none';
+
+    const style = window.getComputedStyle(dialList);
+    const matrix = new WebKitCSSMatrix(style.transform);
+    startTranslateX = matrix.m41;
+    currentTranslateX = startTranslateX;
+
+    wrapper.setPointerCapture?.(e.pointerId);
+  });
+
+  wrapper.addEventListener('pointermove', (e) => {
+    if (!isDragging) return;
+    const dx = e.clientX - startX;
+    const now = Date.now();
+    const dt = now - lastMoveTime;
+    if (dt > 0) {
+      velocity = (e.clientX - lastMoveX) / dt;
+    }
+    lastMoveX = e.clientX;
+    lastMoveTime = now;
+
+    currentTranslateX = startTranslateX + dx;
+    dialList.style.transform = `translateX(${currentTranslateX}px)`;
+
+    const centered = updateDialVisuals(currentTranslateX);
+    if (centered && centered.dataset.cam !== activeCamId) {
+      activeCamId = centered.dataset.cam;
+      soundEngine.playTick();
+      items.forEach(it => it.classList.toggle('active', it === centered));
+    }
+  });
+
+  const onPointerEnd = () => {
+    if (!isDragging) return;
+    isDragging = false;
+
+    const inertiaDist = velocity * 100;
+    const targetTranslate = currentTranslateX + inertiaDist;
+
+    const wrapperCenter = wrapper.offsetWidth / 2;
+    let bestItem = items[0];
+    let minD = Infinity;
+
+    items.forEach(item => {
+      const itemVisualCenter = item.offsetLeft + item.offsetWidth / 2 + targetTranslate;
+      const d = Math.abs(wrapperCenter - itemVisualCenter);
+      if (d < minD) {
+        minD = d;
+        bestItem = item;
+      }
+    });
+
+    const targetOffset = getCenterOffset(bestItem);
+    currentTranslateX = targetOffset;
+
+    dialList.style.transition = 'transform 0.42s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+    dialList.style.transform = `translateX(${targetOffset}px)`;
+    updateDialVisuals(targetOffset);
+
+    if (bestItem.dataset.cam !== state.activeCamera) {
+      switchCamera(bestItem.dataset.cam);
+    }
+  };
+
+  wrapper.addEventListener('pointerup', onPointerEnd);
+  wrapper.addEventListener('pointercancel', onPointerEnd);
+
+  // Wheel / Trackpad scroll support
+  wrapper.addEventListener('wheel', (e) => {
+    const delta = Math.abs(e.deltaX) > Math.abs(e.deltaY) ? e.deltaX : e.deltaY;
+    if (Math.abs(delta) < 4) return;
+    e.preventDefault();
+
+    const curIdx = items.findIndex(it => it.dataset.cam === state.activeCamera);
+    if (delta > 0 && curIdx < items.length - 1) {
+      switchCamera(items[curIdx + 1].dataset.cam);
+    } else if (delta < 0 && curIdx > 0) {
+      switchCamera(items[curIdx - 1].dataset.cam);
+    }
+  }, { passive: false });
+
+  // Initial alignment
+  setTimeout(() => {
+    if (window.alignModeDial) {
+      window.alignModeDial(state.activeCamera || 'canon-ixy', false);
+    }
+  }, 100);
+}
+
 // ==========================================================================
 // 6. Event Listeners & Bootstrapping
 // ==========================================================================
@@ -3252,11 +3800,12 @@ function initEventListeners() {
     btn.addEventListener('click', () => switchCamera(btn.dataset.cam));
   });
 
-  // 3. Ergonomic Multi-Camera Systems (Swipe, Steppers, Category Jump, Visual Bag)
+  // 3. Ergonomic Multi-Camera Systems (Swipe, Steppers, Category Jump, Visual Bag, Smooth Dial)
   initViewfinderSwipe();
   initCameraCategoryBar();
   initCameraBagModal();
   initCarouselElasticPhysics();
+  initSmoothModeDial();
 
   // 4. QuickTake Long-Press Shutter & Volume Hardware Buttons
   initQuickTakeShutter();
@@ -3919,6 +4468,7 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 
   renderColorSwatches('sihyunhada');
+  opticalFlareEngine.init();
   initEventListeners();
   initDeviceAndOSSwitcher();
 
@@ -3951,3 +4501,5 @@ window.applyCurrentCameraFilter = applyCurrentCameraFilter;
 window.applyLensFilter = applyLensFilter;
 window.enableWebcam = enableWebcam;
 window.useStudioModel = useStudioModel;
+window.opticalFlareEngine = opticalFlareEngine;
+window.alignModeDial = alignModeDial;

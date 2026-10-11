@@ -655,6 +655,17 @@ body::before {
   z-index: 5;
 }
 
+/* Dynamic Optical Lens Flare Canvas (Light-Source Tracking Fraunhofer & Prism Engine) */
+.lens-dynamic-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 12;
+  mix-blend-mode: screen;
+}
+
 /* Optical Lens Filters Layers (Black Mist, Star, Streak, Prism, CPL) */
 .lens-fx-layer {
   position: absolute;
@@ -3009,7 +3020,7 @@ body::before {
   box-shadow: 0 0 10px rgba(245, 199, 103, 0.28);
 }
 
-/* Mode Switcher Dial - Vintage Knurled Dial Wheel */
+/* Mode Switcher Dial - Tactile Rotary Camera Wheel with Touch Drag */
 .mode-dial-wrapper {
   width: 100%;
   height: 22px;
@@ -3019,36 +3030,89 @@ body::before {
   justify-content: center;
   position: relative;
   overflow: hidden;
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: grab;
+  touch-action: pan-y;
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+  mask-image: linear-gradient(90deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
+}
+
+.mode-dial-wrapper:active {
+  cursor: grabbing;
+}
+
+/* Illuminated Center Pip/Index Mark */
+.mode-dial-center-mark {
+  position: absolute;
+  top: 1px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 3px;
+  height: 3px;
+  border-radius: 50%;
+  background: #f5c767;
+  box-shadow: 0 0 6px #f5c767, 0 0 12px rgba(245, 199, 103, 0.85);
+  pointer-events: none;
+  z-index: 5;
 }
 
 .mode-dial-list {
   display: flex;
   align-items: center;
   gap: 20px;
+  will-change: transform;
+  pointer-events: auto;
   transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .mode-dial-item {
   font-family: "SF Mono", "Menlo", monospace;
-  font-size: 11px;
+  font-size: 10.5px;
   font-weight: 700;
-  letter-spacing: 1px;
+  letter-spacing: 0.8px;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.35);
+  color: rgba(255, 255, 255, 0.38);
   cursor: pointer;
   white-space: nowrap;
-  transition: color 0.2s ease, transform 0.2s ease;
+  transition: color 0.18s ease, transform 0.18s ease, opacity 0.18s ease;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 1px 4px;
+  border-radius: 4px;
+  opacity: 0.45;
+  transform: scale(0.92);
 }
 
 .mode-dial-item:hover {
-  color: rgba(255, 255, 255, 0.75);
+  color: rgba(255, 255, 255, 0.85);
+  opacity: 0.8;
 }
 
 .mode-dial-item.active {
   color: #f5c767;
   font-weight: 800;
-  text-shadow: 0 0 10px rgba(245, 199, 103, 0.6);
-  transform: scale(1.08);
+  text-shadow: 0 0 10px rgba(245, 199, 103, 0.65), 0 0 20px rgba(245, 199, 103, 0.25);
+  transform: scale(1.12);
+  opacity: 1;
+}
+
+.mode-dial-badge {
+  font-size: 6.5px;
+  font-weight: 800;
+  padding: 0.5px 3px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.6);
+  border: 0.5px solid rgba(255, 255, 255, 0.12);
+  letter-spacing: 0.4px;
+}
+
+.mode-dial-item.active .mode-dial-badge {
+  background: rgba(245, 199, 103, 0.2);
+  color: #f5c767;
+  border-color: rgba(245, 199, 103, 0.4);
 }
 
 /* Shutter Row */
