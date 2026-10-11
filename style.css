@@ -938,8 +938,18 @@ body::before {
 }
 
 .cam-badge-icon {
-  font-size: 13px;
-  color: #f5c767;
+  width: 16px;
+  height: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.cam-badge-icon svg {
+  width: 16px;
+  height: 16px;
+  display: block;
 }
 
 .cam-badge-title {
@@ -4824,106 +4834,310 @@ body::before {
 }
 
 .camera-bag-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* Brand Section Container */
+.bag-brand-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  background: rgba(255, 255, 255, 0.025);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 18px;
+  padding: 12px 14px;
+  transition: all 0.2s ease;
+}
+
+.bag-brand-section:hover {
+  border-color: rgba(255, 255, 255, 0.16);
+  background: rgba(255, 255, 255, 0.04);
+}
+
+.bag-brand-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-bottom: 7px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.bag-brand-left {
+  display: flex;
+  align-items: baseline;
+  gap: 7px;
+  flex-wrap: wrap;
+}
+
+.bag-brand-icon-pill {
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bag-brand-title {
+  font-size: 13.5px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 0.6px;
+}
+
+.bag-brand-kor {
+  font-size: 11.5px;
+  font-weight: 700;
+  color: #f5c767;
+}
+
+.bag-brand-origin {
+  font-size: 10px;
+  color: var(--text-secondary);
+}
+
+.bag-brand-badge-count {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.bag-brand-cards {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 10px;
 }
 
-@media (max-width: 480px) {
-  .camera-bag-grid {
+@media (max-width: 520px) {
+  .bag-brand-cards {
     grid-template-columns: 1fr;
   }
 }
 
 .bag-cam-card {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(18, 20, 26, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.10);
   border-radius: 16px;
-  padding: 12px;
+  padding: 12px 14px;
   cursor: pointer;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 7px;
   position: relative;
   transition: all 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .bag-cam-card:hover {
-  background: rgba(255, 255, 255, 0.09);
-  border-color: rgba(255, 255, 255, 0.25);
+  background: rgba(28, 32, 42, 0.95);
+  border-color: rgba(245, 199, 103, 0.55);
   transform: translateY(-2px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 22px rgba(0, 0, 0, 0.5);
 }
 
 .bag-cam-card.equipped {
-  background: rgba(255, 214, 10, 0.1);
-  border-color: rgba(255, 214, 10, 0.65);
-  box-shadow: 0 0 16px rgba(255, 214, 10, 0.25);
+  background: rgba(40, 32, 14, 0.9);
+  border-color: #f5c767;
+  box-shadow: 0 0 18px rgba(245, 199, 103, 0.3);
 }
 
 .bag-card-top {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 10px;
 }
 
-.bag-card-icon {
-  font-size: 20px;
-  width: 28px;
-  height: 28px;
+.bag-card-icon-container {
+  width: 46px;
+  height: 46px;
+  padding: 3px;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 8px;
-  background: rgba(255, 255, 255, 0.08);
-  color: #fff;
+  flex-shrink: 0;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.1);
+}
+
+.bag-card-icon {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.bag-card-icon svg {
+  width: 40px;
+  height: 40px;
+  display: block;
+}
+
+.bag-card-top-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 3px;
+}
+
+.bag-card-brand-badge {
+  font-size: 9.5px;
+  font-weight: 800;
+  color: #f5c767;
+  letter-spacing: 0.6px;
 }
 
 .bag-card-badge {
   font-size: 8.5px;
-  font-weight: 800;
-  letter-spacing: 0.5px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
   padding: 2px 6px;
-  border-radius: 6px;
-  background: rgba(255, 255, 255, 0.1);
-  color: var(--text-secondary);
-  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .bag-cam-card.equipped .bag-card-badge {
-  background: rgba(255, 214, 10, 0.25);
-  color: var(--ios-yellow);
-  border-color: rgba(255, 214, 10, 0.5);
+  background: rgba(245, 199, 103, 0.25);
+  color: #f5c767;
+  border-color: rgba(245, 199, 103, 0.6);
 }
 
 .bag-card-title {
-  font-size: 13px;
-  font-weight: 700;
+  font-size: 13.5px;
+  font-weight: 800;
   color: #fff;
+  letter-spacing: 0.2px;
   margin-top: 2px;
 }
 
 .bag-card-desc {
-  font-size: 10.5px;
-  color: var(--text-secondary);
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
   line-height: 1.4;
 }
 
+.bag-card-action-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 5px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
 .bag-card-status {
-  margin-top: 4px;
+  font-size: 10px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.45);
+}
+
+.bag-cam-card.equipped .bag-card-status {
+  color: #f5c767;
+  font-weight: 800;
+}
+
+.bag-card-equip-btn {
   font-size: 10px;
   font-weight: 700;
+  padding: 3px 10px;
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.bag-cam-card.equipped .bag-card-equip-btn {
+  background: #f5c767;
+  color: #111;
+  border-color: #f5c767;
+  font-weight: 800;
+}
+
+/* Brand Filter Bar in Camera Bag Modal */
+.bag-brand-filter-wrapper {
+  margin-bottom: 12px;
+  background: rgba(0, 0, 0, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 14px;
+  padding: 8px 10px;
+}
+
+.bag-brand-filter-label {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #f5c767;
+  margin-bottom: 6px;
   display: flex;
   align-items: center;
   gap: 4px;
 }
 
-.bag-cam-card.equipped .bag-card-status {
-  color: var(--ios-yellow);
+.bag-brand-filter {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  overflow-x: auto;
+  padding-bottom: 2px;
+  scrollbar-width: none;
 }
 
-.bag-cam-card:not(.equipped) .bag-card-status {
-  color: var(--text-muted);
+.bag-brand-filter::-webkit-scrollbar {
+  display: none;
+}
+
+.bag-brand-btn {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 5px 10px;
+  border-radius: 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: all 0.18s ease;
+}
+
+.bag-brand-btn:hover {
+  background: rgba(255, 255, 255, 0.14);
+  border-color: rgba(255, 255, 255, 0.3);
+  color: #fff;
+}
+
+.bag-brand-btn.active {
+  background: rgba(245, 199, 103, 0.24);
+  border-color: #f5c767;
+  color: #f5c767;
+  font-weight: 800;
+  box-shadow: 0 0 10px rgba(245, 199, 103, 0.35);
+}
+
+/* Category bar camera bag trigger pill */
+.cam-cat-pill.cam-bag-trigger-pill {
+  background: rgba(245, 199, 103, 0.15) !important;
+  border-color: rgba(245, 199, 103, 0.5) !important;
+  color: #f5c767 !important;
+  font-weight: 800 !important;
+}
+
+.cam-cat-pill.cam-bag-trigger-pill:hover,
+.cam-cat-pill.cam-bag-trigger-pill:active {
+  background: rgba(245, 199, 103, 0.35) !important;
+  border-color: #f5c767 !important;
+  color: #fff !important;
 }
 
 .camera-bag-dialog .modal-footer {

@@ -71,25 +71,41 @@ const state = {
   lastCapturedUrl: null
 };
 
-// Apple HIG / SF Symbols Vector SVG Icons for 16 Iconic Cameras
+// Authentic High-Detail Vector SVG Icons for 16 Iconic Cameras & Collectible Bodies
 const CAM_SVG_ICONS = {
-  'canon-ixy': `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="14" rx="3"/><circle cx="12" cy="13" r="4"/><circle cx="18" cy="9" r="1" fill="currentColor"/></svg>`,
-  'sony-handycam': `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 7-6 4v2l6 4V7z"/><rect x="2" y="6" width="14" height="12" rx="2"/><circle cx="9" cy="12" r="2.5"/></svg>`,
-  'sony-cybershot': `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="13" rx="2"/><circle cx="11" cy="12.5" r="3.5"/><polygon points="18 8 16 11 18 11 17 14 20 10 18 10" fill="currentColor"/></svg>`,
-  'olympus-mju': `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="14" rx="4"/><path d="M7 6v14"/><circle cx="14" cy="13" r="3.5"/></svg>`,
-  'contax-t2': `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="13" rx="2"/><circle cx="12" cy="12.5" r="4"/><circle cx="12" cy="12.5" r="1.5"/><line x1="6" y1="9" x2="8" y2="9"/></svg>`,
-  'ricoh-gr': `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="13" rx="2"/><circle cx="10" cy="12.5" r="3.5"/><path d="M17 10h3v5h-3z"/></svg>`,
-  'leica-m': `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="13" rx="2"/><circle cx="13" cy="12.5" r="4"/><circle cx="6" cy="9.5" r="1.5" fill="#ff453a" stroke="#ff453a"/></svg>`,
-  'citypop-80s': `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><circle cx="8" cy="12" r="2.5"/><circle cx="16" cy="12" r="2.5"/><path d="M8 14.5h8"/></svg>`,
-  'oldfilm-35mm': `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="4" width="12" height="16" rx="2"/><rect x="16" y="8" width="4" height="8" rx="1"/><circle cx="10" cy="8" r="1.5"/><circle cx="10" cy="12" r="1.5"/><circle cx="10" cy="16" r="1.5"/></svg>`,
-  'instax-mini': `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="16" height="18" rx="2"/><rect x="6.5" y="5.5" width="11" height="10" rx="1"/><circle cx="12" cy="18" r="0.75" fill="currentColor"/></svg>`,
-  'sihyun-color': `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><circle cx="12" cy="7" r="1.5" fill="currentColor"/><circle cx="16" cy="10" r="1.5" fill="currentColor"/><circle cx="15" cy="15" r="1.5" fill="currentColor"/><circle cx="9" cy="14" r="1.5" fill="currentColor"/></svg>`,
-  'passport-id': `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="11" r="2.5"/><path d="M5.5 17c0-2 1.5-3 3.5-3s3.5 1 3.5 3"/><line x1="14" y1="9" x2="19" y2="9"/><line x1="14" y1="13" x2="19" y2="13"/></svg>`,
-  'hasselblad-500cm': `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="5" width="16" height="16" rx="2"/><circle cx="12" cy="13" r="4"/><path d="M7 5V3h10v2"/></svg>`,
-  'polaroid-sx70': `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 19 3-11 12 3 3 8z"/><polygon points="6 8 12 4 18 11"/><circle cx="12" cy="14" r="2.5"/></svg>`,
-  'fuji-quicksnap': `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="6" width="20" height="13" rx="2"/><circle cx="10" cy="12.5" r="3"/><circle cx="18" cy="9" r="1.5" fill="currentColor"/><path d="M2 10h5"/></svg>`,
-  'kyocera-samurai': `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="3" width="14" height="18" rx="3"/><circle cx="12" cy="10" r="3.5"/><line x1="12" y1="3" x2="12" y2="21" stroke-dasharray="2 2"/><rect x="8" y="16" width="8" height="3" rx="1"/></svg>`,
-  'default': `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>`
+  'leica-m': `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg leica-svg"><defs><linearGradient id="leica_chrome" x1="0" y1="0" x2="0" y2="12" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#F3F4F6"/><stop offset="50%" stop-color="#D1D5DB"/><stop offset="100%" stop-color="#9CA3AF"/></linearGradient><linearGradient id="leica_body" x1="0" y1="12" x2="0" y2="40" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#1F2937"/><stop offset="100%" stop-color="#111827"/></linearGradient><radialGradient id="leica_glass" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#818CF8"/><stop offset="45%" stop-color="#312E81"/><stop offset="85%" stop-color="#0284C7"/><stop offset="100%" stop-color="#0F172A"/></radialGradient></defs><rect x="7" y="6" width="6" height="3" rx="0.8" fill="url(#leica_chrome)"/><rect x="30" y="5.5" width="9" height="3.5" rx="1" fill="url(#leica_chrome)"/><circle cx="34.5" cy="5" r="2.2" fill="#DC2626"/><rect x="4" y="9" width="40" height="31" rx="4" fill="url(#leica_body)" stroke="#374151" stroke-width="0.8"/><rect x="4" y="9" width="40" height="9.5" rx="3.5" fill="url(#leica_chrome)"/><rect x="33.5" y="11.5" width="6.5" height="4.5" rx="1" fill="#38BDF8" stroke="#0284C7" stroke-width="0.5"/><rect x="23" y="12" width="3.5" height="3.2" rx="0.6" fill="#FDE047" opacity="0.9"/><circle cx="12" cy="18" r="4.2" fill="#E0040B"/><text x="12" y="19.5" fill="#FFFFFF" font-size="4.2" font-weight="900" font-family="'Times New Roman', serif" text-anchor="middle">L</text><circle cx="24" cy="26.5" r="11" fill="#1F2937" stroke="#E5E7EB" stroke-width="1.2"/><circle cx="24" cy="26.5" r="8.5" fill="#111827" stroke="#4B5563" stroke-width="0.8"/><circle cx="24" cy="26.5" r="5.8" fill="url(#leica_glass)"/><path d="M20 23.5 A 4.8 4.8 0 0 1 27 24" stroke="#FFFFFF" stroke-width="0.9" stroke-linecap="round" opacity="0.8"/></svg>`,
+
+  'contax-t2': `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg contax-svg"><defs><linearGradient id="t2_titanium" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#FFFBEB"/><stop offset="35%" stop-color="#E5D3B3"/><stop offset="70%" stop-color="#D4AF37"/><stop offset="100%" stop-color="#A17C38"/></linearGradient><radialGradient id="t2_glass" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#059669"/><stop offset="55%" stop-color="#064E3B"/><stop offset="100%" stop-color="#022C22"/></radialGradient></defs><rect x="31" y="5.5" width="8" height="3" rx="1.2" fill="#2563EB"/><rect x="9" y="6" width="6" height="2.5" rx="0.8" fill="#B89355"/><rect x="4" y="8.5" width="40" height="31.5" rx="3.5" fill="url(#t2_titanium)" stroke="#8C6D37" stroke-width="0.8"/><text x="8.5" y="24" fill="#DC2626" font-size="5.2" font-weight="900" font-family="sans-serif">T*</text><rect x="8.5" y="11.5" width="7.5" height="4.5" rx="1" fill="#FEF08A" stroke="#CA8A04" stroke-width="0.5"/><circle cx="19.5" cy="13.8" r="1.5" fill="#1D4ED8"/><rect x="33.5" y="11.5" width="5.5" height="4.5" rx="1" fill="#60A5FA" stroke="#2563EB" stroke-width="0.5"/><circle cx="24" cy="26" r="10" fill="#D4AF37" stroke="#78350F" stroke-width="1"/><circle cx="24" cy="26" r="7.5" fill="#18181B" stroke="#B89355" stroke-width="0.8"/><circle cx="24" cy="26" r="5" fill="url(#t2_glass)"/><path d="M21 23.5 A 4 4 0 0 1 26 24" stroke="#FFFFFF" stroke-width="0.8" stroke-linecap="round" opacity="0.85"/></svg>`,
+
+  'ricoh-gr': `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg ricoh-svg"><defs><radialGradient id="gr_glass" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#F59E0B"/><stop offset="50%" stop-color="#18181B"/><stop offset="100%" stop-color="#09090B"/></radialGradient></defs><rect x="25" y="5.5" width="8" height="3" rx="1" fill="#27272A"/><circle cx="36" cy="7" r="2.2" fill="#047857" stroke="#10B981" stroke-width="0.8"/><rect x="4" y="8.5" width="40" height="32" rx="3" fill="#18181B" stroke="#27272A" stroke-width="1"/><rect x="33" y="10" width="9" height="28.5" rx="2" fill="#09090B"/><line x1="36" y1="13" x2="36" y2="35" stroke="#27272A" stroke-width="0.8" stroke-dasharray="1 2"/><text x="8.5" y="16.5" fill="#F4F4F5" font-size="5.2" font-weight="900" font-family="sans-serif">GR</text><circle cx="21" cy="26" r="10" fill="#27272A" stroke="#52525B" stroke-width="1"/><circle cx="21" cy="26" r="7.5" fill="#09090B" stroke="#3F3F46" stroke-width="0.8"/><circle cx="21" cy="26" r="5" fill="url(#gr_glass)"/><path d="M18 23 A 4 4 0 0 1 23 23.5" stroke="#FFFFFF" stroke-width="0.8" stroke-linecap="round" opacity="0.8"/></svg>`,
+
+  'olympus-mju': `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg olympus-svg"><defs><linearGradient id="mju_shell" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#27272A"/><stop offset="50%" stop-color="#09090B"/><stop offset="100%" stop-color="#18181B"/></linearGradient></defs><rect x="30" y="5.5" width="7" height="3" rx="1.2" fill="#52525B"/><rect x="4" y="8.5" width="40" height="32" rx="7" fill="url(#mju_shell)" stroke="#3F3F46" stroke-width="1"/><path d="M16 8.5 C23 18 23 31 16 40.5" stroke="#52525B" stroke-width="1.2" stroke-linecap="round"/><text x="27.5" y="27" fill="#F59E0B" font-size="9" font-weight="900" font-style="italic" font-family="'Times New Roman', serif">μ</text><text x="36" y="27" fill="#D97706" font-size="4.5" font-weight="800" font-family="sans-serif">-II</text><ellipse cx="10" cy="15" rx="3.5" ry="2.2" fill="#FEF08A" stroke="#CA8A04" stroke-width="0.5"/><circle cx="10" cy="22.5" r="1.5" fill="#EF4444"/></svg>`,
+
+  'sony-cybershot': `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg cybershot-svg"><defs><linearGradient id="sony_silver" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#FFFFFF"/><stop offset="40%" stop-color="#E2E8F0"/><stop offset="80%" stop-color="#94A3B8"/><stop offset="100%" stop-color="#64748B"/></linearGradient></defs><rect x="4" y="9.5" width="40" height="29" rx="3.5" fill="url(#sony_silver)" stroke="#64748B" stroke-width="1"/><rect x="7" y="12.5" width="7" height="5.5" rx="0.8" fill="#1D4ED8"/><text x="10.5" y="16.5" fill="#FFF" font-size="3" font-weight="900" text-anchor="middle" font-family="sans-serif">ZEISS</text><rect x="16" y="12.5" width="9" height="3.5" rx="0.8" fill="#FEF08A"/><circle cx="32" cy="24" r="8" fill="#1E293B" stroke="#CBD5E1" stroke-width="1.2"/><circle cx="32" cy="24" r="5" fill="#0284C7"/><path d="M30 22 A 3 3 0 0 1 34 22.5" stroke="#FFF" stroke-width="0.8" opacity="0.8"/><line x1="4" y1="32.5" x2="44" y2="32.5" stroke="#94A3B8" stroke-width="0.8"/></svg>`,
+
+  'sony-handycam': `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg handycam-svg"><rect x="6" y="13" width="22" height="22" rx="3" fill="#1E293B" stroke="#475569" stroke-width="1"/><rect x="28" y="16" width="11" height="16" rx="2" fill="#0F172A" stroke="#334155" stroke-width="1"/><circle cx="33.5" cy="24" r="5" fill="#0284C7"/><path d="M6 15 L-1 18 L-1 32 L6 29 Z" fill="#0284C7" stroke="#38BDF8" stroke-width="0.8"/><rect x="11" y="8" width="12" height="5" rx="2" fill="#334155"/><circle cx="14" cy="10.5" r="0.8" fill="#94A3B8"/><circle cx="17" cy="10.5" r="0.8" fill="#94A3B8"/><circle cx="20" cy="10.5" r="0.8" fill="#94A3B8"/><circle cx="10" cy="17" r="1.5" fill="#EF4444"/></svg>`,
+
+  'canon-ixy': `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg ixy-svg"><defs><linearGradient id="ixy_steel" x1="0" y1="0" x2="48" y2="48" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#FFFFFF"/><stop offset="35%" stop-color="#E2E8F0"/><stop offset="70%" stop-color="#CBD5E1"/><stop offset="100%" stop-color="#94A3B8"/></linearGradient></defs><rect x="4" y="9" width="40" height="31" rx="6" fill="url(#ixy_steel)" stroke="#94A3B8" stroke-width="1"/><rect x="8" y="13" width="9.5" height="3.5" rx="0.8" fill="#DC2626"/><text x="12.8" y="15.8" fill="#FFF" font-size="2.6" font-weight="900" text-anchor="middle" font-family="sans-serif">Canon</text><rect x="19.5" y="13" width="6" height="3" rx="0.6" fill="#FEF08A"/><circle cx="28" cy="24.5" r="10.5" fill="#E2E8F0" stroke="#94A3B8" stroke-width="1"/><circle cx="28" cy="24.5" r="8" fill="#1E293B" stroke="#64748B" stroke-width="0.8"/><circle cx="28" cy="24.5" r="5" fill="#0369A1"/><path d="M26 22 A 3.5 3.5 0 0 1 30 22.5" stroke="#FFF" stroke-width="0.8" opacity="0.8"/></svg>`,
+
+  'fuji-quicksnap': `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg quicksnap-svg"><defs><linearGradient id="fuji_green" x1="0" y1="0" x2="0" y2="48" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#10B981"/><stop offset="50%" stop-color="#047857"/><stop offset="100%" stop-color="#064E3B"/></linearGradient></defs><rect x="34" y="6" width="6" height="3" rx="0.5" fill="#18181B"/><rect x="4" y="9" width="40" height="31" rx="3.5" fill="url(#fuji_green)" stroke="#064E3B" stroke-width="1"/><path d="M4 19 L44 26 L44 32 L4 25 Z" fill="#DC2626"/><circle cx="10" cy="22" r="3" fill="#FBBF24"/><rect x="29" y="12" width="10" height="7" rx="1" fill="#FEF08A" stroke="#CA8A04" stroke-width="0.8"/><circle cx="18" cy="26" r="6" fill="#18181B" stroke="#047857" stroke-width="1.2"/><circle cx="18" cy="26" r="3.2" fill="#0284C7"/></svg>`,
+
+  'instax-mini': `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg instax-svg"><rect x="6" y="8" width="36" height="34" rx="10" fill="#FCE7F3" stroke="#F472B6" stroke-width="1.2"/><rect x="15" y="5" width="18" height="3" rx="1" fill="#FFFFFF" stroke="#F472B6" stroke-width="0.8"/><circle cx="24" cy="25" r="11" fill="#FDF2F8" stroke="#DB2777" stroke-width="1.2"/><circle cx="24" cy="25" r="7.5" fill="#374151" stroke="#F472B6" stroke-width="0.8"/><circle cx="24" cy="25" r="4.5" fill="#1E293B"/><circle cx="29" cy="21" r="1.5" fill="#E2E8F0" stroke="#94A3B8" stroke-width="0.5"/><circle cx="11" cy="16" r="2.5" fill="#EC4899"/><ellipse cx="37" cy="15" rx="2" ry="3" fill="#FEF08A"/></svg>`,
+
+  'hasselblad-500cm': `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg hasselblad-svg"><rect x="9" y="11" width="30" height="28" rx="2" fill="#18181B" stroke="#E2E8F0" stroke-width="1.2"/><path d="M12 11 L16 5 L32 5 L36 11 Z" fill="#27272A" stroke="#CBD5E1" stroke-width="1"/><rect x="39" y="19" width="4" height="11" rx="1" fill="#E2E8F0"/><circle cx="41" cy="20.5" r="2" fill="#09090B"/><circle cx="24" cy="25" r="11" fill="#09090B" stroke="#E2E8F0" stroke-width="1.5"/><circle cx="24" cy="25" r="8" fill="#18181B" stroke="#94A3B8" stroke-width="0.8"/><circle cx="24" cy="25" r="5" fill="#0284C7"/><path d="M21 22 A 4 4 0 0 1 26 22.5" stroke="#FFF" stroke-width="0.8" opacity="0.8"/></svg>`,
+
+  'polaroid-sx70': `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg sx70-svg"><polygon points="10,38 24,9 38,38" fill="#B45309" stroke="#E2E8F0" stroke-width="1.2"/><polygon points="20,9 24,4 28,9" fill="#E2E8F0"/><rect x="6" y="36" width="36" height="6" rx="1.5" fill="#E2E8F0" stroke="#64748B" stroke-width="0.8"/><rect x="14" y="38" width="4" height="2.5" fill="#EF4444"/><rect x="18" y="38" width="4" height="2.5" fill="#F97316"/><rect x="22" y="38" width="4" height="2.5" fill="#FACC15"/><rect x="26" y="38" width="4" height="2.5" fill="#22C55E"/><rect x="30" y="38" width="4" height="2.5" fill="#3B82F6"/><circle cx="24" cy="26" r="5.5" fill="#0F172A" stroke="#E2E8F0" stroke-width="1"/><circle cx="24" cy="26" r="3" fill="#0284C7"/></svg>`,
+
+  'kyocera-samurai': `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg samurai-svg"><rect x="11" y="5" width="26" height="38" rx="4" fill="#18181B" stroke="#3F3F46" stroke-width="1"/><rect x="11" y="16" width="26" height="2.5" fill="#DC2626"/><rect x="15" y="8" width="18" height="5" rx="1" fill="#065F46" stroke="#10B981" stroke-width="0.6"/><text x="24" y="12" fill="#34D399" font-size="3" font-weight="900" text-anchor="middle" font-family="monospace">72 EXP</text><circle cx="24" cy="28" r="9" fill="#09090B" stroke="#52525B" stroke-width="1.2"/><circle cx="24" cy="28" r="6" fill="#1E293B" stroke="#0284C7" stroke-width="0.8"/><circle cx="24" cy="28" r="3.5" fill="#0F172A"/></svg>`,
+
+  'citypop-80s': `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg citypop-svg"><defs><linearGradient id="pop_sunset" x1="0" y1="0" x2="48" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#FF007F"/><stop offset="50%" stop-color="#9333EA"/><stop offset="100%" stop-color="#00F5FF"/></linearGradient></defs><rect x="4" y="9" width="40" height="30" rx="3.5" fill="#18181B" stroke="#3F3F46" stroke-width="1"/><rect x="7" y="12" width="34" height="20" rx="2" fill="url(#pop_sunset)"/><rect x="12" y="16" width="24" height="12" rx="2" fill="#09090B"/><circle cx="18" cy="22" r="3.5" fill="#FFFFFF"/><circle cx="18" cy="22" r="1.5" fill="#18181B"/><circle cx="30" cy="22" r="3.5" fill="#FFFFFF"/><circle cx="30" cy="22" r="1.5" fill="#18181B"/><polygon points="12,39 36,39 33,34 15,34" fill="#27272A"/></svg>`,
+
+  'oldfilm-35mm': `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg oldfilm-svg"><rect x="8" y="9" width="22" height="31" rx="2.5" fill="#18181B" stroke="#CA8A04" stroke-width="1"/><rect x="8" y="16" width="22" height="17" fill="#FACC15"/><text x="19" y="26.5" fill="#78350F" font-size="4.5" font-weight="900" text-anchor="middle" font-family="sans-serif">35mm</text><rect x="15" y="6" width="8" height="3" rx="1" fill="#71717A"/><path d="M30 19 L42 19 L40 31 L30 31 Z" fill="#27272A" stroke="#52525B" stroke-width="0.8"/><rect x="32" y="21" width="2.2" height="2.5" rx="0.4" fill="#FFFFFF"/><rect x="36.5" y="21" width="2.2" height="2.5" rx="0.4" fill="#FFFFFF"/><rect x="32" y="26.5" width="2.2" height="2.5" rx="0.4" fill="#FFFFFF"/><rect x="36.5" y="26.5" width="2.2" height="2.5" rx="0.4" fill="#FFFFFF"/></svg>`,
+
+  'sihyun-color': `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg colorstudio-svg"><defs><radialGradient id="studio_glow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#FDF2F8"/><stop offset="50%" stop-color="#F472B6"/><stop offset="100%" stop-color="#8B5CF6"/></radialGradient></defs><polygon points="17,5 31,5 42,16 42,30 31,41 17,41 6,30 6,16" fill="url(#studio_glow)" stroke="#C084FC" stroke-width="1.2"/><polygon points="19,10 29,10 37,18 37,28 29,36 19,36 11,28 11,18" fill="#18181B" opacity="0.4"/><circle cx="24" cy="23" r="5" fill="#FFFFFF"/></svg>`,
+
+  'passport-id': `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg passport-svg"><rect x="9" y="6" width="30" height="36" rx="3" fill="#1E3A8A" stroke="#3B82F6" stroke-width="1"/><circle cx="24" cy="18" r="6" stroke="#FACC15" stroke-width="1" fill="none"/><circle cx="24" cy="18" r="3" stroke="#FACC15" stroke-width="0.8" fill="none"/><rect x="15" y="27" width="18" height="11" rx="1" fill="#FFFFFF"/><circle cx="24" cy="31" r="2.5" fill="#64748B"/><path d="M19 37 C19 34 29 34 29 37" fill="#64748B"/></svg>`,
+
+  'default': `<svg viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg default-svg"><rect x="6" y="11" width="36" height="28" rx="4" fill="#27272A" stroke="#52525B" stroke-width="1"/><circle cx="24" cy="25" r="9" fill="#18181B" stroke="#71717A" stroke-width="1.2"/><circle cx="24" cy="25" r="5" fill="#0284C7"/></svg>`
 };
 
 // 6 Iconic Cameras Architecture Definition
@@ -850,6 +866,129 @@ function getCameraCategory(camId) {
     if (cams.includes(camId)) return cat;
   }
   return 'all';
+}
+
+// 11 Iconic Brands Architecture Definition for Camera Bag
+const CAMERA_BRANDS = {
+  'leica': {
+    id: 'leica',
+    name: 'LEICA',
+    koreanName: '라이카',
+    fullName: 'Leica Camera AG',
+    country: '🇩🇪 독일 Wetzlar',
+    desc: '독일 수제 광학과 영혼의 거리계 레인지파인더',
+    iconText: '🔴',
+    cams: ['leica-m']
+  },
+  'contax': {
+    id: 'contax',
+    name: 'CONTAX',
+    koreanName: '콘탁스',
+    fullName: 'Contax / Carl Zeiss',
+    country: '🇩🇪·🇯🇵 독일·일본',
+    desc: 'T* 코팅 칼 자이스 렌즈와 샴페인 티타늄',
+    iconText: '⭐',
+    cams: ['contax-t2']
+  },
+  'ricoh': {
+    id: 'ricoh',
+    name: 'RICOH',
+    koreanName: '리코',
+    fullName: 'Ricoh GR System',
+    country: '🇯🇵 일본 도쿄',
+    desc: '전설의 28mm 스냅 슈터 & 모리야마 다이도 흑백',
+    iconText: '⬛',
+    cams: ['ricoh-gr']
+  },
+  'olympus': {
+    id: 'olympus',
+    name: 'OLYMPUS',
+    koreanName: '올림푸스',
+    fullName: 'Olympus Optical',
+    country: '🇯🇵 일본 도쿄',
+    desc: '올웨더 슬라이딩 배리어와 주이코 렌즈',
+    iconText: '💧',
+    cams: ['olympus-mju']
+  },
+  'sony': {
+    id: 'sony',
+    name: 'SONY',
+    koreanName: '소니',
+    fullName: 'Sony Corporation',
+    country: '🇯🇵 일본 시나가와',
+    desc: 'Y2K 사이버샷 CCD & 핸디캠 MiniDV 비디오',
+    iconText: '🔵',
+    cams: ['sony-cybershot', 'sony-handycam']
+  },
+  'canon': {
+    id: 'canon',
+    name: 'CANON',
+    koreanName: '캐논',
+    fullName: 'Canon Inc.',
+    country: '🇯🇵 일본 오타',
+    desc: '스틸 곡면 바디 IXY 50 & 뽀얀 피치 글로우',
+    iconText: '🔴',
+    cams: ['canon-ixy']
+  },
+  'fujifilm': {
+    id: 'fujifilm',
+    name: 'FUJIFILM',
+    koreanName: '후지필름',
+    fullName: 'Fujifilm Holdings',
+    country: '🇯🇵 일본 롯폰기',
+    desc: '1986 일회용 우츠룬데스 & 인스탁스 즉석 필름',
+    iconText: '🟢',
+    cams: ['fuji-quicksnap', 'instax-mini']
+  },
+  'hasselblad': {
+    id: 'hasselblad',
+    name: 'HASSELBLAD',
+    koreanName: '핫셀블라드',
+    fullName: 'Victor Hasselblad AB',
+    country: '🇸🇪 스웨덴 예테보리',
+    desc: '아폴로 달 착륙의 6x6 중형 웨이스트레벨',
+    iconText: '🪐',
+    cams: ['hasselblad-500cm']
+  },
+  'polaroid': {
+    id: 'polaroid',
+    name: 'POLAROID',
+    koreanName: '폴라로이드',
+    fullName: 'Polaroid Corporation',
+    country: '🇺🇸 미국 매사추세츠',
+    desc: '에드윈 랜드의 삼각 폴딩 SLR & 5색 레인보우',
+    iconText: '🌈',
+    cams: ['polaroid-sx70']
+  },
+  'kyocera': {
+    id: 'kyocera',
+    name: 'KYOCERA',
+    koreanName: '교세라',
+    fullName: 'Kyocera Optical',
+    country: '🇯🇵 일본 교토',
+    desc: '1988 사이버펑크 세로형 72컷 하프프레임',
+    iconText: '🔺',
+    cams: ['kyocera-samurai']
+  },
+  'studio': {
+    id: 'studio',
+    name: 'STUDIO & LAB',
+    koreanName: '스튜디오 & 랩',
+    fullName: 'Special Vintage Lab',
+    country: '📼 쇼와 버블 & 스튜디오',
+    desc: '80년대 시티팝 앨범 자켓 & 퍼스널 컬러 증명사진',
+    iconText: '🎨',
+    cams: ['citypop-80s', 'oldfilm-35mm', 'sihyun-color', 'passport-id']
+  }
+};
+
+window.CAMERA_BRANDS = CAMERA_BRANDS;
+
+function getCameraBrand(camId) {
+  for (const [brandId, brand] of Object.entries(CAMERA_BRANDS)) {
+    if (brand.cams.includes(camId)) return brandId;
+  }
+  return 'studio';
 }
 
 // Optical Lens Filters Specifications
@@ -3418,14 +3557,22 @@ function initCameraCategoryBar() {
   });
 }
 
-// Tier 4: Visual Camera Bag / Rack Drawer Modal (16 Iconic Bodies)
+// Tier 4: Visual Camera Bag / Brand Cabinet Drawer Modal (16 Iconic Bodies Grouped by Brand)
 function openCameraBagModal() {
-  renderCameraBagGrid('all');
+  // Reset category and brand filter buttons
+  document.querySelectorAll('#bag-category-filter .bag-cat-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.cat === 'all');
+  });
+  document.querySelectorAll('#bag-brand-filter .bag-brand-btn').forEach(b => {
+    b.classList.toggle('active', b.dataset.brand === 'all');
+  });
+  renderCameraBagGrid('all', 'all');
+
   const modal = document.getElementById('camera-bag-modal');
   if (modal) {
     soundEngine.playTick();
     modal.classList.add('open');
-    showDynamicIslandBanner('CAMERA BAG', '16 ICONIC CAMERAS', 1500);
+    showDynamicIslandBanner('CAMERA BAG', 'BRAND COLLECTION', 1500);
   }
 }
 
@@ -3436,46 +3583,96 @@ function closeCameraBagModal() {
   }
 }
 
-function renderCameraBagGrid(filterCat = 'all') {
+function renderCameraBagGrid(filterCat = 'all', filterBrand = 'all') {
   const grid = document.getElementById('camera-bag-grid');
   if (!grid) return;
 
   grid.innerHTML = '';
-  CAMERA_ORDER.forEach(camId => {
-    const cam = CAMERAS[camId];
-    if (!cam) return;
-    const cat = getCameraCategory(camId);
-    if (filterCat !== 'all' && cat !== filterCat) return;
 
-    const isEquipped = state.activeCamera === camId;
-    const card = document.createElement('div');
-    card.className = `bag-cam-card ${isEquipped ? 'equipped' : ''}`;
-    card.dataset.cam = camId;
-    card.dataset.cat = cat;
+  const brandEntries = Object.values(CAMERA_BRANDS);
+  brandEntries.forEach(brand => {
+    if (filterBrand !== 'all' && brand.id !== filterBrand) return;
 
-    let desc = cam.sub;
-    if (cam.filters) {
-      const firstFilter = Object.values(cam.filters)[0];
-      if (firstFilter) desc = `${cam.sub} • ${firstFilter.desc}`;
-    }
-
-    card.innerHTML = `
-      <div class="bag-card-top">
-        <span class="bag-card-icon">${CAM_SVG_ICONS[camId] || CAM_SVG_ICONS['default']}</span>
-        <span class="bag-card-badge">${cam.badge}</span>
-      </div>
-      <div class="bag-card-title">${cam.name}</div>
-      <div class="bag-card-desc">${desc}</div>
-      <div class="bag-card-status">${isEquipped ? '● 장착 중 (EQUIPPED)' : '○ 탭하여 즉시 장착'}</div>
-    `;
-
-    card.addEventListener('click', () => {
-      soundEngine.playMount();
-      switchCamera(camId);
-      closeCameraBagModal();
+    // Find cameras of this brand matching current filterCat
+    const matchingCams = brand.cams.filter(camId => {
+      if (!CAMERAS[camId]) return false;
+      if (filterCat !== 'all') {
+        return getCameraCategory(camId) === filterCat;
+      }
+      return true;
     });
 
-    grid.appendChild(card);
+    if (matchingCams.length === 0) return;
+
+    // Brand Group Section
+    const section = document.createElement('div');
+    section.className = 'bag-brand-section';
+    section.dataset.brand = brand.id;
+
+    // Brand Header
+    const header = document.createElement('div');
+    header.className = 'bag-brand-header';
+    header.innerHTML = `
+      <div class="bag-brand-left">
+        <span class="bag-brand-icon-pill">${brand.iconText}</span>
+        <span class="bag-brand-title">${brand.name}</span>
+        <span class="bag-brand-kor">${brand.koreanName}</span>
+        <span class="bag-brand-origin">${brand.country} • ${brand.desc}</span>
+      </div>
+      <span class="bag-brand-badge-count">${matchingCams.length}대</span>
+    `;
+    section.appendChild(header);
+
+    // Cards Grid within Brand
+    const cardsContainer = document.createElement('div');
+    cardsContainer.className = 'bag-brand-cards';
+
+    matchingCams.forEach(camId => {
+      const cam = CAMERAS[camId];
+      const cat = getCameraCategory(camId);
+      const isEquipped = state.activeCamera === camId;
+
+      const card = document.createElement('div');
+      card.className = `bag-cam-card ${isEquipped ? 'equipped' : ''}`;
+      card.dataset.cam = camId;
+      card.dataset.cat = cat;
+      card.dataset.brand = brand.id;
+
+      let desc = cam.sub;
+      if (cam.filters) {
+        const firstFilter = Object.values(cam.filters)[0];
+        if (firstFilter) desc = `${cam.sub} • ${firstFilter.desc}`;
+      }
+
+      card.innerHTML = `
+        <div class="bag-card-top">
+          <div class="bag-card-icon-container">
+            <span class="bag-card-icon">${CAM_SVG_ICONS[camId] || CAM_SVG_ICONS['default']}</span>
+          </div>
+          <div class="bag-card-top-meta">
+            <span class="bag-card-brand-badge">${brand.name}</span>
+            <span class="bag-card-badge">${cam.badge}</span>
+          </div>
+        </div>
+        <div class="bag-card-title">${cam.name}</div>
+        <div class="bag-card-desc">${desc}</div>
+        <div class="bag-card-action-bar">
+          <span class="bag-card-status">${isEquipped ? '● 장착 중 (EQUIPPED)' : '○ 탭하여 즉시 장착'}</span>
+          <button class="bag-card-equip-btn ${isEquipped ? 'active' : ''}">${isEquipped ? '장착됨' : '장착'}</button>
+        </div>
+      `;
+
+      card.addEventListener('click', () => {
+        soundEngine.playMount();
+        switchCamera(camId);
+        closeCameraBagModal();
+      });
+
+      cardsContainer.appendChild(card);
+    });
+
+    section.appendChild(cardsContainer);
+    grid.appendChild(section);
   });
 }
 
@@ -3485,6 +3682,9 @@ function initCameraBagModal() {
 
   const btnBagBottom = document.getElementById('bottom-camera-bag-btn');
   if (btnBagBottom) btnBagBottom.addEventListener('click', openCameraBagModal);
+
+  const btnCatBag = document.getElementById('cat-bar-bag-btn');
+  if (btnCatBag) btnCatBag.addEventListener('click', openCameraBagModal);
 
   const badgeHud = document.getElementById('camera-model-badge');
   if (badgeHud) badgeHud.addEventListener('click', openCameraBagModal);
@@ -3502,12 +3702,31 @@ function initCameraBagModal() {
     });
   }
 
+  // Category Filter in Camera Bag (Preserved for tests & category sorting)
   document.querySelectorAll('#bag-category-filter .bag-cat-btn').forEach(btn => {
     btn.addEventListener('click', () => {
       soundEngine.playTick();
       document.querySelectorAll('#bag-category-filter .bag-cat-btn').forEach(b => b.classList.remove('active'));
       btn.classList.add('active');
-      renderCameraBagGrid(btn.dataset.cat);
+      // Reset brand buttons to 'all' so category view shows all cameras in that category
+      document.querySelectorAll('#bag-brand-filter .bag-brand-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.brand === 'all');
+      });
+      renderCameraBagGrid(btn.dataset.cat, 'all');
+    });
+  });
+
+  // Brand Filter in Camera Bag (Direct Brand selection)
+  document.querySelectorAll('#bag-brand-filter .bag-brand-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      soundEngine.playTick();
+      document.querySelectorAll('#bag-brand-filter .bag-brand-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      // Reset category buttons to 'all' so brand view shows all cameras of this brand
+      document.querySelectorAll('#bag-category-filter .bag-cat-btn').forEach(b => {
+        b.classList.toggle('active', b.dataset.cat === 'all');
+      });
+      renderCameraBagGrid('all', btn.dataset.brand);
     });
   });
 

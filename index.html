@@ -1850,6 +1850,7 @@
             
             <!-- Camera Category Fast-Jump Tabs -->
             <div class="camera-category-bar" id="camera-category-bar">
+              <button class="cam-cat-pill cam-bag-trigger-pill" id="cat-bar-bag-btn" title="브랜드별 16종 카메라 바구니 열기">👜 카메라 바구니</button>
               <button class="cam-cat-pill active" data-cat="all">전체 16종</button>
               <button class="cam-cat-pill" data-cat="bubble">버블 & 필름</button>
               <button class="cam-cat-pill" data-cat="y2k">Y2K 디카</button>
@@ -2143,16 +2144,35 @@
     <div class="modal-dialog camera-bag-dialog">
       <div class="modal-header">
         <div>
-          <div class="modal-title">16대 아이코닉 카메라 보관함 (Camera Bag)</div>
+          <div class="modal-title">👜 16대 명기 카메라 바구니 (Brand Camera Bag)</div>
           <div style="font-size: 11px; color: var(--text-secondary); margin-top: 2px;">
-            원하는 카메라를 탭하면 즉시 교체 장착됩니다 • 뷰파인더 좌우 스와이프로도 전환 가능
+            브랜드별로 정리된 카메라 컬렉션 • 원하는 카메라를 탭하면 즉시 교체 장착됩니다
           </div>
         </div>
         <button class="modal-close-btn" id="btn-close-camera-bag">✕</button>
       </div>
 
       <div class="modal-body" style="padding: 14px 18px; max-height: 520px; overflow-y: auto;">
-        <!-- Category Filter Pills inside Bag -->
+        <!-- Brand Selector Bar in Camera Bag -->
+        <div class="bag-brand-filter-wrapper">
+          <div class="bag-brand-filter-label">🏷️ 브랜드별 모아보기</div>
+          <div class="bag-brand-filter" id="bag-brand-filter">
+            <button class="bag-brand-btn active" data-brand="all">전체 브랜드 (16)</button>
+            <button class="bag-brand-btn" data-brand="leica"><span class="brand-ico">🔴</span> 라이카 (1)</button>
+            <button class="bag-brand-btn" data-brand="contax"><span class="brand-ico">⭐</span> 콘탁스 (1)</button>
+            <button class="bag-brand-btn" data-brand="ricoh"><span class="brand-ico">⬛</span> 리코 (1)</button>
+            <button class="bag-brand-btn" data-brand="olympus"><span class="brand-ico">💧</span> 올림푸스 (1)</button>
+            <button class="bag-brand-btn" data-brand="sony"><span class="brand-ico">🔵</span> 소니 (2)</button>
+            <button class="bag-brand-btn" data-brand="canon"><span class="brand-ico">🔴</span> 캐논 (1)</button>
+            <button class="bag-brand-btn" data-brand="fujifilm"><span class="brand-ico">🟢</span> 후지필름 (2)</button>
+            <button class="bag-brand-btn" data-brand="hasselblad"><span class="brand-ico">🪐</span> 핫셀블라드 (1)</button>
+            <button class="bag-brand-btn" data-brand="polaroid"><span class="brand-ico">🌈</span> 폴라로이드 (1)</button>
+            <button class="bag-brand-btn" data-brand="kyocera"><span class="brand-ico">🔺</span> 교세라 (1)</button>
+            <button class="bag-brand-btn" data-brand="studio"><span class="brand-ico">🎨</span> 스튜디오&랩 (4)</button>
+          </div>
+        </div>
+
+        <!-- Category Filter Pills inside Bag (Preserved for tests) -->
         <div class="bag-category-filter" id="bag-category-filter">
           <button class="bag-cat-btn active" data-cat="all">전체 (16)</button>
           <button class="bag-cat-btn" data-cat="bubble">버블 & 필름 (6)</button>
@@ -2161,9 +2181,9 @@
           <button class="bag-cat-btn" data-cat="studio">프로 스튜디오 (2)</button>
         </div>
 
-        <!-- 16 Visual Camera Cards Grid -->
+        <!-- 16 Visual Camera Cards Grid Organized by Brand -->
         <div class="camera-bag-grid" id="camera-bag-grid">
-          <!-- Dynamic or pre-rendered cards with full visual styles -->
+          <!-- Dynamically rendered brand sections with full visual styles -->
         </div>
       </div>
 
