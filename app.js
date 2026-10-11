@@ -127,6 +127,18 @@ const CAMERAS = {
         desc: '창가 자연광 투명 얼짱 톤',
         css: 'brightness(1.12) contrast(1.08) saturate(1.24) sepia(0.02)',
         tintRgba: 'rgba(255, 230, 195, 0.08)'
+      },
+      'ixy-cool': {
+        name: 'Y2K Silver CCD',
+        desc: '실버 디카 특유의 쿨톤 투명감',
+        css: 'brightness(1.12) contrast(1.10) saturate(1.12) hue-rotate(-8deg)',
+        tintRgba: 'rgba(200, 230, 255, 0.08)'
+      },
+      'ixy-sunset': {
+        name: 'Sunset Cafe',
+        desc: '골든아워 창가 노을빛 웜 글로우',
+        css: 'brightness(1.08) contrast(1.14) saturate(1.28) sepia(0.12)',
+        tintRgba: 'rgba(255, 185, 115, 0.12)'
       }
     }
   },
@@ -164,6 +176,18 @@ const CAMERAS = {
         desc: '90s 여름 바캉스 햇살 캠코더',
         css: 'brightness(1.10) contrast(1.08) saturate(1.26) sepia(0.05)',
         tintRgba: 'rgba(255, 225, 160, 0.10)'
+      },
+      'handy-matrix': {
+        name: 'NightShot IR',
+        desc: '00년대 캠코더 나이트샷 적외선',
+        css: 'brightness(1.15) contrast(1.20) saturate(1.10) hue-rotate(85deg)',
+        tintRgba: 'rgba(50, 255, 100, 0.12)'
+      },
+      'handy-golden': {
+        name: 'Golden Hour Tape',
+        desc: '황금빛 오후 따스한 테이프 톤',
+        css: 'brightness(1.06) contrast(1.16) saturate(1.25) sepia(0.16)',
+        tintRgba: 'rgba(255, 190, 80, 0.14)'
       }
     }
   },
@@ -201,6 +225,18 @@ const CAMERAS = {
         desc: '부드러운 라벤더-핑크 파스텔',
         css: 'brightness(1.12) contrast(1.06) saturate(1.22) sepia(0.03)',
         tintRgba: 'rgba(245, 215, 255, 0.08)'
+      },
+      'cyber-y2k-pink': {
+        name: 'Cyber Pink CCD',
+        desc: '밀레니엄 핑크 메탈릭 CCD 감성',
+        css: 'brightness(1.12) contrast(1.14) saturate(1.26) hue-rotate(-22deg)',
+        tintRgba: 'rgba(255, 150, 220, 0.10)'
+      },
+      'cyber-silver': {
+        name: 'Titanium CCD',
+        desc: '선명하고 차가운 사이버 실버',
+        css: 'brightness(1.08) contrast(1.24) saturate(1.02) hue-rotate(-6deg)',
+        tintRgba: 'rgba(220, 235, 255, 0.08)'
       }
     }
   },
@@ -238,6 +274,18 @@ const CAMERAS = {
         desc: '비비드 무지개 카드',
         css: 'brightness(1.08) contrast(1.14) saturate(1.3)',
         tintRgba: null
+      },
+      'instax-warm': {
+        name: 'Instax Warm Gold',
+        desc: '따사로운 골든 즉석 인화지',
+        css: 'brightness(1.08) contrast(1.04) saturate(1.18) sepia(0.14)',
+        tintRgba: 'rgba(255, 210, 130, 0.12)'
+      },
+      'instax-cool': {
+        name: 'Instax Cool Blue',
+        desc: '청량한 여름 블루 즉석사진',
+        css: 'brightness(1.06) contrast(1.12) saturate(1.10) hue-rotate(-15deg)',
+        tintRgba: 'rgba(160, 210, 255, 0.10)'
       }
     }
   },
@@ -275,6 +323,18 @@ const CAMERAS = {
         desc: '황금빛 웜톤 네거티브',
         css: 'brightness(1.06) contrast(1.15) saturate(1.24) sepia(0.12)',
         tintRgba: 'rgba(255, 215, 140, 0.1)'
+      },
+      'mju-velvia': {
+        name: 'μ Slide Vivid',
+        desc: '비비드 슬라이드 짙은 발색',
+        css: 'brightness(1.04) contrast(1.30) saturate(1.40) sepia(0.02)',
+        tintRgba: 'rgba(255, 160, 100, 0.08)'
+      },
+      'mju-mono': {
+        name: 'μ Noir Contrast',
+        desc: '강렬한 거리 스냅 흑백 톤',
+        css: 'grayscale(1) contrast(1.55) brightness(1.02)',
+        tintRgba: null
       }
     }
   },
@@ -312,6 +372,18 @@ const CAMERAS = {
         desc: '독일 광학 깊은 흑백 계조',
         css: 'grayscale(1) contrast(1.4) brightness(1.0)',
         tintRgba: null
+      },
+      'zeiss-champagne': {
+        name: 'T2 Champagne Gold',
+        desc: '샴페인 골드 럭셔리 티타늄 룩',
+        css: 'brightness(1.08) contrast(1.18) saturate(1.18) sepia(0.10)',
+        tintRgba: 'rgba(255, 220, 150, 0.12)'
+      },
+      'zeiss-emerald': {
+        name: 'Sonnar Emerald',
+        desc: '조나 38mm 투명한 청록 섀도우',
+        css: 'brightness(1.04) contrast(1.22) saturate(1.22) hue-rotate(18deg)',
+        tintRgba: 'rgba(70, 215, 175, 0.08)'
       }
     }
   },
@@ -349,6 +421,18 @@ const CAMERAS = {
         desc: '그런지한 교차 현상 발색',
         css: 'brightness(1.08) contrast(1.38) saturate(1.4) hue-rotate(25deg)',
         tintRgba: 'rgba(180, 255, 100, 0.08)'
+      },
+      'gr-bleach': {
+        name: 'Bleach Bypass',
+        desc: '거친 은염 탈색의 묵직한 질감',
+        css: 'brightness(1.02) contrast(1.50) saturate(0.65)',
+        tintRgba: 'rgba(200, 200, 200, 0.06)'
+      },
+      'gr-amber': {
+        name: 'Amber Street 28',
+        desc: '골목길 가로등 앰버 스냅',
+        css: 'brightness(1.06) contrast(1.18) saturate(1.25) sepia(0.15)',
+        tintRgba: 'rgba(255, 180, 70, 0.12)'
       }
     }
   },
@@ -386,6 +470,18 @@ const CAMERAS = {
         desc: '라이카 특유의 깊은 원색 렌더링',
         css: 'brightness(1.02) contrast(1.26) saturate(1.28) sepia(0.02)',
         tintRgba: 'rgba(255, 180, 180, 0.05)'
+      },
+      'leica-noctilux': {
+        name: 'Noctilux f/0.95 Dream',
+        desc: '녹티룩스 극한 개방감 & 보케 글로우',
+        css: 'brightness(1.12) contrast(1.08) saturate(1.15) sepia(0.06)',
+        tintRgba: 'rgba(255, 235, 200, 0.12)'
+      },
+      'leica-amber': {
+        name: 'Barnack Amber',
+        desc: '오스카 바르낙 클래식 황동 앰버',
+        css: 'brightness(1.06) contrast(1.16) saturate(1.20) sepia(0.18)',
+        tintRgba: 'rgba(240, 190, 110, 0.12)'
       }
     }
   },
@@ -423,6 +519,18 @@ const CAMERAS = {
         desc: '타케우치 마리야 감성의 감미롭고 온화한 80s 아날로그 카세트 질감',
         css: 'brightness(1.08) contrast(1.10) saturate(1.25) sepia(0.06)',
         tintRgba: 'rgba(255, 205, 160, 0.12)'
+      },
+      'city-resort': {
+        name: 'Karuizawa \'87',
+        desc: '가루이자와 버블 피서지 별장 맑고 투명한 테라스 햇살 & 민트 그린',
+        css: 'brightness(1.12) contrast(1.12) saturate(1.30) hue-rotate(5deg)',
+        tintRgba: 'rgba(64, 224, 180, 0.10)'
+      },
+      'city-midnight': {
+        name: 'Roppongi Drive',
+        desc: '심야 롯폰기 하이웨이 시티라이트 네온 마젠타 & 코발트 앰비언트',
+        css: 'brightness(1.05) contrast(1.22) saturate(1.38) hue-rotate(-12deg)',
+        tintRgba: 'rgba(230, 80, 200, 0.12)'
       }
     }
   },
@@ -460,6 +568,18 @@ const CAMERAS = {
         desc: '특유의 에메랄드 그린 섀도우',
         css: 'brightness(1.04) contrast(1.18) saturate(1.22) hue-rotate(15deg)',
         tintRgba: 'rgba(50, 200, 150, 0.08)'
+      },
+      'film-kodachrome': {
+        name: 'Kodachrome 64',
+        desc: '전설의 코다크롬 64 슬라이드 불멸의 원색',
+        css: 'brightness(1.04) contrast(1.30) saturate(1.38) sepia(0.04)',
+        tintRgba: 'rgba(255, 120, 50, 0.08)'
+      },
+      'film-velvia': {
+        name: 'Velvia 50 Vivid',
+        desc: '초고채도 풍경/인물 슬라이드 압도적 발색',
+        css: 'brightness(1.02) contrast(1.35) saturate(1.50) hue-rotate(5deg)',
+        tintRgba: 'rgba(50, 230, 180, 0.08)'
       }
     }
   },
@@ -499,6 +619,18 @@ const CAMERAS = {
         desc: '북유럽 쿨톤 메탈릭 질감',
         css: 'brightness(1.02) contrast(1.24) saturate(0.88) hue-rotate(-10deg)',
         tintRgba: 'rgba(200, 225, 255, 0.08)'
+      },
+      'hassel-gold': {
+        name: 'Portra 160 MF Gold',
+        desc: '중형 롤필름 따뜻한 포트레이트 골드',
+        css: 'brightness(1.05) contrast(1.14) saturate(1.20) sepia(0.12)',
+        tintRgba: 'rgba(255, 210, 130, 0.10)'
+      },
+      'hassel-mono': {
+        name: 'Acros 100 Precision',
+        desc: '초미립자 정밀 흑백 해상력',
+        css: 'grayscale(1) contrast(1.40) brightness(1.02)',
+        tintRgba: null
       }
     }
   },
@@ -538,6 +670,18 @@ const CAMERAS = {
         desc: '클래식 브라운 세피아 모노크롬',
         css: 'sepia(0.85) contrast(1.15) brightness(1.02)',
         tintRgba: 'rgba(240, 180, 100, 0.1)'
+      },
+      'sx70-cyan': {
+        name: 'Cool Instant Cyan',
+        desc: '청량하고 서늘한 즉석 사이언 틴트',
+        css: 'brightness(1.04) contrast(1.12) saturate(1.15) hue-rotate(-20deg)',
+        tintRgba: 'rgba(100, 215, 255, 0.10)'
+      },
+      'sx70-warm': {
+        name: 'Golden Polaroid',
+        desc: '풍부한 호박빛 골든 아워 즉석사진',
+        css: 'brightness(1.08) contrast(1.08) saturate(1.25) sepia(0.18)',
+        tintRgba: 'rgba(255, 200, 110, 0.14)'
       }
     }
   },
@@ -577,6 +721,18 @@ const CAMERAS = {
         desc: '선명한 오렌지 쿼츠데이트와 따스한 쇼와 61년 아날로그 인화지 감성',
         css: 'brightness(1.08) contrast(1.10) saturate(1.20) sepia(0.08)',
         tintRgba: 'rgba(255, 195, 130, 0.12)'
+      },
+      'quicksnap-fujicolor': {
+        name: 'Fujicolor Super HG',
+        desc: '선명하고 쨍한 후지필름 원색 발색과 녹색 계조의 정점',
+        css: 'brightness(1.10) contrast(1.16) saturate(1.32) sepia(0.03)',
+        tintRgba: 'rgba(30, 200, 110, 0.09)'
+      },
+      'quicksnap-party': {
+        name: 'Party Flash 400',
+        desc: '디스코텍과 파티장의 직광 플래시 & 샴페인 골드 글리터',
+        css: 'brightness(1.14) contrast(1.24) saturate(1.20) sepia(0.05)',
+        tintRgba: 'rgba(255, 230, 170, 0.10)'
       }
     }
   },
@@ -616,6 +772,18 @@ const CAMERAS = {
         desc: '80s 뉴웨이브 사카모토 류이치 감성의 지적이고 정제된 하이콘트라스트 흑백',
         css: 'grayscale(1) contrast(1.45) brightness(1.04)',
         tintRgba: null
+      },
+      'samurai-macro': {
+        name: 'Yashica Macro Pop',
+        desc: '야시카 매크로 렌즈의 극대화된 펀치감과 컬러 팝',
+        css: 'brightness(1.08) contrast(1.24) saturate(1.35) sepia(0.02)',
+        tintRgba: 'rgba(255, 140, 60, 0.08)'
+      },
+      'samurai-night': {
+        name: 'Tokyo Night Flight',
+        desc: '나이트 플라이트 시티 나이트뷰 쿨톤 하이테크 네온',
+        css: 'brightness(1.06) contrast(1.20) saturate(1.25) hue-rotate(-10deg)',
+        tintRgba: 'rgba(80, 210, 255, 0.09)'
       }
     }
   },
@@ -1211,6 +1379,88 @@ function switchPrevCamera() {
   switchCamera(CAMERA_ORDER[prevIndex]);
 }
 
+// Next Filter Stepper (Ergonomic 1-tap/swipe transition)
+function switchNextFilter() {
+  const cam = CAMERAS[state.activeCamera];
+  if (!cam || !cam.filters) return;
+  const filterKeys = Object.keys(cam.filters);
+  if (filterKeys.length <= 1) return;
+  const currentKey = state.selectedFilters[state.activeCamera] || filterKeys[0];
+  const curIdx = filterKeys.indexOf(currentKey);
+  const nextIdx = (curIdx + 1) % filterKeys.length;
+  selectCameraFilter(filterKeys[nextIdx]);
+}
+
+// Previous Filter Stepper (Ergonomic 1-tap/swipe transition)
+function switchPrevFilter() {
+  const cam = CAMERAS[state.activeCamera];
+  if (!cam || !cam.filters) return;
+  const filterKeys = Object.keys(cam.filters);
+  if (filterKeys.length <= 1) return;
+  const currentKey = state.selectedFilters[state.activeCamera] || filterKeys[0];
+  const curIdx = filterKeys.indexOf(currentKey);
+  const prevIdx = (curIdx - 1 + filterKeys.length) % filterKeys.length;
+  selectCameraFilter(filterKeys[prevIdx]);
+}
+
+// Centralized Filter Selector with Graphic Swatch Sync & Auto-Center Scroll
+function selectCameraFilter(filterKey) {
+  const cam = CAMERAS[state.activeCamera];
+  if (!cam || !cam.filters || !cam.filters[filterKey]) return;
+
+  soundEngine.playTick();
+  state.selectedFilters[state.activeCamera] = filterKey;
+  applyCurrentCameraFilter();
+
+  // Update active state on chips in current drawer & smooth center scroll
+  const drawer = document.getElementById(cam.drawerId);
+  if (drawer) {
+    const chips = drawer.querySelectorAll('.filter-chip');
+    chips.forEach(c => {
+      const isTarget = c.dataset.filter === filterKey;
+      c.classList.toggle('active', isTarget);
+      if (isTarget) {
+        c.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+      }
+    });
+  }
+
+  const spec = cam.filters[filterKey];
+  if (spec) {
+    const badgeSub = document.getElementById('cam-badge-sub');
+    if (badgeSub) badgeSub.textContent = spec.name;
+    showDynamicIslandBanner(cam.shortName, spec.name, 1200);
+  }
+}
+
+// Viewfinder Quick Filter Stepper HUD Pill Sync
+function updateFilterHud() {
+  const cam = CAMERAS[state.activeCamera];
+  const stepper = document.getElementById('vf-filter-stepper');
+  if (!stepper) return;
+
+  if (!cam || !cam.filters) {
+    stepper.style.display = 'none';
+    return;
+  }
+
+  stepper.style.display = 'flex';
+  const filterKeys = Object.keys(cam.filters);
+  const currentKey = state.selectedFilters[state.activeCamera] || filterKeys[0];
+  const curIdx = Math.max(0, filterKeys.indexOf(currentKey));
+  const filterSpec = cam.filters[currentKey];
+
+  const labelEl = document.getElementById('vf-filter-label');
+  const counterEl = document.getElementById('vf-filter-counter');
+  const dotEl = document.getElementById('vf-filter-swatch-dot');
+
+  if (labelEl && filterSpec) labelEl.textContent = filterSpec.name;
+  if (counterEl) counterEl.textContent = `${curIdx + 1}/${filterKeys.length}`;
+  if (dotEl) {
+    dotEl.setAttribute('data-swatch', currentKey);
+  }
+}
+
 function applyCurrentCameraFilter() {
   const cam = CAMERAS[state.activeCamera];
   const mediaFilterEl = state.cameraSource === 'webcam' ? document.getElementById('camera-video') : document.getElementById('model-canvas');
@@ -1226,6 +1476,8 @@ function applyCurrentCameraFilter() {
   } else {
     mediaFilterEl.style.filter = 'none';
   }
+
+  updateFilterHud();
 }
 
 // Right Spec Card Update
@@ -2718,7 +2970,7 @@ function initViewfinderSwipe() {
   let isSwiping = false;
 
   vf.addEventListener('pointerdown', (e) => {
-    if (e.target.closest('.camera-model-badge-container') || e.target.closest('button')) return;
+    if (e.target.closest('.camera-model-badge-container') || e.target.closest('.vf-filter-stepper') || e.target.closest('button')) return;
     startX = e.clientX;
     startY = e.clientY;
     isSwiping = true;
@@ -2735,6 +2987,13 @@ function initViewfinderSwipe() {
         switchNextCamera();
       } else {
         switchPrevCamera();
+      }
+    } else if (Math.abs(dy) > 30 && Math.abs(dy) > Math.abs(dx) * 1.2) {
+      // Ergonomic Vertical Flick / Swipe Gesture to Cycle Filters
+      if (dy < 0) {
+        switchNextFilter();
+      } else {
+        switchPrevFilter();
       }
     }
   });
@@ -2874,6 +3133,108 @@ function initCameraBagModal() {
     e.stopPropagation();
     switchNextCamera();
   });
+
+  // Viewfinder Quick Filter Steppers & Tap Pill Trigger
+  const btnFilterPrev = document.getElementById('btn-vf-filter-prev');
+  if (btnFilterPrev) btnFilterPrev.addEventListener('click', (e) => {
+    e.stopPropagation();
+    switchPrevFilter();
+  });
+
+  const btnFilterNext = document.getElementById('btn-vf-filter-next');
+  if (btnFilterNext) btnFilterNext.addEventListener('click', (e) => {
+    e.stopPropagation();
+    switchNextFilter();
+  });
+
+  const filterCenterBadge = document.getElementById('vf-filter-center-badge');
+  if (filterCenterBadge) filterCenterBadge.addEventListener('click', (e) => {
+    e.stopPropagation();
+    switchNextFilter();
+  });
+}
+
+// Elastic iOS-Style Rubber-Band Bounding Physics for Filter Carousels
+function initCarouselElasticPhysics() {
+  document.querySelectorAll('.filter-carousel').forEach(carousel => {
+    let isDragging = false;
+    let startX = 0;
+    let isOverbound = false;
+
+    carousel.addEventListener('pointerdown', (e) => {
+      isDragging = true;
+      startX = e.clientX;
+      isOverbound = false;
+      carousel.style.transition = 'none';
+      carousel.style.scrollBehavior = 'auto';
+    });
+
+    const onPointerMove = (e) => {
+      if (!isDragging) return;
+      const dx = e.clientX - startX;
+      const currentScroll = carousel.scrollLeft;
+      const maxScroll = Math.max(0, carousel.scrollWidth - carousel.clientWidth);
+
+      if (currentScroll <= 0 && dx > 0) {
+        // Elastic Rubber Banding past left edge
+        isOverbound = true;
+        const bounce = Math.pow(dx, 0.72) * 0.45;
+        carousel.style.transform = `translateX(${bounce}px)`;
+        carousel.classList.add('bouncing-left');
+      } else if (currentScroll >= maxScroll - 1 && dx < 0) {
+        // Elastic Rubber Banding past right edge
+        isOverbound = true;
+        const bounce = -Math.pow(Math.abs(dx), 0.72) * 0.45;
+        carousel.style.transform = `translateX(${bounce}px)`;
+        carousel.classList.add('bouncing-right');
+      } else {
+        if (isOverbound) {
+          carousel.style.transform = 'translateX(0px)';
+          carousel.classList.remove('bouncing-left', 'bouncing-right');
+          isOverbound = false;
+        }
+      }
+    };
+
+    const onPointerEnd = () => {
+      if (!isDragging) return;
+      isDragging = false;
+      if (isOverbound) {
+        carousel.style.transition = 'transform 0.42s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        carousel.style.transform = 'translateX(0px)';
+        carousel.classList.remove('bouncing-left', 'bouncing-right');
+        setTimeout(() => {
+          carousel.style.transition = '';
+          carousel.style.scrollBehavior = '';
+        }, 420);
+      }
+    };
+
+    carousel.addEventListener('pointermove', onPointerMove);
+    carousel.addEventListener('pointerup', onPointerEnd);
+    carousel.addEventListener('pointercancel', onPointerEnd);
+    carousel.addEventListener('pointerleave', onPointerEnd);
+
+    // Trackpad / Horizontal Wheel Elastic Bounce
+    let wheelTimeout = null;
+    carousel.addEventListener('wheel', (e) => {
+      if (Math.abs(e.deltaX) > 0) {
+        const atLeft = carousel.scrollLeft <= 0 && e.deltaX < 0;
+        const atRight = carousel.scrollLeft >= (carousel.scrollWidth - carousel.clientWidth - 1) && e.deltaX > 0;
+        if (atLeft || atRight) {
+          const sign = atLeft ? 1 : -1;
+          const bounceAmt = Math.min(20, Math.pow(Math.abs(e.deltaX), 0.6) * 2.5) * sign;
+          carousel.style.transition = 'transform 0.12s ease-out';
+          carousel.style.transform = `translateX(${bounceAmt}px)`;
+          clearTimeout(wheelTimeout);
+          wheelTimeout = setTimeout(() => {
+            carousel.style.transition = 'transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            carousel.style.transform = 'translateX(0px)';
+          }, 120);
+        }
+      }
+    }, { passive: true });
+  });
 }
 
 // ==========================================================================
@@ -2895,6 +3256,7 @@ function initEventListeners() {
   initViewfinderSwipe();
   initCameraCategoryBar();
   initCameraBagModal();
+  initCarouselElasticPhysics();
 
   // 4. QuickTake Long-Press Shutter & Volume Hardware Buttons
   initQuickTakeShutter();
@@ -2994,24 +3356,8 @@ function initEventListeners() {
   // 9. Camera Filter Chips in All Drawers
   document.querySelectorAll('.filter-carousel .filter-chip').forEach(chip => {
     chip.addEventListener('click', () => {
-      soundEngine.playTick();
-      const parentDrawer = chip.closest('.mode-control-panel');
-      if (parentDrawer) {
-        parentDrawer.querySelectorAll('.filter-chip').forEach(c => c.classList.remove('active'));
-      }
-      chip.classList.add('active');
-
       const filterKey = chip.dataset.filter;
-      state.selectedFilters[state.activeCamera] = filterKey;
-      applyCurrentCameraFilter();
-
-      const cam = CAMERAS[state.activeCamera];
-      const spec = cam.filters ? cam.filters[filterKey] : null;
-      if (spec) {
-        const badgeSub = document.getElementById('cam-badge-sub');
-        if (badgeSub) badgeSub.textContent = spec.name;
-        showDynamicIslandBanner(cam.shortName, spec.name, 1200);
-      }
+      selectCameraFilter(filterKey);
     });
   });
 
@@ -3467,6 +3813,12 @@ function initEventListeners() {
     } else if (e.key === 'ArrowRight') {
       e.preventDefault();
       switchNextCamera();
+    } else if (e.key === 'ArrowUp') {
+      e.preventDefault();
+      switchPrevFilter();
+    } else if (e.key === 'ArrowDown') {
+      e.preventDefault();
+      switchNextFilter();
     } else if (e.key === 'b' || e.key === 'B') {
       e.preventDefault();
       const bagModal = document.getElementById('camera-bag-modal');
@@ -3590,6 +3942,9 @@ window.addEventListener('DOMContentLoaded', () => {
 
 // Expose on window for QA test automation
 window.switchCamera = switchCamera;
+window.switchNextFilter = switchNextFilter;
+window.switchPrevFilter = switchPrevFilter;
+window.selectCameraFilter = selectCameraFilter;
 window.executeCapture = executeCapture;
 window.renderStudioModel = renderStudioModel;
 window.applyCurrentCameraFilter = applyCurrentCameraFilter;

@@ -736,6 +736,128 @@ body::before {
   mix-blend-mode: multiply;
 }
 
+/* ==========================================================================
+   Viewfinder Quick Filter Stepper HUD Pill (Tactile Multi-Channel Filter Navigation)
+   ========================================================================== */
+.vf-filter-stepper {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 55;
+  display: flex;
+  align-items: center;
+  gap: 3px;
+  background: rgba(18, 20, 26, 0.78);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 9999px;
+  padding: 3px 4px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.55), inset 0 1px 0 rgba(255, 255, 255, 0.25);
+  user-select: none;
+  -webkit-user-select: none;
+  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.vf-filter-stepper:hover {
+  background: rgba(24, 28, 36, 0.9);
+  border-color: rgba(245, 199, 103, 0.5);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.65), 0 0 12px rgba(245, 199, 103, 0.2);
+}
+
+.vf-filter-step-btn {
+  width: 22px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.08);
+  border: 0.5px solid rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  color: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+  padding: 0;
+  transition: all 0.18s ease;
+  flex-shrink: 0;
+}
+
+.vf-filter-step-btn:hover {
+  background: rgba(255, 255, 255, 0.22);
+  color: #fff;
+  transform: scale(1.08);
+}
+
+.vf-filter-step-btn:active {
+  transform: scale(0.92);
+  background: rgba(245, 199, 103, 0.3);
+  color: #f5c767;
+}
+
+.vf-filter-center-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 2px 8px;
+  cursor: pointer;
+  border-radius: 9999px;
+  transition: background 0.15s ease;
+}
+
+.vf-filter-center-badge:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.vf-filter-center-badge:active {
+  transform: scale(0.97);
+}
+
+.vf-filter-swatch-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  border: 1px solid rgba(255, 255, 255, 0.85);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6), inset 0 0 2px rgba(0, 0, 0, 0.3);
+  position: relative;
+  flex-shrink: 0;
+  background: #f5c767;
+  transition: all 0.25s ease;
+}
+
+.vf-filter-swatch-dot::after {
+  content: '';
+  position: absolute;
+  top: 1px;
+  left: 1.5px;
+  width: 4px;
+  height: 2.5px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.9) 0%, rgba(255, 255, 255, 0.2) 100%);
+  pointer-events: none;
+}
+
+.vf-filter-label {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: #fff;
+  white-space: nowrap;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+}
+
+.vf-filter-counter {
+  font-family: "SF Mono", "Menlo", monospace;
+  font-size: 8.5px;
+  font-weight: 800;
+  color: #f5c767;
+  background: rgba(245, 199, 103, 0.15);
+  border: 0.5px solid rgba(245, 199, 103, 0.4);
+  padding: 1px 4px;
+  border-radius: 6px;
+  white-space: nowrap;
+  letter-spacing: 0.5px;
+}
+
 /* Active Camera Model Badge HUD with Ergonomic Steppers */
 .camera-model-badge-container {
   position: absolute;
@@ -2213,17 +2335,30 @@ body::before {
   box-shadow: 0 2px 8px rgba(0, 0, 0, 0.35), var(--glass-inner-bevel);
 }
 
-/* Multi-brand Filter Carousel */
+/* Multi-brand Filter Carousel with Elastic Rubber-Banding */
 .filter-carousel {
   display: flex;
   gap: 8px;
   overflow-x: auto;
   padding: 3px 2px;
   scrollbar-width: none;
+  overscroll-behavior-x: contain;
+  -webkit-overflow-scrolling: touch;
+  will-change: transform;
+  position: relative;
+  transition: box-shadow 0.2s ease;
 }
 
 .filter-carousel::-webkit-scrollbar {
   display: none;
+}
+
+.filter-carousel.bouncing-left {
+  box-shadow: inset 14px 0 14px -6px rgba(245, 199, 103, 0.45);
+}
+
+.filter-carousel.bouncing-right {
+  box-shadow: inset -14px 0 14px -6px rgba(245, 199, 103, 0.45);
 }
 
 .filter-chip {
@@ -2244,6 +2379,7 @@ body::before {
   min-width: 60px;
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.1);
   position: relative;
+  flex-shrink: 0;
 }
 
 .filter-chip.hidden {
@@ -2261,6 +2397,179 @@ body::before {
   box-shadow: 0 0 12px rgba(245, 199, 103, 0.32), inset 0 1px 0 rgba(255, 255, 255, 0.25);
   transform: translateY(-1px);
 }
+
+/* Explicit Optical Glass Filter Lens Swatch */
+.filter-lens-swatch {
+  position: relative;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #2a2d36 35%, #15171d 85%, #0d0e12 100%);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.35), 0 0 0 1px rgba(255, 255, 255, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 1.5px 0 2px 0;
+  flex-shrink: 0;
+  transition: all 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  overflow: hidden;
+}
+
+.filter-chip.active .filter-lens-swatch {
+  box-shadow: 0 0 0 1.5px #f5c767, 0 0 10px rgba(245, 199, 103, 0.55), inset 0 1px 1.5px rgba(255, 255, 255, 0.6);
+  transform: scale(1.08);
+}
+
+.filter-lens-swatch .swatch-glass {
+  position: absolute;
+  inset: 2px;
+  border-radius: 50%;
+  box-shadow: inset 0 0 3px rgba(0, 0, 0, 0.45);
+  transition: all 0.22s ease;
+}
+
+.filter-lens-swatch .swatch-reflection {
+  position: absolute;
+  top: 3px;
+  left: 4px;
+  width: 9px;
+  height: 5.5px;
+  border-radius: 50% 50% 40% 40% / 60% 60% 30% 30%;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.1) 100%);
+  transform: rotate(-25deg);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.filter-lens-swatch .swatch-aperture-ring {
+  position: absolute;
+  inset: 1px;
+  border-radius: 50%;
+  border: 0.5px dashed rgba(255, 255, 255, 0.25);
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0.65;
+}
+
+.filter-chip.active .filter-lens-swatch .swatch-aperture-ring {
+  border-color: rgba(245, 199, 103, 0.65);
+  opacity: 0.9;
+}
+
+/* ==========================================================================
+   Multi-brand Optical Lens Filters: 84 Physical Glass Presets
+   ========================================================================== */
+/* 1. Canon IXY Digital 50 */
+[data-swatch="ixy-peach"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="ixy-peach"] { background: radial-gradient(circle, #ffb3a7 0%, #ff8b72 65%, #d9533f 100%); }
+[data-swatch="ixy-flash"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="ixy-flash"] { background: radial-gradient(circle, #fff3d1 0%, #ffbe4f 60%, #e07d10 100%); }
+[data-swatch="ixy-pastel"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="ixy-pastel"] { background: radial-gradient(circle, #fde2e4 0%, #e2b4bd 60%, #9b72cf 100%); }
+[data-swatch="ixy-night"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="ixy-night"] { background: radial-gradient(circle, #ffeaa7 0%, #fdcb6e 65%, #e17055 100%); }
+[data-swatch="ixy-cool"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="ixy-cool"] { background: radial-gradient(circle, #c7ecee 0%, #7ed6df 65%, #22a6b3 100%); }
+[data-swatch="ixy-sunset"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="ixy-sunset"] { background: radial-gradient(circle, #fed330 0%, #fa8231 65%, #eb3b5a 100%); }
+
+/* 2. Sony Handycam DCR-PC100 */
+[data-swatch="handy-vhs"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="handy-vhs"] { background: radial-gradient(circle, #70a1ff 0%, #3742fa 65%, #1e272e 100%); }
+[data-swatch="handy-minidv"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="handy-minidv"] { background: radial-gradient(circle, #7bed9f 0%, #2ed573 65%, #1e90ff 100%); }
+[data-swatch="handy-nightshot"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="handy-nightshot"] { background: radial-gradient(circle, #55efc4 0%, #00b894 65%, #053b2d 100%); }
+[data-swatch="handy-super8"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="handy-super8"] { background: radial-gradient(circle, #ffeaa7 0%, #fdcb6e 65%, #d63031 100%); }
+[data-swatch="handy-matrix"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="handy-matrix"] { background: radial-gradient(circle, #a8ff78 0%, #78ffd6 65%, #005c53 100%); }
+[data-swatch="handy-golden"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="handy-golden"] { background: radial-gradient(circle, #fbc531 0%, #e1b12c 65%, #4cd137 100%); }
+
+/* 3. Sony Cyber-shot DSC-P1 */
+[data-swatch="cyber-flash"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="cyber-flash"] { background: radial-gradient(circle, #ffffff 0%, #70a1ff 65%, #1e3799 100%); }
+[data-swatch="cyber-magenta"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="cyber-magenta"] { background: radial-gradient(circle, #ff9ff3 0%, #f368e0 65%, #5f27cd 100%); }
+[data-swatch="cyber-cool"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="cyber-cool"] { background: radial-gradient(circle, #dff9fb 0%, #c7ecee 65%, #48dbfb 100%); }
+[data-swatch="cyber-matrix"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="cyber-matrix"] { background: radial-gradient(circle, #00d2d3 0%, #01a3a4 65%, #10ac84 100%); }
+[data-swatch="cyber-y2k-pink"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="cyber-y2k-pink"] { background: radial-gradient(circle, #ff6b81 0%, #ff4757 65%, #2f3542 100%); }
+[data-swatch="cyber-silver"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="cyber-silver"] { background: radial-gradient(circle, #f1f2f6 0%, #ced6e0 65%, #57606f 100%); }
+
+/* 4. Fujifilm Instax Mini 7S */
+[data-swatch="instax-card"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="instax-card"] { background: radial-gradient(circle, #fff1b8 0%, #ffc069 65%, #d46b08 100%); }
+[data-swatch="polaroid-square"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="polaroid-square"] { background: radial-gradient(circle, #bae7ff 0%, #69c0ff 65%, #1890ff 100%); }
+[data-swatch="instant-rainbow"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="instant-rainbow"] { background: radial-gradient(circle, #ffadd2 0%, #b37feb 50%, #95de64 100%); }
+[data-swatch="instant-bw"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="instant-bw"] { background: radial-gradient(circle, #f5f5f5 0%, #8c8c8c 65%, #262626 100%); }
+[data-swatch="instax-warm"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="instax-warm"] { background: radial-gradient(circle, #ffd591 0%, #fa8c16 65%, #873800 100%); }
+[data-swatch="instax-cool"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="instax-cool"] { background: radial-gradient(circle, #d3adf7 0%, #722ed1 65%, #22075e 100%); }
+
+/* 5. Olympus μ[mju:]-II */
+[data-swatch="mju-standard"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="mju-standard"] { background: radial-gradient(circle, #d4edda 0%, #28a745 65%, #155724 100%); }
+[data-swatch="mju-gold"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="mju-gold"] { background: radial-gradient(circle, #fff3cd 0%, #ffc107 65%, #856404 100%); }
+[data-swatch="mju-chrome"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="mju-chrome"] { background: radial-gradient(circle, #d1ecf1 0%, #17a2b8 65%, #0c5460 100%); }
+[data-swatch="mju-night"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="mju-night"] { background: radial-gradient(circle, #cce5ff 0%, #007bff 65%, #004085 100%); }
+[data-swatch="mju-velvia"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="mju-velvia"] { background: radial-gradient(circle, #ff9ff3 0%, #f368e0 50%, #00d2d3 100%); }
+[data-swatch="mju-mono"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="mju-mono"] { background: radial-gradient(circle, #e9ecef 0%, #6c757d 65%, #212529 100%); }
+
+/* 6. Contax T2 */
+[data-swatch="titanium-classic"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="titanium-classic"] { background: radial-gradient(circle, #f5e6ca 0%, #d4a373 65%, #6b4c35 100%); }
+[data-swatch="zeiss-warm"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="zeiss-warm"] { background: radial-gradient(circle, #ffccd5 0%, #c9184a 65%, #590d22 100%); }
+[data-swatch="zeiss-shadow"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="zeiss-shadow"] { background: radial-gradient(circle, #e2eafc 0%, #8e9aaf 65%, #1b263b 100%); }
+[data-swatch="zeiss-mono"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="zeiss-mono"] { background: radial-gradient(circle, #dee2e6 0%, #495057 65%, #121212 100%); }
+[data-swatch="zeiss-champagne"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="zeiss-champagne"] { background: radial-gradient(circle, #ffeedb 0%, #f4acb7 65%, #9d8189 100%); }
+[data-swatch="zeiss-emerald"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="zeiss-emerald"] { background: radial-gradient(circle, #b7efc5 0%, #25a18e 65%, #004e64 100%); }
+
+/* 7. Ricoh GR Digital III */
+[data-swatch="gr-positive"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="gr-positive"] { background: radial-gradient(circle, #fefae0 0%, #dda15e 65%, #bc6c25 100%); }
+[data-swatch="gr-bw-high"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="gr-bw-high"] { background: radial-gradient(circle, #ffffff 0%, #4a4e69 65%, #000000 100%); }
+[data-swatch="gr-street"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="gr-street"] { background: radial-gradient(circle, #e0a96d 0%, #a85832 65%, #462521 100%); }
+[data-swatch="gr-cross"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="gr-cross"] { background: radial-gradient(circle, #d8e2dc 0%, #84a59d 65%, #354f52 100%); }
+[data-swatch="gr-bleach"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="gr-bleach"] { background: radial-gradient(circle, #e8e8e4 0%, #b8c0c2 65%, #3d405b 100%); }
+[data-swatch="gr-amber"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="gr-amber"] { background: radial-gradient(circle, #ffbe0b 0%, #fb5607 65%, #8338ec 100%); }
+
+/* 8. Leica M8 */
+[data-swatch="leica-classic"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="leica-classic"] { background: radial-gradient(circle, #fff1e6 0%, #f0efeb 50%, #4a5568 100%); }
+[data-swatch="leica-mono"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="leica-mono"] { background: radial-gradient(circle, #edf2f7 0%, #718096 65%, #1a202c 100%); }
+[data-swatch="leica-summilux"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="leica-summilux"] { background: radial-gradient(circle, #fed7aa 0%, #f97316 65%, #7c2d12 100%); }
+[data-swatch="leica-red"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="leica-red"] { background: radial-gradient(circle, #fee2e2 0%, #ef4444 65%, #7f1d1d 100%); }
+[data-swatch="leica-noctilux"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="leica-noctilux"] { background: radial-gradient(circle, #e9d5ff 0%, #a855f7 65%, #3b0764 100%); }
+[data-swatch="leica-amber"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="leica-amber"] { background: radial-gradient(circle, #fef08a 0%, #eab308 65%, #713f12 100%); }
+
+/* 9. City Pop 80s */
+[data-swatch="city-pastel"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="city-pastel"] { background: radial-gradient(circle, #ffeaa7 0%, #fab1a0 50%, #74b9ff 100%); }
+[data-swatch="city-tokyo"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="city-tokyo"] { background: radial-gradient(circle, #fd79a8 0%, #e84393 50%, #6c5ce7 100%); }
+[data-swatch="city-sunset"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="city-sunset"] { background: radial-gradient(circle, #ffeaa7 0%, #fdcb6e 50%, #e17055 100%); }
+[data-swatch="city-plastic"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="city-plastic"] { background: radial-gradient(circle, #81ecec 0%, #00cec9 50%, #ff7675 100%); }
+[data-swatch="city-resort"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="city-resort"] { background: radial-gradient(circle, #a8ff78 0%, #78ffd6 50%, #00cec9 100%); }
+[data-swatch="city-midnight"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="city-midnight"] { background: radial-gradient(circle, #2d3436 0%, #6c5ce7 65%, #0984e3 100%); }
+
+/* 10. Old Film 35mm */
+[data-swatch="film-superia"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="film-superia"] { background: radial-gradient(circle, #b8e994 0%, #78e08f 50%, #38ada9 100%); }
+[data-swatch="film-portra"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="film-portra"] { background: radial-gradient(circle, #ffecd2 0%, #fcb69f 65%, #ee5253 100%); }
+[data-swatch="film-ektar"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="film-ektar"] { background: radial-gradient(circle, #ff6b6b 0%, #ee5253 50%, #10ac84 100%); }
+[data-swatch="film-cinestill"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="film-cinestill"] { background: radial-gradient(circle, #ff9f43 0%, #ee5253 45%, #0abde3 100%); }
+[data-swatch="film-kodachrome"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="film-kodachrome"] { background: radial-gradient(circle, #fbc531 0%, #e84118 60%, #273c75 100%); }
+[data-swatch="film-velvia"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="film-velvia"] { background: radial-gradient(circle, #f368e0 0%, #ff9f43 45%, #00d2d3 100%); }
+
+/* 11. Hasselblad 500C/M */
+[data-swatch="hassel-planar"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="hassel-planar"] { background: radial-gradient(circle, #faedcd 0%, #d4a373 65%, #606c38 100%); }
+[data-swatch="hassel-astia"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="hassel-astia"] { background: radial-gradient(circle, #ffcad4 0%, #f4acb7 65%, #9d8189 100%); }
+[data-swatch="hassel-trix"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="hassel-trix"] { background: radial-gradient(circle, #f8f9fa 0%, #6c757d 65%, #1a1a1a 100%); }
+[data-swatch="hassel-chromium"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="hassel-chromium"] { background: radial-gradient(circle, #e0fbfc 0%, #98c1d9 65%, #293241 100%); }
+[data-swatch="hassel-gold"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="hassel-gold"] { background: radial-gradient(circle, #fff1b8 0%, #ffc069 65%, #ad4e00 100%); }
+[data-swatch="hassel-mono"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="hassel-mono"] { background: radial-gradient(circle, #dee2e6 0%, #495057 65%, #000000 100%); }
+
+/* 12. Polaroid SX-70 */
+[data-swatch="sx70-color600"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="sx70-color600"] { background: radial-gradient(circle, #fff3b0 0%, #e09f3e 55%, #9e2a2b 100%); }
+[data-swatch="sx70-sepia"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="sx70-sepia"] { background: radial-gradient(circle, #ebd4b4 0%, #c59b6d 65%, #593d25 100%); }
+[data-swatch="sx70-fade"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="sx70-fade"] { background: radial-gradient(circle, #d8e2dc 0%, #ffe5d9 60%, #ffcad4 100%); }
+[data-swatch="sx70-expired"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="sx70-expired"] { background: radial-gradient(circle, #c7f9cc 0%, #80ed99 50%, #57cc99 100%); }
+[data-swatch="sx70-cyan"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="sx70-cyan"] { background: radial-gradient(circle, #a0c4ff 0%, #bdb2ff 60%, #ffc6ff 100%); }
+[data-swatch="sx70-warm"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="sx70-warm"] { background: radial-gradient(circle, #ffd166 0%, #f78c6b 65%, #ef476f 100%); }
+
+/* 13. Fuji QuickSnap 1986 */
+[data-swatch="quicksnap-nostalgia"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="quicksnap-nostalgia"] { background: radial-gradient(circle, #d8f3dc 0%, #95d5b2 55%, #2d6a4f 100%); }
+[data-swatch="quicksnap-flash"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="quicksnap-flash"] { background: radial-gradient(circle, #fff9db 0%, #ffe066 60%, #f03e3e 100%); }
+[data-swatch="quicksnap-neon"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="quicksnap-neon"] { background: radial-gradient(circle, #ff99c8 0%, #fcf6bd 50%, #d0f4de 100%); }
+[data-swatch="quicksnap-86"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="quicksnap-86"] { background: radial-gradient(circle, #fde2e4 0%, #fad2e1 60%, #c5dedd 100%); }
+[data-swatch="quicksnap-fujicolor"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="quicksnap-fujicolor"] { background: radial-gradient(circle, #52b788 0%, #2d6a4f 65%, #081c15 100%); }
+[data-swatch="quicksnap-party"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="quicksnap-party"] { background: radial-gradient(circle, #ffbe0b 0%, #ff006e 55%, #8338ec 100%); }
+
+/* 14. Kyocera Samurai X3.0 */
+[data-swatch="samurai-half"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="samurai-half"] { background: radial-gradient(circle, #d3d3d3 0%, #808080 65%, #202020 100%); }
+[data-swatch="samurai-titanium"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="samurai-titanium"] { background: radial-gradient(circle, #e9ecef 0%, #adb5bd 65%, #495057 100%); }
+[data-swatch="samurai-cyber"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="samurai-cyber"] { background: radial-gradient(circle, #72efdd 0%, #48bfe3 60%, #5e60ce 100%); }
+[data-swatch="samurai-tokyo"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="samurai-tokyo"] { background: radial-gradient(circle, #ff70a6 0%, #ff9770 50%, #ffd670 100%); }
+[data-swatch="samurai-macro"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="samurai-macro"] { background: radial-gradient(circle, #90e0ef 0%, #0096c7 65%, #03045e 100%); }
+[data-swatch="samurai-night"] .swatch-glass, .vf-filter-swatch-dot[data-swatch="samurai-night"] { background: radial-gradient(circle, #ff0054 0%, #9e0059 55%, #390099 100%); }
 
 /* Filter Chip Brand Tag Badge - Authentic Vintage Print */
 .filter-chip-tag {
@@ -3450,7 +3759,7 @@ body::before {
   }
 
   .control-drawer .filter-carousel {
-    height: 46px !important;
+    height: 48px !important;
     gap: 6px !important;
   }
 
@@ -3458,7 +3767,13 @@ body::before {
     min-width: 48px !important;
     padding: 2px 4px !important;
     gap: 1px !important;
-    height: 42px !important;
+    height: 44px !important;
+  }
+
+  .control-drawer .filter-lens-swatch {
+    width: 18px !important;
+    height: 18px !important;
+    margin: 0.5px 0 !important;
   }
 
   .control-drawer .filter-chip-name {
@@ -3625,10 +3940,18 @@ body::before {
 .device-wrapper.device-se .cam-drawer-header { margin-bottom: 0px; }
 .device-wrapper.device-se .cam-drawer-title { font-size: 9.5px; }
 .device-wrapper.device-se .cam-drawer-badge { font-size: 7.5px; padding: 1px 4px; }
-.device-wrapper.device-se .filter-chip { padding: 1px 3px; min-width: 46px; gap: 1px; height: 32px; }
-.device-wrapper.device-se .filter-chip-tag { font-size: 6.5px; padding: 0.5px 2px; }
-.device-wrapper.device-se .filter-chip-name { font-size: 8px; }
+.device-wrapper.device-se .filter-chip { padding: 1px 3px; min-width: 44px; gap: 0.5px; height: 32px; }
+.device-wrapper.device-se .filter-lens-swatch { width: 14px; height: 14px; margin: 0; }
+.device-wrapper.device-se .filter-lens-swatch .swatch-glass { inset: 1.5px; }
+.device-wrapper.device-se .filter-lens-swatch .swatch-reflection { top: 2px; left: 2.5px; width: 5px; height: 3px; }
+.device-wrapper.device-se .filter-chip-tag { display: none; }
+.device-wrapper.device-se .filter-chip-name { font-size: 8px; line-height: 1; }
 .device-wrapper.device-se .filter-chip-sub { display: none; }
+.device-wrapper.device-se .vf-filter-stepper { bottom: 8px; padding: 2px 3px; gap: 2px; }
+.device-wrapper.device-se .vf-filter-step-btn { width: 18px; height: 18px; }
+.device-wrapper.device-se .vf-filter-swatch-dot { width: 10px; height: 10px; }
+.device-wrapper.device-se .vf-filter-label { font-size: 9.5px; }
+.device-wrapper.device-se .vf-filter-counter { font-size: 7.5px; padding: 0.5px 3px; }
 .device-wrapper.device-se .vintage-toggles { margin-top: 1px; }
 .device-wrapper.device-se .toggle-pill { padding: 1px 5px; font-size: 8px; height: 16px; line-height: 16px; }
 .device-wrapper.device-se .camera-bottom-section { top: 565px; height: 100px; padding-bottom: 2px; }
@@ -3663,8 +3986,10 @@ body::before {
 .device-wrapper.device-mini .control-drawer { top: 566px; height: 118px; padding: 3px 8px; }
 .device-wrapper.device-mini .cam-drawer-header { margin-bottom: 1px; }
 .device-wrapper.device-mini .filter-chip { padding: 2px 4px; min-width: 50px; gap: 1px; }
+.device-wrapper.device-mini .filter-lens-swatch { width: 18px; height: 18px; margin: 0.5px 0; }
 .device-wrapper.device-mini .filter-chip-name { font-size: 9px; }
 .device-wrapper.device-mini .filter-chip-sub { display: none; }
+.device-wrapper.device-mini .vf-filter-stepper { bottom: 10px; padding: 2.5px 3.5px; }
 .device-wrapper.device-mini .vintage-toggles { margin-top: 2px; }
 .device-wrapper.device-mini .toggle-pill { padding: 2px 6px; font-size: 9px; height: 18px; line-height: 18px; }
 .device-wrapper.device-mini .camera-bottom-section { top: 688px; height: 120px; }
@@ -3691,7 +4016,9 @@ body::before {
 .device-wrapper.device-standard .control-drawer { top: 596px; height: 122px; padding: 4px 8px; }
 .device-wrapper.device-standard .cam-drawer-header { margin-bottom: 2px; }
 .device-wrapper.device-standard .filter-chip { padding: 2px 5px; min-width: 54px; gap: 1px; }
+.device-wrapper.device-standard .filter-lens-swatch { width: 20px; height: 20px; margin: 1px 0; }
 .device-wrapper.device-standard .filter-chip-name { font-size: 9.5px; }
+.device-wrapper.device-standard .filter-chip-sub { display: none; }
 .device-wrapper.device-standard .vintage-toggles { margin-top: 2px; }
 .device-wrapper.device-standard .toggle-pill { padding: 2px 7px; font-size: 9px; height: 18px; line-height: 18px; }
 .device-wrapper.device-standard .camera-bottom-section { top: 722px; height: 124px; }
@@ -3716,6 +4043,8 @@ body::before {
   border-radius: 22px;
 }
 .device-wrapper.device-max .control-drawer { top: 654px; height: 128px; }
+.device-wrapper.device-max .filter-lens-swatch { width: 22px; height: 22px; margin: 1px 0; }
+.device-wrapper.device-max .filter-chip-sub { display: none; }
 .device-wrapper.device-max .camera-bottom-section { top: 788px; height: 136px; }
 
 /* ==========================================================================

@@ -721,6 +721,21 @@
             <div class="timer-countdown-overlay" id="timer-overlay">
               <div class="countdown-number" id="countdown-num">3</div>
             </div>
+
+            <!-- Viewfinder Quick Filter Stepper HUD Pill -->
+            <div class="vf-filter-stepper" id="vf-filter-stepper" title="필터 빠른 전환 (좌/우 화살표 탭 또는 상/하 스와이프)">
+              <button class="vf-filter-step-btn" id="btn-vf-filter-prev" aria-label="이전 필터">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+              </button>
+              <div class="vf-filter-center-badge" id="vf-filter-center-badge" title="탭하여 필터 순환">
+                <span class="vf-filter-swatch-dot" id="vf-filter-swatch-dot" data-swatch="ixy-peach"></span>
+                <span class="vf-filter-label" id="vf-filter-label">Peach Glow</span>
+                <span class="vf-filter-counter" id="vf-filter-counter">1/6</span>
+              </div>
+              <button class="vf-filter-step-btn" id="btn-vf-filter-next" aria-label="다음 필터">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+              </button>
+            </div>
           </div>
 
           <!-- Central Bottom Control Drawer (Contextual to Active Camera) -->
@@ -730,32 +745,68 @@
             <div class="mode-control-panel active" id="drawer-canon-ixy">
               <div class="cam-drawer-header">
                 <span class="cam-drawer-title">Canon IXY Digital 50 전용 필터</span>
-                <span class="cam-drawer-badge">Y2K DIGICAM</span>
+                <span class="cam-drawer-badge">◎ 6 OPTICAL FILTERS</span>
               </div>
               <div class="filter-carousel">
                 <div class="filter-chip active" data-filter="ixy-peach">
                   <div class="filter-chip-tag canon-tag">BEST</div>
-                  <span class="filter-chip-icon">🍑</span>
+                  <div class="filter-lens-swatch" data-swatch="ixy-peach">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Peach Glow</span>
                   <span class="filter-chip-sub">뽀샤시 웜톤</span>
                 </div>
                 <div class="filter-chip" data-filter="ixy-flash">
                   <div class="filter-chip-tag canon-tag">FLASH</div>
-                  <span class="filter-chip-icon">📸</span>
+                  <div class="filter-lens-swatch" data-swatch="ixy-flash">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Flash Pop</span>
                   <span class="filter-chip-sub">디카 플래시</span>
                 </div>
                 <div class="filter-chip" data-filter="ixy-pastel">
                   <div class="filter-chip-tag canon-tag">LO-FI</div>
-                  <span class="filter-chip-icon">🌸</span>
+                  <div class="filter-lens-swatch" data-swatch="ixy-pastel">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Pastel Haze</span>
                   <span class="filter-chip-sub">들뜬 섀도우</span>
                 </div>
                 <div class="filter-chip" data-filter="ixy-night">
                   <div class="filter-chip-tag canon-tag">SUNNY</div>
-                  <span class="filter-chip-icon">☀️</span>
+                  <div class="filter-lens-swatch" data-swatch="ixy-night">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Clear Sunlight</span>
                   <span class="filter-chip-sub">맑은 한낮 햇살</span>
+                </div>
+                <div class="filter-chip" data-filter="ixy-cool">
+                  <div class="filter-chip-tag canon-tag">CCD</div>
+                  <div class="filter-lens-swatch" data-swatch="ixy-cool">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
+                  <span class="filter-chip-name">Silver CCD</span>
+                  <span class="filter-chip-sub">실버 쿨톤 투명</span>
+                </div>
+                <div class="filter-chip" data-filter="ixy-sunset">
+                  <div class="filter-chip-tag canon-tag">WARM</div>
+                  <div class="filter-lens-swatch" data-swatch="ixy-sunset">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
+                  <span class="filter-chip-name">Sunset Cafe</span>
+                  <span class="filter-chip-sub">골든아워 노을빛</span>
                 </div>
               </div>
               <div class="vintage-toggles">
@@ -769,32 +820,68 @@
             <div class="mode-control-panel" id="drawer-sony-handycam">
               <div class="cam-drawer-header">
                 <span class="cam-drawer-title">Sony DCR Handycam 전용 필터</span>
-                <span class="cam-drawer-badge">MINI-DV</span>
+                <span class="cam-drawer-badge">◎ 6 OPTICAL FILTERS</span>
               </div>
               <div class="filter-carousel">
                 <div class="filter-chip active" data-filter="handy-minidv">
                   <div class="filter-chip-tag sony-tag">3CCD</div>
-                  <span class="filter-chip-icon">📹</span>
+                  <div class="filter-lens-swatch" data-swatch="handy-minidv">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">MiniDV Classic</span>
                   <span class="filter-chip-sub">소니 비디오</span>
                 </div>
                 <div class="filter-chip" data-filter="handy-vhs">
                   <div class="filter-chip-tag vhs-tag">VHS</div>
-                  <span class="filter-chip-icon">📼</span>
+                  <div class="filter-lens-swatch" data-swatch="handy-vhs">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Hi8 Tape Glitch</span>
                   <span class="filter-chip-sub">스캔라인 글리치</span>
                 </div>
                 <div class="filter-chip" data-filter="handy-super8">
                   <div class="filter-chip-tag cine-tag">CINE</div>
-                  <span class="filter-chip-icon">📽️</span>
+                  <div class="filter-lens-swatch" data-swatch="handy-super8">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Super 8mm</span>
                   <span class="filter-chip-sub">골든 홈무비</span>
                 </div>
                 <div class="filter-chip" data-filter="handy-nightshot">
                   <div class="filter-chip-tag sony-tag">SUNNY</div>
-                  <span class="filter-chip-icon">☀️</span>
+                  <div class="filter-lens-swatch" data-swatch="handy-nightshot">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Retro Sunshine 90s</span>
                   <span class="filter-chip-sub">야외 햇살 캠코더</span>
+                </div>
+                <div class="filter-chip" data-filter="handy-matrix">
+                  <div class="filter-chip-tag sony-tag">IR</div>
+                  <div class="filter-lens-swatch" data-swatch="handy-matrix">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
+                  <span class="filter-chip-name">NightShot IR</span>
+                  <span class="filter-chip-sub">적외선 나이트샷</span>
+                </div>
+                <div class="filter-chip" data-filter="handy-golden">
+                  <div class="filter-chip-tag vhs-tag">TAPE</div>
+                  <div class="filter-lens-swatch" data-swatch="handy-golden">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
+                  <span class="filter-chip-name">Golden Tape</span>
+                  <span class="filter-chip-sub">골든아워 테이프</span>
                 </div>
               </div>
               <div class="vintage-toggles">
@@ -808,32 +895,68 @@
             <div class="mode-control-panel" id="drawer-sony-cybershot">
               <div class="cam-drawer-header">
                 <span class="cam-drawer-title">Sony Cyber-shot CCD 전용 필터</span>
-                <span class="cam-drawer-badge">CYBER Y2K</span>
+                <span class="cam-drawer-badge">◎ 6 OPTICAL FILTERS</span>
               </div>
               <div class="filter-carousel">
                 <div class="filter-chip active" data-filter="cyber-cool">
                   <div class="filter-chip-tag sony-tag">COOL</div>
-                  <span class="filter-chip-icon">❄️</span>
+                  <div class="filter-lens-swatch" data-swatch="cyber-cool">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">CCD Cool Blue</span>
                   <span class="filter-chip-sub">차가운 블루 틴트</span>
                 </div>
                 <div class="filter-chip" data-filter="cyber-magenta">
                   <div class="filter-chip-tag sony-tag">WHITE</div>
-                  <span class="filter-chip-icon">✨</span>
+                  <div class="filter-lens-swatch" data-swatch="cyber-magenta">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Clean Cyber White</span>
                   <span class="filter-chip-sub">화이트 사이버 룩</span>
                 </div>
                 <div class="filter-chip" data-filter="cyber-flash">
                   <div class="filter-chip-tag sony-tag">FLASH</div>
-                  <span class="filter-chip-icon">⚡</span>
+                  <div class="filter-lens-swatch" data-swatch="cyber-flash">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Flash Sharp</span>
                   <span class="filter-chip-sub">쨍한 콘트라스트</span>
                 </div>
                 <div class="filter-chip" data-filter="cyber-matrix">
                   <div class="filter-chip-tag sony-tag">PASTEL</div>
-                  <span class="filter-chip-icon">🌸</span>
+                  <div class="filter-lens-swatch" data-swatch="cyber-matrix">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Y2K Pastel Glow</span>
                   <span class="filter-chip-sub">Y2K 파스텔 틴트</span>
+                </div>
+                <div class="filter-chip" data-filter="cyber-y2k-pink">
+                  <div class="filter-chip-tag sony-tag">PINK</div>
+                  <div class="filter-lens-swatch" data-swatch="cyber-y2k-pink">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
+                  <span class="filter-chip-name">Cyber Pink CCD</span>
+                  <span class="filter-chip-sub">밀레니엄 핑크</span>
+                </div>
+                <div class="filter-chip" data-filter="cyber-silver">
+                  <div class="filter-chip-tag sony-tag">TITAN</div>
+                  <div class="filter-lens-swatch" data-swatch="cyber-silver">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
+                  <span class="filter-chip-name">Titanium CCD</span>
+                  <span class="filter-chip-sub">차가운 사이버 실버</span>
                 </div>
               </div>
               <div class="vintage-toggles">
@@ -847,32 +970,68 @@
             <div class="mode-control-panel" id="drawer-instax-mini">
               <div class="cam-drawer-header">
                 <span class="cam-drawer-title">Fuji Instax & Polaroid 전용 필터</span>
-                <span class="cam-drawer-badge">INSTANT FILM</span>
+                <span class="cam-drawer-badge">◎ 6 OPTICAL FILTERS</span>
               </div>
               <div class="filter-carousel">
                 <div class="filter-chip active" data-filter="instax-card">
                   <div class="filter-chip-tag fuji-tag">MINI</div>
-                  <span class="filter-chip-icon">🖼️</span>
+                  <div class="filter-lens-swatch" data-swatch="instax-card">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Instax Soft</span>
                   <span class="filter-chip-sub">화이트 카드 프레임</span>
                 </div>
                 <div class="filter-chip" data-filter="polaroid-square">
                   <div class="filter-chip-tag polaroid-tag">600</div>
-                  <span class="filter-chip-icon">🔲</span>
+                  <div class="filter-lens-swatch" data-swatch="polaroid-square">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Polaroid 600</span>
                   <span class="filter-chip-sub">클래식 스퀘어</span>
                 </div>
                 <div class="filter-chip" data-filter="instant-bw">
                   <div class="filter-chip-tag bw-tag">B&W</div>
-                  <span class="filter-chip-icon">🎞️</span>
+                  <div class="filter-lens-swatch" data-swatch="instant-bw">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Warm Mono</span>
                   <span class="filter-chip-sub">웜톤 흑백 즉석</span>
                 </div>
                 <div class="filter-chip" data-filter="instant-rainbow">
                   <div class="filter-chip-tag fuji-tag">COLOR</div>
-                  <span class="filter-chip-icon">🌈</span>
+                  <div class="filter-lens-swatch" data-swatch="instant-rainbow">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Rainbow Edge</span>
                   <span class="filter-chip-sub">무지개 카드</span>
+                </div>
+                <div class="filter-chip" data-filter="instax-warm">
+                  <div class="filter-chip-tag polaroid-tag">GOLD</div>
+                  <div class="filter-lens-swatch" data-swatch="instax-warm">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
+                  <span class="filter-chip-name">Instax Gold</span>
+                  <span class="filter-chip-sub">따스한 골든 인화</span>
+                </div>
+                <div class="filter-chip" data-filter="instax-cool">
+                  <div class="filter-chip-tag fuji-tag">BLUE</div>
+                  <div class="filter-lens-swatch" data-swatch="instax-cool">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
+                  <span class="filter-chip-name">Instax Cool</span>
+                  <span class="filter-chip-sub">청량한 블루 즉석</span>
                 </div>
               </div>
               <div class="vintage-toggles">
@@ -885,32 +1044,68 @@
             <div class="mode-control-panel" id="drawer-olympus-mju">
               <div class="cam-drawer-header">
                 <span class="cam-drawer-title">Olympus μ [mju:] II 필름 필터</span>
-                <span class="cam-drawer-badge">35mm f/2.8 FILM</span>
+                <span class="cam-drawer-badge">◎ 6 OPTICAL FILTERS</span>
               </div>
               <div class="filter-carousel">
                 <div class="filter-chip active" data-filter="mju-standard">
                   <div class="filter-chip-tag olympus-tag">μ2</div>
-                  <span class="filter-chip-icon">📷</span>
+                  <div class="filter-lens-swatch" data-swatch="mju-standard">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">μ Standard</span>
                   <span class="filter-chip-sub">스트리트 필름</span>
                 </div>
                 <div class="filter-chip" data-filter="mju-night">
                   <div class="filter-chip-tag olympus-tag">FLASH</div>
-                  <span class="filter-chip-icon">⚡</span>
-                  <span class="filter-chip-name">Daylight Street Flash</span>
+                  <div class="filter-lens-swatch" data-swatch="mju-night">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
+                  <span class="filter-chip-name">Daylight Flash</span>
                   <span class="filter-chip-sub">한낮 스트리트 직광</span>
                 </div>
                 <div class="filter-chip" data-filter="mju-chrome">
                   <div class="filter-chip-tag olympus-tag">SLIDE</div>
-                  <span class="filter-chip-icon">🎞️</span>
+                  <div class="filter-lens-swatch" data-swatch="mju-chrome">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">μ Chrome Slide</span>
                   <span class="filter-chip-sub">선명한 슬라이드</span>
                 </div>
                 <div class="filter-chip" data-filter="mju-gold">
                   <div class="filter-chip-tag olympus-tag">GOLD</div>
-                  <span class="filter-chip-icon">☀️</span>
+                  <div class="filter-lens-swatch" data-swatch="mju-gold">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">μ Gold 200</span>
                   <span class="filter-chip-sub">황금빛 웜톤</span>
+                </div>
+                <div class="filter-chip" data-filter="mju-velvia">
+                  <div class="filter-chip-tag olympus-tag">VIVID</div>
+                  <div class="filter-lens-swatch" data-swatch="mju-velvia">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
+                  <span class="filter-chip-name">μ Slide Vivid</span>
+                  <span class="filter-chip-sub">비비드 짙은 발색</span>
+                </div>
+                <div class="filter-chip" data-filter="mju-mono">
+                  <div class="filter-chip-tag bw-tag">MONO</div>
+                  <div class="filter-lens-swatch" data-swatch="mju-mono">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
+                  <span class="filter-chip-name">μ Noir Mono</span>
+                  <span class="filter-chip-sub">강렬한 스트리트</span>
                 </div>
               </div>
               <div class="vintage-toggles">
@@ -923,32 +1118,68 @@
             <div class="mode-control-panel" id="drawer-contax-t2">
               <div class="cam-drawer-header">
                 <span class="cam-drawer-title">Contax T2 칼자이스 T* 필터</span>
-                <span class="cam-drawer-badge">Carl Zeiss T*</span>
+                <span class="cam-drawer-badge">◎ 6 OPTICAL FILTERS</span>
               </div>
               <div class="filter-carousel">
                 <div class="filter-chip active" data-filter="zeiss-warm">
                   <div class="filter-chip-tag contax-tag">T*</div>
-                  <span class="filter-chip-icon">✨</span>
+                  <div class="filter-lens-swatch" data-swatch="zeiss-warm">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Zeiss Warm T*</span>
                   <span class="filter-chip-sub">묵직한 웜톤</span>
                 </div>
                 <div class="filter-chip" data-filter="zeiss-shadow">
                   <div class="filter-chip-tag contax-tag">SONNAR</div>
-                  <span class="filter-chip-icon">🌒</span>
+                  <div class="filter-lens-swatch" data-swatch="zeiss-shadow">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">T* Rich Shadow</span>
                   <span class="filter-chip-sub">풍부한 암부계조</span>
                 </div>
                 <div class="filter-chip" data-filter="titanium-classic">
                   <div class="filter-chip-tag contax-tag">TITAN</div>
-                  <span class="filter-chip-icon">🏛️</span>
+                  <div class="filter-lens-swatch" data-swatch="titanium-classic">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Titanium Classic</span>
                   <span class="filter-chip-sub">클래식 티타늄</span>
                 </div>
                 <div class="filter-chip" data-filter="zeiss-mono">
                   <div class="filter-chip-tag contax-tag">B&W</div>
-                  <span class="filter-chip-icon">🖤</span>
+                  <div class="filter-lens-swatch" data-swatch="zeiss-mono">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Zeiss T* B&W</span>
                   <span class="filter-chip-sub">독일 흑백 계조</span>
+                </div>
+                <div class="filter-chip" data-filter="zeiss-champagne">
+                  <div class="filter-chip-tag contax-tag">GOLD</div>
+                  <div class="filter-lens-swatch" data-swatch="zeiss-champagne">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
+                  <span class="filter-chip-name">T2 Champagne</span>
+                  <span class="filter-chip-sub">샴페인 골드 룩</span>
+                </div>
+                <div class="filter-chip" data-filter="zeiss-emerald">
+                  <div class="filter-chip-tag contax-tag">MINT</div>
+                  <div class="filter-lens-swatch" data-swatch="zeiss-emerald">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
+                  <span class="filter-chip-name">Sonnar Emerald</span>
+                  <span class="filter-chip-sub">투명한 청록 섀도우</span>
                 </div>
               </div>
               <div class="vintage-toggles">
@@ -961,32 +1192,68 @@
             <div class="mode-control-panel" id="drawer-ricoh-gr">
               <div class="cam-drawer-header">
                 <span class="cam-drawer-title">Ricoh GR Digital 스냅 필터</span>
-                <span class="cam-drawer-badge">SNAP SHOOTER</span>
+                <span class="cam-drawer-badge">◎ 6 OPTICAL FILTERS</span>
               </div>
               <div class="filter-carousel">
                 <div class="filter-chip active" data-filter="gr-bw-high">
                   <div class="filter-chip-tag ricoh-tag">B&W</div>
-                  <span class="filter-chip-icon">🖤</span>
+                  <div class="filter-lens-swatch" data-swatch="gr-bw-high">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">High-Contrast B&W</span>
                   <span class="filter-chip-sub">모리야마 흑백</span>
                 </div>
                 <div class="filter-chip" data-filter="gr-positive">
                   <div class="filter-chip-tag ricoh-tag">POSI</div>
-                  <span class="filter-chip-icon">🟡</span>
+                  <div class="filter-lens-swatch" data-swatch="gr-positive">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Positive Film</span>
                   <span class="filter-chip-sub">포지티브 발색</span>
                 </div>
                 <div class="filter-chip" data-filter="gr-street">
                   <div class="filter-chip-tag ricoh-tag">SNAP</div>
-                  <span class="filter-chip-icon">⚡</span>
+                  <div class="filter-lens-swatch" data-swatch="gr-street">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Street Snap</span>
                   <span class="filter-chip-sub">신속 스냅 룩</span>
                 </div>
                 <div class="filter-chip" data-filter="gr-cross">
                   <div class="filter-chip-tag ricoh-tag">CROSS</div>
-                  <span class="filter-chip-icon">🧪</span>
+                  <div class="filter-lens-swatch" data-swatch="gr-cross">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Cross Process</span>
                   <span class="filter-chip-sub">교차현상 발색</span>
+                </div>
+                <div class="filter-chip" data-filter="gr-bleach">
+                  <div class="filter-chip-tag ricoh-tag">BLEACH</div>
+                  <div class="filter-lens-swatch" data-swatch="gr-bleach">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
+                  <span class="filter-chip-name">Bleach Bypass</span>
+                  <span class="filter-chip-sub">은염 탈색 질감</span>
+                </div>
+                <div class="filter-chip" data-filter="gr-amber">
+                  <div class="filter-chip-tag ricoh-tag">AMBER</div>
+                  <div class="filter-lens-swatch" data-swatch="gr-amber">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
+                  <span class="filter-chip-name">Amber Street 28</span>
+                  <span class="filter-chip-sub">골목길 앰버 스냅</span>
                 </div>
               </div>
               <div class="vintage-toggles">
@@ -999,32 +1266,68 @@
             <div class="mode-control-panel" id="drawer-leica-m">
               <div class="cam-drawer-header">
                 <span class="cam-drawer-title">Leica M 레인지파인더 필터</span>
-                <span class="cam-drawer-badge">RANGEFINDER M</span>
+                <span class="cam-drawer-badge">◎ 6 OPTICAL FILTERS</span>
               </div>
               <div class="filter-carousel">
                 <div class="filter-chip active" data-filter="leica-summilux">
                   <div class="filter-chip-tag leica-tag">50mm</div>
-                  <span class="filter-chip-icon">🔴</span>
+                  <div class="filter-lens-swatch" data-swatch="leica-summilux">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Summilux 50</span>
                   <span class="filter-chip-sub">따뜻한 벨벳 톤</span>
                 </div>
                 <div class="filter-chip" data-filter="leica-mono">
                   <div class="filter-chip-tag bw-tag">MONO</div>
-                  <span class="filter-chip-icon">🎞️</span>
+                  <div class="filter-lens-swatch" data-swatch="leica-mono">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">M Monochrom</span>
                   <span class="filter-chip-sub">깊은 흑백 계조</span>
                 </div>
                 <div class="filter-chip" data-filter="leica-classic">
                   <div class="filter-chip-tag leica-tag">35mm</div>
-                  <span class="filter-chip-icon">✨</span>
+                  <div class="filter-lens-swatch" data-swatch="leica-classic">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Classic M 35</span>
                   <span class="filter-chip-sub">투명한 선예도</span>
                 </div>
                 <div class="filter-chip" data-filter="leica-red">
                   <div class="filter-chip-tag leica-tag">RED DOT</div>
-                  <span class="filter-chip-icon">🔴</span>
+                  <div class="filter-lens-swatch" data-swatch="leica-red">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Red Dot Color</span>
                   <span class="filter-chip-sub">선명한 원색</span>
+                </div>
+                <div class="filter-chip" data-filter="leica-noctilux">
+                  <div class="filter-chip-tag leica-tag">f/0.95</div>
+                  <div class="filter-lens-swatch" data-swatch="leica-noctilux">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
+                  <span class="filter-chip-name">Noctilux Dream</span>
+                  <span class="filter-chip-sub">극한 개방 보케</span>
+                </div>
+                <div class="filter-chip" data-filter="leica-amber">
+                  <div class="filter-chip-tag leica-tag">AMBER</div>
+                  <div class="filter-lens-swatch" data-swatch="leica-amber">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
+                  <span class="filter-chip-name">Barnack Amber</span>
+                  <span class="filter-chip-sub">바르낙 황동 앰버</span>
                 </div>
               </div>
               <div class="vintage-toggles">
@@ -1037,32 +1340,68 @@
             <div class="mode-control-panel" id="drawer-citypop-80s">
               <div class="cam-drawer-header">
                 <span class="cam-drawer-title">City Pop 1986 (버블 에이지 & 시티팝)</span>
-                <span class="cam-drawer-badge">1986 BUBBLE ERA</span>
+                <span class="cam-drawer-badge">◎ 6 OPTICAL FILTERS</span>
               </div>
               <div class="filter-carousel">
                 <div class="filter-chip active" data-filter="city-sunset">
                   <div class="filter-chip-tag citypop-tag">SHONAN</div>
-                  <span class="filter-chip-icon">🌅</span>
-                  <span class="filter-chip-name">Shonan '86</span>
+                  <div class="filter-lens-swatch" data-swatch="city-sunset">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
+                  <span class="filter-chip-name">Shonan Sunset</span>
                   <span class="filter-chip-sub">쇼난 선셋 골드</span>
                 </div>
                 <div class="filter-chip" data-filter="city-tokyo">
                   <div class="filter-chip-tag citypop-tag">IDOL</div>
-                  <span class="filter-chip-icon">✨</span>
+                  <div class="filter-lens-swatch" data-swatch="city-tokyo">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Showa Idol</span>
                   <span class="filter-chip-sub">쇼와 아이돌 뽀샤시</span>
                 </div>
                 <div class="filter-chip" data-filter="city-pastel">
                   <div class="filter-chip-tag citypop-tag">BREEZE</div>
-                  <span class="filter-chip-icon">🌴</span>
+                  <div class="filter-lens-swatch" data-swatch="city-pastel">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Pacific Breeze</span>
-                  <span class="filter-chip-sub">야마시타 청량 해변</span>
+                  <span class="filter-chip-sub">청량 해변 바람</span>
                 </div>
                 <div class="filter-chip" data-filter="city-plastic">
                   <div class="filter-chip-tag citypop-tag">TAPE</div>
-                  <span class="filter-chip-icon">📻</span>
-                  <span class="filter-chip-name">Plastic Love '88</span>
-                  <span class="filter-chip-sub">마리야 카세트 테이프</span>
+                  <div class="filter-lens-swatch" data-swatch="city-plastic">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
+                  <span class="filter-chip-name">Plastic Love</span>
+                  <span class="filter-chip-sub">80s 아날로그 테이프</span>
+                </div>
+                <div class="filter-chip" data-filter="city-resort">
+                  <div class="filter-chip-tag citypop-tag">RESORT</div>
+                  <div class="filter-lens-swatch" data-swatch="city-resort">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
+                  <span class="filter-chip-name">Karuizawa '87</span>
+                  <span class="filter-chip-sub">버블 피서지 별장</span>
+                </div>
+                <div class="filter-chip" data-filter="city-midnight">
+                  <div class="filter-chip-tag citypop-tag">NIGHT</div>
+                  <div class="filter-lens-swatch" data-swatch="city-midnight">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
+                  <span class="filter-chip-name">Roppongi Drive</span>
+                  <span class="filter-chip-sub">심야 네온 드라이브</span>
                 </div>
               </div>
               <div class="vintage-toggles">
@@ -1075,32 +1414,68 @@
             <div class="mode-control-panel" id="drawer-oldfilm-35mm">
               <div class="cam-drawer-header">
                 <span class="cam-drawer-title">Old Film 35mm 아날로그 필름</span>
-                <span class="cam-drawer-badge">ANALOG CINE 35</span>
+                <span class="cam-drawer-badge">◎ 6 OPTICAL FILTERS</span>
               </div>
               <div class="filter-carousel">
                 <div class="filter-chip active" data-filter="film-cinestill">
                   <div class="filter-chip-tag oldfilm-tag">800T</div>
-                  <span class="filter-chip-icon">🔥</span>
+                  <div class="filter-lens-swatch" data-swatch="film-cinestill">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">CineStill 800T</span>
                   <span class="filter-chip-sub">붉은 할레이션</span>
                 </div>
                 <div class="filter-chip" data-filter="film-portra">
                   <div class="filter-chip-tag kodak-tag">PORTRA</div>
-                  <span class="filter-chip-icon">☀️</span>
+                  <div class="filter-lens-swatch" data-swatch="film-portra">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Portra 400</span>
                   <span class="filter-chip-sub">골든 웜 피부톤</span>
                 </div>
                 <div class="filter-chip" data-filter="film-ektar">
                   <div class="filter-chip-tag kodak-tag">EKTAR</div>
-                  <span class="filter-chip-icon">🌈</span>
+                  <div class="filter-lens-swatch" data-swatch="film-ektar">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Ektar 100</span>
                   <span class="filter-chip-sub">극채도 원색</span>
                 </div>
                 <div class="filter-chip" data-filter="film-superia">
                   <div class="filter-chip-tag fuji-tag">SUPERIA</div>
-                  <span class="filter-chip-icon">🌿</span>
+                  <div class="filter-lens-swatch" data-swatch="film-superia">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Superia 400</span>
                   <span class="filter-chip-sub">에메랄드 그린</span>
+                </div>
+                <div class="filter-chip" data-filter="film-kodachrome">
+                  <div class="filter-chip-tag kodak-tag">KODACHROME</div>
+                  <div class="filter-lens-swatch" data-swatch="film-kodachrome">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
+                  <span class="filter-chip-name">Kodachrome 64</span>
+                  <span class="filter-chip-sub">불멸의 슬라이드</span>
+                </div>
+                <div class="filter-chip" data-filter="film-velvia">
+                  <div class="filter-chip-tag fuji-tag">VELVIA</div>
+                  <div class="filter-lens-swatch" data-swatch="film-velvia">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
+                  <span class="filter-chip-name">Velvia 50 Vivid</span>
+                  <span class="filter-chip-sub">초고채도 비비드</span>
                 </div>
               </div>
               <div class="vintage-toggles">
@@ -1173,32 +1548,68 @@
             <div class="mode-control-panel" id="drawer-hasselblad">
               <div class="cam-drawer-header">
                 <span class="cam-drawer-title">Hasselblad 500C/M 중형 필름 필터</span>
-                <span class="cam-drawer-badge">6x6 MEDIUM FORMAT</span>
+                <span class="cam-drawer-badge">◎ 6 OPTICAL FILTERS</span>
               </div>
               <div class="filter-carousel">
                 <div class="filter-chip active" data-filter="hassel-planar">
                   <div class="filter-chip-tag hassel-tag">PLANAR</div>
-                  <span class="filter-chip-icon">✨</span>
+                  <div class="filter-lens-swatch" data-swatch="hassel-planar">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Planar 80mm Pop</span>
                   <span class="filter-chip-sub">중형 인물 분리감</span>
                 </div>
                 <div class="filter-chip" data-filter="hassel-trix">
                   <div class="filter-chip-tag bw-tag">TRI-X</div>
-                  <span class="filter-chip-icon">🖤</span>
+                  <div class="filter-lens-swatch" data-swatch="hassel-trix">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Tri-X 400 MF</span>
                   <span class="filter-chip-sub">깊은 은염 흑백</span>
                 </div>
                 <div class="filter-chip" data-filter="hassel-astia">
                   <div class="filter-chip-tag fuji-tag">ASTIA</div>
-                  <span class="filter-chip-icon">🌸</span>
+                  <div class="filter-lens-swatch" data-swatch="hassel-astia">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Astia 100F Slide</span>
                   <span class="filter-chip-sub">부드러운 슬라이드</span>
                 </div>
                 <div class="filter-chip" data-filter="hassel-chromium">
                   <div class="filter-chip-tag hassel-tag">CHROME</div>
-                  <span class="filter-chip-icon">🏛️</span>
+                  <div class="filter-lens-swatch" data-swatch="hassel-chromium">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Chromium Silver</span>
                   <span class="filter-chip-sub">쿨톤 메탈릭 질감</span>
+                </div>
+                <div class="filter-chip" data-filter="hassel-gold">
+                  <div class="filter-chip-tag hassel-tag">GOLD</div>
+                  <div class="filter-lens-swatch" data-swatch="hassel-gold">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
+                  <span class="filter-chip-name">Portra 160 Gold</span>
+                  <span class="filter-chip-sub">포트레이트 골드</span>
+                </div>
+                <div class="filter-chip" data-filter="hassel-mono">
+                  <div class="filter-chip-tag bw-tag">ACROS</div>
+                  <div class="filter-lens-swatch" data-swatch="hassel-mono">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
+                  <span class="filter-chip-name">Acros Precision</span>
+                  <span class="filter-chip-sub">초미립자 정밀 흑백</span>
                 </div>
               </div>
               <div class="vintage-toggles">
@@ -1211,32 +1622,68 @@
             <div class="mode-control-panel" id="drawer-polaroid-sx70">
               <div class="cam-drawer-header">
                 <span class="cam-drawer-title">Polaroid SX-70 빈티지 랜드 카메라</span>
-                <span class="cam-drawer-badge">1972 VINTAGE</span>
+                <span class="cam-drawer-badge">◎ 6 OPTICAL FILTERS</span>
               </div>
               <div class="filter-carousel">
                 <div class="filter-chip active" data-filter="sx70-fade">
                   <div class="filter-chip-tag polaroid-tag">1972</div>
-                  <span class="filter-chip-icon">🎞️</span>
+                  <div class="filter-lens-swatch" data-swatch="sx70-fade">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">SX-70 Vintage Fade</span>
                   <span class="filter-chip-sub">따뜻하게 바랜 유제</span>
                 </div>
                 <div class="filter-chip" data-filter="sx70-color600">
                   <div class="filter-chip-tag polaroid-tag">COLOR</div>
-                  <span class="filter-chip-icon">🌈</span>
+                  <div class="filter-lens-swatch" data-swatch="sx70-color600">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Color Protection 600</span>
                   <span class="filter-chip-sub">사이언/마젠타 발색</span>
                 </div>
                 <div class="filter-chip" data-filter="sx70-expired">
                   <div class="filter-chip-tag polaroid-tag">EXPIRED</div>
-                  <span class="filter-chip-icon">⏳</span>
+                  <div class="filter-lens-swatch" data-swatch="sx70-expired">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Expired Film 1979</span>
                   <span class="filter-chip-sub">유통기한 만료 변색</span>
                 </div>
                 <div class="filter-chip" data-filter="sx70-sepia">
                   <div class="filter-chip-tag bw-tag">SEPIA</div>
-                  <span class="filter-chip-icon">☕</span>
+                  <div class="filter-lens-swatch" data-swatch="sx70-sepia">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Sepia Dream</span>
                   <span class="filter-chip-sub">클래식 세피아 틴트</span>
+                </div>
+                <div class="filter-chip" data-filter="sx70-cyan">
+                  <div class="filter-chip-tag polaroid-tag">CYAN</div>
+                  <div class="filter-lens-swatch" data-swatch="sx70-cyan">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
+                  <span class="filter-chip-name">Cool Cyan</span>
+                  <span class="filter-chip-sub">청량 서늘한 즉석</span>
+                </div>
+                <div class="filter-chip" data-filter="sx70-warm">
+                  <div class="filter-chip-tag polaroid-tag">GOLD</div>
+                  <div class="filter-lens-swatch" data-swatch="sx70-warm">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
+                  <span class="filter-chip-name">Golden Polaroid</span>
+                  <span class="filter-chip-sub">호박빛 골든아워</span>
                 </div>
               </div>
               <div class="vintage-toggles">
@@ -1249,32 +1696,68 @@
             <div class="mode-control-panel" id="drawer-fuji-quicksnap">
               <div class="cam-drawer-header">
                 <span class="cam-drawer-title">Fuji QuickSnap (写ルンです 1986)</span>
-                <span class="cam-drawer-badge">1986 BUBBLE ERA</span>
+                <span class="cam-drawer-badge">◎ 6 OPTICAL FILTERS</span>
               </div>
               <div class="filter-carousel">
                 <div class="filter-chip active" data-filter="quicksnap-86">
                   <div class="filter-chip-tag quicksnap-tag">1986</div>
-                  <span class="filter-chip-icon">📸</span>
+                  <div class="filter-lens-swatch" data-swatch="quicksnap-86">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">写ルンです 1986</span>
                   <span class="filter-chip-sub">데이라이트 원작</span>
                 </div>
                 <div class="filter-chip" data-filter="quicksnap-flash">
                   <div class="filter-chip-tag quicksnap-tag">FLASH</div>
-                  <span class="filter-chip-icon">⚡</span>
+                  <div class="filter-lens-swatch" data-swatch="quicksnap-flash">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Sun Flash Pop</span>
                   <span class="filter-chip-sub">한낮의 직광 플래시</span>
                 </div>
                 <div class="filter-chip" data-filter="quicksnap-nostalgia">
                   <div class="filter-chip-tag quicksnap-tag">RESORT</div>
-                  <span class="filter-chip-icon">☀️</span>
+                  <div class="filter-lens-swatch" data-swatch="quicksnap-nostalgia">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Bubble Resort '87</span>
                   <span class="filter-chip-sub">부유층 별장 선샤인</span>
                 </div>
                 <div class="filter-chip" data-filter="quicksnap-neon">
                   <div class="filter-chip-tag quicksnap-tag">SHOWA</div>
-                  <span class="filter-chip-icon">🎞️</span>
+                  <div class="filter-lens-swatch" data-swatch="quicksnap-neon">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Showa Memory '86</span>
                   <span class="filter-chip-sub">쇼와 61년 아날로그</span>
+                </div>
+                <div class="filter-chip" data-filter="quicksnap-fujicolor">
+                  <div class="filter-chip-tag quicksnap-tag">FUJI</div>
+                  <div class="filter-lens-swatch" data-swatch="quicksnap-fujicolor">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
+                  <span class="filter-chip-name">Super HG 400</span>
+                  <span class="filter-chip-sub">선명한 녹색 원색</span>
+                </div>
+                <div class="filter-chip" data-filter="quicksnap-party">
+                  <div class="filter-chip-tag quicksnap-tag">PARTY</div>
+                  <div class="filter-lens-swatch" data-swatch="quicksnap-party">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
+                  <span class="filter-chip-name">Party Flash Pop</span>
+                  <span class="filter-chip-sub">디스코 파티 직광</span>
                 </div>
               </div>
               <div class="vintage-toggles">
@@ -1287,32 +1770,68 @@
             <div class="mode-control-panel" id="drawer-kyocera-samurai">
               <div class="cam-drawer-header">
                 <span class="cam-drawer-title">Kyocera Samurai X3.0 (1988)</span>
-                <span class="cam-drawer-badge">1988 CYBER HALF-FRAME</span>
+                <span class="cam-drawer-badge">◎ 6 OPTICAL FILTERS</span>
               </div>
               <div class="filter-carousel">
                 <div class="filter-chip active" data-filter="samurai-half">
                   <div class="filter-chip-tag samurai-tag">HALF</div>
-                  <span class="filter-chip-icon">📐</span>
+                  <div class="filter-lens-swatch" data-swatch="samurai-half">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Half 72 Crisp</span>
                   <span class="filter-chip-sub">세로 72컷 광학줌</span>
                 </div>
                 <div class="filter-chip" data-filter="samurai-cyber">
                   <div class="filter-chip-tag samurai-tag">TECH</div>
-                  <span class="filter-chip-icon">🟢</span>
+                  <div class="filter-lens-swatch" data-swatch="samurai-cyber">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Bubble High-Tech</span>
                   <span class="filter-chip-sub">80s 하이테크 선예도</span>
                 </div>
                 <div class="filter-chip" data-filter="samurai-tokyo">
                   <div class="filter-chip-tag samurai-tag">GOLD</div>
-                  <span class="filter-chip-icon">🌆</span>
+                  <div class="filter-lens-swatch" data-swatch="samurai-tokyo">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Shinjuku Golden</span>
                   <span class="filter-chip-sub">마천루 골든아워</span>
                 </div>
                 <div class="filter-chip" data-filter="samurai-titanium">
                   <div class="filter-chip-tag samurai-tag">RYUICHI</div>
-                  <span class="filter-chip-icon">🖤</span>
+                  <div class="filter-lens-swatch" data-swatch="samurai-titanium">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
                   <span class="filter-chip-name">Ryuichi B&W 1988</span>
                   <span class="filter-chip-sub">사카모토 류이치 흑백</span>
+                </div>
+                <div class="filter-chip" data-filter="samurai-macro">
+                  <div class="filter-chip-tag samurai-tag">MACRO</div>
+                  <div class="filter-lens-swatch" data-swatch="samurai-macro">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
+                  <span class="filter-chip-name">Yashica Macro</span>
+                  <span class="filter-chip-sub">매크로 렌즈 팝</span>
+                </div>
+                <div class="filter-chip" data-filter="samurai-night">
+                  <div class="filter-chip-tag samurai-tag">NIGHT</div>
+                  <div class="filter-lens-swatch" data-swatch="samurai-night">
+                    <div class="swatch-glass"></div>
+                    <div class="swatch-reflection"></div>
+                    <div class="swatch-aperture-ring"></div>
+                  </div>
+                  <span class="filter-chip-name">Tokyo Night</span>
+                  <span class="filter-chip-sub">나이트 플라이트 네온</span>
                 </div>
               </div>
               <div class="vintage-toggles">
