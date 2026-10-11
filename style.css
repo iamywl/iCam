@@ -2984,11 +2984,11 @@ body::before {
   -webkit-backdrop-filter: var(--glass-blur-md);
   border: var(--glass-border);
   border-top: var(--glass-border-top);
-  border-radius: 30px;
+  border-radius: 28px;
   width: 90%;
   max-width: 580px;
   max-height: 90vh;
-  overflow-y: auto;
+  overflow: hidden;
   box-shadow: var(--glass-shadow), 0 30px 80px rgba(0, 0, 0, 0.8);
   display: flex;
   flex-direction: column;
@@ -3004,14 +3004,16 @@ body::before {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 24px 16px 24px;
+  padding: 18px 24px 14px 24px;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  flex-shrink: 0;
 }
 
 .modal-title {
-  font-size: 18px;
+  font-size: 17px;
   font-weight: 700;
   color: #fff;
+  letter-spacing: -0.2px;
 }
 
 .modal-close-btn {
@@ -3021,19 +3023,30 @@ body::before {
   height: 30px;
   border-radius: 50%;
   color: #fff;
-  font-size: 16px;
+  font-size: 15px;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  transition: background 0.18s ease;
+}
+
+.modal-close-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .modal-body {
-  padding: 24px;
+  padding: 20px 24px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
 }
 
 /* 4x6 Print Template Sheet Preview */
@@ -3115,44 +3128,70 @@ body::before {
 
 .modal-footer {
   display: flex;
-  gap: 12px;
-  padding: 16px 24px 24px 24px;
+  align-items: center;
+  gap: 10px;
+  padding: 14px 20px 20px 20px;
   border-top: 1px solid rgba(255, 255, 255, 0.08);
   width: 100%;
+  flex-shrink: 0;
+  box-sizing: border-box;
 }
 
 .btn-secondary {
   flex: 1;
-  padding: 12px;
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
+  padding: 11px 14px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
   border-radius: 12px;
-  color: #fff;
-  font-size: 13.5px;
-  font-weight: 600;
+  color: #f0f0f2;
+  font-size: 13px;
+  font-weight: 700;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: all 0.18s ease;
+  white-space: nowrap;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.btn-secondary:active {
+  transform: scale(0.97);
 }
 
 .btn-primary {
   flex: 2;
-  padding: 12px;
-  background: #2f81f7;
-  border: none;
+  padding: 11px 18px;
+  background: linear-gradient(135deg, #f5c767 0%, #e5b045 100%);
+  border: 1px solid rgba(255, 255, 255, 0.28);
   border-radius: 12px;
-  color: #fff;
+  color: #0a0b0d;
   font-size: 13.5px;
-  font-weight: 600;
+  font-weight: 800;
+  letter-spacing: 0.2px;
   cursor: pointer;
-  transition: opacity 0.2s ease;
+  box-shadow: 0 4px 16px rgba(245, 199, 103, 0.25);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 6px;
+  white-space: nowrap;
 }
 
 .btn-primary:hover {
-  opacity: 0.9;
+  filter: brightness(1.08);
+  box-shadow: 0 6px 20px rgba(245, 199, 103, 0.38);
+  transform: translateY(-1px);
+}
+
+.btn-primary:active {
+  transform: scale(0.97);
 }
 
 /* Review Captured Photo Card */
@@ -3494,15 +3533,18 @@ body::before {
   .camera-bag-dialog {
     width: 100% !important;
     max-width: 100% !important;
-    max-height: calc(100dvh - max(20px, env(safe-area-inset-top, 20px))) !important;
-    max-height: calc(100vh - max(20px, env(safe-area-inset-top, 20px))) !important;
-    border-radius: 22px 22px 0 0 !important;
+    height: auto !important;
+    max-height: calc(90dvh) !important;
+    max-height: calc(90vh) !important;
+    border-radius: 24px 24px 0 0 !important;
     border-bottom: none !important;
     margin: 0 !important;
     box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+    overflow: hidden !important;
     transform: translateY(100%) !important;
     transition: transform 0.28s cubic-bezier(0.16, 1, 0.3, 1) !important;
-    padding-bottom: max(14px, env(safe-area-inset-bottom, 14px)) !important;
     background: rgba(18, 20, 26, 0.96) !important;
     backdrop-filter: blur(28px) !important;
     -webkit-backdrop-filter: blur(28px) !important;
@@ -3529,18 +3571,25 @@ body::before {
   }
 
   .modal-header {
-    padding: 10px 18px 10px 18px !important;
+    padding: 10px 18px !important;
+    flex-shrink: 0 !important;
   }
 
   .modal-body {
-    padding: 12px 16px !important;
+    flex: 1 1 auto !important;
+    min-height: 0 !important;
+    padding: 12px 16px 20px 16px !important;
     overflow-y: auto !important;
+    overflow-x: hidden !important;
     -webkit-overflow-scrolling: touch !important;
-    max-height: calc(100dvh - 160px) !important;
+    max-height: none !important;
   }
 
   .modal-footer {
-    padding: 10px 18px !important;
+    padding: 12px 16px max(14px, env(safe-area-inset-bottom, 14px)) 16px !important;
+    flex-shrink: 0 !important;
+    background: rgba(14, 16, 20, 0.95) !important;
+    border-top: 1px solid rgba(255, 255, 255, 0.08) !important;
   }
 }
 
@@ -3724,8 +3773,8 @@ body::before {
 }
 
 .gallery-film-thumb.active {
-  border-color: var(--accent-mint);
-  box-shadow: 0 0 10px rgba(0, 229, 163, 0.4);
+  border-color: #f5c767;
+  box-shadow: 0 0 12px rgba(245, 199, 103, 0.45);
 }
 
 .gallery-film-thumb img {
@@ -3744,6 +3793,7 @@ body::before {
 @media (max-width: 640px) {
   .gallery-detail-layout {
     grid-template-columns: 1fr;
+    gap: 14px;
   }
 }
 
@@ -3758,6 +3808,66 @@ body::before {
   align-items: center;
   justify-content: center;
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.6);
+}
+
+@media (max-width: 640px) {
+  .gallery-photo-preview-card {
+    max-height: 38dvh;
+    max-height: 38vh;
+    width: auto;
+    max-width: min(290px, 85%);
+    aspect-ratio: 3 / 4;
+    margin: 0 auto;
+  }
+}
+
+/* Custom Elegant Obsidian Scrollbars for Modals and Drawers */
+.modal-body::-webkit-scrollbar,
+.camera-bag-grid::-webkit-scrollbar,
+.gallery-film-strip::-webkit-scrollbar {
+  width: 5px;
+  height: 5px;
+}
+
+.modal-body::-webkit-scrollbar-track,
+.camera-bag-grid::-webkit-scrollbar-track,
+.gallery-film-strip::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.modal-body::-webkit-scrollbar-thumb,
+.camera-bag-grid::-webkit-scrollbar-thumb,
+.gallery-film-strip::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+}
+
+.modal-body::-webkit-scrollbar-thumb:hover,
+.camera-bag-grid::-webkit-scrollbar-thumb:hover,
+.gallery-film-strip::-webkit-scrollbar-thumb:hover {
+  background: rgba(245, 199, 103, 0.5);
+}
+
+.gallery-save-hint {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.6);
+  text-align: center;
+  padding: 8px 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border-radius: 10px;
+  border: 0.5px solid rgba(255, 255, 255, 0.08);
+  margin-top: 10px;
+  line-height: 1.45;
+}
+
+@keyframes thumbPop {
+  0% { transform: scale(0.85); box-shadow: 0 0 0 rgba(245, 199, 103, 0.8); }
+  50% { transform: scale(1.15); box-shadow: 0 0 16px rgba(245, 199, 103, 0.9); }
+  100% { transform: scale(1); box-shadow: none; }
+}
+
+.gallery-btn-pop {
+  animation: thumbPop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 
 .gallery-large-preview-img {

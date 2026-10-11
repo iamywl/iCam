@@ -2211,17 +2211,83 @@ function deleteCurrentGalleryPhoto() {
   }
 }
 
+async function saveOrSharePhoto(photoItem) {
+  if (!photoItem || !photoItem.dataUrl) return;
+  soundEngine.playTick();
+
+  const camKey = photoItem.cameraKey || state.activeCamera || 'snap';
+  const timestamp = Date.now();
+  const filename = `iCam_${camKey}_${timestamp}.jpg`;
+
+  // 1. Convert base64 dataUrl to Blob safely
+  let blob = null;
+  try {
+    const res = await fetch(photoItem.dataUrl);
+    blob = await res.blob();
+  } catch (e) {
+    try {
+      const parts = photoItem.dataUrl.split(',');
+      const byteString = atob(parts[1]);
+      const mimeString = parts[0].split(':')[1].split(';')[0];
+      const ab = new ArrayBuffer(byteString.length);
+      const ia = new Uint8Array(ab);
+      for (let i = 0; i < byteString.length; i++) {
+        ia[i] = byteString.charCodeAt(i);
+      }
+      blob = new Blob([ab], { type: mimeString });
+    } catch (err) {
+      console.error('Blob conversion failed:', err);
+    }
+  }
+
+  // 2. On Mobile (iOS Safari / Chrome / Android), use Web Share API to directly save to Photos
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if (isMobile && blob && navigator.canShare) {
+    try {
+      const file = new File([blob], filename, { type: 'image/jpeg' });
+      if (navigator.canShare({ files: [file] })) {
+        await navigator.share({
+          files: [file],
+          title: photoItem.cameraName || 'iCam Photo',
+          text: `${photoItem.cameraName || 'iCam'} • ${photoItem.filterName || 'Vintage Filter'}`
+        });
+        showDynamicIslandBanner('SAVED', 'PHOTOS APP', 2200);
+        return;
+      }
+    } catch (err) {
+      if (err.name === 'AbortError') {
+        // User dismissed system share sheet
+        return;
+      }
+    }
+  }
+
+  // 3. Fallback / Desktop: Blob URL download
+  if (blob) {
+    const blobUrl = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = blobUrl;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    setTimeout(() => URL.revokeObjectURL(blobUrl), 2000);
+    showDynamicIslandBanner('DOWNLOADED', 'PHOTO SAVED', 1800);
+  } else {
+    const a = document.createElement('a');
+    a.href = photoItem.dataUrl;
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    showDynamicIslandBanner('DOWNLOADED', 'PHOTO SAVED', 1800);
+  }
+}
+
 function downloadCurrentGalleryPhoto() {
   if (state.gallery.length === 0) return;
-  soundEngine.playTick();
   const item = state.gallery[state.selectedGalleryIndex];
-  const a = document.createElement('a');
-  a.href = item.dataUrl;
-  a.download = `SnapStudio_${item.cameraKey}_${Date.now()}.jpg`;
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
-  showDynamicIslandBanner('DOWNLOADED', 'PHOTO SAVED', 1800);
+  saveOrSharePhoto(item);
 }
 
 function openReviewModal(imgDataUrl) {
@@ -3365,16 +3431,28 @@ function initEventListeners() {
   const btnSave1 = document.getElementById('btn-save-photo');
   const btnSave2 = document.getElementById('btn-download-photo');
   const handleDownloadPhoto = () => {
-    if (state.lastCapturedUrl) {
-      const a = document.createElement('a');
-      a.href = state.lastCapturedUrl;
-      a.download = `SnapStudio_${state.activeCamera}_${Date.now()}.jpg`;
-      a.click();
-      showDynamicIslandBanner('DOWNLOADED', 'CAMERA ROLL', 1500);
+    const item = state.gallery[0] || (state.lastCapturedUrl ? {
+      dataUrl: state.lastCapturedUrl,
+      cameraKey: state.activeCamera,
+      cameraName: CAMERAS[state.activeCamera]?.name || 'iCam',
+      filterName: 'Standard Pass'
+    } : null);
+    if (item) {
+      saveOrSharePhoto(item);
     }
   };
   if (btnSave1) btnSave1.addEventListener('click', handleDownloadPhoto);
   if (btnSave2) btnSave2.addEventListener('click', handleDownloadPhoto);
+
+  // Close modals when clicking outside dialog on the dark backdrop
+  document.querySelectorAll('.modal-backdrop').forEach(backdrop => {
+    backdrop.addEventListener('click', (e) => {
+      if (e.target === backdrop) {
+        backdrop.classList.remove('open');
+        soundEngine.playTick();
+      }
+    });
+  });
 
   // Keyboard Shortcuts (Arrow Keys for Switching, 'b' for Bag, 1~6 for Presets)
   window.addEventListener('keydown', (e) => {
