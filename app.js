@@ -1100,12 +1100,121 @@ class SoundFXEngine {
     }
   }
 
-  playShutter() {
+  playRatchetWind() {
     this.init();
     if (!this.ctx) return;
     const now = this.ctx.currentTime;
+    // 4 rapid mechanical gear teeth clicks with rising resonance
+    for (let i = 0; i < 4; i++) {
+      const clickTime = now + i * 0.045;
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(600 + i * 180, clickTime);
+      osc.frequency.exponentialRampToValueAtTime(140, clickTime + 0.02);
+      gain.gain.setValueAtTime(0.28, clickTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, clickTime + 0.02);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(clickTime);
+      osc.stop(clickTime + 0.025);
+    }
+  }
+
+  playShutter(camId = state?.activeCamera) {
+    this.init();
+    if (!this.ctx) return;
+    const now = this.ctx.currentTime;
+
+    if (camId === 'polaroid-sx70') {
+      // Polaroid SX-70: Soft leaf click followed by motorized roller ejection whine
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(280, now);
+      osc.frequency.exponentialRampToValueAtTime(40, now + 0.08);
+      gain.gain.setValueAtTime(0.45, now);
+      gain.gain.exponentialRampToValueAtTime(0.01, now + 0.08);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.09);
+
+      const motorOsc = this.ctx.createOscillator();
+      const motorGain = this.ctx.createGain();
+      motorOsc.type = 'sawtooth';
+      motorOsc.frequency.setValueAtTime(320, now + 0.1);
+      motorOsc.frequency.linearRampToValueAtTime(420, now + 0.28);
+      motorGain.gain.setValueAtTime(0.2, now + 0.1);
+      motorGain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+      motorOsc.connect(motorGain);
+      motorGain.connect(this.ctx.destination);
+      motorOsc.start(now + 0.1);
+      motorOsc.stop(now + 0.36);
+      return;
+    }
+
+    if (camId === 'hasselblad-500cm') {
+      // Hasselblad 500C/M: Massive 6x6 reflex mirror slap THUMP + leaf shutter
+      const thump = this.ctx.createOscillator();
+      const thumpGain = this.ctx.createGain();
+      thump.type = 'sine';
+      thump.frequency.setValueAtTime(130, now);
+      thump.frequency.exponentialRampToValueAtTime(25, now + 0.16);
+      thumpGain.gain.setValueAtTime(0.7, now);
+      thumpGain.gain.exponentialRampToValueAtTime(0.01, now + 0.16);
+      thump.connect(thumpGain);
+      thumpGain.connect(this.ctx.destination);
+      thump.start(now);
+      thump.stop(now + 0.17);
+
+      const snap = this.ctx.createOscillator();
+      const snapGain = this.ctx.createGain();
+      snap.type = 'triangle';
+      snap.frequency.setValueAtTime(480, now + 0.04);
+      snap.frequency.exponentialRampToValueAtTime(60, now + 0.12);
+      snapGain.gain.setValueAtTime(0.4, now + 0.04);
+      snapGain.gain.exponentialRampToValueAtTime(0.01, now + 0.12);
+      snap.connect(snapGain);
+      snapGain.connect(this.ctx.destination);
+      snap.start(now + 0.04);
+      snap.stop(now + 0.13);
+      return;
+    }
+
+    if (camId === 'contax-t2') {
+      // Contax T2: High precision whisper-quiet titanium leaf shutter
+      const osc = this.ctx.createOscillator();
+      const gain = this.ctx.createGain();
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(750, now);
+      osc.frequency.exponentialRampToValueAtTime(120, now + 0.045);
+      gain.gain.setValueAtTime(0.25, now);
+      gain.gain.exponentialRampToValueAtTime(0.005, now + 0.045);
+      osc.connect(gain);
+      gain.connect(this.ctx.destination);
+      osc.start(now);
+      osc.stop(now + 0.05);
+      return;
+    }
+
+    if (camId === 'fuji-quicksnap') {
+      // QuickSnap: Sharp plastic leaf spring snap
+      const snap = this.ctx.createOscillator();
+      const snapGain = this.ctx.createGain();
+      snap.type = 'square';
+      snap.frequency.setValueAtTime(880, now);
+      snap.frequency.exponentialRampToValueAtTime(80, now + 0.05);
+      snapGain.gain.setValueAtTime(0.5, now);
+      snapGain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+      snap.connect(snapGain);
+      snapGain.connect(this.ctx.destination);
+      snap.start(now);
+      snap.stop(now + 0.055);
+      return;
+    }
     
-    // Mechanical Shutter Click
+    // Mechanical Shutter Click (Standard & Leica)
     const osc = this.ctx.createOscillator();
     const gain = this.ctx.createGain();
     osc.type = 'triangle';
@@ -1426,6 +1535,19 @@ function switchCamera(camId) {
   state.activeCamera = camId;
   const cam = CAMERAS[camId];
   soundEngine.playMount();
+
+  // 0. Chameleon Skeuomorphic Adaptive Body Engine: morph camera chassis
+  const frameEl = document.querySelector('.iphone-frame');
+  const appEl = document.querySelector('.camera-app');
+  const allThemeClasses = Object.keys(CAMERAS).map(id => `theme-${id}`);
+  if (frameEl) {
+    frameEl.classList.remove(...allThemeClasses);
+    frameEl.classList.add(`theme-${camId}`);
+  }
+  if (appEl) {
+    appEl.classList.remove(...allThemeClasses);
+    appEl.classList.add(`theme-${camId}`);
+  }
 
   // 1. Update Dial Active Class & Smooth Perspective Shift
   if (window.alignModeDial) {
@@ -2353,7 +2475,17 @@ function runCountdown(seconds, callback) {
 }
 
 function executeCapture() {
-  soundEngine.playShutter();
+  soundEngine.playShutter(state.activeCamera);
+
+  if (state.activeCamera === 'fuji-quicksnap') {
+    const counterEl = document.querySelector('#quicksnap-osd .quicksnap-frame-counter');
+    if (counterEl) {
+      const match = counterEl.textContent.match(/EXP \[\s*(\d+)\s*\/\s*27\s*\]/);
+      const curr = match ? parseInt(match[1], 10) : 24;
+      const nextExp = Math.min(27, curr + 1);
+      counterEl.textContent = `EXP [ ${nextExp} / 27 ]`;
+    }
+  }
 
   const flashScreen = document.getElementById('flash-screen');
   if (flashScreen) {
@@ -4435,6 +4567,42 @@ function initEventListeners() {
       const flashEl = document.querySelector('#quicksnap-osd .quicksnap-flash-indicator');
       const active = quicksnapFlareToggle.classList.toggle('active');
       if (flashEl) flashEl.style.display = active ? 'flex' : 'none';
+    });
+  }
+
+  // Fuji QuickSnap Mechanical Film Advance Thumb Wheel
+  const windWheel = document.getElementById('quicksnap-wind-wheel');
+  let quicksnapCurrentExp = 24;
+  let windWheelRotation = 0;
+
+  if (windWheel) {
+    const triggerWind = () => {
+      windWheelRotation += 45;
+      const teeth = windWheel.querySelector('.wind-wheel-teeth');
+      if (teeth) {
+        teeth.style.transform = `rotate(${windWheelRotation}deg)`;
+        teeth.classList.add('rotating');
+        setTimeout(() => teeth.classList.remove('rotating'), 240);
+      }
+      soundEngine.playRatchetWind();
+      quicksnapCurrentExp = Math.min(27, quicksnapCurrentExp + 1);
+      const counterEl = document.querySelector('#quicksnap-osd .quicksnap-frame-counter');
+      if (counterEl) {
+        counterEl.textContent = `EXP [ ${quicksnapCurrentExp} / 27 ]`;
+      }
+      showDynamicIslandBanner('写ルンです', `WOUND EXP ${quicksnapCurrentExp}/27 (준비완료)`, 1400);
+    };
+
+    windWheel.addEventListener('click', triggerWind);
+    let touchStartY = 0;
+    windWheel.addEventListener('touchstart', (e) => {
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+    windWheel.addEventListener('touchend', (e) => {
+      const touchEndY = e.changedTouches[0].clientY;
+      if (touchEndY - touchStartY > 8 || Math.abs(touchEndY - touchStartY) < 10) {
+        triggerWind();
+      }
     });
   }
 

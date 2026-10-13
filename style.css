@@ -3197,15 +3197,20 @@ body::before {
   transition: all 0.12s ease;
 }
 
-/* Leica Signature Red Soft-Release Enamel Dot in Center */
+/* Base Shutter Button Inner Dot (Customized per camera theme) */
 .shutter-btn-inner::after {
   content: "";
-  width: 14px;
-  height: 14px;
+  display: none;
+}
+
+.theme-canon-ixy .shutter-btn-inner::after {
+  display: block;
+  width: 12px;
+  height: 12px;
   border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #ff5252 0%, #d32f2f 70%, #9a0007 100%);
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.6);
-  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: radial-gradient(circle at 35% 35%, #e2e8f0 0%, #cbd5e1 70%, #94a3b8 100%);
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.8), 0 1px 2px rgba(0, 0, 0, 0.4);
+  border: 0.5px solid rgba(255, 255, 255, 0.5);
 }
 
 .shutter-btn-outer:active .shutter-btn-inner {
@@ -5265,6 +5270,693 @@ body::before {
   padding: 10px 20px;
   font-size: 13px;
   border-radius: 12px;
+}
+
+/* ==========================================================================
+   Chameleon Skeuomorphic Adaptive Body Engine & Tactile Hardware
+   ========================================================================== */
+
+/* 1. Hardware Deck & Decorative Body Elements Layer */
+/* 1. Fuji QuickSnap Mechanical Thumb Advance Wheel (Positioned in Thumb Zone Shutter Row) */
+.skeuo-wind-wheel {
+  position: relative;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 40%, #2b303a 0%, #15181f 70%, #06070a 100%);
+  border: 2.5px solid #000;
+  box-shadow: 
+    0 5px 14px rgba(0, 0, 0, 0.85),
+    inset 0 2px 3px rgba(255, 255, 255, 0.35),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.9);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  pointer-events: auto;
+  user-select: none;
+  transition: transform 0.12s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  flex-shrink: 0;
+}
+
+.skeuo-wind-wheel:active {
+  cursor: grabbing;
+}
+
+.wind-wheel-rim {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.wind-wheel-teeth {
+  position: absolute;
+  inset: 1px;
+  border-radius: 50%;
+  background: repeating-conic-gradient(
+    #3b4250 0deg 11.25deg,
+    #13161c 11.25deg 22.5deg,
+    #050608 22.5deg 25deg
+  );
+  box-shadow: inset 0 0 5px rgba(0,0,0,0.95);
+  transition: transform 0.18s cubic-bezier(0.2, 0.9, 0.3, 1.3);
+}
+
+.wind-wheel-teeth.rotating {
+  animation: windWheelRatchet 0.22s ease-out;
+}
+
+@keyframes windWheelRatchet {
+  0% { transform: rotate(0deg); }
+  60% { transform: rotate(48deg); }
+  100% { transform: rotate(45deg); }
+}
+
+.wind-wheel-label {
+  position: absolute;
+  font-size: 7.5px;
+  font-weight: 900;
+  color: #ffd400;
+  letter-spacing: -0.2px;
+  text-shadow: 0 1px 2px #000;
+  pointer-events: none;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 1px 3.5px;
+  border-radius: 3px;
+  border: 0.5px solid rgba(255, 212, 0, 0.4);
+}
+
+/* QuickSnap Mode: Show Winding Wheel, Hide Bag Button in Shutter Row */
+.theme-fuji-quicksnap #bottom-camera-bag-btn {
+  display: none !important;
+}
+
+.theme-fuji-quicksnap #quicksnap-wind-wheel {
+  display: flex !important;
+}
+
+/* Device SE Shutter Row Sizing */
+.device-wrapper.device-se #quicksnap-wind-wheel {
+  width: 34px !important;
+  height: 34px !important;
+}
+
+/* Camera Model Badge Skeuomorphic Theme Embellishments */
+.theme-contax-t2 .camera-model-badge {
+  background: linear-gradient(135deg, rgba(222, 208, 182, 0.35), rgba(184, 166, 133, 0.25));
+  border-color: rgba(212, 175, 55, 0.75);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 245, 225, 0.4);
+}
+
+.theme-leica-m .camera-model-badge {
+  background: linear-gradient(135deg, rgba(226, 232, 240, 0.35), rgba(148, 163, 184, 0.25));
+  border-color: rgba(226, 232, 240, 0.75);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5), inset 0 1px 1px rgba(255, 255, 255, 0.5);
+}
+
+.theme-fuji-quicksnap .camera-model-badge {
+  background: linear-gradient(135deg, rgba(13, 121, 56, 0.45), rgba(255, 212, 0, 0.3));
+  border-color: #ffd400;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 212, 0, 0.4);
+}
+
+.theme-polaroid-sx70 .camera-model-badge {
+  background: linear-gradient(135deg, rgba(139, 69, 19, 0.4), rgba(226, 232, 240, 0.25));
+  border-color: rgba(255, 255, 255, 0.65);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6), inset 0 1px 1px rgba(255, 255, 255, 0.4);
+}
+
+.theme-sony-cybershot .camera-model-badge {
+  background: linear-gradient(135deg, rgba(0, 85, 255, 0.35), rgba(0, 210, 255, 0.25));
+  border-color: #00d2ff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6), 0 0 10px rgba(0, 210, 255, 0.35);
+}
+
+/* ==========================================================================
+   2. Individual Camera Chameleon Skeuomorphic Styles
+   ========================================================================== */
+
+/* --------------------------------------------------------------------------
+   [1] Fuji QuickSnap (写ルンです 1986)
+   -------------------------------------------------------------------------- */
+.iphone-frame.theme-fuji-quicksnap {
+  border-color: #14532d;
+  box-shadow: 
+    inset 0 0 0 2px #ffd400,
+    inset 0 0 16px rgba(0, 0, 0, 0.95),
+    0 25px 60px rgba(0, 0, 0, 0.85);
+}
+
+.camera-app.theme-fuji-quicksnap {
+  background: 
+    linear-gradient(135deg, 
+      #095526 0%, #0d7938 28%,
+      #ffd400 28.5%, #ffd400 38%,
+      #e60012 38.5%, #e60012 40.5%,
+      #0d7938 41%, #053a18 100%
+    );
+}
+
+.theme-fuji-quicksnap .camera-top-toolbar {
+  background: linear-gradient(180deg, rgba(9, 68, 30, 0.94) 0%, rgba(13, 121, 56, 0.75) 100%);
+  border-bottom: 1.5px solid rgba(255, 212, 0, 0.45);
+}
+
+.theme-fuji-quicksnap .camera-bottom-section {
+  background: linear-gradient(180deg, rgba(9, 68, 30, 0.88) 0%, rgba(5, 42, 18, 0.98) 100%);
+  border-top: 1.5px solid rgba(255, 212, 0, 0.4);
+}
+
+.theme-fuji-quicksnap .shutter-btn-outer {
+  background: #111417;
+  border: 3px solid #ffd400;
+  box-shadow: 
+    0 6px 18px rgba(0, 0, 0, 0.85),
+    inset 0 4px 8px #000,
+    0 0 14px rgba(255, 212, 0, 0.35);
+}
+
+.theme-fuji-quicksnap .shutter-btn-inner {
+  background: 
+    repeating-linear-gradient(90deg, rgba(255,255,255,0.18) 0px 3px, transparent 3px 6px),
+    linear-gradient(180deg, #16a34a 0%, #15803d 60%, #14532d 100%);
+  box-shadow: 
+    0 3px 6px rgba(0, 0, 0, 0.6),
+    inset 0 1px 2px rgba(255, 255, 255, 0.6),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.6);
+  border: 1px solid #166534;
+}
+
+.theme-fuji-quicksnap .shutter-btn-outer:active .shutter-btn-inner {
+  transform: scale(0.88) translateY(2px);
+  background: linear-gradient(180deg, #15803d 0%, #14532d 100%);
+  box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.85);
+}
+
+/* --------------------------------------------------------------------------
+   [2] Contax T2 (Titanium Champagne & Carl Zeiss T*)
+   -------------------------------------------------------------------------- */
+.iphone-frame.theme-contax-t2 {
+  border-color: #b5a383;
+  box-shadow: 
+    inset 0 0 0 2px rgba(255, 245, 225, 0.65),
+    inset 0 0 16px rgba(0, 0, 0, 0.8),
+    0 25px 60px rgba(0, 0, 0, 0.85);
+}
+
+.camera-app.theme-contax-t2 {
+  background: 
+    linear-gradient(180deg, 
+      #ded0b6 0%, #b8a685 14%, 
+      #1b1814 16%, #141210 82%, 
+      #b8a685 84%, #ded0b6 100%
+    );
+}
+
+.theme-contax-t2 .camera-top-toolbar {
+  background: linear-gradient(180deg, rgba(222, 208, 182, 0.95) 0%, rgba(184, 166, 133, 0.85) 100%);
+  border-bottom: 1.5px solid #8f7d5e;
+}
+.theme-contax-t2 .camera-top-toolbar .toolbar-btn {
+  color: #2b2316;
+  background: rgba(255, 255, 255, 0.28);
+  border-color: rgba(143, 125, 94, 0.45);
+}
+
+.theme-contax-t2 .camera-bottom-section {
+  background: linear-gradient(180deg, rgba(27, 24, 20, 0.88) 0%, rgba(184, 166, 133, 0.95) 88%, rgba(222, 208, 182, 0.98) 100%);
+  border-top: 1.5px solid #8f7d5e;
+}
+
+.theme-contax-t2 .shutter-btn-outer {
+  background: conic-gradient(from 45deg, #d4af37, #806000, #ffd700, #806000, #d4af37);
+  border: 3px solid #8f7d5e;
+  box-shadow: 
+    0 6px 20px rgba(0, 0, 0, 0.8),
+    inset 0 2px 4px rgba(255, 255, 255, 0.7),
+    0 0 14px rgba(212, 175, 55, 0.35);
+}
+
+.theme-contax-t2 .shutter-btn-inner {
+  background: radial-gradient(circle at 35% 35%, #fffdf8 0%, #d8caa7 60%, #9e8d69 100%);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5), inset 0 1px 2px #fff;
+  border: 1px solid #b39f79;
+}
+
+.theme-contax-t2 .shutter-btn-core {
+  display: block;
+  width: 6.5px;
+  height: 6.5px;
+  border-radius: 50%;
+  background: #dc2626;
+  box-shadow: 0 0 5px #dc2626;
+}
+
+.theme-contax-t2 .shutter-btn-outer:active .shutter-btn-inner {
+  transform: scale(0.92) translateY(2px);
+  background: radial-gradient(circle at 35% 35%, #d8caa7 0%, #b39f79 100%);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.65);
+}
+
+/* --------------------------------------------------------------------------
+   [3] Leica M System (Satin Chrome + Vulcanite Leatherette)
+   -------------------------------------------------------------------------- */
+.iphone-frame.theme-leica-m {
+  border-color: #cbd5e1;
+  box-shadow: 
+    inset 0 0 0 2px #ffffff,
+    inset 0 0 18px rgba(0, 0, 0, 0.85),
+    0 25px 60px rgba(0, 0, 0, 0.9);
+}
+
+.camera-app.theme-leica-m {
+  background: 
+    linear-gradient(180deg, 
+      #e2e8f0 0%, #94a3b8 14%, 
+      #13161c 15%, #0a0c10 82%, 
+      #94a3b8 83%, #e2e8f0 100%
+    );
+}
+
+.theme-leica-m .camera-top-toolbar {
+  background: linear-gradient(180deg, rgba(226, 232, 240, 0.96) 0%, rgba(148, 163, 184, 0.9) 100%);
+  border-bottom: 1.5px solid #64748b;
+}
+.theme-leica-m .camera-top-toolbar .toolbar-btn {
+  color: #0f172a;
+  background: rgba(255, 255, 255, 0.35);
+  border-color: rgba(100, 116, 139, 0.45);
+}
+
+.theme-leica-m .camera-bottom-section {
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.9) 0%, rgba(148, 163, 184, 0.95) 86%, rgba(226, 232, 240, 0.98) 100%);
+  border-top: 1.5px solid #64748b;
+}
+
+.theme-leica-m .shutter-btn-outer {
+  background: repeating-conic-gradient(
+    #cbd5e1 0deg 6deg,
+    #475569 6deg 12deg
+  );
+  border: 3px solid #64748b;
+  box-shadow: 
+    0 6px 20px rgba(0, 0, 0, 0.85),
+    inset 0 2px 4px rgba(255, 255, 255, 0.8);
+}
+
+.theme-leica-m .shutter-btn-inner {
+  background: radial-gradient(circle at 45% 45%, #ffffff 0%, #cbd5e1 55%, #64748b 100%);
+  box-shadow: 
+    0 3px 8px rgba(0, 0, 0, 0.5),
+    inset 0 1px 3px rgba(255, 255, 255, 0.95),
+    inset 0 -2px 4px rgba(0, 0, 0, 0.4);
+  border: 1px solid #94a3b8;
+}
+
+.theme-leica-m .shutter-btn-thread {
+  display: block;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #000 0%, #1e293b 65%, #64748b 100%);
+  border: 1px solid #475569;
+  box-shadow: inset 0 2px 3px rgba(0,0,0,0.9);
+}
+
+.theme-leica-m .shutter-btn-outer:active .shutter-btn-inner {
+  transform: scale(0.91) translateY(2px);
+  background: radial-gradient(circle at 45% 45%, #cbd5e1 0%, #94a3b8 100%);
+  box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.7);
+}
+
+/* --------------------------------------------------------------------------
+   [4] Polaroid SX-70 (Porvair Tan Leather + Tomato Red Concave Shutter)
+   -------------------------------------------------------------------------- */
+.iphone-frame.theme-polaroid-sx70 {
+  border-color: #cbd5e1;
+  box-shadow: 
+    inset 0 0 0 2px #f8fafc,
+    inset 0 0 16px rgba(0, 0, 0, 0.8),
+    0 25px 60px rgba(0, 0, 0, 0.85);
+}
+
+.camera-app.theme-polaroid-sx70 {
+  background: 
+    linear-gradient(180deg, 
+      #e2e8f0 0%, #94a3b8 14%, 
+      #8b4513 15%, #5c2c08 82%, 
+      #94a3b8 83%, #e2e8f0 100%
+    );
+}
+
+.theme-polaroid-sx70 .camera-top-toolbar {
+  background: linear-gradient(180deg, rgba(226, 232, 240, 0.96) 0%, rgba(148, 163, 184, 0.9) 100%);
+  border-bottom: 1.5px solid #64748b;
+}
+
+.theme-polaroid-sx70 .camera-bottom-section {
+  background: linear-gradient(180deg, rgba(92, 44, 8, 0.9) 0%, rgba(148, 163, 184, 0.92) 86%, rgba(226, 232, 240, 0.98) 100%);
+  border-top: 1.5px solid #64748b;
+}
+
+.theme-polaroid-sx70 .shutter-btn-outer {
+  background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 50%, #64748b 100%);
+  border: 3px solid #334155;
+  box-shadow: 
+    0 6px 20px rgba(0, 0, 0, 0.85),
+    inset 0 2px 4px rgba(255, 255, 255, 0.9),
+    0 0 16px rgba(220, 38, 38, 0.4);
+}
+
+.theme-polaroid-sx70 .shutter-btn-inner {
+  background: radial-gradient(circle at 35% 35%, #ff5252 0%, #dc2626 55%, #991b1b 100%);
+  box-shadow: 
+    0 3px 8px rgba(0, 0, 0, 0.6),
+    inset 0 2px 4px rgba(255, 255, 255, 0.5),
+    inset 0 -3px 6px rgba(0, 0, 0, 0.5);
+  border: 1.5px solid #b91c1c;
+}
+
+.theme-polaroid-sx70 .shutter-btn-outer:active .shutter-btn-inner {
+  transform: scale(0.89) translateY(2px);
+  background: radial-gradient(circle at 35% 35%, #dc2626 0%, #991b1b 100%);
+  box-shadow: inset 0 3px 8px rgba(0, 0, 0, 0.8);
+}
+
+/* --------------------------------------------------------------------------
+   [5] Sony Cyber-shot CCD (Spun Aluminum + Cyan Halo)
+   -------------------------------------------------------------------------- */
+.iphone-frame.theme-sony-cybershot {
+  border-color: #64748b;
+  box-shadow: 
+    inset 0 0 0 2px #00d2ff,
+    inset 0 0 16px rgba(0, 0, 0, 0.8),
+    0 25px 60px rgba(0, 0, 0, 0.85);
+}
+
+.camera-app.theme-sony-cybershot {
+  background: 
+    radial-gradient(circle at 50% 30%, #f8fafc 0%, #cbd5e1 35%, #475569 70%, #0f172a 100%);
+}
+
+.theme-sony-cybershot .camera-top-toolbar {
+  background: linear-gradient(180deg, rgba(248, 250, 252, 0.95) 0%, rgba(203, 213, 225, 0.88) 100%);
+  border-bottom: 1.5px solid #0055ff;
+}
+
+.theme-sony-cybershot .camera-bottom-section {
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.9) 0%, rgba(71, 85, 105, 0.92) 88%, rgba(203, 213, 225, 0.98) 100%);
+  border-top: 1.5px solid #0055ff;
+}
+
+.theme-sony-cybershot .shutter-btn-outer {
+  background: conic-gradient(from 0deg, #e2e8f0, #94a3b8, #f8fafc, #64748b, #e2e8f0);
+  border: 3px solid #0055ff;
+  box-shadow: 
+    0 6px 20px rgba(0, 0, 0, 0.85),
+    inset 0 2px 4px rgba(255, 255, 255, 0.8),
+    0 0 16px rgba(0, 210, 255, 0.5);
+}
+
+.theme-sony-cybershot .shutter-btn-inner {
+  background: radial-gradient(circle at 35% 35%, #ffffff 0%, #cbd5e1 60%, #64748b 100%);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.5), inset 0 1px 2px #fff;
+  border: 1px solid #0055ff;
+}
+
+.theme-sony-cybershot .shutter-btn-core {
+  display: block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #00d2ff;
+  box-shadow: 0 0 8px #00d2ff;
+}
+
+.theme-sony-cybershot .shutter-btn-outer:active .shutter-btn-inner {
+  transform: scale(0.91) translateY(2px);
+  background: radial-gradient(circle at 35% 35%, #cbd5e1 0%, #64748b 100%);
+  box-shadow: inset 0 2px 6px rgba(0, 0, 0, 0.7);
+}
+
+/* --------------------------------------------------------------------------
+   [6] Olympus μ [mju:] II (Champagne Aerodynamic Capsule)
+   -------------------------------------------------------------------------- */
+.iphone-frame.theme-olympus-mju {
+  border-color: #a1a1aa;
+  box-shadow: inset 0 0 0 2px #fef08a, 0 25px 60px rgba(0,0,0,0.85);
+}
+
+.camera-app.theme-olympus-mju {
+  background: linear-gradient(180deg, #3f3f46 0%, #18181b 30%, #09090b 100%);
+}
+
+.theme-olympus-mju .shutter-btn-outer {
+  background: linear-gradient(135deg, #d4d4d8 0%, #71717a 100%);
+  border: 3px solid #eab308;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.8), 0 0 12px rgba(234, 179, 8, 0.3);
+}
+
+.theme-olympus-mju .shutter-btn-inner {
+  background: radial-gradient(circle at 35% 35%, #fef08a 0%, #ca8a04 60%, #854d0e 100%);
+  border: 1px solid #eab308;
+}
+
+/* --------------------------------------------------------------------------
+   [7] Hasselblad 500C/M (6x6 Medium Format Industrial Chrome & Leatherette)
+   -------------------------------------------------------------------------- */
+.iphone-frame.theme-hasselblad-500cm {
+  border-color: #cbd5e1;
+  box-shadow: inset 0 0 0 3px #ffffff, 0 25px 60px rgba(0,0,0,0.9);
+}
+
+.camera-app.theme-hasselblad-500cm {
+  background: 
+    radial-gradient(circle at 50% 50%, #18181b 0%, #09090b 100%);
+}
+
+.theme-hasselblad-500cm .shutter-btn-outer {
+  background: linear-gradient(135deg, #f8fafc 0%, #94a3b8 50%, #334155 100%);
+  border: 4px solid #cbd5e1;
+  box-shadow: 0 8px 22px rgba(0,0,0,0.9), inset 0 2px 4px #fff;
+}
+
+.theme-hasselblad-500cm .shutter-btn-inner {
+  background: radial-gradient(circle at 40% 40%, #ffffff 0%, #cbd5e1 55%, #475569 100%);
+  border: 1.5px solid #64748b;
+}
+
+.theme-hasselblad-500cm .shutter-btn-outer:active .shutter-btn-inner {
+  transform: scale(0.88) translateY(3px);
+}
+
+/* --------------------------------------------------------------------------
+   [8] Kyocera Samurai X3.0 (1988 Cyber Ergonomic Half-Frame)
+   -------------------------------------------------------------------------- */
+.iphone-frame.theme-kyocera-samurai {
+  border-color: #3f3f46;
+  box-shadow: inset 0 0 0 2px #ef4444, 0 25px 60px rgba(0,0,0,0.85);
+}
+
+.camera-app.theme-kyocera-samurai {
+  background: linear-gradient(180deg, #27272a 0%, #18181b 40%, #09090b 100%);
+}
+
+.theme-kyocera-samurai .shutter-btn-outer {
+  background: #18181b;
+  border: 3px solid #ef4444;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.85), 0 0 12px rgba(239, 68, 68, 0.4);
+}
+
+.theme-kyocera-samurai .shutter-btn-inner {
+  background: linear-gradient(180deg, #3f3f46 0%, #18181b 100%);
+  border: 1px solid #71717a;
+}
+
+.theme-kyocera-samurai .shutter-btn-core {
+  display: block;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 6px #10b981;
+}
+
+/* --------------------------------------------------------------------------
+   [9] Ricoh GR Digital (Magnesium Matte Stealth)
+   -------------------------------------------------------------------------- */
+.iphone-frame.theme-ricoh-gr {
+  border-color: #27272a;
+  box-shadow: inset 0 0 0 2px #52525b, 0 25px 60px rgba(0,0,0,0.9);
+}
+
+.camera-app.theme-ricoh-gr {
+  background: linear-gradient(180deg, #18181b 0%, #09090b 100%);
+}
+
+.theme-ricoh-gr .shutter-btn-outer {
+  background: #18181b;
+  border: 3px solid #52525b;
+}
+
+.theme-ricoh-gr .shutter-btn-inner {
+  background: radial-gradient(circle at 35% 35%, #3f3f46 0%, #18181b 100%);
+  border: 1px solid #27272a;
+}
+
+/* --------------------------------------------------------------------------
+   [10] Sony Handycam MiniDV (90s Camcorder Silver & REC Trigger)
+   -------------------------------------------------------------------------- */
+.iphone-frame.theme-sony-handycam {
+  border-color: #64748b;
+  box-shadow: inset 0 0 0 2px #0284c7, 0 25px 60px rgba(0,0,0,0.85);
+}
+
+.camera-app.theme-sony-handycam {
+  background: linear-gradient(180deg, #cbd5e1 0%, #64748b 20%, #1e293b 100%);
+}
+
+.theme-sony-handycam .shutter-btn-outer {
+  background: #1e293b;
+  border: 3px solid #ef4444;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.8), 0 0 14px rgba(239, 68, 68, 0.4);
+}
+
+.theme-sony-handycam .shutter-btn-inner {
+  background: radial-gradient(circle at 35% 35%, #f87171 0%, #dc2626 60%, #991b1b 100%);
+  border: 1px solid #b91c1c;
+}
+
+/* --------------------------------------------------------------------------
+   [11] City Pop 80s (1986 Japanese Boombox & Neon Sunset)
+   -------------------------------------------------------------------------- */
+.iphone-frame.theme-citypop-80s {
+  border-color: #8b5cf6;
+  box-shadow: inset 0 0 0 2px #ec4899, 0 25px 60px rgba(0,0,0,0.9);
+}
+
+.camera-app.theme-citypop-80s {
+  background: linear-gradient(180deg, #1e1b4b 0%, #0f172a 50%, #311042 100%);
+}
+
+.theme-citypop-80s .shutter-btn-outer {
+  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
+  border: 3px solid #00f5ff;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.85), 0 0 16px rgba(0, 245, 255, 0.4);
+}
+
+.theme-citypop-80s .shutter-btn-inner {
+  background: radial-gradient(circle at 35% 35%, #ffffff 0%, #f472b6 60%, #8b5cf6 100%);
+  border: 1px solid #ec4899;
+}
+
+/* --------------------------------------------------------------------------
+   [12] Old Film 35mm (Kodak Portra Tin Canister)
+   -------------------------------------------------------------------------- */
+.iphone-frame.theme-oldfilm-35mm {
+  border-color: #ca8a04;
+  box-shadow: inset 0 0 0 2px #facc15, 0 25px 60px rgba(0,0,0,0.85);
+}
+
+.camera-app.theme-oldfilm-35mm {
+  background: linear-gradient(180deg, #713f12 0%, #1c1917 40%, #0c0a09 100%);
+}
+
+.theme-oldfilm-35mm .shutter-btn-outer {
+  background: #1c1917;
+  border: 3px solid #facc15;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.8), 0 0 12px rgba(250, 204, 21, 0.4);
+}
+
+.theme-oldfilm-35mm .shutter-btn-inner {
+  background: radial-gradient(circle at 35% 35%, #fef08a 0%, #eab308 60%, #854d0e 100%);
+  border: 1px solid #ca8a04;
+}
+
+/* --------------------------------------------------------------------------
+   [13] Instax Mini (Candy Pink Curves)
+   -------------------------------------------------------------------------- */
+.iphone-frame.theme-instax-mini {
+  border-color: #f472b6;
+  box-shadow: inset 0 0 0 2px #fce7f3, 0 25px 60px rgba(0,0,0,0.85);
+}
+
+.camera-app.theme-instax-mini {
+  background: linear-gradient(180deg, #fdf2f8 0%, #fce7f3 30%, #f472b6 100%);
+}
+
+.theme-instax-mini .shutter-btn-outer {
+  background: #fdf2f8;
+  border: 3px solid #db2777;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.4), 0 0 12px rgba(219, 39, 119, 0.3);
+}
+
+.theme-instax-mini .shutter-btn-inner {
+  background: radial-gradient(circle at 35% 35%, #ffffff 0%, #f472b6 60%, #db2777 100%);
+  border: 1px solid #f472b6;
+}
+
+/* --------------------------------------------------------------------------
+   [14] Personal Color Studio (Sihyunhada Frosted Violet)
+   -------------------------------------------------------------------------- */
+.iphone-frame.theme-sihyun-color {
+  border-color: #8b5cf6;
+  box-shadow: inset 0 0 0 2px #c084fc, 0 25px 60px rgba(0,0,0,0.85);
+}
+
+.camera-app.theme-sihyun-color {
+  background: linear-gradient(180deg, #2e1065 0%, #1e1b4b 50%, #0f172a 100%);
+}
+
+.theme-sihyun-color .shutter-btn-outer {
+  background: #1e1b4b;
+  border: 3px solid #c084fc;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.8), 0 0 14px rgba(192, 132, 252, 0.4);
+}
+
+.theme-sihyun-color .shutter-btn-inner {
+  background: radial-gradient(circle at 35% 35%, #f5d0fe 0%, #c084fc 60%, #7e22ce 100%);
+  border: 1px solid #a855f7;
+}
+
+/* --------------------------------------------------------------------------
+   [15] Passport ID Biometric Console
+   -------------------------------------------------------------------------- */
+.iphone-frame.theme-passport-id {
+  border-color: #1e3a8a;
+  box-shadow: inset 0 0 0 2px #60a5fa, 0 25px 60px rgba(0,0,0,0.85);
+}
+
+.camera-app.theme-passport-id {
+  background: linear-gradient(180deg, #172554 0%, #0f172a 100%);
+}
+
+.theme-passport-id .shutter-btn-outer {
+  background: #0f172a;
+  border: 3px solid #3b82f6;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.8), 0 0 12px rgba(59, 130, 246, 0.4);
+}
+
+.theme-passport-id .shutter-btn-inner {
+  background: radial-gradient(circle at 35% 35%, #93c5fd 0%, #3b82f6 60%, #1d4ed8 100%);
+  border: 1px solid #60a5fa;
+}
+
+/* --------------------------------------------------------------------------
+   [16] Canon IXY Digital 50 (Classic Y2K Silver)
+   -------------------------------------------------------------------------- */
+.iphone-frame.theme-canon-ixy {
+  border-color: #64748b;
+  box-shadow: inset 0 0 0 2px #e2e8f0, 0 25px 60px rgba(0,0,0,0.85);
+}
+
+.camera-app.theme-canon-ixy {
+  background: linear-gradient(180deg, #334155 0%, #1e293b 40%, #0f172a 100%);
 }
 
 /* ==========================================================================

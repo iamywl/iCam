@@ -278,7 +278,7 @@
 
         <!-- Camera App Surface -->
         <div class="camera-app">
-          
+
           <!-- Top Utility Toolbar -->
           <nav class="camera-top-toolbar">
             <button class="toolbar-btn" id="btn-flash" title="플래시">
@@ -1895,13 +1895,23 @@
 
               <!-- Center: Shutter Button (Tap = Photo, Hold >280ms = QuickTake Video) -->
               <button class="shutter-btn-outer" id="shutter-btn" title="사진 촬영 (길게 누르면 QuickTake 비디오)">
-                <div class="shutter-btn-inner"></div>
+                <div class="shutter-btn-collar"></div>
+                <div class="shutter-btn-inner">
+                  <div class="shutter-btn-thread"></div>
+                  <div class="shutter-btn-core"></div>
+                </div>
               </button>
 
-              <!-- Right: Visual Camera Bag Trigger -->
+              <!-- Right: Visual Camera Bag Trigger (or QuickSnap Thumb Winding Wheel) -->
               <button class="bottom-quick-btn" id="bottom-camera-bag-btn" title="16종 카메라 보관함 (Camera Bag) 열기">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="3" y1="12" x2="21" y2="12"/><circle cx="12" cy="12" r="2"/></svg>
               </button>
+              <div class="skeuo-wind-wheel" id="quicksnap-wind-wheel" role="button" tabindex="0" title="필름 와인딩 휠 (클릭하거나 아래로 드래그하여 필름 감기)">
+                <div class="wind-wheel-rim">
+                  <div class="wind-wheel-teeth"></div>
+                </div>
+                <div class="wind-wheel-label">WIND ▶</div>
+              </div>
             </div>
 
           </footer>
