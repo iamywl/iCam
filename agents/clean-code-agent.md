@@ -60,7 +60,7 @@ Your mission is to enforce the highest standards of software craftsmanship, SOLI
     * `Filterable`: Basic image manipulation.
     * `TemporalFilterable`: Multi-frame video effects (VHS jitter, film gate weave).
     * `LensAttachable`: Optical diffraction / flare overlays.
-    * `DateImprintable`: Quartz date stamp overlays (Fuji QuickSnap '89 11 24).
+    * `DateImprintable`: Dynamic real-time quartz date stamp overlays ('YY MM DD computed from live `new Date()`, never hardcoded).
 
 ### 5. D — Dependency Inversion Principle (DIP)
 - **Problem**: High-level presentation logic tightly coupled to low-level DOM elements, global variables, or platform-specific APIs.
@@ -81,8 +81,12 @@ Your mission is to enforce the highest standards of software craftsmanship, SOLI
    - Zero unexpected side effects in pure calculation functions.
 3. **DRY (Don't Repeat Yourself)**:
    - Shared filter math (e.g. Fraunhofer diffraction, chromatic aberration, grain synthesis) encapsulated in reusable math utilities.
-4. **Error Handling**:
+4. **Photo Capture Purity & Idempotency Standard (사진 캡처 무결성 표준)**:
+   - **Zero Brand Watermark**: `captureCanvas` must NEVER stamp filter names, camera names, or brand badges (`FUJICOLOR`, `LEICA M`, `Cyber-shot`).
+   - **Dynamic Real-Time Date**: Hardcoding past years/dates is considered an architectural anti-pattern and bug. All date imprints MUST use `new Date()` dynamically.
+5. **Error Handling**:
    - Explicit failure handling with graceful fallbacks.
-5. **Architectural Review Workflow**:
+6. **Architectural Review Workflow**:
    - Every feature proposed by `dev-agent` must be reviewed by `clean-code-agent` for SOLID adherence.
    - Any architectural smell identified must trigger a refactoring plan before submission.
+

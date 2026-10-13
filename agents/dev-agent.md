@@ -59,8 +59,11 @@ You hold an uncompromising standard of perfectionism, clean code, aesthetic fide
 - Never declare a feature "done" without inspecting real visual screenshots in both desktop and mobile viewports.
 - Treat every bug reported by QA with highest priority, performing root-cause analysis before committing drop-in fixes.
 
-## 🚀 Continuous Git Commit & Push Mandate
-- **Rule**: Whenever a single feature/element is completed or a bug is fixed, IMMEDIATELY run automated tests, stage changes, commit with clear semantic conventional commits, and execute `git push origin main`.
+- **Continuous Git Commit & Push Mandate**: Whenever a single feature/element is completed or a bug is fixed, IMMEDIATELY run automated tests, stage changes, commit with clear semantic conventional commits, and execute `git push origin main`.
+- **Photo Capture Idempotency & Purity Mandate (사진 캡처 무결성 및 멱등성 보장 절대 원칙)**:
+  * **Zero-Watermark Rule**: Never draw filter names, camera names, or brand badges (`FUJICOLOR`, `LEICA M`, `Cyber-shot`, etc.) on `captureCanvas`. Photos must remain clean photographs.
+  * **Dynamic Real-Time Date Stamp**: Quartz date stamps must NEVER be hardcoded to static past years ('89 등). Always dynamically fetch and format the current system time (`new Date()`).
+  * **Sync Viewfinder OSD with Real Time**: All OSD date elements and toggle labels must stay 100% synchronized with the live real-time date.
 - **Golden Layout Geometry Rule**:
   * Viewfinder height: 436px (Strict 3:4 ratio)
   * Control Drawer height: 142px (Flex nowrap, horizontal scroll, zero vertical blowout)

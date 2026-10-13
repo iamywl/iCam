@@ -1350,25 +1350,57 @@ function renderStudioModel(canvas, toneVal = 35) {
 // 4. Multi-Camera Switcher Engine & Real-time Live Background
 // ==========================================================================
 
-function updateClock() {
-  const clockEl = document.getElementById('status-time');
-  const dateCodeEl = document.getElementById('sihyun-date-code');
-  const dateStampEl = document.getElementById('date-stamp');
-  
+function getLiveVintageTimestamp() {
   const now = new Date();
-  let hours = now.getHours();
-  let minutes = now.getMinutes();
-  hours = hours < 10 ? '0' + hours : hours;
-  minutes = minutes < 10 ? '0' + minutes : minutes;
-
-  if (clockEl) clockEl.textContent = `${hours}:${minutes}`;
-
   const yyyy = now.getFullYear();
+  const yy = String(yyyy).slice(-2);
   const mm = String(now.getMonth() + 1).padStart(2, '0');
   const dd = String(now.getDate()).padStart(2, '0');
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  const seconds = String(now.getSeconds()).padStart(2, '0');
 
-  if (dateCodeEl) dateCodeEl.textContent = `${yyyy}.${mm}.${dd} RECORD`;
-  if (dateStampEl) dateStampEl.textContent = `'${String(yyyy).slice(2)} ${mm} ${dd}`;
+  return {
+    now,
+    yyyy,
+    yy,
+    mm,
+    dd,
+    hours,
+    minutes,
+    seconds,
+    quartzDate: `'${yy} ${mm} ${dd}`,
+    quartzDateTime: `'${yy} ${mm} ${dd} ${hours}:${minutes}`,
+    studioRecord: `${yyyy}.${mm}.${dd} RECORD`
+  };
+}
+
+function updateClock() {
+  const vt = getLiveVintageTimestamp();
+  
+  const clockEl = document.getElementById('status-time');
+  if (clockEl) clockEl.textContent = `${vt.hours}:${vt.minutes}`;
+
+  const dateCodeEl = document.getElementById('sihyun-date-code');
+  if (dateCodeEl) dateCodeEl.textContent = vt.studioRecord;
+
+  const dateStampEl = document.getElementById('date-stamp');
+  if (dateStampEl) dateStampEl.textContent = vt.quartzDate;
+
+  const quicksnapDateEl = document.getElementById('quicksnap-date-stamp');
+  if (quicksnapDateEl) quicksnapDateEl.textContent = vt.quartzDate;
+
+  const quicksnapToggle = document.getElementById('toggle-quicksnap-date');
+  if (quicksnapToggle) quicksnapToggle.textContent = `${vt.quartzDate} 데이트스탬프`;
+
+  const canonDateEl = document.querySelector('.canon-date-stamp');
+  if (canonDateEl) canonDateEl.textContent = vt.quartzDateTime;
+
+  const olympusDateEl = document.querySelector('.olympus-date');
+  if (olympusDateEl) olympusDateEl.textContent = vt.quartzDate;
+
+  const instaxDateEl = document.querySelector('.instax-date-stamp');
+  if (instaxDateEl) instaxDateEl.textContent = vt.quartzDate;
 }
 
 function showDynamicIslandBanner(title, subtitle, durationMs = 2200) {
@@ -2475,67 +2507,70 @@ function executeCapture() {
     }
   }
 
-  // 5. Camera-Specific OSD Watermarks & Frames
+  // 5. Camera-Specific OSD Watermarks & Frames (Clean Capture with Dynamic Live Dates)
+  const vt = getLiveVintageTimestamp();
+
   if (cam.id === 'canon-ixy') {
-    ctx.font = 'bold 26px "Courier New", monospace';
-    ctx.fillStyle = '#ff9500';
-    ctx.shadowColor = 'rgba(0,0,0,0.9)';
-    ctx.shadowOffsetX = 2;
-    ctx.shadowOffsetY = 2;
-    ctx.fillText("'26 10 05 14:28", captureCanvas.width - 270, captureCanvas.height - 40);
-    ctx.shadowColor = 'transparent';
+    const ixyDateToggle = document.getElementById('toggle-ixy-date');
+    if (!ixyDateToggle || ixyDateToggle.classList.contains('active')) {
+      ctx.save();
+      ctx.font = 'bold 26px "Courier New", monospace';
+      ctx.fillStyle = '#ff9500';
+      ctx.shadowColor = 'rgba(0,0,0,0.9)';
+      ctx.shadowOffsetX = 2;
+      ctx.shadowOffsetY = 2;
+      ctx.fillText(vt.quartzDateTime, captureCanvas.width - 270, captureCanvas.height - 40);
+      ctx.restore();
+    }
   } else if (cam.id === 'sony-handycam') {
-    ctx.font = 'bold 24px "Courier New", monospace';
-    ctx.fillStyle = '#ff3b30';
-    ctx.fillText('● REC', 40, 60);
-    ctx.fillStyle = '#00ffcc';
-    ctx.fillText('SP 0:00:14  SONY DCR', 130, 60);
-    ctx.fillText('Hi-Fi STEREO [DV]', 40, captureCanvas.height - 40);
-    ctx.fillText('BATT ▮▮▮▯', captureCanvas.width - 200, captureCanvas.height - 40);
+    const handyRecToggle = document.getElementById('toggle-handy-rec');
+    const handyOsdToggle = document.getElementById('toggle-handy-osd');
+    if (!handyRecToggle || handyRecToggle.classList.contains('active')) {
+      ctx.font = 'bold 24px "Courier New", monospace';
+      ctx.fillStyle = '#ff3b30';
+      ctx.fillText('● REC', 40, 60);
+      ctx.fillStyle = '#00ffcc';
+      ctx.fillText('SP 0:00:14', 130, 60);
+    }
+    if (!handyOsdToggle || handyOsdToggle.classList.contains('active')) {
+      ctx.font = 'bold 24px "Courier New", monospace';
+      ctx.fillStyle = '#00ffcc';
+      ctx.fillText('Hi-Fi STEREO [DV]', 40, captureCanvas.height - 40);
+      ctx.fillText('BATT ▮▮▮▯', captureCanvas.width - 200, captureCanvas.height - 40);
+    }
   } else if (cam.id === 'sony-cybershot') {
-    ctx.font = 'bold 22px -apple-system, sans-serif';
-    ctx.fillStyle = '#ff9f0a';
-    ctx.fillText('Cyber-shot', 40, 60);
-    ctx.fillStyle = '#ffffff';
-    ctx.font = '18px -apple-system, sans-serif';
-    ctx.fillText('5.1 MEGAPIXELS', captureCanvas.width - 200, 60);
-    ctx.fillText('DSC-P10  ISO 100', 40, captureCanvas.height - 40);
+    // Pure clean photograph: No brand text or megapixel watermark stamped on photo!
   } else if (cam.id === 'olympus-mju') {
-    ctx.font = 'bold 20px -apple-system, sans-serif';
-    ctx.fillStyle = '#30d158';
-    ctx.fillText('OLYMPUS μ [mju:]-II', 40, 60);
-    ctx.fillStyle = '#ff9f0a';
-    ctx.font = 'bold 18px monospace';
-    ctx.fillText('⚡ OK', captureCanvas.width - 120, 60);
-    ctx.fillText('[ S 24 ]', 40, captureCanvas.height - 40);
-    ctx.fillText("'26 10 05", captureCanvas.width - 150, captureCanvas.height - 40);
+    // Pure clean photograph: No OLYMPUS brand watermark banner stamped on photo!
+    const mjuDateToggle = document.getElementById('toggle-mju-date');
+    if (!mjuDateToggle || mjuDateToggle.classList.contains('active')) {
+      ctx.save();
+      ctx.font = 'bold 20px monospace';
+      ctx.fillStyle = '#ff9f0a';
+      ctx.shadowColor = 'rgba(255, 159, 10, 0.7)';
+      ctx.shadowBlur = 6;
+      ctx.fillText(vt.quartzDate, captureCanvas.width - 150, captureCanvas.height - 40);
+      ctx.restore();
+    }
   } else if (cam.id === 'contax-t2') {
-    // Red LED T* Bar
-    ctx.fillStyle = 'rgba(0,0,0,0.6)';
-    ctx.fillRect(30, 25, captureCanvas.width - 60, 48);
-    ctx.font = 'bold 20px "Courier New", monospace';
-    ctx.fillStyle = '#ff453a';
-    ctx.fillText('T*  1/250  F2.8  +0.5', 50, 56);
-
-    ctx.font = '14px -apple-system, sans-serif';
-    ctx.fillStyle = '#d1d1d6';
-    ctx.fillText('CONTAX T2 TITANIUM', 40, captureCanvas.height - 40);
-    ctx.fillText('Carl Zeiss Sonnar 2.8/38', captureCanvas.width - 250, captureCanvas.height - 40);
+    // Pure clean photograph: No red LED bar or CONTAX brand text stamped on photo!
+    const contaxLedToggle = document.getElementById('toggle-contax-led');
+    if (contaxLedToggle && contaxLedToggle.classList.contains('active')) {
+      ctx.save();
+      ctx.font = 'bold 18px "Courier New", monospace';
+      ctx.fillStyle = '#ff453a';
+      ctx.shadowColor = 'rgba(255, 69, 58, 0.7)';
+      ctx.shadowBlur = 6;
+      ctx.fillText(vt.quartzDate, captureCanvas.width - 150, captureCanvas.height - 40);
+      ctx.restore();
+    }
   } else if (cam.id === 'ricoh-gr') {
-    ctx.font = 'bold 18px -apple-system, sans-serif';
-    ctx.fillStyle = '#ffffff';
-    ctx.fillText('P   [ SNAP 2.5m ]   ISO 400', 40, 60);
-    ctx.font = '16px -apple-system, sans-serif';
-    ctx.fillStyle = '#ffd60a';
-    ctx.fillText('28mm GR LENS F2.8   1/160   RAW+', 40, captureCanvas.height - 40);
-
-    // If High-contrast B&W is selected
+    // Pure clean photograph: No SNAP / GR LENS text stamped on photo!
     if (state.selectedFilters['ricoh-gr'] === 'gr-bw-high') {
       const imgData = ctx.getImageData(0, 0, captureCanvas.width, captureCanvas.height);
       const d = imgData.data;
       for (let i = 0; i < d.length; i += 4) {
         let v = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2];
-        // High contrast curve
         v = (v - 128) * 1.5 + 128;
         v = Math.max(0, Math.min(255, v));
         d[i] = v; d[i + 1] = v; d[i + 2] = v;
@@ -2543,24 +2578,7 @@ function executeCapture() {
       ctx.putImageData(imgData, 0, 0);
     }
   } else if (cam.id === 'leica-m') {
-    // Red Dot
-    ctx.fillStyle = '#ff3b30';
-    ctx.beginPath();
-    ctx.roundRect(40, 40, 110, 32, 16);
-    ctx.fill();
-    ctx.font = 'bold 15px -apple-system, sans-serif';
-    ctx.fillStyle = '#ffffff';
-    ctx.fillText('LEICA M', 66, 62);
-
-    ctx.font = 'bold 16px monospace';
-    ctx.fillStyle = '#ffd60a';
-    ctx.fillText('1/500  f/1.4', captureCanvas.width - 150, 62);
-
-    ctx.font = '14px -apple-system, sans-serif';
-    ctx.fillStyle = '#e0e0e0';
-    ctx.fillText('SUMMILUX-M 1:1.4/50 ASPH.', 40, captureCanvas.height - 40);
-
-    // If Monochrom filter is selected
+    // Pure clean photograph: No LEICA red dot badge or SUMMILUX text stamped on photo!
     if (state.selectedFilters['leica-m'] === 'leica-mono') {
       const imgData = ctx.getImageData(0, 0, captureCanvas.width, captureCanvas.height);
       const d = imgData.data;
@@ -2571,48 +2589,45 @@ function executeCapture() {
       ctx.putImageData(imgData, 0, 0);
     }
   } else if (cam.id === 'citypop-80s') {
-    // City Pop Tape Top Banner
-    ctx.fillStyle = 'rgba(30, 5, 50, 0.7)';
-    ctx.fillRect(30, 30, captureCanvas.width - 60, 44);
-    ctx.strokeStyle = '#ff2db9';
-    ctx.lineWidth = 1;
-    ctx.strokeRect(30, 30, captureCanvas.width - 60, 44);
+    const cassetteToggle = document.getElementById('toggle-citypop-cassette');
+    if (cassetteToggle && cassetteToggle.classList.contains('active')) {
+      ctx.fillStyle = 'rgba(30, 5, 50, 0.7)';
+      ctx.fillRect(30, 30, captureCanvas.width - 60, 44);
+      ctx.strokeStyle = '#ff2db9';
+      ctx.lineWidth = 1;
+      ctx.strokeRect(30, 30, captureCanvas.width - 60, 44);
 
-    ctx.font = 'bold 15px "Courier New", monospace';
-    ctx.fillStyle = '#ff2db9';
-    ctx.fillText('SIDE A • STEREO', 50, 58);
-    ctx.fillStyle = '#00f0ff';
-    ctx.fillText('[DOLBY B-C NR]', 240, 58);
-    ctx.fillStyle = '#ffd60a';
-    ctx.fillText('FM 80.0 MHz', captureCanvas.width - 180, 58);
+      ctx.font = 'bold 15px "Courier New", monospace';
+      ctx.fillStyle = '#ff2db9';
+      ctx.fillText('SIDE A • STEREO', 50, 58);
+      ctx.fillStyle = '#00f0ff';
+      ctx.fillText('[DOLBY B-C NR]', 240, 58);
+      ctx.fillStyle = '#ffd60a';
+      ctx.fillText('FM 80.0 MHz', captureCanvas.width - 180, 58);
 
-    // Bottom Badge
-    ctx.font = 'bold 20px "Courier New", monospace';
-    ctx.fillStyle = '#00f0ff';
-    ctx.fillText('PACIFIC BREEZE 1986 • SHONAN', 40, captureCanvas.height - 40);
-    ctx.fillStyle = '#ffd60a';
-    ctx.fillText('◷ C-60 TAPE', captureCanvas.width - 150, captureCanvas.height - 40);
+      ctx.font = 'bold 20px "Courier New", monospace';
+      ctx.fillStyle = '#00f0ff';
+      ctx.fillText('PACIFIC BREEZE 1986 • SHONAN', 40, captureCanvas.height - 40);
+      ctx.fillStyle = '#ffd60a';
+      ctx.fillText('◷ C-60 TAPE', captureCanvas.width - 150, captureCanvas.height - 40);
+    }
   } else if (cam.id === 'oldfilm-35mm') {
-    // Top & Bottom Film Sprocket Borders
-    const sprocketH = 34;
-    ctx.fillStyle = '#0a0a0c';
-    ctx.fillRect(0, 0, captureCanvas.width, sprocketH);
-    ctx.fillRect(0, captureCanvas.height - sprocketH, captureCanvas.width, sprocketH);
+    const sprocketToggle = document.getElementById('toggle-oldfilm-sprocket');
+    if (sprocketToggle && sprocketToggle.classList.contains('active')) {
+      const sprocketH = 34;
+      ctx.fillStyle = '#0a0a0c';
+      ctx.fillRect(0, 0, captureCanvas.width, sprocketH);
+      ctx.fillRect(0, captureCanvas.height - sprocketH, captureCanvas.width, sprocketH);
 
-    // Sprocket Holes
-    ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
-    for (let x = 20; x < captureCanvas.width; x += 60) {
-      ctx.fillRect(x, 8, 20, 16);
-      ctx.fillRect(x, captureCanvas.height - 24, 20, 16);
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.2)';
+      for (let x = 20; x < captureCanvas.width; x += 60) {
+        ctx.fillRect(x, 8, 20, 16);
+        ctx.fillRect(x, captureCanvas.height - 24, 20, 16);
+      }
     }
 
-    // Film Stamp
-    ctx.font = 'bold 14px "Courier New", monospace';
-    ctx.fillStyle = '#ff9f0a';
-    ctx.fillText('KODAK SAFETY FILM 5063 • 35mm • 24A • PORTRA 400', 120, 22);
-
-    // CineStill Red Halation Simulation
-    if (state.selectedFilters['oldfilm-35mm'] === 'film-cinestill') {
+    const halationToggle = document.getElementById('toggle-oldfilm-halation');
+    if ((!halationToggle || halationToggle.classList.contains('active')) && state.selectedFilters['oldfilm-35mm'] === 'film-cinestill') {
       ctx.save();
       ctx.globalCompositeOperation = 'screen';
       const halation = ctx.createRadialGradient(
@@ -2627,34 +2642,25 @@ function executeCapture() {
       ctx.restore();
     }
   } else if (cam.id === 'hasselblad-500cm') {
-    // 6x6 Medium Format Inner Frame
-    ctx.lineWidth = 1.5;
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
-    ctx.strokeRect(30, 30, captureCanvas.width - 60, captureCanvas.height - 60);
+    const waistToggle = document.getElementById('toggle-hassel-waist');
+    if (!waistToggle || waistToggle.classList.contains('active')) {
+      ctx.lineWidth = 1.5;
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.45)';
+      ctx.strokeRect(30, 30, captureCanvas.width - 60, captureCanvas.height - 60);
+    }
 
-    // Crosshair at center
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
-    ctx.lineWidth = 1;
-    ctx.beginPath();
-    ctx.moveTo(captureCanvas.width / 2 - 12, captureCanvas.height / 2);
-    ctx.lineTo(captureCanvas.width / 2 + 12, captureCanvas.height / 2);
-    ctx.moveTo(captureCanvas.width / 2, captureCanvas.height / 2 - 12);
-    ctx.lineTo(captureCanvas.width / 2, captureCanvas.height / 2 + 12);
-    ctx.stroke();
-
-    // Top Hasselblad Swedish Badge
-    ctx.fillStyle = 'rgba(0, 0, 0, 0.6)';
-    ctx.fillRect(40, 40, 220, 34);
-    ctx.font = 'bold 15px Georgia, serif';
-    ctx.fillStyle = '#9a8c98';
-    ctx.fillText('HASSELBLAD 500C/M', 52, 63);
-
-    // Bottom Zeiss Planar & Shutter
-    ctx.font = 'bold 16px "Courier New", monospace';
-    ctx.fillStyle = '#ffffff';
-    ctx.fillText('Carl Zeiss Planar 2.8/80 T*', 50, captureCanvas.height - 50);
-    ctx.fillStyle = '#9a8c98';
-    ctx.fillText('1/250  f/2.8  A12 6x6', captureCanvas.width - 260, captureCanvas.height - 50);
+    const crossToggle = document.getElementById('toggle-hassel-cross');
+    if (crossToggle && crossToggle.classList.contains('active')) {
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.6)';
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(captureCanvas.width / 2 - 12, captureCanvas.height / 2);
+      ctx.lineTo(captureCanvas.width / 2 + 12, captureCanvas.height / 2);
+      ctx.moveTo(captureCanvas.width / 2, captureCanvas.height / 2 - 12);
+      ctx.lineTo(captureCanvas.width / 2, captureCanvas.height / 2 + 12);
+      ctx.stroke();
+    }
+    // Pure clean photograph: No HASSELBLAD Swedish badge or Carl Zeiss text stamped on photo!
   } else if (cam.id === 'polaroid-sx70') {
     // Signature Polaroid SX-70 Instant Card Frame
     ctx.lineWidth = 28;
@@ -2663,42 +2669,41 @@ function executeCapture() {
     ctx.fillStyle = '#f5f0eb';
     ctx.fillRect(0, captureCanvas.height - 150, captureCanvas.width, 150);
 
-    // Rainbow 5-color stripe badge
-    const rx = 40, ry = captureCanvas.height - 85;
-    const colors = ['#ff3b30', '#ff9500', '#ffcc00', '#34c759', '#007aff'];
-    colors.forEach((col, idx) => {
-      ctx.fillStyle = col;
-      ctx.fillRect(rx + idx * 8, ry, 7, 24);
-    });
+    const rainbowToggle = document.getElementById('toggle-sx70-rainbow');
+    if (!rainbowToggle || rainbowToggle.classList.contains('active')) {
+      const rx = 40, ry = captureCanvas.height - 85;
+      const colors = ['#ff3b30', '#ff9500', '#ffcc00', '#34c759', '#007aff'];
+      colors.forEach((col, idx) => {
+        ctx.fillStyle = col;
+        ctx.fillRect(rx + idx * 8, ry, 7, 24);
+      });
 
-    ctx.font = 'bold 22px -apple-system, sans-serif';
-    ctx.fillStyle = '#2c2d30';
-    ctx.fillText('POLAROID SX-70', 90, captureCanvas.height - 68);
+      ctx.font = 'bold 22px -apple-system, sans-serif';
+      ctx.fillStyle = '#2c2d30';
+      ctx.fillText('POLAROID SX-70', 90, captureCanvas.height - 68);
 
-    ctx.font = 'bold 14px "Courier New", monospace';
-    ctx.fillStyle = '#8e793e';
-    ctx.fillText('ALPHA 1 • 1972 LAND CAMERA', 90, captureCanvas.height - 48);
+      ctx.font = 'bold 14px "Courier New", monospace';
+      ctx.fillStyle = '#8e793e';
+      ctx.fillText('ALPHA 1 • 1972 LAND CAMERA', 90, captureCanvas.height - 48);
+    }
 
     ctx.font = 'bold 18px "Courier New", monospace';
     ctx.fillStyle = '#6e7075';
-    ctx.fillText("'26 10 05", captureCanvas.width - 160, captureCanvas.height - 60);
+    ctx.fillText(vt.quartzDate, captureCanvas.width - 160, captureCanvas.height - 60);
   } else if (cam.id === 'fuji-quicksnap') {
-    // 1986 Bubble Era Fuji QuickSnap Plastic Meniscus Flare & Amber Quartz Date Imprint
-    ctx.save();
-    ctx.font = 'bold 22px "Impact", "Arial Black", sans-serif';
-    ctx.fillStyle = '#ff9100';
-    ctx.shadowColor = 'rgba(255, 145, 0, 0.8)';
-    ctx.shadowBlur = 8;
-    ctx.fillText("'89 11 24", captureCanvas.width - 150, captureCanvas.height - 45);
+    // 1986 Fuji QuickSnap: Authentic Amber Quartz Date Imprint with NO top-left watermark
+    const quicksnapDateToggle = document.getElementById('toggle-quicksnap-date');
+    if (!quicksnapDateToggle || quicksnapDateToggle.classList.contains('active')) {
+      ctx.save();
+      ctx.font = 'bold 22px "Impact", "Arial Black", sans-serif';
+      ctx.fillStyle = '#ff9100';
+      ctx.shadowColor = 'rgba(255, 145, 0, 0.8)';
+      ctx.shadowBlur = 8;
+      ctx.fillText(vt.quartzDate, captureCanvas.width - 150, captureCanvas.height - 45);
+      ctx.restore();
+    }
 
-    // Top-left FUJICOLOR 写ルンです single-use paper badge
-    ctx.fillStyle = 'rgba(0, 100, 40, 0.8)';
-    ctx.fillRect(30, 30, 240, 34);
-    ctx.font = 'bold 14px -apple-system, sans-serif';
-    ctx.fillStyle = '#ffffff';
-    ctx.shadowColor = 'transparent';
-    ctx.shadowBlur = 0;
-    ctx.fillText('FUJICOLOR 写ルンです 1986', 42, 53);
+    // Top-left FUJICOLOR badge is COMPLETELY REMOVED to keep clean photo!
 
     // Subtle plastic edge vignette
     const pGrad = ctx.createRadialGradient(
@@ -2709,47 +2714,48 @@ function executeCapture() {
     pGrad.addColorStop(1, 'rgba(10, 35, 15, 0.28)');
     ctx.fillStyle = pGrad;
     ctx.fillRect(0, 0, captureCanvas.width, captureCanvas.height);
-    ctx.restore();
   } else if (cam.id === 'kyocera-samurai') {
     // 1988 Kyocera Samurai X3.0 Cyber Half-Frame 72-Shot SLR
+    const halfToggle = document.getElementById('toggle-samurai-halfline');
+    if (!halfToggle || halfToggle.classList.contains('active')) {
+      ctx.save();
+      ctx.strokeStyle = 'rgba(0, 229, 255, 0.4)';
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([8, 8]);
+      ctx.beginPath();
+      ctx.moveTo(captureCanvas.width / 2, 40);
+      ctx.lineTo(captureCanvas.width / 2, captureCanvas.height - 40);
+      ctx.stroke();
+      ctx.restore();
+    }
+
+    // Pure clean photograph: Top-left cyber LCD banner & bottom-right Yashica text REMOVED!
     ctx.save();
-    ctx.strokeStyle = 'rgba(0, 229, 255, 0.4)';
-    ctx.lineWidth = 1.5;
-    ctx.setLineDash([8, 8]);
-    ctx.beginPath();
-    ctx.moveTo(captureCanvas.width / 2, 40);
-    ctx.lineTo(captureCanvas.width / 2, captureCanvas.height - 40);
-    ctx.stroke();
-    ctx.setLineDash([]);
-
-    // Top-left cyber LCD banner
-    ctx.fillStyle = 'rgba(4, 16, 20, 0.85)';
-    ctx.fillRect(30, 30, 260, 34);
-    ctx.font = 'bold 13px "Courier New", monospace';
-    ctx.fillStyle = '#00ff80';
-    ctx.shadowColor = '#00ff80';
+    ctx.font = 'bold 18px monospace';
+    ctx.fillStyle = '#ff9100';
+    ctx.shadowColor = 'rgba(255, 145, 0, 0.8)';
     ctx.shadowBlur = 6;
-    ctx.fillText('SAMURAI X3.0 • EXP 48/72', 42, 52);
-
-    // Bottom-right Yashica zoom mark
-    ctx.font = 'bold 13px "Courier New", monospace';
-    ctx.fillStyle = '#00e5ff';
-    ctx.shadowColor = '#00e5ff';
-    ctx.shadowBlur = 4;
-    ctx.fillText('YASHICA ZOOM 25-75mm MACRO', captureCanvas.width - 270, captureCanvas.height - 45);
+    ctx.fillText(vt.quartzDate, captureCanvas.width - 150, captureCanvas.height - 45);
     ctx.restore();
   } else if (cam.id === 'instax-mini') {
-    ctx.lineWidth = 36;
-    ctx.strokeStyle = '#f5f4ef';
-    ctx.strokeRect(18, 18, captureCanvas.width - 36, captureCanvas.height - 36);
-    ctx.fillStyle = '#f5f4ef';
-    ctx.fillRect(0, captureCanvas.height - 140, captureCanvas.width, 140);
-    ctx.font = 'bold 24px -apple-system, sans-serif';
-    ctx.fillStyle = '#3b3d44';
-    ctx.fillText('instax mini', 40, captureCanvas.height - 55);
-    ctx.font = '20px "Courier New", monospace';
-    ctx.fillStyle = '#8c8f99';
-    ctx.fillText("'26 10 05", captureCanvas.width - 170, captureCanvas.height - 55);
+    const frameToggle = document.getElementById('toggle-instax-frame');
+    if (!frameToggle || frameToggle.classList.contains('active')) {
+      ctx.lineWidth = 36;
+      ctx.strokeStyle = '#f5f4ef';
+      ctx.strokeRect(18, 18, captureCanvas.width - 36, captureCanvas.height - 36);
+      ctx.fillStyle = '#f5f4ef';
+      ctx.fillRect(0, captureCanvas.height - 140, captureCanvas.width, 140);
+      ctx.font = 'bold 24px -apple-system, sans-serif';
+      ctx.fillStyle = '#3b3d44';
+      ctx.fillText('instax mini', 40, captureCanvas.height - 55);
+    }
+
+    const dateToggle = document.getElementById('toggle-instax-date');
+    if (!dateToggle || dateToggle.classList.contains('active')) {
+      ctx.font = '20px "Courier New", monospace';
+      ctx.fillStyle = '#8c8f99';
+      ctx.fillText(vt.quartzDate, captureCanvas.width - 170, captureCanvas.height - 55);
+    }
   } else if (cam.id === 'sihyun-color' && state.moodFrameEnabled) {
     const topGrad = ctx.createLinearGradient(0, 0, 0, 160);
     topGrad.addColorStop(0, 'rgba(0,0,0,0.65)');
@@ -2780,7 +2786,7 @@ function executeCapture() {
 
     ctx.font = '14px "Courier New", monospace';
     ctx.fillStyle = 'rgba(255,255,255,0.75)';
-    ctx.fillText('2026.10.05 RECORD', 40, captureCanvas.height - 75);
+    ctx.fillText(vt.studioRecord, 40, captureCanvas.height - 75);
 
     ctx.font = 'bold 20px -apple-system, sans-serif';
     ctx.fillStyle = '#ffffff';
@@ -2790,6 +2796,7 @@ function executeCapture() {
     ctx.fillStyle = 'rgba(255,255,255,0.95)';
     ctx.fillText('Studio Signature', captureCanvas.width - 270, captureCanvas.height - 45);
   }
+
 
   // 6. Dynamic Optical Lens Filter Synthesis with Light-Source Detection
   if (state.lensFilter && state.lensFilter !== 'none' && state.lensFilter !== 'cpl') {
