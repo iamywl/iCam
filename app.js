@@ -1640,15 +1640,24 @@ function applyCurrentCameraFilter() {
   const mediaFilterEl = state.cameraSource === 'webcam' ? document.getElementById('camera-video') : document.getElementById('model-canvas');
   if (!mediaFilterEl) return;
 
+  // Real-Time Hardware Spectral Matrix Integration
+  if (window.FilmSpectralEngine) {
+    const matrixNode = document.getElementById('spectralMatrixNode');
+    if (matrixNode) {
+      const matrixVals = window.FilmSpectralEngine.getLiveViewfinderSVGFilter(cam.id);
+      matrixNode.setAttribute('values', matrixVals);
+    }
+  }
+
   if (cam.filters) {
     const activeFilterKey = state.selectedFilters[cam.id];
     const filterSpec = cam.filters[activeFilterKey] || Object.values(cam.filters)[0];
-    mediaFilterEl.style.filter = filterSpec.css;
+    mediaFilterEl.style.filter = `${filterSpec.css} url(#spectralMatrixFilter)`;
   } else if (cam.id === 'sihyun-color') {
     const toneRatio = 1 + (state.retouchTone - 35) * 0.0035;
-    mediaFilterEl.style.filter = `brightness(${toneRatio}) contrast(${1 + (state.retouchTone - 35) * 0.001})`;
+    mediaFilterEl.style.filter = `brightness(${toneRatio}) contrast(${1 + (state.retouchTone - 35) * 0.001}) url(#spectralMatrixFilter)`;
   } else {
-    mediaFilterEl.style.filter = 'none';
+    mediaFilterEl.style.filter = 'url(#spectralMatrixFilter)';
   }
 
   updateFilterHud();
@@ -2505,6 +2514,11 @@ function executeCapture() {
       ctx.fillRect(0, 0, captureCanvas.width, captureCanvas.height);
       ctx.restore();
     }
+  }
+
+  // 4.5. Scientific Photographic Colorimetry & Film Emulsion Processing
+  if (window.FilmSpectralEngine) {
+    window.FilmSpectralEngine.processCanvas(captureCanvas, cam.id);
   }
 
   // 5. Camera-Specific OSD Watermarks & Frames (Clean Capture with Dynamic Live Dates)

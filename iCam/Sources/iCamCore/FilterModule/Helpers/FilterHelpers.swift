@@ -126,4 +126,35 @@ public enum FilterHelpers {
         blend.setValue(background, forKey: kCIInputBackgroundImageKey)
         return blend.outputImage?.cropped(to: background.extent) ?? foreground
     }
+
+    /// Apply rigorous 3x3 Spectral Sensitivity & Dye Coupler Crosstalk Matrix
+    public static func applySpectralMatrix(
+        image: CIImage,
+        matrix: [[Float]],
+        bias: CIVector = CIVector(x: 0, y: 0, z: 0, w: 0)
+    ) -> CIImage {
+        guard matrix.count == 3, matrix[0].count == 3, matrix[1].count == 3, matrix[2].count == 3 else {
+            return image
+        }
+        let rVec = CIVector(x: CGFloat(matrix[0][0]), y: CGFloat(matrix[0][1]), z: CGFloat(matrix[0][2]), w: 0)
+        let gVec = CIVector(x: CGFloat(matrix[1][0]), y: CGFloat(matrix[1][1]), z: CGFloat(matrix[1][2]), w: 0)
+        let bVec = CIVector(x: CGFloat(matrix[2][0]), y: CGFloat(matrix[2][1]), z: CGFloat(matrix[2][2]), w: 0)
+        return applyColorMatrix(image: image, rVector: rVec, gVector: gVec, bVector: bVec, biasVector: bias)
+    }
+
+    /// Apply Hurter & Driffield (H-D) Tone Curves via CIColorPolynomial
+    public static func applyHDCurves(
+        image: CIImage,
+        rCoeffs: CIVector = CIVector(x: 0.02, y: 1.05, z: 0.0, w: 0.0),
+        gCoeffs: CIVector = CIVector(x: 0.01, y: 1.15, z: 0.0, w: 0.0),
+        bCoeffs: CIVector = CIVector(x: 0.05, y: 1.00, z: 0.0, w: 0.0)
+    ) -> CIImage {
+        guard let filter = CIFilter(name: "CIColorPolynomial") else { return image }
+        filter.setValue(image, forKey: kCIInputImageKey)
+        filter.setValue(rCoeffs, forKey: "inputRedCoefficients")
+        filter.setValue(gCoeffs, forKey: "inputGreenCoefficients")
+        filter.setValue(bCoeffs, forKey: "inputBlueCoefficients")
+        return filter.outputImage?.cropped(to: image.extent) ?? image
+    }
 }
+

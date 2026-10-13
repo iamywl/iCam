@@ -32,11 +32,22 @@ public enum FujiQuickSnapFilterPack {
                 saturation: Float(1.0 + 0.28 * intensity)
             )
 
-            // Fuji signature emerald green shadow & crisp clean highlights
-            img = FilterHelpers.adjustTemperatureAndTint(
+            // 1. Rigorous 3x3 Fujicolor Super HG 400 Spectral Sensitivity Matrix
+            img = FilterHelpers.applySpectralMatrix(
                 image: img,
-                neutral: CIVector(x: 6500, y: 0),
-                targetNeutral: CIVector(x: 6300, y: -4)
+                matrix: [
+                    [0.93, 0.09, -0.02],
+                    [-0.06, 1.15, -0.06],
+                    [-0.03, 0.14, 0.91]
+                ]
+            )
+
+            // 2. Hurter & Driffield (H-D) Emulsion Tone Curves (Toe + Linear Gamma + Shoulder Rolloff)
+            img = FilterHelpers.applyHDCurves(
+                image: img,
+                rCoeffs: CIVector(x: 0.025, y: 1.06, z: 0.0, w: 0.0),
+                gCoeffs: CIVector(x: 0.015, y: 1.18, z: 0.0, w: 0.0),
+                bCoeffs: CIVector(x: 0.055, y: 1.02, z: 0.0, w: 0.0)
             )
 
             // Plastic lens edge softness & vignette
