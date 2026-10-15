@@ -2704,10 +2704,17 @@ function executeCapture() {
   }
 
   // 3. Draw Subject (Transparent Model or Mirrored/Unmirrored Webcam)
+  const currentZoom = Math.max(1.0, Math.min(5.0, state.fimoZoomLevel || 1.0));
+
   if (state.cameraSource === 'webcam') {
     const video = document.getElementById('camera-video');
     if (video.videoWidth && video.videoHeight) {
       ctx.save();
+      if (currentZoom > 1.0) {
+        ctx.translate(captureCanvas.width / 2, captureCanvas.height / 2);
+        ctx.scale(currentZoom, currentZoom);
+        ctx.translate(-captureCanvas.width / 2, -captureCanvas.height / 2);
+      }
       let filterToApply = activeFilter;
       if (state.flashMode === 'on') {
         filterToApply = (filterToApply === 'none')
@@ -2751,6 +2758,11 @@ function executeCapture() {
 
     if (activeImg && activeImg.complete && activeImg.naturalWidth > 0) {
       ctx.save();
+      if (currentZoom > 1.0) {
+        ctx.translate(captureCanvas.width / 2, captureCanvas.height / 2);
+        ctx.scale(currentZoom, currentZoom);
+        ctx.translate(-captureCanvas.width / 2, -captureCanvas.height / 2);
+      }
       ctx.filter = activeFilter;
 
       const imgAspect = activeImg.naturalWidth / activeImg.naturalHeight;
@@ -3111,6 +3123,10 @@ function executeCapture() {
   const fKey = state.selectedFilters[cam.id];
   const filterSpec = (cam.filters && cam.filters[fKey]) ? cam.filters[fKey] : { name: 'Standard Pass', desc: '표준 렌더링' };
 
+  const focalStr = currentZoom > 1.05 
+    ? `${Math.round(23.5 * currentZoom)}mm eq. (${currentZoom.toFixed(1)}x)`
+    : (cam.exposure ? cam.exposure.focal : '28mm eq.');
+
   const photoRecord = {
     id: 'snap_' + Date.now(),
     dataUrl: dataUrl,
@@ -3125,11 +3141,12 @@ function executeCapture() {
     filterName: filterSpec.name,
     filterDesc: filterSpec.desc,
     opticalLens: state.lensFilter !== 'none' ? state.lensFilter.toUpperCase() : 'Clear (None)',
+
     shutterSpeed: cam.exposure ? cam.exposure.shutter : '1/125s',
     aperture: cam.exposure ? cam.exposure.aperture : 'f/2.8',
     iso: cam.exposure ? cam.exposure.iso : 'ISO 100',
-    exposure: cam.exposure ? `${cam.exposure.shutter} • ${cam.exposure.aperture} • ${cam.exposure.iso}` : '1/125s • f/2.8 • ISO 100',
-    focalLength: cam.exposure ? cam.exposure.focal : '35mm eq.',
+    exposure: cam.exposure ? `${cam.exposure.shutter} • ${cam.exposure.aperture} • ${focalStr}` : `1/125s • f/2.8 • ${focalStr}`,
+    focalLength: focalStr,
     flashFired: state.flashMode === 'on',
     width: captureCanvas.width,
     height: captureCanvas.height,
@@ -3143,7 +3160,7 @@ function executeCapture() {
       shutter: cam.exposure ? cam.exposure.shutter : '1/125s',
       aperture: cam.exposure ? cam.exposure.aperture : 'f/2.8',
       iso: cam.exposure ? cam.exposure.iso : 'ISO 100',
-      focal: cam.exposure ? cam.exposure.focal : '35mm eq.',
+      focal: focalStr,
       flash: state.flashMode === 'on' ? 'Fired' : 'Off',
       timestamp: new Date().toISOString()
     }
@@ -4030,45 +4047,169 @@ function initFimoUI() {
     });
   }
 
-  // 5. Tactile Zoom Ruler Deck
-  const zoomTicks = document.querySelectorAll('#fimo-zoom-ruler-ticks .fimo-tick-stop');
+  // 5. Tactile Zoom Ruler Deck (Continuous Drag, Pinch-to-Zoom, Mouse Wheel & Discrete Stops)
+  const zoomDeck = document.getElementById('fimo-zoom-ruler-deck');
+  const zoomTrack = document.getElementById('fimo-zoom-ruler-track');
+  const zoomTicks = document.querySelectorAll('.fimo-tick-stop');
   const zoomMag = document.getElementById('fimo-zoom-mag');
   const zoomFocal = document.getElementById('fimo-zoom-focal');
   const rulerPointer = document.querySelector('.fimo-ruler-pointer');
   const videoMedia = document.getElementById('camera-video');
   const modelMedia = document.getElementById('model-canvas');
+  const dynamicCanvas = document.getElementById('lens-dynamic-canvas');
+  const vfContainer = document.getElementById('viewfinder');
 
-  const zoomPositions = {
-    '1.0': '10%',
-    '1.5': '32%',
-    '2.0': '55%',
-    '3.0': '78%',
-    '5.0': '95%'
-  };
+  let lastTickSoundZoom = 1.0;
 
+  function applyZoom(zoom, options = {}) {
+    const { animate = false, showBanner = true, playSound = false } = options;
+    const clampedZoom = Math.max(1.0, Math.min(5.0, Math.round(zoom * 10) / 10));
+    state.fimoZoomLevel = clampedZoom;
+
+    // Focal length calculation based on 23.5mm base sensor: at 2.1x gives exactly 49mm (reference app!)
+    const focalMm = Math.round(23.5 * clampedZoom);
+
+    // Update readout
+    if (zoomMag) zoomMag.textContent = `${clampedZoom.toFixed(1)}x`;
+    if (zoomFocal) zoomFocal.textContent = `· ${focalMm}mm`;
+
+    // Map clampedZoom (1.0 to 5.0) to track horizontal percentage (8% to 94%)
+    const ratio = (clampedZoom - 1.0) / (5.0 - 1.0);
+    const pointerPercent = 8 + ratio * 86;
+    if (rulerPointer) {
+      rulerPointer.style.transition = animate ? 'left 0.18s cubic-bezier(0.16, 1, 0.3, 1)' : 'none';
+      rulerPointer.style.left = `${pointerPercent}%`;
+    }
+
+    // Highlight nearest tick stop
+    zoomTicks.forEach(tick => {
+      const zVal = parseFloat(tick.dataset.zoom || '1.0');
+      const isNear = Math.abs(zVal - clampedZoom) < 0.22;
+      tick.classList.toggle('active', isNear);
+    });
+
+    // Viewfinder media scale transform
+    const scaleStr = `scale(${clampedZoom})`;
+    const transStr = animate ? 'transform 0.18s cubic-bezier(0.16, 1, 0.3, 1)' : 'none';
+    [videoMedia, modelMedia, dynamicCanvas].forEach(el => {
+      if (el) {
+        el.style.transition = transStr;
+        el.style.transform = scaleStr;
+      }
+    });
+
+    // Haptic tick audio on every 0.2x change
+    if (playSound || Math.abs(clampedZoom - lastTickSoundZoom) >= 0.2) {
+      soundEngine.playTick();
+      lastTickSoundZoom = clampedZoom;
+    }
+
+    // Dynamic Island banner
+    if (showBanner) {
+      showDynamicIslandBanner('ZOOM', `${clampedZoom.toFixed(1)}x (${focalMm}mm)`, 800);
+    }
+  }
+
+  // A. Discrete tick stops click
   zoomTicks.forEach(tick => {
     tick.addEventListener('click', (e) => {
       e.stopPropagation();
-      soundEngine.playTick();
-      const zVal = tick.dataset.zoom || '1.0';
-      const fVal = tick.dataset.focal || '28';
-      state.fimoZoomLevel = parseFloat(zVal);
-
-      zoomTicks.forEach(t => t.classList.toggle('active', t === tick));
-      if (zoomMag) zoomMag.textContent = `${zVal}x`;
-      if (zoomFocal) zoomFocal.textContent = `· ${fVal}mm`;
-      if (rulerPointer && zoomPositions[zVal]) {
-        rulerPointer.style.left = zoomPositions[zVal];
-      }
-
-      // Smooth zoom scaling on viewfinder media
-      const scaleStr = `scale(${state.fimoZoomLevel})`;
-      if (videoMedia) videoMedia.style.transform = scaleStr;
-      if (modelMedia) modelMedia.style.transform = scaleStr;
-
-      showDynamicIslandBanner('ZOOM', `${zVal}x (${fVal}mm)`, 1000);
+      const zVal = parseFloat(tick.dataset.zoom || '1.0');
+      applyZoom(zVal, { animate: true, showBanner: true, playSound: true });
     });
   });
+
+  // B. Continuous Drag on Track / Ruler
+  if (zoomTrack) {
+    let isDraggingZoom = false;
+
+    const handleZoomPointer = (e) => {
+      const rect = zoomTrack.getBoundingClientRect();
+      if (!rect.width) return;
+      const x = Math.max(0, Math.min(rect.width, e.clientX - rect.left));
+      const ratio = x / rect.width;
+      const targetZoom = 1.0 + ratio * (5.0 - 1.0);
+      applyZoom(targetZoom, { animate: false, showBanner: false, playSound: false });
+    };
+
+    zoomTrack.addEventListener('pointerdown', (e) => {
+      isDraggingZoom = true;
+      zoomTrack.setPointerCapture(e.pointerId);
+      handleZoomPointer(e);
+    });
+
+    zoomTrack.addEventListener('pointermove', (e) => {
+      if (isDraggingZoom) {
+        handleZoomPointer(e);
+      }
+    });
+
+    const endZoomDrag = (e) => {
+      if (isDraggingZoom) {
+        isDraggingZoom = false;
+        try { zoomTrack.releasePointerCapture(e.pointerId); } catch(err) {}
+        const focalMm = Math.round(23.5 * state.fimoZoomLevel);
+        showDynamicIslandBanner('ZOOM', `${state.fimoZoomLevel.toFixed(1)}x (${focalMm}mm)`, 900);
+        soundEngine.playTick();
+      }
+    };
+
+    zoomTrack.addEventListener('pointerup', endZoomDrag);
+    zoomTrack.addEventListener('pointercancel', endZoomDrag);
+  }
+
+  // C. Viewfinder Pinch-to-Zoom Gesture
+  if (vfContainer) {
+    let initialTouchDist = null;
+    let initialZoom = 1.0;
+
+    vfContainer.addEventListener('touchstart', (e) => {
+      if (e.touches.length === 2) {
+        initialTouchDist = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+        initialZoom = state.fimoZoomLevel;
+      }
+    }, { passive: true });
+
+    vfContainer.addEventListener('touchmove', (e) => {
+      if (e.touches.length === 2 && initialTouchDist) {
+        const currentDist = Math.hypot(
+          e.touches[0].clientX - e.touches[1].clientX,
+          e.touches[0].clientY - e.touches[1].clientY
+        );
+        const factor = currentDist / initialTouchDist;
+        applyZoom(initialZoom * factor, { animate: false, showBanner: false });
+      }
+    }, { passive: true });
+
+    vfContainer.addEventListener('touchend', (e) => {
+      if (e.touches.length < 2 && initialTouchDist) {
+        initialTouchDist = null;
+        const focalMm = Math.round(23.5 * state.fimoZoomLevel);
+        showDynamicIslandBanner('ZOOM', `${state.fimoZoomLevel.toFixed(1)}x (${focalMm}mm)`, 900);
+      }
+    }, { passive: true });
+
+    // D. Viewfinder Mouse Wheel Zoom
+    vfContainer.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const delta = -e.deltaY * 0.003;
+      applyZoom(state.fimoZoomLevel + delta, { animate: false, showBanner: false });
+    }, { passive: false });
+  }
+
+  if (zoomDeck) {
+    zoomDeck.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      const delta = -e.deltaY * 0.003;
+      applyZoom(state.fimoZoomLevel + delta, { animate: false, showBanner: false });
+    }, { passive: false });
+  }
+
+  // Expose global helper
+  window.setFimoZoom = (z) => applyZoom(z, { animate: true, showBanner: true, playSound: true });
 
   // 6. 4 Hardware Round Buttons
   const hwMore = document.getElementById('fimo-hw-more');
