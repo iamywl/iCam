@@ -123,38 +123,38 @@ const CAMERAS = {
       'ixy-peach': {
         name: 'Peach Glow',
         desc: '뽀샤시 복숭아빛 피부',
-        css: 'brightness(1.1) contrast(1.04) saturate(1.18) sepia(0.05)',
-        tintRgba: 'rgba(255, 195, 160, 0.12)'
+        css: 'brightness(1.04) contrast(1.06) saturate(1.12) sepia(0.03)',
+        tintRgba: null
       },
       'ixy-flash': {
         name: 'Flash Pop',
         desc: '디카 직광 플래시',
-        css: 'brightness(1.08) contrast(1.18) saturate(1.22) sepia(0.04)',
-        tintRgba: 'rgba(255, 220, 180, 0.1)'
+        css: 'brightness(1.05) contrast(1.14) saturate(1.14) sepia(0.02)',
+        tintRgba: null
       },
       'ixy-pastel': {
         name: 'Pastel Haze',
         desc: '들뜬 파스텔 섀도우',
-        css: 'brightness(1.12) contrast(0.96) saturate(1.08) sepia(0.08)',
-        tintRgba: 'rgba(255, 235, 240, 0.1)'
+        css: 'brightness(1.03) contrast(1.02) saturate(1.06) sepia(0.04)',
+        tintRgba: null
       },
       'ixy-night': {
         name: 'Clear Sunlight',
         desc: '창가 자연광 투명 얼짱 톤',
-        css: 'brightness(1.12) contrast(1.08) saturate(1.24) sepia(0.02)',
-        tintRgba: 'rgba(255, 230, 195, 0.08)'
+        css: 'brightness(1.04) contrast(1.08) saturate(1.14) sepia(0.02)',
+        tintRgba: null
       },
       'ixy-cool': {
         name: 'Y2K Silver CCD',
         desc: '실버 디카 특유의 쿨톤 투명감',
-        css: 'brightness(1.12) contrast(1.10) saturate(1.12) hue-rotate(-8deg)',
-        tintRgba: 'rgba(200, 230, 255, 0.08)'
+        css: 'brightness(1.04) contrast(1.08) saturate(1.08)',
+        tintRgba: null
       },
       'ixy-sunset': {
         name: 'Sunset Cafe',
         desc: '골든아워 창가 노을빛 웜 글로우',
-        css: 'brightness(1.08) contrast(1.14) saturate(1.28) sepia(0.12)',
-        tintRgba: 'rgba(255, 185, 115, 0.12)'
+        css: 'brightness(1.03) contrast(1.10) saturate(1.16) sepia(0.06)',
+        tintRgba: null
       }
     }
   },
@@ -172,38 +172,38 @@ const CAMERAS = {
       'handy-minidv': {
         name: 'MiniDV Classic',
         desc: '소니 3CCD 비디오 톤',
-        css: 'brightness(1.08) contrast(1.12) saturate(1.22) sepia(0.06)',
-        tintRgba: 'rgba(255, 235, 180, 0.08)'
+        css: 'brightness(1.03) contrast(1.10) saturate(1.15) sepia(0.03)',
+        tintRgba: null
       },
       'handy-vhs': {
         name: 'Hi8 Tape Glitch',
         desc: '스캔라인 테이프 글리치',
-        css: 'brightness(1.06) contrast(1.15) saturate(1.18) sepia(0.10)',
-        tintRgba: 'rgba(255, 210, 150, 0.1)'
+        css: 'brightness(1.02) contrast(1.12) saturate(1.12) sepia(0.04)',
+        tintRgba: null
       },
       'handy-super8': {
         name: 'Super 8mm Cine',
         desc: '골든 앰버 홈무비',
-        css: 'brightness(1.04) contrast(1.18) saturate(1.20) sepia(0.20)',
-        tintRgba: 'rgba(240, 180, 80, 0.12)'
+        css: 'brightness(1.02) contrast(1.14) saturate(1.15) sepia(0.08)',
+        tintRgba: null
       },
       'handy-nightshot': {
         name: 'Retro Sunshine 90s',
         desc: '90s 여름 바캉스 햇살 캠코더',
-        css: 'brightness(1.10) contrast(1.08) saturate(1.26) sepia(0.05)',
-        tintRgba: 'rgba(255, 225, 160, 0.10)'
+        css: 'brightness(1.04) contrast(1.08) saturate(1.16) sepia(0.03)',
+        tintRgba: null
       },
       'handy-matrix': {
         name: 'NightShot IR',
         desc: '00년대 캠코더 나이트샷 적외선',
-        css: 'brightness(1.15) contrast(1.20) saturate(1.10) hue-rotate(85deg)',
-        tintRgba: 'rgba(50, 255, 100, 0.12)'
+        css: 'brightness(1.06) contrast(1.18) saturate(1.10) hue-rotate(80deg)',
+        tintRgba: null
       },
       'handy-golden': {
         name: 'Golden Hour Tape',
         desc: '황금빛 오후 따스한 테이프 톤',
-        css: 'brightness(1.06) contrast(1.16) saturate(1.25) sepia(0.16)',
-        tintRgba: 'rgba(255, 190, 80, 0.14)'
+        css: 'brightness(1.03) contrast(1.12) saturate(1.18) sepia(0.08)',
+        tintRgba: null
       }
     }
   },
@@ -221,38 +221,38 @@ const CAMERAS = {
       'cyber-cool': {
         name: 'CCD Cool Blue',
         desc: '차가운 블루 틴트',
-        css: 'brightness(1.08) contrast(1.16) saturate(1.14) hue-rotate(-6deg)',
-        tintRgba: 'rgba(160, 205, 255, 0.10)'
+        css: 'brightness(1.03) contrast(1.10) saturate(1.10)',
+        tintRgba: null
       },
       'cyber-magenta': {
         name: 'Clean Cyber White',
         desc: 'CCD 센서 투명하고 새하얀 피부',
-        css: 'brightness(1.12) contrast(1.15) saturate(1.16) sepia(0.02)',
-        tintRgba: 'rgba(225, 240, 255, 0.08)'
+        css: 'brightness(1.04) contrast(1.12) saturate(1.12)',
+        tintRgba: null
       },
       'cyber-flash': {
         name: 'Flash Sharp',
         desc: '선명하고 쨍한 플래시',
-        css: 'brightness(1.12) contrast(1.24) saturate(1.20) sepia(0.02)',
-        tintRgba: 'rgba(255, 240, 220, 0.08)'
+        css: 'brightness(1.05) contrast(1.16) saturate(1.14)',
+        tintRgba: null
       },
       'cyber-matrix': {
         name: 'Y2K Pastel Glow',
         desc: '부드러운 라벤더-핑크 파스텔',
-        css: 'brightness(1.12) contrast(1.06) saturate(1.22) sepia(0.03)',
-        tintRgba: 'rgba(245, 215, 255, 0.08)'
+        css: 'brightness(1.03) contrast(1.06) saturate(1.12)',
+        tintRgba: null
       },
       'cyber-y2k-pink': {
         name: 'Cyber Pink CCD',
         desc: '밀레니엄 핑크 메탈릭 CCD 감성',
-        css: 'brightness(1.12) contrast(1.14) saturate(1.26) hue-rotate(-22deg)',
-        tintRgba: 'rgba(255, 150, 220, 0.10)'
+        css: 'brightness(1.03) contrast(1.10) saturate(1.16)',
+        tintRgba: null
       },
       'cyber-silver': {
         name: 'Titanium CCD',
         desc: '선명하고 차가운 사이버 실버',
-        css: 'brightness(1.08) contrast(1.24) saturate(1.02) hue-rotate(-6deg)',
-        tintRgba: 'rgba(220, 235, 255, 0.08)'
+        css: 'brightness(1.04) contrast(1.12) saturate(1.06)',
+        tintRgba: null
       }
     }
   },
@@ -270,38 +270,38 @@ const CAMERAS = {
       'instax-card': {
         name: 'Instax Soft',
         desc: '화이트 카드 프레임',
-        css: 'brightness(1.1) contrast(0.98) saturate(1.06) sepia(0.05)',
-        tintRgba: 'rgba(255, 245, 235, 0.08)'
+        css: 'brightness(1.03) contrast(1.06) saturate(1.10) sepia(0.02)',
+        tintRgba: null
       },
       'polaroid-square': {
         name: 'Polaroid 600',
         desc: '클래식 정방형 스퀘어',
-        css: 'brightness(1.04) contrast(1.08) saturate(1.08) sepia(0.12)',
-        tintRgba: 'rgba(255, 215, 160, 0.1)'
+        css: 'brightness(1.02) contrast(1.08) saturate(1.10) sepia(0.05)',
+        tintRgba: null
       },
       'instant-bw': {
         name: 'Warm Mono',
         desc: '웜톤 흑백 즉석사진',
-        css: 'grayscale(1) contrast(1.25) brightness(1.02)',
+        css: 'grayscale(1) contrast(1.22) brightness(1.01)',
         tintRgba: null
       },
       'instant-rainbow': {
         name: 'Rainbow Edge',
         desc: '비비드 무지개 카드',
-        css: 'brightness(1.08) contrast(1.14) saturate(1.3)',
+        css: 'brightness(1.04) contrast(1.10) saturate(1.18)',
         tintRgba: null
       },
       'instax-warm': {
         name: 'Instax Warm Gold',
         desc: '따사로운 골든 즉석 인화지',
-        css: 'brightness(1.08) contrast(1.04) saturate(1.18) sepia(0.14)',
-        tintRgba: 'rgba(255, 210, 130, 0.12)'
+        css: 'brightness(1.03) contrast(1.06) saturate(1.14) sepia(0.06)',
+        tintRgba: null
       },
       'instax-cool': {
         name: 'Instax Cool Blue',
         desc: '청량한 여름 블루 즉석사진',
-        css: 'brightness(1.06) contrast(1.12) saturate(1.10) hue-rotate(-15deg)',
-        tintRgba: 'rgba(160, 210, 255, 0.10)'
+        css: 'brightness(1.03) contrast(1.08) saturate(1.08)',
+        tintRgba: null
       }
     }
   },
@@ -319,37 +319,37 @@ const CAMERAS = {
       'mju-standard': {
         name: 'μ Standard',
         desc: '자연스러운 스트리트 필름',
-        css: 'brightness(1.04) contrast(1.18) saturate(1.16) sepia(0.06)',
-        tintRgba: 'rgba(255, 235, 200, 0.06)'
+        css: 'brightness(1.02) contrast(1.12) saturate(1.14) sepia(0.03)',
+        tintRgba: null
       },
       'mju-night': {
         name: 'Daylight Street Flash',
         desc: '긴자 스트리트 한낮의 직광 플래시',
-        css: 'brightness(1.14) contrast(1.22) saturate(1.20) sepia(0.03)',
-        tintRgba: 'rgba(255, 235, 205, 0.08)'
+        css: 'brightness(1.05) contrast(1.16) saturate(1.15) sepia(0.02)',
+        tintRgba: null
       },
       'mju-chrome': {
         name: 'μ Chrome Slide',
         desc: '선명한 슬라이드 발색',
-        css: 'brightness(1.02) contrast(1.28) saturate(1.35) sepia(0.04)',
-        tintRgba: 'rgba(255, 200, 150, 0.05)'
+        css: 'brightness(1.02) contrast(1.16) saturate(1.18)',
+        tintRgba: null
       },
       'mju-gold': {
         name: 'μ Gold 200',
         desc: '황금빛 웜톤 네거티브',
-        css: 'brightness(1.06) contrast(1.15) saturate(1.24) sepia(0.12)',
-        tintRgba: 'rgba(255, 215, 140, 0.1)'
+        css: 'brightness(1.03) contrast(1.10) saturate(1.16) sepia(0.06)',
+        tintRgba: null
       },
       'mju-velvia': {
         name: 'μ Slide Vivid',
         desc: '비비드 슬라이드 짙은 발색',
-        css: 'brightness(1.04) contrast(1.30) saturate(1.40) sepia(0.02)',
-        tintRgba: 'rgba(255, 160, 100, 0.08)'
+        css: 'brightness(1.02) contrast(1.18) saturate(1.24)',
+        tintRgba: null
       },
       'mju-mono': {
         name: 'μ Noir Contrast',
         desc: '강렬한 거리 스냅 흑백 톤',
-        css: 'grayscale(1) contrast(1.55) brightness(1.02)',
+        css: 'grayscale(1) contrast(1.25) brightness(1.01)',
         tintRgba: null
       }
     }
@@ -368,38 +368,38 @@ const CAMERAS = {
       'zeiss-warm': {
         name: 'Zeiss Warm T*',
         desc: '칼자이스 묵직한 웜톤',
-        css: 'brightness(1.02) contrast(1.22) saturate(1.15) sepia(0.12)',
-        tintRgba: 'rgba(255, 210, 160, 0.12)'
+        css: 'brightness(1.02) contrast(1.12) saturate(1.12) sepia(0.05)',
+        tintRgba: null
       },
       'zeiss-shadow': {
         name: 'T* Rich Shadow',
         desc: '풍부한 암부와 섬세한 하이라이트',
-        css: 'brightness(0.98) contrast(1.35) saturate(1.1) sepia(0.05)',
-        tintRgba: 'rgba(240, 220, 200, 0.08)'
+        css: 'brightness(1.01) contrast(1.16) saturate(1.10)',
+        tintRgba: null
       },
       'titanium-classic': {
         name: 'Titanium Classic',
         desc: '티타늄 바디 클래식 룩',
-        css: 'brightness(1.06) contrast(1.15) saturate(1.08) sepia(0.08)',
-        tintRgba: 'rgba(255, 230, 210, 0.06)'
+        css: 'brightness(1.03) contrast(1.12) saturate(1.08) sepia(0.03)',
+        tintRgba: null
       },
       'zeiss-mono': {
         name: 'Zeiss T* B&W',
         desc: '독일 광학 깊은 흑백 계조',
-        css: 'grayscale(1) contrast(1.4) brightness(1.0)',
+        css: 'grayscale(1) contrast(1.28) brightness(1.0)',
         tintRgba: null
       },
       'zeiss-champagne': {
         name: 'T2 Champagne Gold',
         desc: '샴페인 골드 럭셔리 티타늄 룩',
-        css: 'brightness(1.08) contrast(1.18) saturate(1.18) sepia(0.10)',
-        tintRgba: 'rgba(255, 220, 150, 0.12)'
+        css: 'brightness(1.03) contrast(1.12) saturate(1.14) sepia(0.05)',
+        tintRgba: null
       },
       'zeiss-emerald': {
         name: 'Sonnar Emerald',
         desc: '조나 38mm 투명한 청록 섀도우',
-        css: 'brightness(1.04) contrast(1.22) saturate(1.22) hue-rotate(18deg)',
-        tintRgba: 'rgba(70, 215, 175, 0.08)'
+        css: 'brightness(1.02) contrast(1.14) saturate(1.15)',
+        tintRgba: null
       }
     }
   },
@@ -417,38 +417,38 @@ const CAMERAS = {
       'gr-bw-high': {
         name: 'High-Contrast B&W',
         desc: '모리야마 풍 강렬한 흑백',
-        css: 'grayscale(1) contrast(1.85) brightness(0.95)',
+        css: 'grayscale(1) contrast(1.45) brightness(0.98)',
         tintRgba: null
       },
       'gr-positive': {
         name: 'Positive Film',
         desc: '특유의 포지티브 필름 발색',
-        css: 'brightness(1.04) contrast(1.28) saturate(1.32) sepia(0.03)',
-        tintRgba: 'rgba(255, 220, 180, 0.06)'
+        css: 'brightness(1.02) contrast(1.16) saturate(1.18) sepia(0.02)',
+        tintRgba: null
       },
       'gr-street': {
         name: 'Street Snap',
         desc: '신속하고 날카로운 스냅 룩',
-        css: 'brightness(1.02) contrast(1.22) saturate(1.12)',
+        css: 'brightness(1.02) contrast(1.14) saturate(1.10)',
         tintRgba: null
       },
       'gr-cross': {
         name: 'Cross Process',
         desc: '그런지한 교차 현상 발색',
-        css: 'brightness(1.08) contrast(1.38) saturate(1.4) hue-rotate(25deg)',
-        tintRgba: 'rgba(180, 255, 100, 0.08)'
+        css: 'brightness(1.03) contrast(1.18) saturate(1.20)',
+        tintRgba: null
       },
       'gr-bleach': {
         name: 'Bleach Bypass',
         desc: '거친 은염 탈색의 묵직한 질감',
-        css: 'brightness(1.02) contrast(1.50) saturate(0.65)',
-        tintRgba: 'rgba(200, 200, 200, 0.06)'
+        css: 'brightness(1.01) contrast(1.25) saturate(0.85)',
+        tintRgba: null
       },
       'gr-amber': {
         name: 'Amber Street 28',
         desc: '골목길 가로등 앰버 스냅',
-        css: 'brightness(1.06) contrast(1.18) saturate(1.25) sepia(0.15)',
-        tintRgba: 'rgba(255, 180, 70, 0.12)'
+        css: 'brightness(1.03) contrast(1.12) saturate(1.18) sepia(0.08)',
+        tintRgba: null
       }
     }
   },
@@ -466,38 +466,38 @@ const CAMERAS = {
       'leica-summilux': {
         name: 'Summilux 50',
         desc: '따뜻한 벨벳 톤 & 부드러운 보케',
-        css: 'brightness(1.05) contrast(1.12) saturate(1.18) sepia(0.08)',
-        tintRgba: 'rgba(255, 225, 180, 0.08)'
+        css: 'brightness(1.03) contrast(1.10) saturate(1.14) sepia(0.04)',
+        tintRgba: null
       },
       'leica-mono': {
         name: 'M Monochrom',
         desc: '깊고 섬세한 흑백 계조',
-        css: 'grayscale(1) contrast(1.45) brightness(0.96)',
+        css: 'grayscale(1) contrast(1.30) brightness(0.98)',
         tintRgba: null
       },
       'leica-classic': {
         name: 'Classic M 35',
         desc: '투명하고 날카로운 선예도',
-        css: 'brightness(1.03) contrast(1.22) saturate(1.1)',
+        css: 'brightness(1.02) contrast(1.14) saturate(1.10)',
         tintRgba: null
       },
       'leica-red': {
         name: 'Red Dot Color',
         desc: '라이카 특유의 깊은 원색 렌더링',
-        css: 'brightness(1.02) contrast(1.26) saturate(1.28) sepia(0.02)',
-        tintRgba: 'rgba(255, 180, 180, 0.05)'
+        css: 'brightness(1.02) contrast(1.16) saturate(1.20) sepia(0.02)',
+        tintRgba: null
       },
       'leica-noctilux': {
         name: 'Noctilux f/0.95 Dream',
         desc: '녹티룩스 극한 개방감 & 보케 글로우',
-        css: 'brightness(1.12) contrast(1.08) saturate(1.15) sepia(0.06)',
-        tintRgba: 'rgba(255, 235, 200, 0.12)'
+        css: 'brightness(1.04) contrast(1.08) saturate(1.12) sepia(0.03)',
+        tintRgba: null
       },
       'leica-amber': {
         name: 'Barnack Amber',
         desc: '오스카 바르낙 클래식 황동 앰버',
-        css: 'brightness(1.06) contrast(1.16) saturate(1.20) sepia(0.18)',
-        tintRgba: 'rgba(240, 190, 110, 0.12)'
+        css: 'brightness(1.03) contrast(1.12) saturate(1.16) sepia(0.08)',
+        tintRgba: null
       }
     }
   },
@@ -515,38 +515,38 @@ const CAMERAS = {
       'city-sunset': {
         name: 'Shonan Sunset 1986',
         desc: '나가이 히로시 감성의 쇼난 코스트 샴페인 선셋과 청명한 하늘',
-        css: 'brightness(1.10) contrast(1.14) saturate(1.35) sepia(0.04)',
-        tintRgba: 'rgba(255, 175, 120, 0.12)'
+        css: 'brightness(1.03) contrast(1.12) saturate(1.20) sepia(0.03)',
+        tintRgba: null
       },
       'city-tokyo': {
         name: 'Showa Idol Glow',
         desc: '80s 쇼와 아이돌 앨범 자켓의 투명하고 화사한 도자기 복숭아빛 피부',
-        css: 'brightness(1.15) contrast(1.02) saturate(1.22) sepia(0.03)',
-        tintRgba: 'rgba(255, 215, 200, 0.14)'
+        css: 'brightness(1.04) contrast(1.06) saturate(1.14) sepia(0.02)',
+        tintRgba: null
       },
       'city-pastel': {
         name: 'Pacific Breeze',
         desc: '타츠로 야마시타 감성의 눈부신 한낮 코발트 블루와 청량한 해변 바람',
-        css: 'brightness(1.12) contrast(1.15) saturate(1.32) sepia(0.02)',
-        tintRgba: 'rgba(0, 200, 245, 0.10)'
+        css: 'brightness(1.03) contrast(1.08) saturate(1.16)',
+        tintRgba: null
       },
       'city-plastic': {
         name: 'Plastic Love \'88',
         desc: '타케우치 마리야 감성의 감미롭고 온화한 80s 아날로그 카세트 질감',
-        css: 'brightness(1.08) contrast(1.10) saturate(1.25) sepia(0.06)',
-        tintRgba: 'rgba(255, 205, 160, 0.12)'
+        css: 'brightness(1.02) contrast(1.10) saturate(1.14) sepia(0.03)',
+        tintRgba: null
       },
       'city-resort': {
         name: 'Karuizawa \'87',
         desc: '가루이자와 버블 피서지 별장 맑고 투명한 테라스 햇살 & 민트 그린',
-        css: 'brightness(1.12) contrast(1.12) saturate(1.30) hue-rotate(5deg)',
-        tintRgba: 'rgba(64, 224, 180, 0.10)'
+        css: 'brightness(1.03) contrast(1.10) saturate(1.16)',
+        tintRgba: null
       },
       'city-midnight': {
         name: 'Roppongi Drive',
         desc: '심야 롯폰기 하이웨이 시티라이트 네온 마젠타 & 코발트 앰비언트',
-        css: 'brightness(1.05) contrast(1.22) saturate(1.38) hue-rotate(-12deg)',
-        tintRgba: 'rgba(230, 80, 200, 0.12)'
+        css: 'brightness(1.02) contrast(1.16) saturate(1.20)',
+        tintRgba: null
       }
     }
   },
@@ -564,38 +564,38 @@ const CAMERAS = {
       'film-cinestill': {
         name: 'CineStill 800T',
         desc: '광원 붉은 할레이션 번짐',
-        css: 'brightness(1.02) contrast(1.24) saturate(1.25) hue-rotate(195deg)',
-        tintRgba: 'rgba(255, 20, 0, 0.1)'
+        css: 'brightness(1.02) contrast(1.16) saturate(1.18)',
+        tintRgba: null
       },
       'film-portra': {
         name: 'Portra 400',
         desc: '따뜻한 골든 옐로우 피부톤',
-        css: 'brightness(1.06) contrast(1.14) saturate(1.15) sepia(0.1)',
-        tintRgba: 'rgba(255, 210, 140, 0.08)'
+        css: 'brightness(1.03) contrast(1.08) saturate(1.12) sepia(0.04)',
+        tintRgba: null
       },
       'film-ektar': {
         name: 'Ektar 100',
         desc: '선명하고 강렬한 원색 콘트라스트',
-        css: 'brightness(1.03) contrast(1.32) saturate(1.42)',
+        css: 'brightness(1.02) contrast(1.20) saturate(1.26)',
         tintRgba: null
       },
       'film-superia': {
         name: 'Superia 400',
         desc: '특유의 에메랄드 그린 섀도우',
-        css: 'brightness(1.04) contrast(1.18) saturate(1.22) hue-rotate(15deg)',
-        tintRgba: 'rgba(50, 200, 150, 0.08)'
+        css: 'brightness(1.02) contrast(1.14) saturate(1.16)',
+        tintRgba: null
       },
       'film-kodachrome': {
         name: 'Kodachrome 64',
         desc: '전설의 코다크롬 64 슬라이드 불멸의 원색',
-        css: 'brightness(1.04) contrast(1.30) saturate(1.38) sepia(0.04)',
-        tintRgba: 'rgba(255, 120, 50, 0.08)'
+        css: 'brightness(1.03) contrast(1.18) saturate(1.20) sepia(0.02)',
+        tintRgba: null
       },
       'film-velvia': {
         name: 'Velvia 50 Vivid',
         desc: '초고채도 풍경/인물 슬라이드 압도적 발색',
-        css: 'brightness(1.02) contrast(1.35) saturate(1.50) hue-rotate(5deg)',
-        tintRgba: 'rgba(50, 230, 180, 0.08)'
+        css: 'brightness(1.02) contrast(1.22) saturate(1.28)',
+        tintRgba: null
       }
     }
   },
@@ -615,37 +615,37 @@ const CAMERAS = {
       'hassel-planar': {
         name: 'Planar 80mm Pop',
         desc: '중형 렌즈 인물 분리감',
-        css: 'brightness(1.02) contrast(1.16) saturate(1.10) sepia(0.04)',
-        tintRgba: 'rgba(255, 235, 215, 0.06)'
+        css: 'brightness(1.02) contrast(1.12) saturate(1.10) sepia(0.02)',
+        tintRgba: null
       },
       'hassel-trix': {
         name: 'Tri-X 400 MF',
         desc: '중형 롤필름 깊은 은염 흑백',
-        css: 'grayscale(1) contrast(1.35) brightness(1.0)',
+        css: 'grayscale(1) contrast(1.25) brightness(1.0)',
         tintRgba: null
       },
       'hassel-astia': {
         name: 'Astia 100F Slide',
         desc: '투명하고 부드러운 스킨톤',
-        css: 'brightness(1.04) contrast(1.12) saturate(1.15) sepia(0.06)',
-        tintRgba: 'rgba(255, 220, 200, 0.07)'
+        css: 'brightness(1.03) contrast(1.08) saturate(1.12) sepia(0.03)',
+        tintRgba: null
       },
       'hassel-chromium': {
         name: 'Chromium Silver',
         desc: '북유럽 쿨톤 메탈릭 질감',
-        css: 'brightness(1.02) contrast(1.24) saturate(0.88) hue-rotate(-10deg)',
-        tintRgba: 'rgba(200, 225, 255, 0.08)'
+        css: 'brightness(1.02) contrast(1.14) saturate(0.96)',
+        tintRgba: null
       },
       'hassel-gold': {
         name: 'Portra 160 MF Gold',
         desc: '중형 롤필름 따뜻한 포트레이트 골드',
-        css: 'brightness(1.05) contrast(1.14) saturate(1.20) sepia(0.12)',
-        tintRgba: 'rgba(255, 210, 130, 0.10)'
+        css: 'brightness(1.03) contrast(1.10) saturate(1.16) sepia(0.05)',
+        tintRgba: null
       },
       'hassel-mono': {
         name: 'Acros 100 Precision',
         desc: '초미립자 정밀 흑백 해상력',
-        css: 'grayscale(1) contrast(1.40) brightness(1.02)',
+        css: 'grayscale(1) contrast(1.28) brightness(1.01)',
         tintRgba: null
       }
     }
@@ -666,38 +666,38 @@ const CAMERAS = {
       'sx70-fade': {
         name: 'SX-70 Vintage Fade',
         desc: '1970년대 따뜻하게 바랜 유제',
-        css: 'brightness(1.04) contrast(0.95) saturate(0.88) sepia(0.18)',
-        tintRgba: 'rgba(255, 215, 140, 0.12)'
+        css: 'brightness(1.03) contrast(1.02) saturate(1.02) sepia(0.08)',
+        tintRgba: null
       },
       'sx70-color600': {
         name: 'Color Protection 600',
         desc: '사이언/마젠타 즉석사진 발색',
-        css: 'brightness(1.02) contrast(1.18) saturate(1.22) hue-rotate(-8deg)',
-        tintRgba: 'rgba(200, 100, 255, 0.08)'
+        css: 'brightness(1.02) contrast(1.10) saturate(1.14)',
+        tintRgba: null
       },
       'sx70-expired': {
         name: 'Expired Film 1979',
         desc: '유통기한 지난 필름의 황록색 변색',
-        css: 'brightness(1.06) contrast(0.90) saturate(0.75) hue-rotate(30deg)',
-        tintRgba: 'rgba(220, 255, 120, 0.14)'
+        css: 'brightness(1.02) contrast(1.02) saturate(0.95) sepia(0.06)',
+        tintRgba: null
       },
       'sx70-sepia': {
         name: 'Sepia Dream',
         desc: '클래식 브라운 세피아 모노크롬',
-        css: 'sepia(0.85) contrast(1.15) brightness(1.02)',
-        tintRgba: 'rgba(240, 180, 100, 0.1)'
+        css: 'sepia(0.5) contrast(1.12) brightness(1.01)',
+        tintRgba: null
       },
       'sx70-cyan': {
         name: 'Cool Instant Cyan',
         desc: '청량하고 서늘한 즉석 사이언 틴트',
-        css: 'brightness(1.04) contrast(1.12) saturate(1.15) hue-rotate(-20deg)',
-        tintRgba: 'rgba(100, 215, 255, 0.10)'
+        css: 'brightness(1.02) contrast(1.08) saturate(1.10)',
+        tintRgba: null
       },
       'sx70-warm': {
         name: 'Golden Polaroid',
         desc: '풍부한 호박빛 골든 아워 즉석사진',
-        css: 'brightness(1.08) contrast(1.08) saturate(1.25) sepia(0.18)',
-        tintRgba: 'rgba(255, 200, 110, 0.14)'
+        css: 'brightness(1.03) contrast(1.08) saturate(1.15) sepia(0.08)',
+        tintRgba: null
       }
     }
   },
@@ -717,38 +717,38 @@ const CAMERAS = {
       'quicksnap-86': {
         name: '写ルンです 1986 Daylight',
         desc: '1986년 원작 우츠룬데스의 청량한 에메랄드 풀잎과 맑은 피부톤',
-        css: 'brightness(1.10) contrast(1.12) saturate(1.28) sepia(0.04)',
-        tintRgba: 'rgba(40, 195, 140, 0.10)'
+        css: 'brightness(1.02) contrast(1.12) saturate(1.16) sepia(0.02)',
+        tintRgba: null
       },
       'quicksnap-flash': {
         name: 'Sun Flash Pop',
         desc: '버블시대 거리와 카페에서 터뜨린 또렷하고 화사한 고광량 직광 플래시',
-        css: 'brightness(1.16) contrast(1.22) saturate(1.18) sepia(0.02)',
-        tintRgba: 'rgba(255, 240, 220, 0.10)'
+        css: 'brightness(1.05) contrast(1.16) saturate(1.14) sepia(0.02)',
+        tintRgba: null
       },
       'quicksnap-nostalgia': {
         name: 'Bubble Resort \'87',
         desc: '80년대 버블 부유층의 여름 별장 휴양지 따사로운 햇살과 비비드 톤',
-        css: 'brightness(1.08) contrast(1.14) saturate(1.26) sepia(0.06)',
-        tintRgba: 'rgba(255, 215, 145, 0.12)'
+        css: 'brightness(1.03) contrast(1.10) saturate(1.16) sepia(0.04)',
+        tintRgba: null
       },
       'quicksnap-neon': {
         name: 'Showa Memory \'86',
         desc: '선명한 오렌지 쿼츠데이트와 따스한 쇼와 61년 아날로그 인화지 감성',
-        css: 'brightness(1.08) contrast(1.10) saturate(1.20) sepia(0.08)',
-        tintRgba: 'rgba(255, 195, 130, 0.12)'
+        css: 'brightness(1.02) contrast(1.08) saturate(1.14) sepia(0.03)',
+        tintRgba: null
       },
       'quicksnap-fujicolor': {
         name: 'Fujicolor Super HG',
         desc: '선명하고 쨍한 후지필름 원색 발색과 녹색 계조의 정점',
-        css: 'brightness(1.10) contrast(1.16) saturate(1.32) sepia(0.03)',
-        tintRgba: 'rgba(30, 200, 110, 0.09)'
+        css: 'brightness(1.02) contrast(1.14) saturate(1.20)',
+        tintRgba: null
       },
       'quicksnap-party': {
         name: 'Party Flash 400',
         desc: '디스코텍과 파티장의 직광 플래시 & 샴페인 골드 글리터',
-        css: 'brightness(1.14) contrast(1.24) saturate(1.20) sepia(0.05)',
-        tintRgba: 'rgba(255, 230, 170, 0.10)'
+        css: 'brightness(1.05) contrast(1.16) saturate(1.16) sepia(0.03)',
+        tintRgba: null
       }
     }
   },
@@ -768,38 +768,38 @@ const CAMERAS = {
       'samurai-half': {
         name: 'Half-Frame Crisp 72',
         desc: '야시카 광학 줌 렌즈의 또렷한 선예도와 세로 분할 72컷 하프프레임',
-        css: 'brightness(1.08) contrast(1.18) saturate(1.22) sepia(0.02)',
-        tintRgba: 'rgba(215, 235, 255, 0.08)'
+        css: 'brightness(1.02) contrast(1.12) saturate(1.15)',
+        tintRgba: null
       },
       'samurai-cyber': {
         name: 'Bubble High-Tech \'88',
         desc: '1988년 도쿄 하이테크 열풍의 미래지향 에메랄드 HUD와 맑은 선예도',
-        css: 'brightness(1.10) contrast(1.20) saturate(1.24) sepia(0.02)',
-        tintRgba: 'rgba(0, 225, 195, 0.08)'
+        css: 'brightness(1.03) contrast(1.14) saturate(1.16)',
+        tintRgba: null
       },
       'samurai-tokyo': {
         name: 'Shinjuku Golden Hour',
         desc: '신주쿠 마천루에 반사되는 찬란한 황혼의 황금빛 햇살과 고급스러운 웜톤',
-        css: 'brightness(1.08) contrast(1.16) saturate(1.30) sepia(0.05)',
-        tintRgba: 'rgba(255, 190, 100, 0.12)'
+        css: 'brightness(1.03) contrast(1.12) saturate(1.18) sepia(0.04)',
+        tintRgba: null
       },
       'samurai-titanium': {
         name: 'Ryuichi B&W 1988',
         desc: '80s 뉴웨이브 사카모토 류이치 감성의 지적이고 정제된 하이콘트라스트 흑백',
-        css: 'grayscale(1) contrast(1.45) brightness(1.04)',
+        css: 'grayscale(1) contrast(1.30) brightness(1.02)',
         tintRgba: null
       },
       'samurai-macro': {
         name: 'Yashica Macro Pop',
         desc: '야시카 매크로 렌즈의 극대화된 펀치감과 컬러 팝',
-        css: 'brightness(1.08) contrast(1.24) saturate(1.35) sepia(0.02)',
-        tintRgba: 'rgba(255, 140, 60, 0.08)'
+        css: 'brightness(1.02) contrast(1.16) saturate(1.20)',
+        tintRgba: null
       },
       'samurai-night': {
         name: 'Tokyo Night Flight',
         desc: '나이트 플라이트 시티 나이트뷰 쿨톤 하이테크 네온',
-        css: 'brightness(1.06) contrast(1.20) saturate(1.25) hue-rotate(-10deg)',
-        tintRgba: 'rgba(80, 210, 255, 0.09)'
+        css: 'brightness(1.03) contrast(1.15) saturate(1.16)',
+        tintRgba: null
       }
     }
   },
@@ -2625,12 +2625,8 @@ function executeCapture() {
   if (cam.filters) {
     const fKey = state.selectedFilters[cam.id];
     const spec = cam.filters[fKey] || Object.values(cam.filters)[0];
-    if (spec.tintRgba) {
-      ctx.save();
-      ctx.fillStyle = spec.tintRgba;
-      ctx.fillRect(0, 0, captureCanvas.width, captureCanvas.height);
-      ctx.restore();
-    }
+    // Organic film tone curves are handled with Float32 spectral precision in FilmSpectralEngine
+    // Destructive flat tint overlays are removed to guarantee pure, deep blacks and organic sky tones
 
     // Direct Flash Vignette for DigiCam & Handycam
     if (cam.id === 'canon-ixy' || cam.id === 'sony-cybershot' || cam.id === 'sony-handycam') {
@@ -2851,15 +2847,7 @@ function executeCapture() {
 
     // Top-left FUJICOLOR badge is COMPLETELY REMOVED to keep clean photo!
 
-    // Subtle plastic edge vignette
-    const pGrad = ctx.createRadialGradient(
-      captureCanvas.width / 2, captureCanvas.height / 2, captureCanvas.width * 0.4,
-      captureCanvas.width / 2, captureCanvas.height / 2, captureCanvas.width * 0.75
-    );
-    pGrad.addColorStop(0, 'transparent');
-    pGrad.addColorStop(1, 'rgba(10, 35, 15, 0.28)');
-    ctx.fillStyle = pGrad;
-    ctx.fillRect(0, 0, captureCanvas.width, captureCanvas.height);
+    // Optical cosine-fourth lens falloff is applied with Float32 precision in FilmSpectralEngine
   } else if (cam.id === 'kyocera-samurai') {
     // 1988 Kyocera Samurai X3.0 Cyber Half-Frame 72-Shot SLR
     const halfToggle = document.getElementById('toggle-samurai-halfline');
@@ -4176,10 +4164,27 @@ function initSmoothModeDial() {
 // ==========================================================================
 
 function initEventListeners() {
-  // 1. Bottom Camera Switcher Dial items
+  // 1. Bottom Camera Switcher Dial items & Edge Cues
   document.querySelectorAll('#mode-dial-list .mode-dial-item').forEach(item => {
     item.addEventListener('click', () => switchCamera(item.dataset.cam));
   });
+
+  const cuePrev = document.getElementById('btn-dial-cue-prev');
+  const cueNext = document.getElementById('btn-dial-cue-next');
+  if (cuePrev) {
+    cuePrev.addEventListener('pointerdown', (e) => e.stopPropagation());
+    cuePrev.addEventListener('click', (e) => {
+      e.stopPropagation();
+      switchPrevCamera();
+    });
+  }
+  if (cueNext) {
+    cueNext.addEventListener('pointerdown', (e) => e.stopPropagation());
+    cueNext.addEventListener('click', (e) => {
+      e.stopPropagation();
+      switchNextCamera();
+    });
+  }
 
   // 2. Left Sidebar Camera Rack Buttons
   document.querySelectorAll('.panel-modes .panel-mode-btn').forEach(btn => {

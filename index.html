@@ -271,7 +271,7 @@
               <span style="color: var(--accent-mint); font-size: 13px;">●</span>
               <span id="island-label">SnapStudio</span>
             </span>
-            <span id="island-extra" style="color: var(--ios-yellow); font-family: monospace;">READY</span>
+            <span id="island-extra" class="island-extra-badge">READY</span>
           </div>
           <div class="island-sensor"></div>
         </div>
@@ -1861,26 +1861,28 @@
             </div>
 
             <!-- 16 Iconic Cameras Switcher Dial -->
-            <div class="mode-dial-wrapper" id="mode-dial-wrapper" title="좌우로 드래그하여 16종 카메라 바디를 매끄럽게 전환하세요">
+            <div class="mode-dial-wrapper" id="mode-dial-wrapper" title="좌우로 드래그하거나 탭하여 16종 카메라를 즉시 전환하세요">
+              <div class="mode-dial-edge-cue dial-cue-left" id="btn-dial-cue-prev" title="이전 카메라">‹</div>
               <div class="mode-dial-center-mark" aria-hidden="true"></div>
               <div class="mode-dial-list" id="mode-dial-list">
-                <div class="mode-dial-item active" data-cam="canon-ixy"><span class="mode-dial-badge">Y2K</span>CANON IXY</div>
-                <div class="mode-dial-item" data-cam="sony-handycam"><span class="mode-dial-badge">DV</span>HANDYCAM</div>
-                <div class="mode-dial-item" data-cam="sony-cybershot"><span class="mode-dial-badge">CCD</span>CYBER-SHOT</div>
-                <div class="mode-dial-item" data-cam="olympus-mju"><span class="mode-dial-badge">FILM</span>OLYMPUS μ-II</div>
-                <div class="mode-dial-item" data-cam="contax-t2"><span class="mode-dial-badge">T*</span>CONTAX T2</div>
-                <div class="mode-dial-item" data-cam="ricoh-gr"><span class="mode-dial-badge">SNAP</span>RICOH GRD</div>
-                <div class="mode-dial-item" data-cam="leica-m"><span class="mode-dial-badge">M</span>LEICA M</div>
-                <div class="mode-dial-item" data-cam="citypop-80s"><span class="mode-dial-badge">'86</span>CITY POP 80s</div>
-                <div class="mode-dial-item" data-cam="oldfilm-35mm"><span class="mode-dial-badge">35mm</span>OLD FILM 35</div>
-                <div class="mode-dial-item" data-cam="hasselblad-500cm"><span class="mode-dial-badge">6x6</span>HASSELBLAD</div>
-                <div class="mode-dial-item" data-cam="polaroid-sx70"><span class="mode-dial-badge">POLA</span>POLAROID SX-70</div>
-                <div class="mode-dial-item" data-cam="fuji-quicksnap"><span class="mode-dial-badge">DISP</span>QUICKSNAP '86</div>
-                <div class="mode-dial-item" data-cam="kyocera-samurai"><span class="mode-dial-badge">HALF</span>SAMURAI 1988</div>
-                <div class="mode-dial-item" data-cam="instax-mini"><span class="mode-dial-badge">INST</span>INSTAX</div>
-                <div class="mode-dial-item" data-cam="sihyun-color"><span class="mode-dial-badge">PRO</span>COLOR STUDIO</div>
-                <div class="mode-dial-item" data-cam="passport-id"><span class="mode-dial-badge">ID</span>PASSPORT ID</div>
+                <div class="mode-dial-item active" data-cam="canon-ixy"><span class="mode-dial-badge">📸 Y2K</span>CANON IXY</div>
+                <div class="mode-dial-item" data-cam="sony-handycam"><span class="mode-dial-badge">📹 DV</span>HANDYCAM</div>
+                <div class="mode-dial-item" data-cam="sony-cybershot"><span class="mode-dial-badge">💿 CCD</span>CYBER-SHOT</div>
+                <div class="mode-dial-item" data-cam="olympus-mju"><span class="mode-dial-badge">💧 FILM</span>OLYMPUS μ-II</div>
+                <div class="mode-dial-item" data-cam="contax-t2"><span class="mode-dial-badge">⭐ T*</span>CONTAX T2</div>
+                <div class="mode-dial-item" data-cam="ricoh-gr"><span class="mode-dial-badge">⬛ SNAP</span>RICOH GRD</div>
+                <div class="mode-dial-item" data-cam="leica-m"><span class="mode-dial-badge">🔴 M</span>LEICA M</div>
+                <div class="mode-dial-item" data-cam="citypop-80s"><span class="mode-dial-badge">📼 '86</span>CITY POP 80s</div>
+                <div class="mode-dial-item" data-cam="oldfilm-35mm"><span class="mode-dial-badge">🎞️ 35mm</span>OLD FILM 35</div>
+                <div class="mode-dial-item" data-cam="hasselblad-500cm"><span class="mode-dial-badge">🪐 6x6</span>HASSELBLAD</div>
+                <div class="mode-dial-item" data-cam="polaroid-sx70"><span class="mode-dial-badge">🌈 POLA</span>POLAROID SX-70</div>
+                <div class="mode-dial-item" data-cam="fuji-quicksnap"><span class="mode-dial-badge">📸 写</span>QUICKSNAP '86</div>
+                <div class="mode-dial-item" data-cam="kyocera-samurai"><span class="mode-dial-badge">🗡️ HALF</span>SAMURAI 1988</div>
+                <div class="mode-dial-item" data-cam="instax-mini"><span class="mode-dial-badge">🌸 INST</span>INSTAX</div>
+                <div class="mode-dial-item" data-cam="sihyun-color"><span class="mode-dial-badge">🎨 PRO</span>COLOR STUDIO</div>
+                <div class="mode-dial-item" data-cam="passport-id"><span class="mode-dial-badge">🪪 ID</span>PASSPORT ID</div>
               </div>
+              <div class="mode-dial-edge-cue dial-cue-right" id="btn-dial-cue-next" title="다음 카메라">›</div>
             </div>
 
             <!-- Shutter Controls Row -->

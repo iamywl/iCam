@@ -477,6 +477,26 @@ body::before {
   width: 100%;
 }
 
+.island-extra-badge {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  color: rgba(255, 255, 255, 0.85);
+  padding: 1.5px 6px;
+  border-radius: 5px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 0.5px solid rgba(255, 255, 255, 0.12);
+}
+
+.dynamic-island.recording .island-extra-badge {
+  color: #ff453a;
+  background: rgba(255, 69, 58, 0.15);
+  border-color: rgba(255, 69, 58, 0.35);
+  font-family: "SF Mono", monospace;
+  font-weight: 700;
+}
+
 /* ==========================================================================
    iOS Camera App Main UI
    ========================================================================== */
@@ -3044,12 +3064,77 @@ body::before {
   -webkit-user-select: none;
   cursor: grab;
   touch-action: pan-y;
-  -webkit-mask-image: linear-gradient(90deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
-  mask-image: linear-gradient(90deg, transparent 0%, #000 18%, #000 82%, transparent 100%);
 }
 
 .mode-dial-wrapper:active {
   cursor: grabbing;
+}
+
+/* Subtle edge gradients so dial items glide softly into chassis edges */
+.mode-dial-wrapper::before,
+.mode-dial-wrapper::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 28px;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.mode-dial-wrapper::before {
+  left: 20px;
+  background: linear-gradient(90deg, rgba(14, 15, 18, 0.95), transparent);
+}
+
+.mode-dial-wrapper::after {
+  right: 20px;
+  background: linear-gradient(270deg, rgba(14, 15, 18, 0.95), transparent);
+}
+
+/* Tactile Edge Cues / Steppers (‹ and ›) */
+.mode-dial-edge-cue {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 20px;
+  height: 18px;
+  border-radius: 9px;
+  background: rgba(24, 26, 32, 0.88);
+  border: 1px solid rgba(245, 199, 103, 0.35);
+  color: #f5c767;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 6;
+  pointer-events: auto;
+  user-select: none;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  transition: all 0.16s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+.mode-dial-edge-cue.dial-cue-left {
+  left: 2px;
+}
+
+.mode-dial-edge-cue.dial-cue-right {
+  right: 2px;
+}
+
+.mode-dial-edge-cue:hover {
+  background: rgba(245, 199, 103, 0.22);
+  color: #fff;
+  border-color: rgba(245, 199, 103, 0.7);
+  box-shadow: 0 0 10px rgba(245, 199, 103, 0.45);
+  transform: translateY(-50%) scale(1.08);
+}
+
+.mode-dial-edge-cue:active {
+  transform: translateY(-50%) scale(0.92);
 }
 
 /* Illuminated Center Pip/Index Mark */
@@ -3070,59 +3155,66 @@ body::before {
 .mode-dial-list {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 16px;
   will-change: transform;
   pointer-events: auto;
   transition: transform 0.3s cubic-bezier(0.25, 1, 0.5, 1);
 }
 
 .mode-dial-item {
-  font-family: "SF Mono", "Menlo", monospace;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Mono", sans-serif;
   font-size: 10.5px;
   font-weight: 700;
-  letter-spacing: 0.8px;
+  letter-spacing: 0.6px;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.38);
+  color: rgba(255, 255, 255, 0.55);
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 11px;
   cursor: pointer;
   white-space: nowrap;
-  transition: color 0.18s ease, transform 0.18s ease, opacity 0.18s ease;
+  transition: color 0.18s ease, transform 0.18s ease, opacity 0.18s ease, background 0.18s ease, border-color 0.18s ease;
   display: flex;
   align-items: center;
-  gap: 4px;
-  padding: 1px 4px;
-  border-radius: 4px;
-  opacity: 0.45;
-  transform: scale(0.92);
+  gap: 5px;
+  padding: 1.5px 7px;
+  opacity: 0.65;
+  transform: scale(0.94);
 }
 
 .mode-dial-item:hover {
-  color: rgba(255, 255, 255, 0.85);
-  opacity: 0.8;
+  color: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.08);
+  opacity: 0.9;
 }
 
 .mode-dial-item.active {
-  color: #f5c767;
+  color: #ffd875;
   font-weight: 800;
-  text-shadow: 0 0 10px rgba(245, 199, 103, 0.65), 0 0 20px rgba(245, 199, 103, 0.25);
-  transform: scale(1.12);
+  background: linear-gradient(180deg, rgba(245, 199, 103, 0.22) 0%, rgba(180, 120, 30, 0.14) 100%);
+  border-color: rgba(245, 199, 103, 0.55);
+  box-shadow: 0 0 12px rgba(245, 199, 103, 0.35), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.7), 0 0 10px rgba(245, 199, 103, 0.5);
+  transform: scale(1.1);
   opacity: 1;
 }
 
 .mode-dial-badge {
-  font-size: 6.5px;
+  font-size: 7.5px;
   font-weight: 800;
-  padding: 0.5px 3px;
-  border-radius: 3px;
-  background: rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.6);
-  border: 0.5px solid rgba(255, 255, 255, 0.12);
+  padding: 0.5px 3.5px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.09);
+  color: rgba(255, 255, 255, 0.75);
+  border: 0.5px solid rgba(255, 255, 255, 0.16);
   letter-spacing: 0.4px;
 }
 
 .mode-dial-item.active .mode-dial-badge {
-  background: rgba(245, 199, 103, 0.2);
-  color: #f5c767;
-  border-color: rgba(245, 199, 103, 0.4);
+  background: rgba(245, 199, 103, 0.32);
+  color: #fff;
+  border-color: rgba(245, 199, 103, 0.7);
+  box-shadow: 0 0 6px rgba(245, 199, 103, 0.4);
 }
 
 /* Shutter Row */
@@ -4037,6 +4129,9 @@ body::before {
 .device-wrapper.device-se .camera-category-bar { height: 18px; margin-bottom: 2px; }
 .device-wrapper.device-se .cam-cat-pill { font-size: 8.5px; padding: 1px 5px; }
 .device-wrapper.device-se .mode-dial-wrapper { height: 18px; margin-bottom: 2px; font-size: 9px; }
+.device-wrapper.device-se .mode-dial-edge-cue { width: 17px; height: 15px; font-size: 11px; }
+.device-wrapper.device-se .mode-dial-item { font-size: 8.5px; padding: 1px 5px; }
+.device-wrapper.device-se .mode-dial-badge { font-size: 6.5px; padding: 0.5px 2.5px; }
 .device-wrapper.device-se .shutter-row { height: 56px; }
 .device-wrapper.device-se .shutter-btn-outer { width: 50px; height: 50px; }
 .device-wrapper.device-se .shutter-btn-inner { width: 40px; height: 40px; }

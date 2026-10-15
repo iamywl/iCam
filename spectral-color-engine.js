@@ -23,90 +23,90 @@
     // 1. Fuji QuickSnap 1986 (Fujicolor Super HG 400 Emulsion + 32mm F/10 Plastic Lens)
     'fuji-quicksnap': {
       spectralMatrix: [
-        [0.93, 0.09, -0.02],
-        [-0.06, 1.15, -0.06],
-        [-0.03, 0.14, 0.91]
+        [1.00, -0.01, -0.01],
+        [-0.01, 1.03, -0.01],
+        [-0.01, -0.01, 1.02]
       ],
       hdCurves: {
-        r: { toe: 0.025, gamma: 1.06, shoulder: 0.94 },
-        g: { toe: 0.015, gamma: 1.18, shoulder: 0.92 }, // Peak green quantum efficiency
-        b: { toe: 0.055, gamma: 1.02, shoulder: 0.95 }  // Lifted cyan-teal shadow fog
+        r: { toe: 0.020, gamma: 1.10, shoulder: 0.96 },
+        g: { toe: 0.018, gamma: 1.12, shoulder: 0.96 }, // Peak green quantum efficiency & natural sky blue
+        b: { toe: 0.020, gamma: 1.10, shoulder: 0.96 }  // Clean shadow density without milky cast
       },
-      grain: { amount: 0.12, roughness: 1.3, colorGrain: false },
-      chromaticAberration: 0.0022,
-      vignette: 0.38,
-      halation: { threshold: 0.88, radius: 14, color: [240, 70, 30, 0.25] }
+      grain: { amount: 0.035, roughness: 0.7, colorGrain: false }, // Subtle micro-grain
+      chromaticAberration: 0.0,
+      vignette: 0.16,
+      halation: null
     },
 
     // 2. Kodak Portra 400 / OldFilm 35mm (Kodak Vision/Portra T-GRAIN Emulsion)
     'oldfilm-35mm': {
       spectralMatrix: [
-        [1.12, -0.05, -0.04],
-        [-0.03, 1.04, -0.01],
-        [-0.06, -0.04, 0.88]
+        [1.03, -0.01, -0.01],
+        [-0.01, 1.02, -0.01],
+        [-0.01, -0.02, 1.00]
       ],
       hdCurves: {
-        r: { toe: 0.040, gamma: 1.02, shoulder: 0.98 }, // Warm golden skin tone preservation
-        g: { toe: 0.025, gamma: 1.00, shoulder: 0.96 },
-        b: { toe: 0.020, gamma: 0.95, shoulder: 0.94 }
+        r: { toe: 0.022, gamma: 1.06, shoulder: 0.96 }, // Warm golden skin tone preservation
+        g: { toe: 0.018, gamma: 1.04, shoulder: 0.96 },
+        b: { toe: 0.016, gamma: 1.02, shoulder: 0.96 }
       },
-      grain: { amount: 0.08, roughness: 0.9, colorGrain: false },
-      chromaticAberration: 0.0008,
-      vignette: 0.24,
-      halation: { threshold: 0.82, radius: 24, color: [255, 45, 15, 0.38] }
+      grain: { amount: 0.038, roughness: 0.7, colorGrain: false },
+      chromaticAberration: 0.0,
+      vignette: 0.16,
+      halation: null
     },
 
     // 3. Sony Cyber-shot DSC-P10 (2003 1/1.8" Super HAD CCD)
     'sony-cybershot': {
       spectralMatrix: [
-        [1.18, -0.12, -0.05],
-        [-0.08, 1.16, -0.05],
-        [-0.04, -0.14, 1.25]
+        [1.03, -0.01, -0.01],
+        [-0.01, 1.03, -0.02],
+        [-0.01, -0.02, 1.04]
       ],
       hdCurves: {
-        r: { toe: 0.010, gamma: 1.20, shoulder: 0.86 }, // Harsh digital highlight clipping
-        g: { toe: 0.010, gamma: 1.22, shoulder: 0.88 },
-        b: { toe: 0.015, gamma: 1.25, shoulder: 0.85 }
+        r: { toe: 0.012, gamma: 1.12, shoulder: 0.94 },
+        g: { toe: 0.012, gamma: 1.14, shoulder: 0.94 },
+        b: { toe: 0.015, gamma: 1.15, shoulder: 0.93 }
       },
-      grain: { amount: 0.03, roughness: 0.5, colorGrain: true }, // Sensor readout noise
-      chromaticAberration: 0.0016,
-      vignette: 0.28,
+      grain: { amount: 0.022, roughness: 0.5, colorGrain: false },
+      chromaticAberration: 0.0,
+      vignette: 0.15,
       halation: null
     },
 
     // 4. Olympus μ [mju:]-II (Stylus Epic 35mm F/2.8 4-element Glass)
     'olympus-mju': {
       spectralMatrix: [
-        [1.06, -0.04, -0.02],
-        [-0.04, 1.10, -0.04],
-        [-0.02, -0.03, 1.04]
+        [1.02, -0.01, -0.01],
+        [-0.01, 1.04, -0.02],
+        [-0.01, -0.01, 1.02]
       ],
       hdCurves: {
-        r: { toe: 0.020, gamma: 1.14, shoulder: 0.94 },
-        g: { toe: 0.018, gamma: 1.16, shoulder: 0.93 },
-        b: { toe: 0.022, gamma: 1.12, shoulder: 0.95 }
+        r: { toe: 0.018, gamma: 1.12, shoulder: 0.95 },
+        g: { toe: 0.016, gamma: 1.14, shoulder: 0.95 },
+        b: { toe: 0.018, gamma: 1.10, shoulder: 0.95 }
       },
-      grain: { amount: 0.09, roughness: 1.0, colorGrain: false },
-      chromaticAberration: 0.0009,
-      vignette: 0.26,
-      halation: { threshold: 0.86, radius: 16, color: [240, 60, 20, 0.20] }
+      grain: { amount: 0.035, roughness: 0.7, colorGrain: false },
+      chromaticAberration: 0.0,
+      vignette: 0.16,
+      halation: null
     },
 
     // 5. Contax T2 (Carl Zeiss Sonnar 38mm F/2.8 T* Multi-Coated)
     'contax-t2': {
       spectralMatrix: [
-        [1.03, -0.01, -0.01],
-        [-0.02, 1.06, -0.03],
-        [-0.01, -0.02, 1.04]
+        [1.02, -0.01, -0.01],
+        [-0.01, 1.03, -0.01],
+        [-0.01, -0.01, 1.02]
       ],
       hdCurves: {
-        r: { toe: 0.008, gamma: 1.18, shoulder: 0.96 }, // Zeiss 3D pop & deep micro-contrast
-        g: { toe: 0.008, gamma: 1.20, shoulder: 0.96 },
-        b: { toe: 0.010, gamma: 1.16, shoulder: 0.97 }
+        r: { toe: 0.010, gamma: 1.14, shoulder: 0.96 }, // Zeiss 3D pop & deep micro-contrast
+        g: { toe: 0.010, gamma: 1.14, shoulder: 0.96 },
+        b: { toe: 0.012, gamma: 1.12, shoulder: 0.96 }
       },
-      grain: { amount: 0.05, roughness: 0.7, colorGrain: false },
-      chromaticAberration: 0.0003, // Zeiss T* suppresses aberration
-      vignette: 0.22,
+      grain: { amount: 0.028, roughness: 0.6, colorGrain: false },
+      chromaticAberration: 0.0,
+      vignette: 0.14,
       halation: null
     },
 
@@ -118,175 +118,175 @@
         [0.2126, 0.7152, 0.0722]
       ],
       hdCurves: {
-        r: { toe: 0.005, gamma: 1.26, shoulder: 0.94 },
-        g: { toe: 0.005, gamma: 1.26, shoulder: 0.94 },
-        b: { toe: 0.005, gamma: 1.26, shoulder: 0.94 }
+        r: { toe: 0.010, gamma: 1.18, shoulder: 0.96 },
+        g: { toe: 0.010, gamma: 1.18, shoulder: 0.96 },
+        b: { toe: 0.010, gamma: 1.18, shoulder: 0.96 }
       },
-      grain: { amount: 0.06, roughness: 0.8, colorGrain: false },
-      chromaticAberration: 0.0002,
-      vignette: 0.18,
+      grain: { amount: 0.035, roughness: 0.7, colorGrain: false },
+      chromaticAberration: 0.0,
+      vignette: 0.14,
       halation: null
     },
 
     // 7. Ricoh GR (GR LENS 28mm F/2.8 Snap Shooter)
     'ricoh-gr': {
       spectralMatrix: [
-        [1.04, -0.02, -0.02],
-        [-0.02, 1.05, -0.03],
-        [-0.01, -0.03, 1.03]
+        [1.03, -0.01, -0.01],
+        [-0.01, 1.03, -0.02],
+        [-0.01, -0.02, 1.03]
       ],
       hdCurves: {
-        r: { toe: 0.012, gamma: 1.22, shoulder: 0.92 },
-        g: { toe: 0.012, gamma: 1.22, shoulder: 0.92 },
-        b: { toe: 0.015, gamma: 1.20, shoulder: 0.93 }
+        r: { toe: 0.014, gamma: 1.16, shoulder: 0.95 },
+        g: { toe: 0.014, gamma: 1.16, shoulder: 0.95 },
+        b: { toe: 0.016, gamma: 1.14, shoulder: 0.95 }
       },
-      grain: { amount: 0.07, roughness: 1.1, colorGrain: false },
-      chromaticAberration: 0.0006,
-      vignette: 0.32,
+      grain: { amount: 0.035, roughness: 0.7, colorGrain: false },
+      chromaticAberration: 0.0,
+      vignette: 0.16,
       halation: null
     },
 
     // 8. Polaroid SX-70 (1972 Time-Zero Land Film Diffusion)
     'polaroid-sx70': {
       spectralMatrix: [
-        [1.06, 0.03, -0.06],
-        [-0.04, 0.97, 0.08],
-        [-0.07, 0.12, 0.94]
+        [1.03, 0.00, -0.02],
+        [-0.01, 1.01, 0.00],
+        [-0.02, 0.01, 0.98]
       ],
       hdCurves: {
-        r: { toe: 0.075, gamma: 0.98, shoulder: 0.88 }, // Chemical diffusion lifted base fog
-        g: { toe: 0.065, gamma: 0.96, shoulder: 0.86 },
-        b: { toe: 0.080, gamma: 0.92, shoulder: 0.85 }
+        r: { toe: 0.035, gamma: 1.05, shoulder: 0.92 },
+        g: { toe: 0.030, gamma: 1.03, shoulder: 0.90 },
+        b: { toe: 0.035, gamma: 1.00, shoulder: 0.90 }
       },
-      grain: { amount: 0.05, roughness: 0.6, colorGrain: true },
-      chromaticAberration: 0.0014,
-      vignette: 0.28,
-      halation: { threshold: 0.78, radius: 20, color: [255, 180, 120, 0.22] }
+      grain: { amount: 0.032, roughness: 0.6, colorGrain: false },
+      chromaticAberration: 0.0,
+      vignette: 0.18,
+      halation: null
     },
 
     // 9. Kyocera Samurai X3.0 (1988 Half-Frame 72-Shot SLR)
     'kyocera-samurai': {
       spectralMatrix: [
-        [1.09, -0.04, -0.02],
-        [-0.02, 1.09, -0.04],
-        [-0.03, 0.06, 1.05]
+        [1.03, -0.01, -0.01],
+        [-0.01, 1.04, -0.02],
+        [-0.01, -0.01, 1.03]
       ],
       hdCurves: {
-        r: { toe: 0.030, gamma: 1.14, shoulder: 0.93 },
-        g: { toe: 0.025, gamma: 1.15, shoulder: 0.92 },
-        b: { toe: 0.035, gamma: 1.12, shoulder: 0.94 }
+        r: { toe: 0.020, gamma: 1.12, shoulder: 0.94 },
+        g: { toe: 0.018, gamma: 1.14, shoulder: 0.94 },
+        b: { toe: 0.022, gamma: 1.10, shoulder: 0.94 }
       },
-      grain: { amount: 0.18, roughness: 1.5, colorGrain: false }, // 2x magnification grain
-      chromaticAberration: 0.0018,
-      vignette: 0.34,
-      halation: { threshold: 0.85, radius: 16, color: [0, 230, 255, 0.18] }
+      grain: { amount: 0.040, roughness: 0.8, colorGrain: false },
+      chromaticAberration: 0.0,
+      vignette: 0.16,
+      halation: null
     },
 
     // 10. Sony Handycam DCR (MiniDV Tape CCD)
     'sony-handycam': {
       spectralMatrix: [
-        [1.08, -0.05, -0.03],
-        [-0.04, 1.06, -0.02],
-        [-0.02, -0.06, 1.10]
+        [1.03, -0.01, -0.01],
+        [-0.01, 1.03, -0.01],
+        [-0.01, -0.02, 1.04]
       ],
       hdCurves: {
-        r: { toe: 0.020, gamma: 1.12, shoulder: 0.88 },
-        g: { toe: 0.020, gamma: 1.12, shoulder: 0.88 },
-        b: { toe: 0.025, gamma: 1.14, shoulder: 0.86 }
+        r: { toe: 0.018, gamma: 1.10, shoulder: 0.92 },
+        g: { toe: 0.018, gamma: 1.10, shoulder: 0.92 },
+        b: { toe: 0.020, gamma: 1.12, shoulder: 0.90 }
       },
-      grain: { amount: 0.08, roughness: 0.4, colorGrain: true },
-      chromaticAberration: 0.0020,
-      vignette: 0.20,
+      grain: { amount: 0.030, roughness: 0.5, colorGrain: false },
+      chromaticAberration: 0.0,
+      vignette: 0.14,
       halation: null
     },
 
     // 11. Hasselblad 500C/M (Carl Zeiss Planar 80mm F/2.8 T* Medium Format)
     'hasselblad-500cm': {
       spectralMatrix: [
-        [1.01, -0.005, -0.005],
-        [-0.01, 1.03, -0.02],
-        [-0.005, -0.01, 1.02]
+        [1.01, 0.00, 0.00],
+        [0.00, 1.02, -0.01],
+        [0.00, -0.01, 1.01]
       ],
       hdCurves: {
-        r: { toe: 0.005, gamma: 1.10, shoulder: 0.98 }, // 12+ stops smooth tonal gradation
-        g: { toe: 0.005, gamma: 1.10, shoulder: 0.98 },
-        b: { toe: 0.006, gamma: 1.08, shoulder: 0.98 }
+        r: { toe: 0.008, gamma: 1.10, shoulder: 0.98 }, // 12+ stops smooth tonal gradation
+        g: { toe: 0.008, gamma: 1.10, shoulder: 0.98 },
+        b: { toe: 0.009, gamma: 1.08, shoulder: 0.98 }
       },
-      grain: { amount: 0.03, roughness: 0.5, colorGrain: false }, // Fine medium format grain
-      chromaticAberration: 0.0002,
-      vignette: 0.16,
+      grain: { amount: 0.020, roughness: 0.5, colorGrain: false },
+      chromaticAberration: 0.0,
+      vignette: 0.12,
       halation: null
     },
 
     // 12. City Pop '86 (Japanese Bubble Summer Resort Aesthetic)
     'citypop-80s': {
       spectralMatrix: [
-        [1.15, 0.02, -0.10],
-        [-0.06, 0.98, 0.08],
-        [-0.10, 0.08, 1.24]
+        [1.04, 0.00, -0.03],
+        [-0.02, 1.02, 0.00],
+        [-0.02, 0.00, 1.04]
       ],
       hdCurves: {
-        r: { toe: 0.040, gamma: 1.15, shoulder: 0.92 },
-        g: { toe: 0.025, gamma: 1.10, shoulder: 0.90 },
-        b: { toe: 0.060, gamma: 1.20, shoulder: 0.94 }
+        r: { toe: 0.024, gamma: 1.08, shoulder: 0.94 },
+        g: { toe: 0.020, gamma: 1.06, shoulder: 0.92 },
+        b: { toe: 0.026, gamma: 1.10, shoulder: 0.94 }
       },
-      grain: { amount: 0.10, roughness: 1.1, colorGrain: false },
-      chromaticAberration: 0.0026,
-      vignette: 0.32,
-      halation: { threshold: 0.80, radius: 26, color: [255, 60, 180, 0.30] }
+      grain: { amount: 0.038, roughness: 0.7, colorGrain: false },
+      chromaticAberration: 0.0,
+      vignette: 0.18,
+      halation: null
     },
 
     // 13. Canon IXY Digital (PowerShot Digic Sensor)
     'canon-ixy': {
       spectralMatrix: [
-        [1.12, -0.06, -0.04],
-        [-0.05, 1.10, -0.02],
-        [-0.03, -0.08, 1.14]
+        [1.04, -0.02, -0.01],
+        [-0.02, 1.04, -0.01],
+        [-0.01, -0.02, 1.04]
       ],
       hdCurves: {
-        r: { toe: 0.015, gamma: 1.16, shoulder: 0.90 },
-        g: { toe: 0.012, gamma: 1.18, shoulder: 0.92 },
-        b: { toe: 0.020, gamma: 1.15, shoulder: 0.88 }
+        r: { toe: 0.014, gamma: 1.12, shoulder: 0.93 },
+        g: { toe: 0.012, gamma: 1.14, shoulder: 0.94 },
+        b: { toe: 0.016, gamma: 1.12, shoulder: 0.92 }
       },
-      grain: { amount: 0.04, roughness: 0.6, colorGrain: true },
-      chromaticAberration: 0.0014,
-      vignette: 0.25,
+      grain: { amount: 0.025, roughness: 0.5, colorGrain: false },
+      chromaticAberration: 0.0,
+      vignette: 0.15,
       halation: null
     },
 
     // 14. Fujifilm Instax Mini (Instant Color Film)
     'instax-mini': {
       spectralMatrix: [
-        [0.98, 0.06, -0.02],
-        [-0.05, 1.12, -0.04],
-        [-0.02, 0.08, 0.96]
+        [1.02, 0.00, -0.01],
+        [-0.01, 1.04, -0.02],
+        [-0.01, 0.00, 1.01]
       ],
       hdCurves: {
-        r: { toe: 0.050, gamma: 1.22, shoulder: 0.88 },
-        g: { toe: 0.040, gamma: 1.24, shoulder: 0.88 },
-        b: { toe: 0.065, gamma: 1.18, shoulder: 0.90 }
+        r: { toe: 0.030, gamma: 1.14, shoulder: 0.92 },
+        g: { toe: 0.025, gamma: 1.16, shoulder: 0.92 },
+        b: { toe: 0.032, gamma: 1.12, shoulder: 0.92 }
       },
-      grain: { amount: 0.06, roughness: 0.7, colorGrain: false },
-      chromaticAberration: 0.0015,
-      vignette: 0.30,
+      grain: { amount: 0.032, roughness: 0.6, colorGrain: false },
+      chromaticAberration: 0.0,
+      vignette: 0.18,
       halation: null
     },
 
     // 15. Sihyun Color Studio (High-Key Calibrated Studio Lighting)
     'sihyun-color': {
       spectralMatrix: [
-        [1.02, -0.01, -0.01],
-        [-0.01, 1.02, -0.01],
-        [-0.01, -0.01, 1.02]
+        [1.01, 0.00, 0.00],
+        [0.00, 1.01, 0.00],
+        [0.00, 0.00, 1.01]
       ],
       hdCurves: {
-        r: { toe: 0.010, gamma: 1.05, shoulder: 0.96 },
-        g: { toe: 0.010, gamma: 1.05, shoulder: 0.96 },
-        b: { toe: 0.010, gamma: 1.05, shoulder: 0.96 }
+        r: { toe: 0.008, gamma: 1.05, shoulder: 0.98 },
+        g: { toe: 0.008, gamma: 1.05, shoulder: 0.98 },
+        b: { toe: 0.008, gamma: 1.05, shoulder: 0.98 }
       },
-      grain: { amount: 0.02, roughness: 0.5, colorGrain: false },
-      chromaticAberration: 0.0001,
-      vignette: 0.12,
+      grain: { amount: 0.015, roughness: 0.4, colorGrain: false },
+      chromaticAberration: 0.0,
+      vignette: 0.10,
       halation: null
     },
 
@@ -298,12 +298,12 @@
         [0.00, 0.00, 1.00]
       ],
       hdCurves: {
-        r: { toe: 0.005, gamma: 1.04, shoulder: 0.98 },
-        g: { toe: 0.005, gamma: 1.04, shoulder: 0.98 },
-        b: { toe: 0.005, gamma: 1.04, shoulder: 0.98 }
+        r: { toe: 0.005, gamma: 1.02, shoulder: 0.99 },
+        g: { toe: 0.005, gamma: 1.02, shoulder: 0.99 },
+        b: { toe: 0.005, gamma: 1.02, shoulder: 0.99 }
       },
-      grain: { amount: 0.01, roughness: 0.4, colorGrain: false },
-      chromaticAberration: 0.0000,
+      grain: { amount: 0.008, roughness: 0.3, colorGrain: false },
+      chromaticAberration: 0.0,
       vignette: 0.00,
       halation: null
     }
@@ -410,19 +410,10 @@
       for (let x = 0; x < width; x++) {
         const pIdx = (rowIdx + x) * 4;
 
-        // 1. Chromatic Aberration sampling: R channel shifted outward, B inward
-        let rawR, rawG, rawB;
-        if (caOffset > 0 && x >= caOffset && x < width - caOffset) {
-          const rShift = Math.round(((x - cx) / cx) * caOffset);
-          const bShift = -rShift;
-          rawR = data[pIdx + (rShift * 4)];
-          rawG = data[pIdx + 1];
-          rawB = data[pIdx + 2 + (bShift * 4)];
-        } else {
-          rawR = data[pIdx];
-          rawG = data[pIdx + 1];
-          rawB = data[pIdx + 2];
-        }
+        // 1. Pure Optical Sensor Sampling (Zero Lateral Channel Splitting)
+        const rawR = data[pIdx];
+        const rawG = data[pIdx + 1];
+        const rawB = data[pIdx + 2];
 
         // 2. Linear Color Matrix Transformation (Spectral Crosstalk)
         let sr = (m00 * rawR + m01 * rawG + m02 * rawB);
