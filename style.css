@@ -772,7 +772,7 @@ body::before {
    ========================================================================== */
 .vf-filter-stepper {
   position: absolute;
-  bottom: 12px;
+  bottom: 36px;
   left: 50%;
   transform: translateX(-50%);
   z-index: 55;
@@ -6052,6 +6052,939 @@ body::before {
 
 .camera-app.theme-canon-ixy {
   background: linear-gradient(180deg, #334155 0%, #1e293b 40%, #0f172a 100%);
+   FIMO Luxury Analog Aesthetic & Tactile Viewfinder Deck Styles
+   ========================================================================== */
+
+/* 1. Viewfinder Orange Brackets & Center Focus Reticle */
+.fimo-vf-brackets {
+  position: absolute;
+  inset: 12px;
+  pointer-events: none;
+  z-index: 15;
+}
+
+.fimo-bracket {
+  position: absolute;
+  width: 22px;
+  height: 22px;
+  border-color: #ff6b35;
+  border-style: solid;
+  border-width: 0;
+  opacity: 0.92;
+}
+
+.fimo-bracket-tl {
+  top: 0;
+  left: 0;
+  border-top-width: 1.8px;
+  border-left-width: 1.8px;
+  border-top-left-radius: 3px;
+}
+
+.fimo-bracket-tr {
+  top: 0;
+  right: 0;
+  border-top-width: 1.8px;
+  border-right-width: 1.8px;
+  border-top-right-radius: 3px;
+}
+
+.fimo-bracket-bl {
+  bottom: 0;
+  left: 0;
+  border-bottom-width: 1.8px;
+  border-left-width: 1.8px;
+  border-bottom-left-radius: 3px;
+}
+
+.fimo-bracket-br {
+  bottom: 0;
+  right: 0;
+  border-bottom-width: 1.8px;
+  border-right-width: 1.8px;
+  border-bottom-right-radius: 3px;
+}
+
+.fimo-center-focus-box {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 32px;
+  height: 20px;
+  border: 1.2px solid #ff6b35;
+  border-radius: 2px;
+  opacity: 0.85;
+  box-shadow: 0 0 6px rgba(255, 107, 53, 0.4);
+  pointer-events: none;
+}
+
+/* Viewfinder Status Line inside bottom right */
+.fimo-vf-status-line {
+  position: absolute;
+  right: 12px;
+  bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.85);
+  z-index: 35;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  user-select: none;
+  background: rgba(14, 16, 20, 0.55);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  padding: 3px 9px;
+  border-radius: 12px;
+  border: 0.5px solid rgba(255, 255, 255, 0.14);
+}
+
+.fimo-status-date,
+.fimo-status-caption {
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  transition: opacity 0.2s ease;
+}
+
+.fimo-status-date:hover,
+.fimo-status-caption:hover {
+  opacity: 1;
+}
+
+.fimo-val-on {
+  color: #ff6b35;
+  font-weight: 800;
+}
+
+.fimo-val-off {
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 600;
+}
+
+/* Viewfinder Floating Right Edge Tab (‹) */
+.fimo-vf-drawer-tab {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 52px;
+  background: rgba(32, 34, 40, 0.78);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-right: none;
+  border-radius: 12px 0 0 12px;
+  color: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 28;
+  padding: 0;
+  transition: all 0.2s ease;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.4);
+}
+
+.fimo-vf-drawer-tab:hover {
+  background: rgba(45, 48, 56, 0.95);
+  color: #ff6b35;
+  width: 20px;
+}
+
+/* 2. Zoom Ruler Deck & Arched Film Gauge */
+.fimo-zoom-ruler-deck {
+  width: 100%;
+  padding: 2px 14px 4px 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.fimo-zoom-readout {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  min-width: 65px;
+}
+
+.fimo-zoom-mag {
+  font-size: 13px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.2px;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+}
+
+.fimo-zoom-focal {
+  font-size: 10px;
+  color: rgba(255, 255, 255, 0.5);
+  font-weight: 600;
+}
+
+.fimo-zoom-ruler-track {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  margin: 0 10px;
+  padding-top: 10px;
+  cursor: pointer;
+}
+
+.fimo-ruler-pointer {
+  position: absolute;
+  top: 0;
+  left: 10%; /* dynamically updated via style */
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  color: #ff6b35;
+  pointer-events: none;
+  transition: left 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.fimo-caret-triangle {
+  font-size: 7px;
+  line-height: 1;
+}
+
+.fimo-caret-bar {
+  width: 1.5px;
+  height: 8px;
+  background: #ff6b35;
+}
+
+.fimo-ruler-ticks {
+  width: 100%;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  height: 14px;
+}
+
+.fimo-tick-stop {
+  font-size: 9px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  transition: color 0.18s ease;
+  padding: 0 2px;
+}
+
+.fimo-tick-stop.active {
+  color: #fff;
+  font-weight: 800;
+}
+
+.fimo-tick-pip {
+  width: 1px;
+  height: 5px;
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Arched Film Counter Gauge */
+.fimo-arched-gauge-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  min-width: 44px;
+}
+
+.fimo-gauge-frame {
+  background: rgba(24, 26, 32, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  padding: 2px 7px;
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.fimo-gauge-readout {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  color: #ff6b35;
+  font-size: 11px;
+  font-weight: 800;
+}
+
+.fimo-gauge-arrow {
+  font-size: 8px;
+}
+
+.fimo-gauge-total {
+  font-size: 9.5px;
+  color: rgba(255, 255, 255, 0.4);
+  font-weight: 600;
+}
+
+/* 3. Tactile 4 Round Hardware Control Buttons */
+.fimo-hardware-bar {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 4px 16px 2px 16px;
+  box-sizing: border-box;
+}
+
+.fimo-hw-btn {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: rgba(30, 32, 38, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  color: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all 0.18s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  padding: 0;
+}
+
+.fimo-hw-btn:hover {
+  background: rgba(45, 48, 58, 0.95);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.fimo-hw-btn:active {
+  transform: scale(0.92);
+}
+
+.fimo-hw-dot-badge {
+  position: absolute;
+  top: 1px;
+  right: 1px;
+  width: 13px;
+  height: 13px;
+  background: #ff6b35;
+  color: #fff;
+  font-size: 8.5px;
+  font-weight: 900;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 5px rgba(255, 107, 53, 0.6);
+}
+
+/* 4. Bottom Shutter Row with Capsule & Concentric Brushed Metallic Shutter */
+.fimo-shutter-capsule {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: rgba(26, 28, 34, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 44px;
+  padding: 3px 14px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+}
+
+.fimo-capsule-mode-btn {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.4);
+  cursor: pointer;
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color 0.18s ease;
+}
+
+.fimo-capsule-mode-btn.active {
+  color: #fff;
+}
+
+.fimo-capsule-mode-btn:hover {
+  color: rgba(255, 255, 255, 0.8);
+}
+
+/* Concentric Brushed Metallic Shutter Button */
+.shutter-btn-outer.fimo-metallic-shutter {
+  width: 62px;
+  height: 62px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 45% 40%, #ffffff 0%, #d4d4d8 28%, #a1a1aa 60%, #52525b 90%, #27272a 100%);
+  border: 2.5px solid #18181b;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.65), inset 0 2px 4px rgba(255, 255, 255, 0.9);
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.12s ease;
+  position: relative;
+}
+
+.shutter-btn-outer.fimo-metallic-shutter:active {
+  transform: scale(0.92);
+}
+
+.fimo-shutter-concentric {
+  width: 46px;
+  height: 46px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #f4f4f5 0%, #e4e4e7 35%, #a1a1aa 75%, #71717a 100%);
+  box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.8), 0 2px 6px rgba(0, 0, 0, 0.35);
+  border: 1px solid rgba(0, 0, 0, 0.25);
+  position: relative;
+}
+
+.fimo-shutter-concentric::after {
+  content: '';
+  position: absolute;
+  inset: 6px;
+  border-radius: 50%;
+  border: 0.8px dashed rgba(0, 0, 0, 0.18);
+  pointer-events: none;
+}
+
+/* Equipped Miniature Camera Body Button in Shutter Row */
+.bottom-quick-btn.fimo-equipped-mini-btn {
+  width: 46px;
+  height: 46px;
+  border-radius: 14px;
+  background: rgba(26, 28, 34, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  padding: 3px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  overflow: hidden;
+}
+
+.bottom-quick-btn.fimo-equipped-mini-btn:hover {
+  background: rgba(40, 44, 54, 0.95);
+  border-color: #ff6b35;
+  transform: translateY(-1px);
+}
+
+.fimo-mini-cam-render {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.fimo-mini-cam-render svg {
+  width: 38px;
+  height: 28px;
+}
+
+/* ==========================================================================
+   5. FIMO Luxury Camera Selector / Showcase View (Modal)
+   ========================================================================== */
+.fimo-modal-backdrop {
+  background: rgba(0, 0, 0, 0.92) !important;
+  backdrop-filter: blur(32px) !important;
+  -webkit-backdrop-filter: blur(32px) !important;
+}
+
+.fimo-selector-dialog {
+  width: 100% !important;
+  max-width: 440px !important;
+  height: 100% !important;
+  max-height: 100dvh !important;
+  max-height: 100vh !important;
+  background: #090a0f !important;
+  border-radius: 0 !important;
+  border: none !important;
+  display: flex !important;
+  flex-direction: column !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+  position: relative !important;
+}
+
+.fimo-selector-topbar {
+  padding: max(14px, env(safe-area-inset-top, 14px)) 16px 8px 16px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.fimo-poetic-title {
+  font-family: "Nanum Myeongjo", "Song Myung", "Times New Roman", serif;
+  font-size: 15px;
+  font-weight: 400;
+  color: rgba(255, 255, 255, 0.88);
+  letter-spacing: 1.2px;
+  margin: 0;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.7);
+}
+
+/* Membership Banner */
+.fimo-membership-banner {
+  margin: 4px 14px 10px 14px;
+  background: rgba(28, 30, 36, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 10px 16px;
+  flex-shrink: 0;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+}
+
+.fimo-banner-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.fimo-banner-gold {
+  color: #f5c767;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+}
+
+.fimo-banner-white {
+  color: #fff;
+  font-size: 12.5px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.fimo-banner-arrow {
+  font-size: 14px;
+  color: rgba(255, 255, 255, 0.6);
+}
+
+/* Modal Body */
+.fimo-selector-body {
+  padding: 0 14px 90px 14px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  flex: 1 1 auto !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 10px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Hero Showcase Photo Card */
+.fimo-hero-card {
+  width: 100%;
+  aspect-ratio: 1.15 / 1;
+  max-height: 380px;
+  border-radius: 20px;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+  flex-shrink: 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.fimo-hero-photo-wrap {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.fimo-hero-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.fimo-hero-gradient-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(0,0,0,0.15) 0%, rgba(0,0,0,0) 40%, rgba(0,0,0,0.75) 100%);
+  pointer-events: none;
+}
+
+.fimo-hero-bottom-info {
+  position: absolute;
+  left: 14px;
+  bottom: 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  z-index: 10;
+}
+
+.fimo-hero-icon-box {
+  width: 52px;
+  height: 38px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.6));
+}
+
+.fimo-hero-icon-box svg {
+  width: 100%;
+  height: 100%;
+}
+
+.fimo-hero-text-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+}
+
+.fimo-hero-name {
+  font-size: 17px;
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: -0.2px;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+}
+
+.fimo-hero-sub {
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.65);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", sans-serif;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+.fimo-hero-cta {
+  font-size: 10.5px;
+  font-weight: 700;
+  color: #ff6b35;
+  margin-top: 2px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+}
+
+/* Stacked 3 Thumbnails on right edge */
+.fimo-hero-thumbs-col {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 10;
+}
+
+.fimo-hero-thumb-wrap {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  cursor: pointer;
+  transition: transform 0.18s ease;
+}
+
+.fimo-hero-thumb-wrap:hover {
+  transform: scale(1.08);
+}
+
+.fimo-hero-thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Hero Drawer Back Handle (‹) */
+.fimo-hero-drawer-handle {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 18px;
+  height: 52px;
+  background: rgba(30, 32, 38, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-right: none;
+  border-radius: 12px 0 0 12px;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 15;
+  padding: 0;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.5);
+}
+
+/* "All" Section Divider */
+.fimo-all-section-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 4px 2px 4px;
+}
+
+.fimo-all-label {
+  font-size: 14px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.8);
+  letter-spacing: -0.2px;
+}
+
+.fimo-all-hairline {
+  flex: 1;
+  height: 1px;
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* Category Pills Row */
+.fimo-cat-pills-row {
+  display: flex;
+  gap: 5px;
+  overflow-x: auto;
+  width: 100%;
+  padding-bottom: 4px;
+}
+
+.fimo-cat-pills-row::-webkit-scrollbar {
+  display: none;
+}
+
+/* 4-Column Compact Camera Grid */
+.fimo-4column-grid {
+  display: grid !important;
+  grid-template-columns: repeat(4, 1fr) !important;
+  gap: 14px 6px !important;
+  width: 100% !important;
+  padding: 6px 0 !important;
+}
+
+/* 4-Column Camera Card (.bag-cam-card override) */
+.fimo-4column-grid .bag-cam-card {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0 !important;
+  cursor: pointer !important;
+  position: relative !important;
+  width: auto !important;
+  min-width: 0 !important;
+}
+
+.fimo-4column-grid .card-hero-stage {
+  width: 100% !important;
+  max-width: 78px !important;
+  height: 52px !important;
+  background: transparent !important;
+  border: none !important;
+  position: relative !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.fimo-4column-grid .card-camera-render {
+  width: 68px !important;
+  height: 46px !important;
+  filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.65)) !important;
+  transition: transform 0.2s ease !important;
+}
+
+.fimo-4column-grid .bag-cam-card:hover .card-camera-render {
+  transform: scale(1.08) !important;
+}
+
+/* Gold Star/Flower [N] Badge */
+.fimo-new-badge {
+  position: absolute;
+  top: 1px;
+  right: 4px;
+  width: 15px;
+  height: 15px;
+  background: #f5c767;
+  color: #111;
+  font-size: 9px;
+  font-weight: 900;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 6px rgba(245, 199, 103, 0.7);
+  z-index: 5;
+}
+
+/* Camera Title below body */
+.fimo-4column-grid .card-info-content {
+  align-items: center !important;
+  text-align: center !important;
+  padding: 4px 0 0 0 !important;
+  width: 100% !important;
+}
+
+.fimo-4column-grid .card-title {
+  font-size: 10.5px !important;
+  font-weight: 700 !important;
+  color: rgba(255, 255, 255, 0.7) !important;
+  letter-spacing: -0.2px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  max-width: 100% !important;
+  padding-bottom: 2px !important;
+  transition: color 0.18s ease !important;
+}
+
+/* Active Highlight with Orange Underline */
+.fimo-4column-grid .bag-cam-card.equipped .card-title {
+  color: #fff !important;
+  font-weight: 800 !important;
+  border-bottom: 2px solid #ff6b35 !important;
+}
+
+/* Hide extraneous elements in 4-column compact grid */
+.fimo-4column-grid .card-brand-header,
+.fimo-4column-grid .card-desc,
+.fimo-4column-grid .card-filter-summary,
+.fimo-4column-grid .card-mount-action,
+.fimo-4column-grid .card-ambient-spotlight {
+  display: none !important;
+}
+
+/* Floating Action Buttons */
+.fimo-floating-actions-bar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 16px;
+  pointer-events: none;
+  z-index: 40;
+}
+
+.fimo-frosted-pill-btn {
+  pointer-events: auto;
+  background: rgba(36, 38, 46, 0.75);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  border-radius: 28px;
+  padding: 8px 16px;
+  color: #fff;
+  font-size: 12.5px;
+  font-weight: 700;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+  transition: all 0.2s ease;
+}
+
+.fimo-frosted-pill-btn:hover {
+  background: rgba(50, 54, 64, 0.9);
+  transform: translateY(-2px);
+}
+
+.fimo-metallic-circle-btn {
+  pointer-events: auto;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: radial-gradient(circle at 45% 40%, #ffffff 0%, #d4d4d8 28%, #a1a1aa 60%, #52525b 90%, #27272a 100%);
+  border: 2px solid #18181b;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.65), inset 0 2px 4px rgba(255, 255, 255, 0.9);
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.15s ease;
+}
+
+.fimo-metallic-circle-btn:hover {
+  transform: scale(1.06);
+}
+
+.fimo-metallic-circle-inner {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #f4f4f5 0%, #e4e4e7 35%, #a1a1aa 75%, #71717a 100%);
+  box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.8), 0 2px 6px rgba(0, 0, 0, 0.35);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #18181b;
+}
+
+/* 6. Bottom iOS 4-Tab Bar */
+.fimo-bottom-tabbar {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 48px;
+  background: rgba(12, 14, 18, 0.96);
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding-bottom: env(safe-area-inset-bottom, 0);
+  z-index: 50;
+}
+
+.fimo-tab-item {
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.45);
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 6px 12px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  transition: color 0.18s ease;
+}
+
+.fimo-tab-item.active {
+  color: #ff6b35;
+}
+
+.fimo-tab-item:hover {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+.fimo-tab-orange-underline {
+  width: 20px;
+  height: 2px;
+  background: #ff6b35;
+  border-radius: 1px;
 }
 
 /* ==========================================================================

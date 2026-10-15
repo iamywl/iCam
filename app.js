@@ -68,8 +68,150 @@ const state = {
   lensFilter: 'none', // 'none' | 'mist' | 'star' | 'streak' | 'prism' | 'cpl'
   
   // Captures
-  lastCapturedUrl: null
+  lastCapturedUrl: null,
+
+  // FIMO Analog Viewfinder & Deck State
+  fimoDateEnabled: true,
+  fimoCaptionEnabled: false,
+  fimoZoomLevel: 1.0,
+  fimoFilmRemaining: 24,
+  fimoFilmTotal: 27
 };
+
+// FIMO Persona & Showcase Personas for 16 Collectible Camera Bodies
+const FIMO_CAMERA_PERSONAS = {
+  'kyocera-samurai': {
+    personaName: 'Osaka Classic',
+    isNew: true,
+    subtitle: 'half frame 72',
+    heroImg: 'assets/hero/kyocera-samurai_hero.png',
+    thumbs: ['assets/hero/kyocera-samurai_hero.png', 'assets/hero/seoul_instc_hero.jpg', 'assets/hero/thumb_cat1.jpg']
+  },
+  'sihyun-color': {
+    personaName: 'Butterfilm',
+    isNew: true,
+    subtitle: 'personal color studio',
+    heroImg: 'assets/hero/sihyun-color_hero.png',
+    thumbs: ['assets/hero/sihyun-color_hero.png', 'assets/hero/thumb_cat2.jpg', 'assets/hero/thumb_cat3.jpg']
+  },
+  'instax-mini': {
+    personaName: 'Seoul instc',
+    isNew: false,
+    subtitle: 'film white',
+    heroImg: 'assets/hero/seoul_instc_hero.jpg',
+    thumbs: ['assets/hero/thumb_cat1.jpg', 'assets/hero/thumb_cat2.jpg', 'assets/hero/thumb_cat3.jpg']
+  },
+  'olympus-mju': {
+    personaName: 'Lime Memory',
+    isNew: false,
+    subtitle: 'all-weather 35mm',
+    heroImg: 'assets/hero/olympus-mju_hero.png',
+    thumbs: ['assets/hero/olympus-mju_hero.png', 'assets/hero/thumb_cat1.jpg', 'assets/hero/thumb_cat2.jpg']
+  },
+  'canon-ixy': {
+    personaName: 'Cold Snap',
+    isNew: false,
+    subtitle: 'y2k peach ccd',
+    heroImg: 'assets/hero/canon-ixy_hero.png',
+    thumbs: ['assets/hero/canon-ixy_hero.png', 'assets/hero/thumb_cat3.jpg', 'assets/hero/thumb_cat1.jpg']
+  },
+  'ricoh-gr': {
+    personaName: 'Nature Core',
+    isNew: false,
+    subtitle: '28mm street snap',
+    heroImg: 'assets/hero/ricoh-gr_hero.png',
+    thumbs: ['assets/hero/ricoh-gr_hero.png', 'assets/hero/thumb_cat2.jpg', 'assets/hero/thumb_cat1.jpg']
+  },
+  'contax-t2': {
+    personaName: 'Pearl 08',
+    isNew: false,
+    subtitle: 'titanium zeiss t*',
+    heroImg: 'assets/hero/contax-t2_hero.png',
+    thumbs: ['assets/hero/contax-t2_hero.png', 'assets/hero/thumb_cat1.jpg', 'assets/hero/thumb_cat3.jpg']
+  },
+  'fuji-quicksnap': {
+    personaName: 'Sunny Saver',
+    isNew: false,
+    subtitle: 'disposable 1986',
+    heroImg: 'assets/hero/fuji-quicksnap_hero.png',
+    thumbs: ['assets/hero/fuji-quicksnap_hero.png', 'assets/hero/thumb_cat1.jpg', 'assets/hero/thumb_cat2.jpg']
+  },
+  'sony-handycam': {
+    personaName: 'Lazy Monkey',
+    isNew: false,
+    subtitle: 'minidv 3ccd camcorder',
+    heroImg: 'assets/hero/sony-handycam_hero.png',
+    thumbs: ['assets/hero/sony-handycam_hero.png', 'assets/hero/thumb_cat3.jpg', 'assets/hero/thumb_cat2.jpg']
+  },
+  'sony-cybershot': {
+    personaName: 'Night Tape 98',
+    isNew: false,
+    subtitle: 'cyber cool blue',
+    heroImg: 'assets/hero/sony-cybershot_hero.png',
+    thumbs: ['assets/hero/sony-cybershot_hero.png', 'assets/hero/thumb_cat1.jpg', 'assets/hero/thumb_cat3.jpg']
+  },
+  'citypop-80s': {
+    personaName: 'Pocari Blue',
+    isNew: false,
+    subtitle: 'sunset neon 1986',
+    heroImg: 'assets/hero/citypop-80s_hero.png',
+    thumbs: ['assets/hero/citypop-80s_hero.png', 'assets/hero/thumb_cat2.jpg', 'assets/hero/thumb_cat1.jpg']
+  },
+  'oldfilm-35mm': {
+    personaName: "Wedding '95",
+    isNew: false,
+    subtitle: 'portra 400 halation',
+    heroImg: 'assets/hero/oldfilm-35mm_hero.png',
+    thumbs: ['assets/hero/oldfilm-35mm_hero.png', 'assets/hero/thumb_cat1.jpg', 'assets/hero/thumb_cat2.jpg']
+  },
+  'polaroid-sx70': {
+    personaName: 'Ohio Summer',
+    isNew: false,
+    subtitle: 'vintage folding instant',
+    heroImg: 'assets/hero/polaroid-sx70_hero.png',
+    thumbs: ['assets/hero/polaroid-sx70_hero.png', 'assets/hero/thumb_cat3.jpg', 'assets/hero/thumb_cat1.jpg']
+  },
+  'leica-m': {
+    personaName: 'Day Classic',
+    isNew: false,
+    subtitle: 'summilux rangefinder',
+    heroImg: 'assets/hero/leica-m_hero.png',
+    thumbs: ['assets/hero/leica-m_hero.png', 'assets/hero/thumb_cat2.jpg', 'assets/hero/thumb_cat3.jpg']
+  },
+  'hasselblad-500cm': {
+    personaName: 'Dark Akan 77',
+    isNew: false,
+    subtitle: 'medium format 6x6',
+    heroImg: 'assets/hero/hasselblad_hero.png',
+    thumbs: ['assets/hero/hasselblad_hero.png', 'assets/hero/thumb_cat1.jpg', 'assets/hero/thumb_cat2.jpg']
+  },
+  'passport-id': {
+    personaName: 'Passport ID',
+    isNew: false,
+    subtitle: 'official 3.5x4.5 studio',
+    heroImg: 'assets/hero/passport-id_hero.png',
+    thumbs: ['assets/hero/passport-id_hero.png', 'assets/hero/thumb_cat3.jpg', 'assets/hero/thumb_cat2.jpg']
+  }
+};
+
+const FIMO_ORDERED_CAMERAS = [
+  'kyocera-samurai',
+  'sihyun-color',
+  'instax-mini',
+  'olympus-mju',
+  'canon-ixy',
+  'ricoh-gr',
+  'contax-t2',
+  'fuji-quicksnap',
+  'sony-handycam',
+  'sony-cybershot',
+  'citypop-80s',
+  'oldfilm-35mm',
+  'polaroid-sx70',
+  'leica-m',
+  'hasselblad-500cm',
+  'passport-id'
+];
 
 // Authentic High-Detail Vector SVG Icons for 16 Iconic Cameras & Collectible Bodies
 const CAM_SVG_ICONS = {
@@ -1585,6 +1727,10 @@ function switchCamera(camId) {
   if (badgeIcon) badgeIcon.innerHTML = CAM_SVG_ICONS[camId] || CAM_SVG_ICONS['default'];
   if (badgeSub) badgeSub.textContent = cam.sub;
 
+  // Update FIMO Showcase Hero Card & Viewfinder Mini Camera Body Button
+  updateFimoHeroCard(camId);
+  updateFimoMiniCamRender(camId);
+
   // 5. Update Equipped State in Camera Bag Modal Cards
   document.querySelectorAll('.camera-bag-grid .bag-cam-card').forEach(card => {
     const isEq = card.dataset.cam === camId;
@@ -2485,6 +2631,13 @@ function executeCapture() {
       const nextExp = Math.min(27, curr + 1);
       counterEl.textContent = `EXP [ ${nextExp} / 27 ]`;
     }
+  }
+
+  // Decrement FIMO analog film remaining gauge
+  if (state.fimoFilmRemaining > 0) {
+    state.fimoFilmRemaining--;
+    const gaugeEl = document.getElementById('fimo-gauge-curr');
+    if (gaugeEl) gaugeEl.textContent = state.fimoFilmRemaining;
   }
 
   const flashScreen = document.getElementById('flash-screen');
@@ -3724,111 +3877,279 @@ function closeCameraBagModal() {
   }
 }
 
+function updateFimoHeroCard(camId) {
+  const persona = FIMO_CAMERA_PERSONAS[camId];
+  if (!persona) return;
+
+  const heroImg = document.getElementById('fimo-hero-photo');
+  if (heroImg && persona.heroImg) {
+    heroImg.src = persona.heroImg;
+  }
+
+  const iconBox = document.getElementById('fimo-hero-icon-box');
+  if (iconBox) {
+    iconBox.innerHTML = CAM_SVG_ICONS[camId] || CAM_SVG_ICONS['default'];
+  }
+
+  const nameEl = document.getElementById('fimo-hero-name');
+  if (nameEl) nameEl.textContent = persona.personaName;
+
+  const subEl = document.getElementById('fimo-hero-sub');
+  if (subEl) subEl.textContent = persona.subtitle;
+
+  if (persona.thumbs && persona.thumbs.length >= 3) {
+    const t1 = document.getElementById('fimo-hero-thumb-1');
+    const t2 = document.getElementById('fimo-hero-thumb-2');
+    const t3 = document.getElementById('fimo-hero-thumb-3');
+    if (t1) t1.src = persona.thumbs[0];
+    if (t2) t2.src = persona.thumbs[1];
+    if (t3) t3.src = persona.thumbs[2];
+  }
+}
+
+function updateFimoMiniCamRender(camId) {
+  const miniEl = document.getElementById('fimo-mini-cam-render');
+  if (miniEl) {
+    miniEl.innerHTML = CAM_SVG_ICONS[camId] || CAM_SVG_ICONS['default'];
+  }
+}
+
 function renderCameraBagGrid(filterCat = 'all', filterBrand = 'all') {
   const grid = document.getElementById('camera-bag-grid');
   if (!grid) return;
 
   grid.innerHTML = '';
 
-  const brandEntries = Object.values(CAMERA_BRANDS);
-  brandEntries.forEach(brand => {
-    if (filterBrand !== 'all' && brand.id !== filterBrand) return;
+  const camList = FIMO_ORDERED_CAMERAS.filter(camId => {
+    if (!CAMERAS[camId]) return false;
+    if (filterBrand !== 'all') {
+      const bKey = Object.keys(CAMERA_BRANDS).find(b => CAMERA_BRANDS[b].cams.includes(camId));
+      if (bKey !== filterBrand) return false;
+    }
+    if (filterCat !== 'all') {
+      return getCameraCategory(camId) === filterCat;
+    }
+    return true;
+  });
 
-    // Find cameras of this brand matching current filterCat
-    const matchingCams = brand.cams.filter(camId => {
-      if (!CAMERAS[camId]) return false;
-      if (filterCat !== 'all') {
-        return getCameraCategory(camId) === filterCat;
-      }
-      return true;
-    });
+  camList.forEach(camId => {
+    const cam = CAMERAS[camId];
+    const cat = getCameraCategory(camId);
+    const isEquipped = state.activeCamera === camId;
+    const persona = FIMO_CAMERA_PERSONAS[camId] || {
+      personaName: cam.name,
+      isNew: false,
+      subtitle: cam.sub,
+      heroImg: 'assets/hero/seoul_instc_hero.jpg',
+      thumbs: ['assets/hero/thumb_cat1.jpg', 'assets/hero/thumb_cat2.jpg', 'assets/hero/thumb_cat3.jpg']
+    };
 
-    if (matchingCams.length === 0) return;
+    const card = document.createElement('div');
+    card.className = `bag-cam-card ${isEquipped ? 'equipped' : ''}`;
+    card.dataset.cam = camId;
+    card.dataset.cat = cat;
 
-    // Luxury Brand Section Container
-    const section = document.createElement('div');
-    section.className = 'bag-brand-section';
-    section.dataset.brand = brand.id;
-
-    // Elegant Full-Width Brand Header Divider
-    const divider = document.createElement('div');
-    divider.className = 'bag-brand-divider';
-    divider.dataset.brand = brand.id;
-    divider.innerHTML = `
-      <div class="brand-divider-left">
-        <span class="brand-divider-ico">${brand.iconText}</span>
-        <span class="brand-divider-title">${brand.name}</span>
-        <span class="brand-divider-kor">${brand.koreanName}</span>
+    card.innerHTML = `
+      <div class="card-hero-stage">
+        ${persona.isNew ? '<span class="fimo-new-badge">N</span>' : ''}
+        <div class="card-camera-render">
+          ${CAM_SVG_ICONS[camId] || CAM_SVG_ICONS['default']}
+        </div>
       </div>
-      <div class="brand-divider-right">
-        <span class="brand-divider-origin">${brand.country}</span>
-        <span class="brand-divider-count">${matchingCams.length} MODEL${matchingCams.length > 1 ? 'S' : ''}</span>
+      <div class="card-info-content">
+        <div class="card-title">${persona.personaName}</div>
       </div>
     `;
-    section.appendChild(divider);
 
-    // Cards list for this brand
-    const cardsList = document.createElement('div');
-    cardsList.className = 'bag-brand-cards';
-
-    matchingCams.forEach(camId => {
-      const cam = CAMERAS[camId];
-      const cat = getCameraCategory(camId);
-      const isEquipped = state.activeCamera === camId;
-
-      const card = document.createElement('div');
-      card.className = `bag-cam-card ${isEquipped ? 'equipped' : ''}`;
-      card.dataset.cam = camId;
-      card.dataset.cat = cat;
-      card.dataset.brand = brand.id;
-
-      let filterCount = cam.filters ? Object.keys(cam.filters).length : 0;
-      let filterSummary = `${filterCount} Film Presets`;
-      if (cam.filters) {
-        const filterNames = Object.values(cam.filters).map(f => f.name).slice(0, 2).join(', ');
-        filterSummary = `${filterCount}종 필터 • ${filterNames}`;
-      }
-
-      card.innerHTML = `
-        <div class="card-hero-stage">
-          <div class="card-ambient-spotlight spotlight-${brand.id}"></div>
-          <div class="card-camera-render">
-            ${CAM_SVG_ICONS[camId] || CAM_SVG_ICONS['default']}
-          </div>
-        </div>
-
-        <div class="card-info-content">
-          <div class="card-brand-header">
-            <span class="card-brand-tag">${brand.name}</span>
-            <span class="card-badge-pill">${cam.badge}</span>
-          </div>
-          <div class="card-title">${cam.name}</div>
-          <div class="card-desc">${cam.sub}</div>
-          <div class="card-filter-summary">${filterSummary}</div>
-        </div>
-
-        <div class="card-mount-action">
-          <span class="card-mount-status ${isEquipped ? 'mounted' : ''}">
-            ${isEquipped ? '● 장착 중' : '○ 선택 가능'}
-          </span>
-          <button class="card-mount-btn ${isEquipped ? 'active' : ''}">
-            ${isEquipped ? '장착됨' : '장착'}
-          </button>
-        </div>
-      `;
-
-      card.addEventListener('click', () => {
-        soundEngine.playMount();
-        switchCamera(camId);
-        closeCameraBagModal();
-      });
-
-      cardsList.appendChild(card);
+    card.addEventListener('click', () => {
+      soundEngine.playMount();
+      switchCamera(camId);
+      updateFimoHeroCard(camId);
+      closeCameraBagModal();
     });
 
-    section.appendChild(cardsList);
-    grid.appendChild(section);
+    grid.appendChild(card);
   });
+}
+
+function initFimoUI() {
+  // 1. Right Edge Floating Drawer Tab on Viewfinder (‹)
+  const vfDrawerTab = document.getElementById('fimo-vf-drawer-tab');
+  if (vfDrawerTab) {
+    vfDrawerTab.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openCameraBagModal();
+    });
+  }
+
+  // 2. Floating Viewfinder Back Button in Selector (📷)
+  const btnBackVf = document.getElementById('btn-fimo-back-vf');
+  if (btnBackVf) {
+    btnBackVf.addEventListener('click', (e) => {
+      e.stopPropagation();
+      closeCameraBagModal();
+    });
+  }
+
+  // 3. Floating Apply Filter Pill Button (🎞 필터 입히기)
+  const btnApplyFilter = document.getElementById('btn-fimo-apply-filter');
+  const userPhotoUpload = document.getElementById('user-photo-upload');
+  if (btnApplyFilter && userPhotoUpload) {
+    btnApplyFilter.addEventListener('click', (e) => {
+      e.stopPropagation();
+      userPhotoUpload.click();
+    });
+  }
+
+  // 4. Viewfinder Status Line Toggles (날짜 ON / 사진 문구 OFF)
+  const toggleDate = document.getElementById('fimo-toggle-date');
+  if (toggleDate) {
+    toggleDate.addEventListener('click', (e) => {
+      e.stopPropagation();
+      soundEngine.playTick();
+      state.fimoDateEnabled = !state.fimoDateEnabled;
+      toggleDate.classList.toggle('active', state.fimoDateEnabled);
+      toggleDate.innerHTML = `날짜 <b class="${state.fimoDateEnabled ? 'fimo-val-on' : 'fimo-val-off'}">${state.fimoDateEnabled ? 'ON' : 'OFF'}</b>`;
+      const dateOverlay = document.getElementById('date-stamp');
+      if (dateOverlay) {
+        dateOverlay.style.display = state.fimoDateEnabled ? 'block' : 'none';
+      }
+      showDynamicIslandBanner('DATE STAMP', state.fimoDateEnabled ? 'ENABLED' : 'DISABLED', 1200);
+    });
+  }
+
+  const toggleCaption = document.getElementById('fimo-toggle-caption');
+  if (toggleCaption) {
+    toggleCaption.addEventListener('click', (e) => {
+      e.stopPropagation();
+      soundEngine.playTick();
+      state.fimoCaptionEnabled = !state.fimoCaptionEnabled;
+      toggleCaption.classList.toggle('active', state.fimoCaptionEnabled);
+      toggleCaption.innerHTML = `사진 문구 <b class="${state.fimoCaptionEnabled ? 'fimo-val-on' : 'fimo-val-off'}">${state.fimoCaptionEnabled ? 'ON' : 'OFF'}</b>`;
+      showDynamicIslandBanner('PHOTO CAPTION', state.fimoCaptionEnabled ? 'ON' : 'OFF', 1200);
+    });
+  }
+
+  // 5. Tactile Zoom Ruler Deck
+  const zoomTicks = document.querySelectorAll('#fimo-zoom-ruler-ticks .fimo-tick-stop');
+  const zoomMag = document.getElementById('fimo-zoom-mag');
+  const zoomFocal = document.getElementById('fimo-zoom-focal');
+  const rulerPointer = document.querySelector('.fimo-ruler-pointer');
+  const videoMedia = document.getElementById('camera-video');
+  const modelMedia = document.getElementById('model-canvas');
+
+  const zoomPositions = {
+    '1.0': '10%',
+    '1.5': '32%',
+    '2.0': '55%',
+    '3.0': '78%',
+    '5.0': '95%'
+  };
+
+  zoomTicks.forEach(tick => {
+    tick.addEventListener('click', (e) => {
+      e.stopPropagation();
+      soundEngine.playTick();
+      const zVal = tick.dataset.zoom || '1.0';
+      const fVal = tick.dataset.focal || '28';
+      state.fimoZoomLevel = parseFloat(zVal);
+
+      zoomTicks.forEach(t => t.classList.toggle('active', t === tick));
+      if (zoomMag) zoomMag.textContent = `${zVal}x`;
+      if (zoomFocal) zoomFocal.textContent = `· ${fVal}mm`;
+      if (rulerPointer && zoomPositions[zVal]) {
+        rulerPointer.style.left = zoomPositions[zVal];
+      }
+
+      // Smooth zoom scaling on viewfinder media
+      const scaleStr = `scale(${state.fimoZoomLevel})`;
+      if (videoMedia) videoMedia.style.transform = scaleStr;
+      if (modelMedia) modelMedia.style.transform = scaleStr;
+
+      showDynamicIslandBanner('ZOOM', `${zVal}x (${fVal}mm)`, 1000);
+    });
+  });
+
+  // 6. 4 Hardware Round Buttons
+  const hwMore = document.getElementById('fimo-hw-more');
+  if (hwMore) {
+    hwMore.addEventListener('click', (e) => {
+      e.stopPropagation();
+      soundEngine.playTick();
+      const popover = document.getElementById('lens-filter-popover');
+      if (popover) popover.classList.toggle('open');
+    });
+  }
+
+  const hwFlash = document.getElementById('fimo-hw-flash');
+  if (hwFlash) {
+    hwFlash.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const btnFlash = document.getElementById('btn-flash');
+      if (btnFlash) btnFlash.click();
+    });
+  }
+
+  const hwExp = document.getElementById('fimo-hw-exp');
+  if (hwExp) {
+    hwExp.addEventListener('click', (e) => {
+      e.stopPropagation();
+      soundEngine.playTick();
+      showDynamicIslandBanner('EXPOSURE', 'EV ±0.0 AUTO', 1200);
+    });
+  }
+
+  const hwFlip = document.getElementById('fimo-hw-flip');
+  if (hwFlip) {
+    hwFlip.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const btnFlip = document.getElementById('btn-flip');
+      if (btnFlip) btnFlip.click();
+    });
+  }
+
+  // 7. Shutter Capsule Photo/Video Mode Buttons
+  const btnModePhoto = document.getElementById('fimo-mode-photo');
+  const btnModeVideo = document.getElementById('fimo-mode-video');
+  if (btnModePhoto && btnModeVideo) {
+    btnModePhoto.addEventListener('click', (e) => {
+      e.stopPropagation();
+      soundEngine.playTick();
+      btnModePhoto.classList.add('active');
+      btnModeVideo.classList.remove('active');
+      showDynamicIslandBanner('MODE', 'STILL PHOTO', 1000);
+    });
+    btnModeVideo.addEventListener('click', (e) => {
+      e.stopPropagation();
+      soundEngine.playTick();
+      btnModeVideo.classList.add('active');
+      btnModePhoto.classList.remove('active');
+      showDynamicIslandBanner('MODE', 'VIDEO QUICKTAKE', 1000);
+    });
+  }
+
+  // 8. Bottom iOS Tab Bar
+  const tabDrop = document.getElementById('fimo-tab-drop');
+  const tabMuseum = document.getElementById('fimo-tab-museum');
+  const tabCamera = document.getElementById('fimo-tab-camera');
+  const tabMy = document.getElementById('fimo-tab-my');
+
+  if (tabDrop) tabDrop.addEventListener('click', () => openGalleryModal());
+  if (tabMuseum) tabMuseum.addEventListener('click', () => openGalleryModal());
+  if (tabCamera) tabCamera.addEventListener('click', () => {
+    soundEngine.playTick();
+    const modal = document.getElementById('camera-bag-modal');
+    if (modal && modal.classList.contains('open')) {
+      closeCameraBagModal();
+    } else {
+      openCameraBagModal();
+    }
+  });
+  if (tabMy) tabMy.addEventListener('click', () => openGalleryModal());
+
+  // Initial Sync
+  updateFimoHeroCard(state.activeCamera);
+  updateFimoMiniCamRender(state.activeCamera);
 }
 
 function initCameraBagModal() {
@@ -4898,6 +5219,7 @@ window.addEventListener('DOMContentLoaded', () => {
   opticalFlareEngine.init();
   initEventListeners();
   initDeviceAndOSSwitcher();
+  initFimoUI();
 
   // Connect Start Camera button and viewfinder touch
   const btnStartCam = document.getElementById('btn-start-camera');

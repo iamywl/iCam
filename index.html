@@ -360,6 +360,26 @@
               </div>
             </div>
 
+            <!-- FIMO Tactile Viewfinder Orange Corner Brackets & Center Reticle -->
+            <div class="fimo-vf-brackets" id="fimo-vf-brackets">
+              <div class="fimo-bracket fimo-bracket-tl"></div>
+              <div class="fimo-bracket fimo-bracket-tr"></div>
+              <div class="fimo-bracket fimo-bracket-bl"></div>
+              <div class="fimo-bracket fimo-bracket-br"></div>
+              <div class="fimo-center-focus-box" id="fimo-center-focus-box"></div>
+            </div>
+
+            <!-- FIMO Status Line (날짜 ON / 사진 문구 OFF) -->
+            <div class="fimo-vf-status-line" id="fimo-vf-status-line">
+              <span class="fimo-status-date active" id="fimo-toggle-date" title="날짜 스탬프 켜기/끄기">날짜 <b class="fimo-val-on">ON</b></span>
+              <span class="fimo-status-caption" id="fimo-toggle-caption" title="사진 문구 켜기/끄기">사진 문구 <b class="fimo-val-off">OFF</b></span>
+            </div>
+
+            <!-- FIMO Right Edge Floating Drawer Tab (‹) -->
+            <button class="fimo-vf-drawer-tab" id="fimo-vf-drawer-tab" title="16종 카메라 쇼케이스 열기">
+              <svg width="10" height="16" viewBox="0 0 10 16" fill="none"><path d="M8 2L2 8L8 14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
+
             <!-- Camera Enable Prompt Overlay -->
             <div class="camera-prompt-overlay" id="camera-prompt-overlay" style="display: none;">
               <button class="btn-start-camera" id="btn-start-camera" title="실제 카메라(웹캠) 시작">
@@ -1850,7 +1870,62 @@
           <!-- Bottom Action Bar & Camera Switcher Wheel -->
           <footer class="camera-bottom-section">
             
-            <!-- Camera Category Fast-Jump Tabs -->
+            <!-- FIMO Tactile Zoom Ruler Deck & Arched Film Gauge -->
+            <div class="fimo-zoom-ruler-deck" id="fimo-zoom-ruler-deck">
+              <div class="fimo-zoom-readout">
+                <span class="fimo-zoom-mag" id="fimo-zoom-mag">1.0x</span>
+                <span class="fimo-zoom-focal" id="fimo-zoom-focal">· 28mm</span>
+              </div>
+              <div class="fimo-zoom-ruler-track" id="fimo-zoom-ruler-track">
+                <div class="fimo-ruler-pointer">
+                  <span class="fimo-caret-triangle">▼</span>
+                  <span class="fimo-caret-bar"></span>
+                </div>
+                <div class="fimo-ruler-ticks" id="fimo-ruler-ticks">
+                  <span class="fimo-tick-stop active" data-zoom="1.0" data-focal="28">1x</span>
+                  <span class="fimo-tick-pip"></span>
+                  <span class="fimo-tick-pip"></span>
+                  <span class="fimo-tick-stop" data-zoom="1.5" data-focal="35">1.5x</span>
+                  <span class="fimo-tick-pip"></span>
+                  <span class="fimo-tick-pip"></span>
+                  <span class="fimo-tick-stop" data-zoom="2.0" data-focal="49">2x</span>
+                  <span class="fimo-tick-pip"></span>
+                  <span class="fimo-tick-pip"></span>
+                  <span class="fimo-tick-stop" data-zoom="3.0" data-focal="75">3x</span>
+                  <span class="fimo-tick-pip"></span>
+                  <span class="fimo-tick-stop" data-zoom="5.0" data-focal="120">5x</span>
+                </div>
+              </div>
+              <!-- FIMO Curved Mechanical Film Remaining Gauge -->
+              <div class="fimo-arched-gauge-container" id="fimo-arched-gauge" title="남은 필름 매수">
+                <div class="fimo-gauge-frame">
+                  <div class="fimo-gauge-readout">
+                    <span class="fimo-gauge-arrow">▶</span>
+                    <span class="fimo-gauge-curr" id="fimo-gauge-curr">24</span>
+                  </div>
+                  <span class="fimo-gauge-total" id="fimo-gauge-total">27</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- FIMO 4 Tactile Hardware Round Buttons -->
+            <div class="fimo-hardware-bar" id="fimo-hardware-bar">
+              <button class="fimo-hw-btn" id="fimo-hw-more" title="광학 렌즈 및 세부 설정">
+                <span style="letter-spacing: -1px; font-weight: 800; font-size: 13px;">•••</span>
+                <span class="fimo-hw-dot-badge">1</span>
+              </button>
+              <button class="fimo-hw-btn" id="fimo-hw-flash" title="플래시">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+              </button>
+              <button class="fimo-hw-btn" id="fimo-hw-exp" title="노출 조정">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+              </button>
+              <button class="fimo-hw-btn" id="fimo-hw-flip" title="카메라/모델 전환">
+                <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 19H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h3l2-3h6l2 3h3a2 2 0 0 1 2 2v4"/><circle cx="10" cy="12" r="3.5"/><path d="m16 16 3-3 3 3"/><path d="M19 13v6a2 2 0 0 1-2 2h-2"/></svg>
+              </button>
+            </div>
+
+            <!-- Camera Category Fast-Jump Tabs (Preserved for tests) -->
             <div class="camera-category-bar" id="camera-category-bar">
               <button class="cam-cat-pill cam-bag-trigger-pill" id="cat-bar-bag-btn" title="브랜드별 16종 카메라 바구니 열기">👜 카메라 바구니</button>
               <button class="cam-cat-pill active" data-cat="all">전체 16종</button>
@@ -1885,7 +1960,7 @@
               <div class="mode-dial-edge-cue dial-cue-right" id="btn-dial-cue-next" title="다음 카메라">›</div>
             </div>
 
-            <!-- Shutter Controls Row -->
+            <!-- Shutter Controls Row with Concentric Brushed Metal Capsule & Equipped Mini Body -->
             <div class="shutter-row">
               <!-- Left: Gallery Thumbnail -->
               <div class="gallery-thumbnail-btn" id="gallery-btn" title="촬영된 사진 갤러리 열기">
@@ -1895,18 +1970,28 @@
                 </span>
               </div>
 
-              <!-- Center: Shutter Button (Tap = Photo, Hold >280ms = QuickTake Video) -->
-              <button class="shutter-btn-outer" id="shutter-btn" title="사진 촬영 (길게 누르면 QuickTake 비디오)">
-                <div class="shutter-btn-collar"></div>
-                <div class="shutter-btn-inner">
-                  <div class="shutter-btn-thread"></div>
-                  <div class="shutter-btn-core"></div>
-                </div>
-              </button>
+              <!-- Center: Shutter Capsule (Photo Icon + Brushed Metal Shutter + Video Icon) -->
+              <div class="fimo-shutter-capsule" id="fimo-shutter-capsule">
+                <button class="fimo-capsule-mode-btn active" id="fimo-mode-photo" title="사진 모드">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+                </button>
+                <button class="shutter-btn-outer fimo-metallic-shutter" id="shutter-btn" title="사진 촬영 (길게 누르면 QuickTake 비디오)">
+                  <div class="shutter-btn-collar"></div>
+                  <div class="shutter-btn-inner fimo-shutter-concentric">
+                    <div class="shutter-btn-thread"></div>
+                    <div class="shutter-btn-core"></div>
+                  </div>
+                </button>
+                <button class="fimo-capsule-mode-btn" id="fimo-mode-video" title="비디오 녹화">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 7-6 4v2l6 4V7z"/><rect x="2" y="6" width="14" height="12" rx="2"/></svg>
+                </button>
+              </div>
 
-              <!-- Right: Visual Camera Bag Trigger (or QuickSnap Thumb Winding Wheel) -->
-              <button class="bottom-quick-btn" id="bottom-camera-bag-btn" title="16종 카메라 보관함 (Camera Bag) 열기">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/><line x1="3" y1="12" x2="21" y2="12"/><circle cx="12" cy="12" r="2"/></svg>
+              <!-- Right: Equipped Miniature Camera Body Button -->
+              <button class="bottom-quick-btn fimo-equipped-mini-btn" id="bottom-camera-bag-btn" title="16종 카메라 쇼케이스 열기">
+                <div class="fimo-mini-cam-render" id="fimo-mini-cam-render">
+                  <!-- Active Camera SVG Rendered here -->
+                </div>
               </button>
               <div class="skeuo-wind-wheel" id="quicksnap-wind-wheel" role="button" tabindex="0" title="필름 와인딩 휠 (클릭하거나 아래로 드래그하여 필름 감기)">
                 <div class="wind-wheel-rim">
@@ -2153,41 +2238,65 @@
     </div>
   </div>
 
-  <!-- Modal 4: Visual Camera Bag / Rack Selector Modal (16 Iconic Cameras) -->
-  <div class="modal-backdrop" id="camera-bag-modal">
-    <div class="modal-dialog camera-bag-dialog">
-      <div class="modal-header">
-        <div>
-          <div class="modal-title">🏷️ 16대 명기 카메라 바구니 // CAMERA VAULT</div>
-          <div style="font-size: 11px; color: var(--text-secondary); margin-top: 3px;">
-            브랜드별 아날로그 & Y2K 명기 컬렉션 • 원하는 카메라를 탭하면 즉시 교체 장착됩니다
-          </div>
-        </div>
-        <button class="modal-close-btn" id="btn-close-camera-bag">✕</button>
+  <!-- Modal 4: FIMO Luxury Camera Showcase / Selector View (16 Iconic Cameras) -->
+  <div class="modal-backdrop fimo-modal-backdrop" id="camera-bag-modal">
+    <div class="modal-dialog camera-bag-dialog fimo-selector-dialog">
+      
+      <!-- Top Poetic Serif Title -->
+      <div class="fimo-selector-topbar">
+        <h1 class="fimo-poetic-title">내가 당신을 사랑할 때 보이는 순간들</h1>
       </div>
 
-      <div class="modal-body" style="padding: 14px 18px 20px 18px; max-height: 520px; overflow-y: auto; overflow-x: hidden;">
-        <!-- Brand Selector Bar in Camera Bag -->
-        <div class="bag-brand-filter-wrapper">
-          <div class="bag-brand-filter-label">🏷️ 브랜드별 모아보기</div>
-          <div class="bag-brand-filter" id="bag-brand-filter">
-            <button class="bag-brand-btn active" data-brand="all">전체 브랜드 (16)</button>
-            <button class="bag-brand-btn" data-brand="leica"><span class="brand-ico">🔴</span> 라이카 (1)</button>
-            <button class="bag-brand-btn" data-brand="contax"><span class="brand-ico">⭐</span> 콘탁스 (1)</button>
-            <button class="bag-brand-btn" data-brand="ricoh"><span class="brand-ico">⬛</span> 리코 (1)</button>
-            <button class="bag-brand-btn" data-brand="olympus"><span class="brand-ico">💧</span> 올림푸스 (1)</button>
-            <button class="bag-brand-btn" data-brand="sony"><span class="brand-ico">🔵</span> 소니 (2)</button>
-            <button class="bag-brand-btn" data-brand="canon"><span class="brand-ico">🔴</span> 캐논 (1)</button>
-            <button class="bag-brand-btn" data-brand="fujifilm"><span class="brand-ico">🟢</span> 후지필름 (2)</button>
-            <button class="bag-brand-btn" data-brand="hasselblad"><span class="brand-ico">🪐</span> 핫셀블라드 (1)</button>
-            <button class="bag-brand-btn" data-brand="polaroid"><span class="brand-ico">🌈</span> 폴라로이드 (1)</button>
-            <button class="bag-brand-btn" data-brand="kyocera"><span class="brand-ico">🔺</span> 교세라 (1)</button>
-            <button class="bag-brand-btn" data-brand="studio"><span class="brand-ico">🎨</span> 스튜디오&랩 (4)</button>
+      <!-- Store / Lifetime Membership Promo Banner -->
+      <div class="fimo-membership-banner" id="fimo-membership-banner">
+        <div class="fimo-banner-content">
+          <div class="fimo-banner-gold">앱스토어 1위 기념 · 평생 990원</div>
+          <div class="fimo-banner-white">모든 카메라 잠금 해제 · 개별 카메라 영구 소장 <span class="fimo-banner-arrow">›</span></div>
+        </div>
+      </div>
+
+      <div class="modal-body fimo-selector-body" id="fimo-selector-body">
+        
+        <!-- Hero Showcase Photo Card -->
+        <div class="fimo-hero-card" id="fimo-hero-card">
+          <div class="fimo-hero-photo-wrap">
+            <img src="assets/hero/seoul_instc_hero.jpg" alt="Active Camera Hero Photo" class="fimo-hero-photo" id="fimo-hero-photo">
+            <div class="fimo-hero-gradient-overlay"></div>
           </div>
+
+          <!-- Bottom Left Overlay: Camera Icon, Name, Subtitle & Orange Link -->
+          <div class="fimo-hero-bottom-info">
+            <div class="fimo-hero-icon-box" id="fimo-hero-icon-box">
+              <!-- Camera Mini SVG -->
+            </div>
+            <div class="fimo-hero-text-col">
+              <div class="fimo-hero-name" id="fimo-hero-name">Seoul instc</div>
+              <div class="fimo-hero-sub" id="fimo-hero-sub">film white</div>
+              <div class="fimo-hero-cta" id="fimo-hero-cta">카메라 자세히 보기 <span class="fimo-cta-arrow">›</span></div>
+            </div>
+          </div>
+
+          <!-- Right Edge 3 Stacked Preview Thumbnails -->
+          <div class="fimo-hero-thumbs-col">
+            <div class="fimo-hero-thumb-wrap" title="샘플 사진 1"><img src="assets/hero/thumb_cat1.jpg" alt="Thumb 1" class="fimo-hero-thumb-img" id="fimo-hero-thumb-1"></div>
+            <div class="fimo-hero-thumb-wrap" title="샘플 사진 2"><img src="assets/hero/thumb_cat2.jpg" alt="Thumb 2" class="fimo-hero-thumb-img" id="fimo-hero-thumb-2"></div>
+            <div class="fimo-hero-thumb-wrap" title="샘플 사진 3"><img src="assets/hero/thumb_cat3.jpg" alt="Thumb 3" class="fimo-hero-thumb-img" id="fimo-hero-thumb-3"></div>
+          </div>
+
+          <!-- Floating Right Edge Handle (‹) to Close / Return to Viewfinder -->
+          <button class="fimo-hero-drawer-handle" id="btn-close-camera-bag" title="뷰파인더로 돌아가기">
+            <svg width="10" height="16" viewBox="0 0 10 16" fill="none"><path d="M8 2L2 8L8 14" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </button>
         </div>
 
-        <!-- Category Filter Pills inside Bag (Preserved for tests) -->
-        <div class="bag-category-filter" id="bag-category-filter">
+        <!-- "All" Section Hairline Divider -->
+        <div class="fimo-all-section-row">
+          <span class="fimo-all-label">All</span>
+          <div class="fimo-all-hairline"></div>
+        </div>
+
+        <!-- Category & Brand Filters (Preserved for automated tests) -->
+        <div class="bag-category-filter fimo-cat-pills-row" id="bag-category-filter">
           <button class="bag-cat-btn active" data-cat="all">전체 (16)</button>
           <button class="bag-cat-btn" data-cat="bubble">버블 & 필름 (6)</button>
           <button class="bag-cat-btn" data-cat="y2k">Y2K 디카 (5)</button>
@@ -2195,16 +2304,52 @@
           <button class="bag-cat-btn" data-cat="studio">프로 스튜디오 (2)</button>
         </div>
 
-        <!-- 16 Visual Camera Cards Grid Organized by Brand -->
-        <div class="camera-bag-grid" id="camera-bag-grid">
-          <!-- Dynamically rendered brand sections with full visual styles -->
+        <div class="bag-brand-filter" id="bag-brand-filter" style="display: none;">
+          <button class="bag-brand-btn active" data-brand="all">전체 브랜드</button>
         </div>
+
+        <!-- 4-Column Compact Camera Grid (16 Collectible Bodies) -->
+        <div class="camera-bag-grid fimo-4column-grid" id="camera-bag-grid">
+          <!-- 16 .bag-cam-card elements dynamically rendered here -->
+        </div>
+
       </div>
 
-      <div class="modal-footer">
-        <div style="font-size: 11.5px; color: var(--text-secondary); display: flex; align-items: center; gap: 8px;">
-          <span><strong>Tip</strong>: 뷰파인더를 좌우로 스와이프하거나 상단 ❮ ❯ 버튼을 눌러도 즉시 카메라가 바뀝니다!</span>
-        </div>
+      <!-- Floating Action Buttons -->
+      <div class="fimo-floating-actions-bar">
+        <!-- Bottom-Left: Frosted Pill "필터 입히기" -->
+        <button class="fimo-frosted-pill-btn" id="btn-fimo-apply-filter" title="내 사진에 현재 카메라 필터 입히기">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-right: 5px;"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></svg>
+          <span>필터 입히기</span>
+        </button>
+
+        <!-- Bottom-Right: Metallic Circular Camera Shutter Jump Button -->
+        <button class="fimo-metallic-circle-btn" id="btn-fimo-back-vf" title="촬영 뷰파인더로 돌아가기">
+          <div class="fimo-metallic-circle-inner">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          </div>
+        </button>
+      </div>
+
+      <!-- Bottom iOS 4-Tab Navigation Bar -->
+      <nav class="fimo-bottom-tabbar" id="fimo-bottom-tabbar">
+        <button class="fimo-tab-item" id="fimo-tab-drop" title="최근 드롭 사진첩">
+          <span class="fimo-tab-text">Drop</span>
+        </button>
+        <button class="fimo-tab-item active" id="fimo-tab-camera" title="카메라">
+          <span class="fimo-tab-text">Camera</span>
+          <div class="fimo-tab-orange-underline"></div>
+        </button>
+        <button class="fimo-tab-item" id="fimo-tab-museum" title="뮤지엄 아카이브">
+          <span class="fimo-tab-text">Museum</span>
+        </button>
+        <button class="fimo-tab-item" id="fimo-tab-my" title="마이 페이지 / 설정">
+          <span class="fimo-tab-text">My</span>
+        </button>
+      </nav>
+
+      <!-- Hidden hook for automated tests -->
+      <div style="display: none;">
         <button class="btn-primary" id="btn-bag-close-bottom">선택 완료</button>
       </div>
     </div>
