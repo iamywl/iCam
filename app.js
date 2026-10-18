@@ -5383,6 +5383,19 @@ const DeviceDetector = window.DeviceDetector = {
     if (hudViewport) hudViewport.textContent = `${info.viewportWidth} × ${info.viewportHeight} pt`;
     if (hudTouch) hudTouch.textContent = info.isTouch ? `터치스크린 (${info.maxTouchPoints}pt)` : '정밀 마우스 / 포인터';
     if (hudOrient) hudOrient.textContent = info.orientation;
+
+    // Modal HUD Sync
+    const mHudBrand = document.getElementById('modal-hud-device-brand');
+    const mHudResolution = document.getElementById('modal-hud-resolution');
+    const mHudViewport = document.getElementById('modal-hud-viewport');
+    const mHudTouch = document.getElementById('modal-hud-touch');
+    const mHudOrient = document.getElementById('modal-hud-orientation');
+
+    if (mHudBrand) mHudBrand.textContent = `${info.brand} (${info.os})`;
+    if (mHudResolution) mHudResolution.textContent = `${info.screenWidth}×${info.screenHeight} (${info.dpr}x DPR)`;
+    if (mHudViewport) mHudViewport.textContent = `${info.viewportWidth} × ${info.viewportHeight} pt`;
+    if (mHudTouch) mHudTouch.textContent = info.isTouch ? `지원 (${info.maxTouchPoints}pt)` : '미지원 (마우스)';
+    if (mHudOrient) mHudOrient.textContent = info.orientation;
   }
 };
 
@@ -5476,8 +5489,12 @@ function setOrientation(orient) {
 function selectDevicePreset(dev, w, h, r) {
   const deviceWrapper = document.querySelector('.device-wrapper');
   const deviceBtns = document.querySelectorAll('.device-select-btn');
+  const modalDeviceBtns = document.querySelectorAll('.modal-device-card');
 
   deviceBtns.forEach(b => {
+    b.classList.toggle('active', b.dataset.device === dev);
+  });
+  modalDeviceBtns.forEach(b => {
     b.classList.toggle('active', b.dataset.device === dev);
   });
 
@@ -5500,6 +5517,20 @@ function selectDevicePreset(dev, w, h, r) {
     deviceWrapper.style.setProperty('--device-radius', `${r}px`);
   }
 
+  // OS styling sync
+  if (dev === 'galaxy' || dev === 'fold') {
+    deviceWrapper.classList.remove('ios-16', 'ios-17', 'ios-18');
+    deviceWrapper.classList.add('os-android');
+  } else if (dev !== 'fluid') {
+    deviceWrapper.classList.remove('os-android');
+    deviceWrapper.classList.add('ios-18');
+  }
+
+  // Persist user selection
+  try {
+    localStorage.setItem('icam_device_preset', dev);
+  } catch (e) {}
+
   updateViewportDimensionDisplay();
   autoScaleDeviceFrame();
   DeviceDetector.updateHUD();
@@ -5507,15 +5538,34 @@ function selectDevicePreset(dev, w, h, r) {
 window.autoScaleDeviceFrame = autoScaleDeviceFrame;
 window.selectDevicePreset = selectDevicePreset;
 
+function openDeviceSelectorModal() {
+  soundEngine.playTick();
+  const modal = document.getElementById('device-selector-modal');
+  if (modal) {
+    modal.classList.add('open');
+    DeviceDetector.updateHUD();
+  }
+}
+
+function closeDeviceSelectorModal() {
+  soundEngine.playTick();
+  const modal = document.getElementById('device-selector-modal');
+  if (modal) modal.classList.remove('open');
+}
+window.openDeviceSelectorModal = openDeviceSelectorModal;
+window.closeDeviceSelectorModal = closeDeviceSelectorModal;
+
 // ==========================================================================
 // 8. Device Tier & Cross-Platform Switcher
 // ==========================================================================
 function initDeviceAndOSSwitcher() {
   const deviceWrapper = document.querySelector('.device-wrapper');
   const deviceBtns = document.querySelectorAll('.device-select-btn');
+  const modalDeviceBtns = document.querySelectorAll('.modal-device-card');
   const iosBtns = document.querySelectorAll('.ios-ver-btn');
   const orientBtns = document.querySelectorAll('.orientation-btn');
 
+  // Sidebar preset buttons
   deviceBtns.forEach(btn => {
     btn.addEventListener('click', () => {
       const dev = btn.dataset.device;
@@ -5525,6 +5575,64 @@ function initDeviceAndOSSwitcher() {
       selectDevicePreset(dev, w, h, r);
     });
   });
+
+  // Modal preset buttons
+  modalDeviceBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const dev = btn.dataset.device;
+      const w = btn.dataset.width;
+      const h = btn.dataset.height;
+      const r = btn.dataset.radius;
+      selectDevicePreset(dev, w, h, r);
+      closeDeviceSelectorModal();
+    });
+  });
+
+  // Modal triggers & close
+  const btnFluidPicker = document.getElementById('btn-fluid-device-picker');
+  if (btnFluidPicker) btnFluidPicker.addEventListener('click', openDeviceSelectorModal);
+
+  const btnQuickDevices = document.getElementById('quickbar-devices-btn');
+  if (btnQuickDevices) btnQuickDevices.addEventListener('click', openDeviceSelectorModal);
+
+  const btnCloseDeviceModal = document.getElementById('btn-close-device-modal');
+  if (btnCloseDeviceModal) btnCloseDeviceModal.addEventListener('click', closeDeviceSelectorModal);
+
+  const deviceModal = document.getElementById('device-selector-modal');
+  if (deviceModal) {
+    deviceModal.addEventListener('click', (e) => {
+      if (e.target === deviceModal) closeDeviceSelectorModal();
+    });
+  }
+
+  const modalOrientBtn = document.getElementById('modal-btn-toggle-orient');
+  if (modalOrientBtn) {
+    modalOrientBtn.addEventListener('click', () => {
+      toggleOrientation();
+    });
+  }
+
+  // Quickbar extra buttons
+  const btnQuickCambag = document.getElementById('quickbar-cambag-btn');
+  if (btnQuickCambag) {
+    btnQuickCambag.addEventListener('click', () => {
+      openCameraBagModal();
+    });
+  }
+
+  const btnQuickRotate = document.getElementById('quickbar-rotate-btn');
+  if (btnQuickRotate) {
+    btnQuickRotate.addEventListener('click', () => {
+      toggleOrientation();
+    });
+  }
+
+  const btnQuickGallery = document.getElementById('quickbar-gallery-btn');
+  if (btnQuickGallery) {
+    btnQuickGallery.addEventListener('click', () => {
+      openGalleryModal();
+    });
+  }
 
   const btnExitFluid = document.getElementById('btn-exit-fluid');
   if (btnExitFluid) {
@@ -5602,6 +5710,31 @@ function initDeviceAndOSSwitcher() {
   window.addEventListener('touchstart', unlockAudio, { passive: true });
   window.addEventListener('click', unlockAudio, { passive: true });
 
+  // Intelligent Hardware Auto-Adaptation on Initial Load
+  const devInfo = DeviceDetector.getInfo();
+  let savedPreset = null;
+  try {
+    savedPreset = localStorage.getItem('icam_device_preset');
+  } catch (e) {}
+
+  if (savedPreset) {
+    const btn = document.querySelector(`.device-select-btn[data-device="${savedPreset}"]`);
+    if (btn) {
+      selectDevicePreset(savedPreset, btn.dataset.width, btn.dataset.height, btn.dataset.radius);
+    }
+  } else {
+    // Zero-friction Native Hardware Auto-Adaptation
+    if (devInfo.isTouch && (window.innerWidth <= 600 || window.innerHeight <= 550)) {
+      selectDevicePreset('fluid', 0, 0, 0);
+      document.body.classList.add('native-mobile-device');
+    } else if (devInfo.deviceCategory === 'Tablet' && devInfo.isTouch) {
+      selectDevicePreset('tablet', 768, 1024, 28);
+      document.body.classList.add('native-tablet-device');
+    } else if (devInfo.os === 'Android') {
+      selectDevicePreset('galaxy', 412, 915, 40);
+    }
+  }
+
   // Initial HUD & scaling check
   DeviceDetector.updateHUD();
   autoScaleDeviceFrame();
@@ -5661,4 +5794,6 @@ window.toggleOrientation = toggleOrientation;
 window.DeviceDetector = DeviceDetector;
 window.selectDevicePreset = selectDevicePreset;
 window.autoScaleDeviceFrame = autoScaleDeviceFrame;
+window.openDeviceSelectorModal = openDeviceSelectorModal;
+window.closeDeviceSelectorModal = closeDeviceSelectorModal;
 

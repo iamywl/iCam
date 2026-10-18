@@ -334,6 +334,40 @@ body.is-fluid-fullscreen .fluid-exit-pill {
   gap: 6px;
 }
 
+.fluid-device-pill {
+  position: fixed;
+  top: 14px;
+  right: 185px;
+  z-index: 99999;
+  background: rgba(18, 18, 22, 0.9);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  color: #fff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 6px 14px;
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.7);
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  display: none;
+  align-items: center;
+  gap: 6px;
+}
+.fluid-device-pill:hover {
+  background: rgba(255, 255, 255, 0.15);
+  color: var(--accent-mint);
+  transform: translateY(-1px);
+}
+body.is-fluid-fullscreen:not(.native-mobile-device) .fluid-device-pill {
+  display: flex !important;
+}
+body.native-mobile-device .fluid-exit-pill,
+body.native-mobile-device .fluid-device-pill {
+  display: none !important;
+}
+
 .device-wrapper {
   position: relative;
   width: var(--device-width);
@@ -3801,6 +3835,160 @@ body.is-fluid-fullscreen .fluid-exit-pill {
   }
 }
 
+/* ==========================================================================
+   Compact Floating Quick Utility Bar (Visible when Desktop Sidebars are hidden)
+   ========================================================================== */
+.mobile-compact-quickbar {
+  display: none;
+  position: fixed;
+  top: 14px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 99990;
+  background: rgba(20, 22, 28, 0.9);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 30px;
+  padding: 4px 6px;
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.75);
+  align-items: center;
+  gap: 4px;
+  pointer-events: auto;
+}
+
+@media (max-width: 1100px) and (min-width: 601px) {
+  .mobile-compact-quickbar {
+    display: flex;
+  }
+}
+
+.compact-quick-pill-btn {
+  background: transparent;
+  border: none;
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+  white-space: nowrap;
+}
+
+.compact-quick-pill-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--accent-mint);
+}
+
+.compact-quick-pill-btn:active {
+  transform: scale(0.96);
+}
+
+.compact-quick-pill-btn.highlight {
+  background: rgba(0, 229, 255, 0.15);
+  border: 1px solid rgba(0, 229, 255, 0.35);
+  color: var(--accent-mint);
+}
+
+/* Modal 5: Universal Device & Resolution Switcher */
+.device-selector-dialog {
+  max-width: 520px;
+  width: 92%;
+  background: #14161a;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 20px;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.85);
+  overflow: hidden;
+}
+
+.device-modal-hud-card {
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+}
+
+.modal-device-fluid-btn {
+  width: 100%;
+  padding: 11px 14px;
+  background: rgba(0, 229, 255, 0.08);
+  border: 1px solid rgba(0, 229, 255, 0.35);
+  border-radius: 12px;
+  text-align: left;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  margin-bottom: 6px;
+}
+.modal-device-fluid-btn:hover {
+  background: rgba(0, 229, 255, 0.16);
+  border-color: rgba(0, 229, 255, 0.6);
+  transform: translateY(-1px);
+}
+
+.modal-device-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.modal-device-card {
+  position: relative;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
+  padding: 10px 12px;
+  text-align: left;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  flex-direction: column;
+}
+.modal-device-card:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.22);
+  transform: translateY(-1px);
+}
+.modal-device-card.active {
+  background: rgba(0, 229, 255, 0.12);
+  border-color: var(--accent-mint);
+  box-shadow: 0 0 14px rgba(0, 229, 255, 0.25);
+}
+.modal-device-card b {
+  font-size: 12px;
+  margin-top: 2px;
+  color: #fff;
+}
+.modal-device-card span {
+  font-size: 10px;
+  color: var(--accent-gold);
+  margin-top: 2px;
+}
+.modal-device-card small {
+  font-size: 9px;
+  color: var(--text-secondary);
+  margin-top: 4px;
+}
+.mdc-badge {
+  font-size: 8px;
+  font-weight: 800;
+  padding: 1px 5px;
+  border-radius: 3px;
+  align-self: flex-start;
+  margin-bottom: 2px;
+  letter-spacing: 0.5px;
+}
+.mdc-badge.android { background: rgba(76, 175, 80, 0.25); color: #81c784; }
+.mdc-badge.ios { background: rgba(0, 122, 255, 0.25); color: #64b5f6; }
+.mdc-badge.tablet { background: rgba(156, 39, 176, 0.25); color: #ba68c8; }
+.mdc-badge.fold { background: rgba(255, 152, 0, 0.25); color: #ffb74d; }
+.mdc-badge.classic { background: rgba(158, 158, 158, 0.25); color: #bdbdbd; }
+
 @media (max-width: 600px) {
   .showcase-panel {
     display: none;
@@ -4195,6 +4383,29 @@ body.is-fluid-fullscreen .fluid-exit-pill {
 .device-wrapper.device-se .gallery-thumbnail-btn { width: 34px; height: 34px; }
 .device-wrapper.device-se .bottom-quick-btn { width: 34px; height: 34px; }
 
+/* iPhone SE Ergonomics: No Action Button, Volume on Left, Power on Right */
+.device-wrapper.device-se .hw-action {
+  display: none !important;
+}
+.device-wrapper.device-se .hw-vol-up {
+  left: -3px !important;
+  top: 110px !important;
+  width: 4px !important;
+  height: 42px !important;
+}
+.device-wrapper.device-se .hw-vol-down {
+  left: -3px !important;
+  top: 158px !important;
+  width: 4px !important;
+  height: 42px !important;
+}
+.device-wrapper.device-se .hw-power {
+  right: -3px !important;
+  top: 125px !important;
+  width: 4px !important;
+  height: 50px !important;
+}
+
 /* Tier 2: iPhone 12 mini / 13 mini (375 x 812) */
 .device-wrapper.device-mini {
   --device-width: 375px;
@@ -4350,6 +4561,32 @@ body.is-fluid-fullscreen .fluid-exit-pill {
 .device-wrapper.device-galaxy .mode-dial-wrapper { height: 26px; margin-bottom: 3px; }
 .device-wrapper.device-galaxy .shutter-row { height: 76px; }
 
+/* Samsung Galaxy S24 Ultra Authentic Ergonomics: All Buttons on Right Edge, Flush Left */
+.device-wrapper.device-galaxy .hw-action {
+  display: none !important;
+}
+.device-wrapper.device-galaxy .hw-vol-up {
+  left: auto !important;
+  right: -3px !important;
+  top: 175px !important;
+  width: 4px !important;
+  height: 48px !important;
+}
+.device-wrapper.device-galaxy .hw-vol-down {
+  left: auto !important;
+  right: -3px !important;
+  top: 229px !important;
+  width: 4px !important;
+  height: 48px !important;
+}
+.device-wrapper.device-galaxy .hw-power {
+  left: auto !important;
+  right: -3px !important;
+  top: 298px !important;
+  width: 4px !important;
+  height: 52px !important;
+}
+
 /* Tier 6: iPad Pro / Tablet (768 x 1024) */
 .device-wrapper.device-tablet {
   --device-width: 768px;
@@ -4386,6 +4623,33 @@ body.is-fluid-fullscreen .fluid-exit-pill {
 .device-wrapper.device-tablet .camera-bottom-section { top: 882px; height: 132px; }
 .device-wrapper.device-tablet .shutter-row { height: 80px; }
 
+/* iPad Pro / Tablet Ergonomics: Power on Top-Right Edge, Volume on Upper-Right Edge */
+.device-wrapper.device-tablet .hw-action {
+  display: none !important;
+}
+.device-wrapper.device-tablet .hw-power {
+  top: -3px !important;
+  bottom: auto !important;
+  left: auto !important;
+  right: 60px !important;
+  width: 50px !important;
+  height: 4px !important;
+}
+.device-wrapper.device-tablet .hw-vol-up {
+  left: auto !important;
+  right: -3px !important;
+  top: 70px !important;
+  height: 42px !important;
+  width: 4px !important;
+}
+.device-wrapper.device-tablet .hw-vol-down {
+  left: auto !important;
+  right: -3px !important;
+  top: 118px !important;
+  height: 42px !important;
+  width: 4px !important;
+}
+
 /* Tier 7: Galaxy Z Fold (884 x 1104) */
 .device-wrapper.device-fold {
   --device-width: 884px;
@@ -4404,6 +4668,32 @@ body.is-fluid-fullscreen .fluid-exit-pill {
 }
 .device-wrapper.device-fold .control-drawer { top: 808px; height: 108px; }
 .device-wrapper.device-fold .camera-bottom-section { top: 924px; height: 168px; }
+
+/* Galaxy Z Fold Ergonomics: Right-edge buttons, Flush Left */
+.device-wrapper.device-fold .hw-action {
+  display: none !important;
+}
+.device-wrapper.device-fold .hw-vol-up {
+  left: auto !important;
+  right: -3px !important;
+  top: 180px !important;
+  height: 48px !important;
+  width: 4px !important;
+}
+.device-wrapper.device-fold .hw-vol-down {
+  left: auto !important;
+  right: -3px !important;
+  top: 234px !important;
+  height: 48px !important;
+  width: 4px !important;
+}
+.device-wrapper.device-fold .hw-power {
+  left: auto !important;
+  right: -3px !important;
+  top: 305px !important;
+  height: 52px !important;
+  width: 4px !important;
+}
 
 /* Tier 8: Fluid Native Fullscreen Mode */
 .device-wrapper.device-fluid,

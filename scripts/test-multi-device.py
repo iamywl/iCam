@@ -151,6 +151,27 @@ async def main():
         check(abs(vf_metrics['ratio'] - 1.3333) < 0.05, f"Galaxy Viewfinder 3:4 Photographic Ratio: {vf_metrics['ratio']:.4f} ({vf_metrics['vfWidth']}x{vf_metrics['vfHeight']})")
         check(vf_metrics['shutterBottom'] <= vf_metrics['windowHeight'] + 5, f"Galaxy Shutter fully visible: {vf_metrics['shutterBottom']}px <= {vf_metrics['windowHeight']}px")
 
+        # Galaxy Hardware Buttons verification (Right-side ergonomics, no action button)
+        hw_galaxy = await eval_js("""
+            (() => {
+                const action = document.querySelector('.device-wrapper.device-galaxy .hw-action');
+                const volUp = document.querySelector('.device-wrapper.device-galaxy .hw-vol-up');
+                const volDown = document.querySelector('.device-wrapper.device-galaxy .hw-vol-down');
+                const power = document.querySelector('.device-wrapper.device-galaxy .hw-power');
+                const csAction = action ? getComputedStyle(action) : null;
+                const csVolUp = volUp ? getComputedStyle(volUp) : null;
+                const csPower = power ? getComputedStyle(power) : null;
+                return {
+                    actionHidden: csAction ? csAction.display === 'none' : true,
+                    volUpOnRight: csVolUp ? csVolUp.right === '-3px' && csVolUp.left === 'auto' : false,
+                    powerOnRight: csPower ? csPower.right === '-3px' && csPower.left === 'auto' : false
+                };
+            })()
+        """)
+        check(hw_galaxy['actionHidden'], "Galaxy S24 Ultra: Action button is correctly hidden")
+        check(hw_galaxy['volUpOnRight'], "Galaxy S24 Ultra: Volume buttons positioned on right edge")
+        check(hw_galaxy['powerOnRight'], "Galaxy S24 Ultra: Power button positioned on right edge")
+
         shot2 = await cdp('Page.captureScreenshot')
         with open('multi_galaxy_s24_ultra.png', 'wb') as f:
             f.write(base64.b64decode(shot2['result']['data']))
@@ -185,6 +206,67 @@ async def main():
         """)
         check(abs(tablet_p_metrics['ratio'] - 1.3333) < 0.05, f"Tablet Portrait Viewfinder 3:4 Ratio: {tablet_p_metrics['ratio']:.4f}")
         check(tablet_p_metrics['shutterBottom'] <= tablet_p_metrics['windowHeight'] + 5, "Tablet Portrait Shutter fully visible")
+
+        # iPad Pro Hardware Buttons verification
+        hw_tablet = await eval_js("""
+            (() => {
+                const action = document.querySelector('.device-wrapper.device-tablet .hw-action');
+                const power = document.querySelector('.device-wrapper.device-tablet .hw-power');
+                const volUp = document.querySelector('.device-wrapper.device-tablet .hw-vol-up');
+                const csAction = action ? getComputedStyle(action) : null;
+                const csPower = power ? getComputedStyle(power) : null;
+                const csVolUp = volUp ? getComputedStyle(volUp) : null;
+                return {
+                    actionHidden: csAction ? csAction.display === 'none' : true,
+                    powerOnTop: csPower ? csPower.top === '-3px' : false,
+                    volOnRight: csVolUp ? csVolUp.right === '-3px' : false
+                };
+            })()
+        """)
+        check(hw_tablet['actionHidden'], "iPad Pro: Action button is correctly hidden")
+        check(hw_tablet['powerOnTop'], "iPad Pro: Top sleep/wake button on top edge")
+        check(hw_tablet['volOnRight'], "iPad Pro: Volume buttons on upper-right edge")
+
+        # Medium viewport / Tablet Quickbar & Device Modal verification
+        quickbar_info = await eval_js("""
+            (() => {
+                const bar = document.getElementById('mobile-compact-quickbar');
+                const panel = document.querySelector('.showcase-panel');
+                return {
+                    quickbarVisible: bar ? getComputedStyle(bar).display !== 'none' : false,
+                    panelHidden: panel ? getComputedStyle(panel).display === 'none' : true
+                };
+            })()
+        """)
+        check(quickbar_info['panelHidden'], "Desktop showcase sidebars are hidden in 768px tablet portrait")
+        check(quickbar_info['quickbarVisible'], "Compact Quick Utility Bar is visible in 768px tablet portrait")
+
+        # Open Device Selector Modal via Quickbar button
+        await eval_js("document.getElementById('quickbar-devices-btn')?.click()")
+        await asyncio.sleep(0.3)
+
+        modal_state = await eval_js("""
+            (() => {
+                const modal = document.getElementById('device-selector-modal');
+                const isOpen = modal ? modal.classList.contains('open') : false;
+                const cards = document.querySelectorAll('#device-selector-modal .modal-device-card');
+                const brand = document.getElementById('modal-hud-device-brand')?.textContent || '';
+                return {
+                    isOpen,
+                    cardCount: cards.length,
+                    hudBrandPopulated: brand.length > 0 && !brand.includes('감지 중...')
+                };
+            })()
+        """)
+        check(modal_state['isOpen'], "Device Selector Modal opened cleanly via Quickbar button")
+        check(modal_state['cardCount'] >= 6, f"All device preset cards available in modal: {modal_state['cardCount']} cards")
+        check(modal_state['hudBrandPopulated'], "Live hardware info populated in Device Selector Modal HUD")
+
+        # Close Device Selector Modal via Close button
+        await eval_js("document.getElementById('btn-close-device-modal')?.click()")
+        await asyncio.sleep(0.3)
+        modal_closed = await eval_js("!document.getElementById('device-selector-modal')?.classList.contains('open')")
+        check(modal_closed, "Device Selector Modal closed cleanly via X button")
 
         shot3_p = await cdp('Page.captureScreenshot')
         with open('multi_ipad_mini_portrait.png', 'wb') as f:
