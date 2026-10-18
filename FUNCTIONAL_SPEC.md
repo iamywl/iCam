@@ -405,6 +405,38 @@ iCam은 기기 회전 시 단순 화면 회전이 아닌, **실제 라이카/콘
    - 셔터 버튼이 우측 중앙으로 이동하여 오른손 엄지로 안정적인 셔터 릴리즈 및 롱프레스 QuickTake 비디오 녹화 지원.
    - 뷰포트 하단/우측 잘림(Clipping) 0px 보장.
 4. **사진 캡처 파이프라인의 가로 모드 자동 감지**:
-   - 가로 모드 촬영 시 `captureCanvas` 해상도를 `1920 × 1440` (가로형 4:3)으로 렌더링.
-   - EXIF 방향 태그(`Orientation: 1 - Normal Horizontal`) 자동 기록.
+   - 가로 모드 촬영 시 `captureCanvas` 해상도를 `1040 × 780` (가로형 4:3)으로 렌더링.
+   - EXIF 방향 태그(`Orientation: 1 - Normal Horizontal`) 및 종횡비(`1040:780 (4:3 가로)`) 자동 기록.
+
+---
+
+## 13. 브라우저 하드웨어 정보 감지 (DeviceDetector) 및 유니버설 멀티 디바이스 호환성 엔진
+
+### 13.1 웹 표준 브라우저 하드웨어 감지 API (Standard Web APIs)
+iCam은 브라우저 표준 Web API를 활용하여 사용자의 접속 기기, 해상도, 터치 여부, 방향 센서를 실시간으로 정밀 감지합니다.
+
+| 분류 | 웹 표준 API | 획득 정보 및 활용 목적 |
+| :--- | :--- | :--- |
+| **물리 디스플레이** | `window.screen.width`, `height`, `availWidth`, `availHeight` | 하드웨어 물리 화면 해상도 및 작업표시줄 제외 유효 영역 |
+| **픽셀 밀도 (DPR)** | `window.devicePixelRatio` | Retina / Dynamic AMOLED 2X 서브픽셀 렌더링 배율 (1.0x ~ 3.5x) |
+| **실시간 뷰포트** | `window.innerWidth`, `innerHeight`, `visualViewport` | 실제 브라우저 콘텐츠 렌더링 영역 및 가상 키보드/주소창 가변 크기 |
+| **기기 및 OS 식별** | `navigator.userAgent`, `navigator.userAgentData`, `platform` | iOS, Android(Galaxy/Pixel), macOS, Windows, Linux 및 기종 식별 |
+| **터치 하드웨어** | `navigator.maxTouchPoints`, `@media (hover: none)` | 스마트폰/태블릿 멀티터치 스크린 vs 정밀 마우스/트랙패드 판별 |
+| **방향 센서** | `screen.orientation.type`, `screen.orientation.addEventListener` | 자이로/가속도계 기반 실시간 하드웨어 회전 감지 (`portrait`/`landscape`) |
+| **물리 노치/안전영역** | `env(safe-area-inset-top, bottom, left, right)` | 다이내믹 아일랜드, 펀치홀 카메라, 제스처 바 오버랩 방지 |
+
+### 13.2 멀티 디바이스 프리셋 아키텍처
+1. **Samsung Galaxy S24 Ultra (`device-galaxy`)**: 412 × 915 pt (19.5:9), 13px 핀홀 펀치홀 카메라, Android 제스처 내비게이션 바.
+2. **iPad Pro / Tablet (`device-tablet`)**: 768 × 1024 pt (4:3 태블릿), 대화면 뷰파인더(480×640) 및 안정적인 하단 데크.
+3. **Galaxy Z Fold (`device-fold`)**: 884 × 1104 pt (폴더블 펼침 광활 화면), 510×680 뷰파인더.
+4. **iPhone 16 Pro / Max / Mini / SE**: 393×852, 430×932, 375×812, 375×667.
+5. **⚡️ 내 브라우저 100% 맞춤 (Fluid Fullscreen, `device-fluid`)**:
+   - `100vw × 100dvh` 완전 풀스크린, 베젤/프레임 0px, 실시간 브라우저 뷰포트에 1:1 완벽 밀착.
+   - 우측 상단 플로팅 복귀 버튼(`fluid-exit-pill`)으로 원클릭 프레임 모드 전환.
+
+### 13.3 랩탑/소형 모니터 높이 오토스케일링 엔진 (Zero-Clipping Auto-Scale Engine)
+- 노트북(MacBook 13", 14") 및 분할 화면(높이 600~750px)에서 852px/915px 스마트폰 프레임이 세로로 잘려 셔터 버튼이 가려지는 문제를 해결하기 위해, `autoScaleDeviceFrame()` 수학적 배율 엔진을 적용.
+- `scale = Math.min(1, Math.min(availableH / targetH, availableW / targetW))`
+- 어떤 모니터 해상도에서도 셔터 버튼 및 조작계가 화면 밖으로 잘려나가지 않고(Zero-Clipping) 항상 100% 시각적으로 온전히 노출됩니다.
+
 

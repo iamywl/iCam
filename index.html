@@ -14,6 +14,12 @@
 </head>
 <body>
 
+  <!-- Floating Fluid Fullscreen Exit Pill (Visible only in fluid fullscreen mode) -->
+  <button id="btn-exit-fluid" class="fluid-exit-pill" style="display: none;" title="시뮬레이터 모드로 복귀">
+    <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="5" y="2" width="14" height="20" rx="3"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
+    <span>📱 기기 프레임 모드로 복귀</span>
+  </button>
+
   <!-- Outer Desktop Showcase Wrapper -->
   <div class="showcase-container">
     
@@ -195,34 +201,67 @@
         <button class="panel-action-btn" id="sidebar-btn-gallery" style="margin-top: 8px; background: linear-gradient(135deg, rgba(0,229,255,0.18), rgba(0,180,216,0.18)); border-color: rgba(0,229,255,0.4);">
           <span>사진 갤러리 & EXIF 뷰어 (<span id="sidebar-gallery-count">0</span>)</span>
         </button>
-        <!-- iPhone Device Tier & iOS Version Switcher (점유율 기반 전 기기 / OS 검증) -->
+        <!-- Universal Multi-Device & Cross-Platform Switcher (iPhone, Galaxy, iPad, Fluid) -->
         <div style="margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--border-subtle);">
           <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
-            <div style="font-size: 12px; font-weight: 700; color: var(--accent-mint);">iPhone 기기 뷰포트 프리뷰</div>
+            <div style="font-size: 12px; font-weight: 700; color: var(--accent-mint);">멀티 디바이스 뷰포트 프리뷰</div>
             <span style="font-size: 10px; color: var(--text-secondary);" id="active-viewport-dim">393 × 852 pt</span>
           </div>
+
+          <!-- ⚡️ Auto Fluid Fullscreen Button -->
+          <button class="btn-secondary device-select-btn" data-device="fluid" data-width="100%" data-height="100%" data-radius="0" style="width: 100%; margin-bottom: 7px; padding: 7px 10px; font-size: 11px; text-align: left; background: rgba(0, 229, 255, 0.08); border-color: rgba(0, 229, 255, 0.35);">
+            <div style="display: flex; align-items: center; justify-content: space-between;">
+              <b style="color: var(--accent-mint);">⚡️ 내 브라우저 100% 맞춤 (Fluid Fullscreen)</b>
+              <span style="font-size: 8.5px; padding: 1px 5px; border-radius: 4px; background: rgba(0, 229, 255, 0.2); color: #fff;">ZERO BEZEL</span>
+            </div>
+            <span style="font-size: 9px; color: var(--text-secondary);">실제 접속 기기(스마트폰/태블릿/모니터) 100vw × 100dvh 완전 반응형</span>
+          </button>
+
           <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px; margin-bottom: 8px;">
             <button class="btn-secondary device-select-btn active" data-device="standard" data-width="393" data-height="852" data-radius="54" style="padding: 6px; font-size: 10.5px; text-align: left;">
-              <b>iPhone 15/16 Pro</b><br><span style="font-size: 9px; color: var(--text-secondary);">393×852 (국내 1위)</span>
+              <b>iPhone 16 Pro</b><br><span style="font-size: 9px; color: var(--text-secondary);">393×852 (iOS 대표)</span>
+            </button>
+            <button class="btn-secondary device-select-btn" data-device="galaxy" data-width="412" data-height="915" data-radius="40" style="padding: 6px; font-size: 10.5px; text-align: left;">
+              <b>Galaxy S24 Ultra</b><br><span style="font-size: 9px; color: var(--text-secondary);">412×915 (Android 1위)</span>
+            </button>
+            <button class="btn-secondary device-select-btn" data-device="tablet" data-width="768" data-height="1024" data-radius="28" style="padding: 6px; font-size: 10.5px; text-align: left;">
+              <b>iPad Pro / Tablet</b><br><span style="font-size: 9px; color: var(--text-secondary);">768×1024 (대화면 스튜디오)</span>
+            </button>
+            <button class="btn-secondary device-select-btn" data-device="fold" data-width="884" data-height="1104" data-radius="24" style="padding: 6px; font-size: 10.5px; text-align: left;">
+              <b>Galaxy Z Fold</b><br><span style="font-size: 9px; color: var(--text-secondary);">884×1104 (폴더블 대화면)</span>
             </button>
             <button class="btn-secondary device-select-btn" data-device="max" data-width="430" data-height="932" data-radius="55" style="padding: 6px; font-size: 10.5px; text-align: left;">
-              <b>15/16 Pro Max</b><br><span style="font-size: 9px; color: var(--text-secondary);">430×932 (대화면 1위)</span>
-            </button>
-            <button class="btn-secondary device-select-btn" data-device="mini" data-width="375" data-height="812" data-radius="44" style="padding: 6px; font-size: 10.5px; text-align: left;">
-              <b>iPhone 13 mini</b><br><span style="font-size: 9px; color: var(--text-secondary);">375×812 (컴팩트 노치)</span>
+              <b>16 Pro Max</b><br><span style="font-size: 9px; color: var(--text-secondary);">430×932 (대화면 노치)</span>
             </button>
             <button class="btn-secondary device-select-btn" data-device="se" data-width="375" data-height="667" data-radius="20" style="padding: 6px; font-size: 10.5px; text-align: left;">
               <b>iPhone SE 2/3</b><br><span style="font-size: 9px; color: var(--text-secondary);">375×667 (홈버튼 SE)</span>
             </button>
           </div>
 
+          <!-- Browser Live Hardware Info HUD Card -->
+          <div style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); border-radius: 8px; padding: 8px 10px; margin-bottom: 8px; font-size: 9.5px; line-height: 1.45;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px; font-weight: 700; color: #fff;">
+              <span style="display: flex; align-items: center; gap: 4px;">
+                <span style="display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: #00e5ff; box-shadow: 0 0 6px #00e5ff;"></span>
+                📡 브라우저 하드웨어 실시간 감지
+              </span>
+              <span id="hud-live-orientation" style="color: var(--accent-mint); font-size: 9px;">세로 (Portrait)</span>
+            </div>
+            <div style="display: grid; grid-template-columns: 75px 1fr; gap: 2px; color: var(--text-secondary);">
+              <span>기기 / OS:</span><span id="hud-device-brand" style="color: #fff; font-weight: 600;">감지 중...</span>
+              <span>물리 해상도:</span><span id="hud-screen-resolution" style="color: #fff;">감지 중...</span>
+              <span>브라우저 뷰포트:</span><span id="hud-live-viewport" style="color: #fff;">감지 중...</span>
+              <span>입력 장치:</span><span id="hud-touch-support" style="color: #fff;">감지 중...</span>
+            </div>
+          </div>
+
           <div style="font-size: 11px; font-weight: 700; color: var(--text-secondary); margin-bottom: 5px;">
-            iOS 버전 에뮬레이션
+            OS 테마 & 렌더링 스타일
           </div>
           <div style="display: flex; gap: 5px;">
             <button class="btn-secondary ios-ver-btn active" data-ios="18" style="flex: 1; padding: 5px; font-size: 10px;">iOS 18</button>
             <button class="btn-secondary ios-ver-btn" data-ios="17" style="flex: 1; padding: 5px; font-size: 10px;">iOS 17</button>
-            <button class="btn-secondary ios-ver-btn" data-ios="16" style="flex: 1; padding: 5px; font-size: 10px;">iOS 16</button>
+            <button class="btn-secondary ios-ver-btn" data-ios="android" style="flex: 1; padding: 5px; font-size: 10px;">Android 14</button>
           </div>
 
           <div style="font-size: 11px; font-weight: 700; color: var(--accent-mint); margin-top: 10px; margin-bottom: 5px;">

@@ -157,7 +157,27 @@
 | **Horizontal Frame** | `max-width: 860px`, `height: 100vh` or `393px` | 가로형 아날로그 카메라 바디 프레임 |
 | **Landscape Viewfinder** | 가로 440~480px × 세로 330~360px (`aspect-ratio: 4 / 3`) | 4:3 불변 가로 사진 비율, 브라스 코너 브라켓 유지 |
 | **Right Shutter Grip** | 폭 110~130px (우측 수직 컬럼) | 대형 햅틱 셔터(중앙), 갤러리(하단), 카메라 바구니(상단) |
-| **Bottom Zoom Ruler** | 뷰파인더 하단 40px | 1.0x~5.0x 룰러 연속 눈금 및 49mm 환산 화각 HUD |
 | **Dynamic Island Safe Margin**| 좌측 또는 상단 12px 안전 여백 확보 | 버튼/HUD 충돌 0건 |
+
+---
+
+## 9. 유니버설 멀티 디바이스 & 크로스 플랫폼 디자인 토큰 (Section 9)
+
+### 9.1 디바이스별 바디 스타일링 & 물리 규격
+
+| 디바이스 | 뷰포트 규격 | 화면비 | 전면 카메라 컷아웃 | 홈 인디케이터 / 내비게이션 바 |
+| :--- | :--- | :--- | :--- | :--- |
+| **Galaxy S24 Ultra** | `412 × 915 pt` | 19.5:9 | 13px 초소형 펀치홀 서클 (Center) | 110px × 3.5px 슬림 Android 제스처 바 |
+| **iPad Pro / Tablet** | `768 × 1024 pt` | 4:3 | 10px 핀홀 웹캠 (Top Center) | 140px × 4px 대화면 홈 바 |
+| **Galaxy Z Fold** | `884 × 1104 pt` | ~4:5 | UDC (언더디스플레이 카메라) 숨김 | 120px 안드로이드 바 |
+| **iPhone 16 Pro** | `393 × 852 pt` | 19.5:9 | 126px × 37px 다이내믹 아일랜드 | 134px × 5px iOS 홈 인디케이터 |
+| **iPhone SE 2/3** | `375 × 667 pt` | 16:9 | 클래식 상단 베젤 스피커 | 물리 홈버튼 (노치/아일랜드 없음) |
+| **⚡️ Fluid Fullscreen** | `100vw × 100dvh` | 반응형 | 물리 하드웨어에 위임 (베젤 0px) | `env(safe-area-inset-bottom)` |
+
+### 9.2 지능형 뷰포트 오토스케일링 & 클리핑 방지 정책
+- **데스크톱/랩탑 안전 여백**: 상하 36px 마진(`availableH = window.innerHeight - 36px`).
+- **가로비율 유지(Maintain Aspect Ratio)**: 뷰파인더는 어떤 기기에서도 세로 모드 `3:4`, 가로 모드 `4:3`의 정통 사진 황금 비율을 강제 유지.
+- **플로팅 복귀 위젯 (`fluid-exit-pill`)**: 전체화면 플루이드 모드 활성화 시 우측 상단 블러 백드롭 글래스모피즘 알약 버튼으로 시뮬레이터 즉시 복귀 제공.
+
 
 

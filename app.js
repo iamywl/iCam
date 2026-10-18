@@ -5299,11 +5299,159 @@ function toggleOrientation() {
   setOrientation(next);
 }
 
+// ==========================================================================
+// 8.1 Device & Hardware Detector (Standard Web APIs)
+// ==========================================================================
+const DeviceDetector = window.DeviceDetector = {
+  getInfo() {
+    const ua = navigator.userAgent || '';
+    const platform = navigator.platform || '';
+    const isTouch = ('ontouchstart' in window) || (navigator.maxTouchPoints > 0);
+    const dpr = window.devicePixelRatio || 1;
+    const screenW = window.screen ? window.screen.width : window.innerWidth;
+    const screenH = window.screen ? window.screen.height : window.innerHeight;
+    const viewW = window.innerWidth;
+    const viewH = window.innerHeight;
+
+    let os = 'Unknown OS';
+    let deviceCategory = 'Desktop';
+    let brand = 'Device';
+
+    if (/iPad|Macintosh/i.test(ua) && isTouch && navigator.maxTouchPoints > 1) {
+      os = 'iPadOS';
+      deviceCategory = 'Tablet';
+      brand = 'Apple iPad';
+    } else if (/iPhone/i.test(ua)) {
+      os = 'iOS';
+      deviceCategory = 'Mobile';
+      brand = 'Apple iPhone';
+    } else if (/Android/i.test(ua)) {
+      os = 'Android';
+      deviceCategory = /Tablet|SM-T/i.test(ua) ? 'Tablet' : 'Mobile';
+      if (/SM-|SAMSUNG/i.test(ua)) {
+        brand = 'Galaxy S24 / Tab';
+      } else if (/Pixel/i.test(ua)) {
+        brand = 'Google Pixel';
+      } else {
+        brand = 'Android Device';
+      }
+    } else if (/Mac/i.test(platform) || /Macintosh/i.test(ua)) {
+      os = 'macOS';
+      deviceCategory = 'Desktop';
+      brand = 'Apple Mac';
+    } else if (/Win/i.test(platform) || /Windows/i.test(ua)) {
+      os = 'Windows';
+      deviceCategory = 'Desktop';
+      brand = 'Windows PC';
+    } else if (/Linux/i.test(platform) || /Linux/i.test(ua)) {
+      os = 'Linux';
+      deviceCategory = 'Desktop';
+      brand = 'Linux PC';
+    }
+
+    const isLandscape = (screen.orientation && screen.orientation.type)
+      ? screen.orientation.type.startsWith('landscape')
+      : (window.innerWidth > window.innerHeight);
+    const orientation = isLandscape ? '가로 (Landscape)' : '세로 (Portrait)';
+
+    return {
+      os,
+      deviceCategory,
+      brand,
+      isTouch,
+      maxTouchPoints: navigator.maxTouchPoints || (isTouch ? 1 : 0),
+      dpr: Math.round(dpr * 10) / 10,
+      screenWidth: screenW,
+      screenHeight: screenH,
+      viewportWidth: viewW,
+      viewportHeight: viewH,
+      orientation,
+      isLandscape
+    };
+  },
+
+  updateHUD() {
+    const info = this.getInfo();
+    const hudBrand = document.getElementById('hud-device-brand');
+    const hudResolution = document.getElementById('hud-screen-resolution');
+    const hudViewport = document.getElementById('hud-live-viewport');
+    const hudTouch = document.getElementById('hud-touch-support');
+    const hudOrient = document.getElementById('hud-live-orientation');
+
+    if (hudBrand) hudBrand.textContent = `${info.brand} (${info.os})`;
+    if (hudResolution) hudResolution.textContent = `${info.screenWidth}×${info.screenHeight} (${info.dpr}x DPR)`;
+    if (hudViewport) hudViewport.textContent = `${info.viewportWidth} × ${info.viewportHeight} pt`;
+    if (hudTouch) hudTouch.textContent = info.isTouch ? `터치스크린 (${info.maxTouchPoints}pt)` : '정밀 마우스 / 포인터';
+    if (hudOrient) hudOrient.textContent = info.orientation;
+  }
+};
+
+function updateViewportDimensionDisplay() {
+  const dimDisplay = document.getElementById('active-viewport-dim');
+  if (!dimDisplay) return;
+
+  const activeDevBtn = document.querySelector('.device-select-btn.active');
+  const dev = activeDevBtn ? activeDevBtn.dataset.device : 'standard';
+
+  if (dev === 'fluid' || document.body.classList.contains('is-fluid-fullscreen')) {
+    dimDisplay.textContent = `${window.innerWidth} × ${window.innerHeight} pt (100% 맞춤)`;
+    return;
+  }
+
+  const rawW = activeDevBtn ? parseInt(activeDevBtn.dataset.width, 10) : 393;
+  const rawH = activeDevBtn ? parseInt(activeDevBtn.dataset.height, 10) : 852;
+
+  if (state.orientation === 'landscape') {
+    const w = Math.max(rawW, rawH);
+    const h = Math.min(rawW, rawH);
+    dimDisplay.textContent = `${w} × ${h} pt (가로)`;
+  } else {
+    const w = Math.min(rawW, rawH);
+    const h = Math.max(rawW, rawH);
+    dimDisplay.textContent = `${w} × ${h} pt`;
+  }
+}
+
+function autoScaleDeviceFrame() {
+  const deviceWrapper = document.querySelector('.device-wrapper');
+  if (!deviceWrapper) return;
+
+  if (deviceWrapper.classList.contains('device-fluid') || document.body.classList.contains('is-fluid-fullscreen') || document.body.classList.contains('native-fluid-mode')) {
+    deviceWrapper.style.transform = '';
+    return;
+  }
+
+  // Real mobile fullscreens
+  if (window.innerWidth <= 600 || (window.innerWidth <= 852 && window.innerHeight <= 550)) {
+    deviceWrapper.style.transform = '';
+    return;
+  }
+
+  const isLandscape = deviceWrapper.classList.contains('orientation-landscape');
+  let baseW = parseFloat(deviceWrapper.style.getPropertyValue('--device-width')) || 393;
+  let baseH = parseFloat(deviceWrapper.style.getPropertyValue('--device-height')) || 852;
+
+  const targetW = isLandscape ? Math.max(baseW, baseH) : Math.min(baseW, baseH);
+  const targetH = isLandscape ? Math.min(baseW, baseH) : Math.max(baseW, baseH);
+
+  const showcasePanel = document.querySelector('.showcase-panel');
+  const isSidebarVisible = window.innerWidth > 1100 && showcasePanel && getComputedStyle(showcasePanel).display !== 'none';
+  const availableW = isSidebarVisible ? (window.innerWidth - 380) : (window.innerWidth - 24);
+  const availableH = window.innerHeight - 36;
+
+  if (targetH > availableH || targetW > availableW) {
+    const scale = Math.min(1, Math.min(availableH / targetH, availableW / targetW));
+    deviceWrapper.style.transform = `scale(${scale.toFixed(3)})`;
+    deviceWrapper.style.transformOrigin = 'center center';
+  } else {
+    deviceWrapper.style.transform = '';
+  }
+}
+
 function setOrientation(orient) {
   state.orientation = orient;
   const deviceWrapper = document.querySelector('.device-wrapper');
   const cameraApp = document.querySelector('.camera-app');
-  const dimDisplay = document.getElementById('active-viewport-dim');
   const orientBtns = document.querySelectorAll('.orientation-btn');
 
   orientBtns.forEach(btn => {
@@ -5314,62 +5462,76 @@ function setOrientation(orient) {
     deviceWrapper?.classList.add('orientation-landscape');
     cameraApp?.classList.add('landscape-mode');
     soundEngine.playTick();
-    if (dimDisplay && deviceWrapper) {
-      const activeDevBtn = document.querySelector('.device-select-btn.active');
-      const w = activeDevBtn ? activeDevBtn.dataset.height : 852;
-      const h = activeDevBtn ? activeDevBtn.dataset.width : 393;
-      dimDisplay.textContent = `${w} × ${h} pt (가로)`;
-    }
   } else {
     deviceWrapper?.classList.remove('orientation-landscape');
     cameraApp?.classList.remove('landscape-mode');
     soundEngine.playTick();
-    if (dimDisplay && deviceWrapper) {
-      const activeDevBtn = document.querySelector('.device-select-btn.active');
-      const w = activeDevBtn ? activeDevBtn.dataset.width : 393;
-      const h = activeDevBtn ? activeDevBtn.dataset.height : 852;
-      dimDisplay.textContent = `${w} × ${h} pt`;
-    }
   }
+
+  updateViewportDimensionDisplay();
+  autoScaleDeviceFrame();
+  DeviceDetector.updateHUD();
 }
 
+function selectDevicePreset(dev, w, h, r) {
+  const deviceWrapper = document.querySelector('.device-wrapper');
+  const deviceBtns = document.querySelectorAll('.device-select-btn');
+
+  deviceBtns.forEach(b => {
+    b.classList.toggle('active', b.dataset.device === dev);
+  });
+
+  if (!deviceWrapper) return;
+
+  // Clear all device classes
+  deviceWrapper.classList.remove('device-se', 'device-mini', 'device-standard', 'device-max', 'device-galaxy', 'device-tablet', 'device-fold', 'device-fluid');
+
+  if (dev === 'fluid') {
+    deviceWrapper.classList.add('device-fluid');
+    document.body.classList.add('is-fluid-fullscreen');
+    deviceWrapper.style.removeProperty('--device-width');
+    deviceWrapper.style.removeProperty('--device-height');
+    deviceWrapper.style.removeProperty('--device-radius');
+  } else {
+    document.body.classList.remove('is-fluid-fullscreen');
+    deviceWrapper.classList.add(`device-${dev}`);
+    deviceWrapper.style.setProperty('--device-width', `${w}px`);
+    deviceWrapper.style.setProperty('--device-height', `${h}px`);
+    deviceWrapper.style.setProperty('--device-radius', `${r}px`);
+  }
+
+  updateViewportDimensionDisplay();
+  autoScaleDeviceFrame();
+  DeviceDetector.updateHUD();
+}
+window.autoScaleDeviceFrame = autoScaleDeviceFrame;
+window.selectDevicePreset = selectDevicePreset;
+
 // ==========================================================================
-// 8. Device Tier & iOS Version Switcher (Cross-Device & Cross-OS Preview)
+// 8. Device Tier & Cross-Platform Switcher
 // ==========================================================================
 function initDeviceAndOSSwitcher() {
   const deviceWrapper = document.querySelector('.device-wrapper');
-  const dimDisplay = document.getElementById('active-viewport-dim');
   const deviceBtns = document.querySelectorAll('.device-select-btn');
   const iosBtns = document.querySelectorAll('.ios-ver-btn');
   const orientBtns = document.querySelectorAll('.orientation-btn');
 
   deviceBtns.forEach(btn => {
     btn.addEventListener('click', () => {
-      deviceBtns.forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-
       const dev = btn.dataset.device;
       const w = btn.dataset.width;
       const h = btn.dataset.height;
       const r = btn.dataset.radius;
-
-      if (deviceWrapper) {
-        deviceWrapper.classList.remove('device-se', 'device-mini', 'device-standard', 'device-max');
-        deviceWrapper.classList.add(`device-${dev}`);
-        deviceWrapper.style.setProperty('--device-width', `${w}px`);
-        deviceWrapper.style.setProperty('--device-height', `${h}px`);
-        deviceWrapper.style.setProperty('--device-radius', `${r}px`);
-      }
-
-      if (dimDisplay) {
-        if (state.orientation === 'landscape') {
-          dimDisplay.textContent = `${h} × ${w} pt (가로)`;
-        } else {
-          dimDisplay.textContent = `${w} × ${h} pt`;
-        }
-      }
+      selectDevicePreset(dev, w, h, r);
     });
   });
+
+  const btnExitFluid = document.getElementById('btn-exit-fluid');
+  if (btnExitFluid) {
+    btnExitFluid.addEventListener('click', () => {
+      selectDevicePreset('standard', 393, 852, 54);
+    });
+  }
 
   iosBtns.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -5378,8 +5540,12 @@ function initDeviceAndOSSwitcher() {
 
       const ver = btn.dataset.ios;
       if (deviceWrapper) {
-        deviceWrapper.classList.remove('ios-16', 'ios-17', 'ios-18');
-        deviceWrapper.classList.add(`ios-${ver}`);
+        deviceWrapper.classList.remove('ios-16', 'ios-17', 'ios-18', 'os-android');
+        if (ver === 'android') {
+          deviceWrapper.classList.add('os-android');
+        } else {
+          deviceWrapper.classList.add(`ios-${ver}`);
+        }
       }
     });
   });
@@ -5415,6 +5581,9 @@ function initDeviceAndOSSwitcher() {
         setOrientation('landscape');
       }
     }
+    updateViewportDimensionDisplay();
+    autoScaleDeviceFrame();
+    DeviceDetector.updateHUD();
   });
 
   // iOS Safari 100dvh & AudioContext First Touch Unlock
@@ -5432,6 +5601,10 @@ function initDeviceAndOSSwitcher() {
   };
   window.addEventListener('touchstart', unlockAudio, { passive: true });
   window.addEventListener('click', unlockAudio, { passive: true });
+
+  // Initial HUD & scaling check
+  DeviceDetector.updateHUD();
+  autoScaleDeviceFrame();
 }
 
 // ==========================================================================
@@ -5485,4 +5658,7 @@ window.opticalFlareEngine = opticalFlareEngine;
 window.alignModeDial = alignModeDial;
 window.setOrientation = setOrientation;
 window.toggleOrientation = toggleOrientation;
+window.DeviceDetector = DeviceDetector;
+window.selectDevicePreset = selectDevicePreset;
+window.autoScaleDeviceFrame = autoScaleDeviceFrame;
 
