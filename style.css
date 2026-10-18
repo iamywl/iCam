@@ -513,10 +513,10 @@ body::before {
 /* Top Camera Utility Toolbar */
 .camera-top-toolbar {
   position: absolute;
-  top: 60px;
+  top: 48px;
   left: 0;
   right: 0;
-  height: 40px;
+  height: 36px;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -892,7 +892,7 @@ body::before {
 /* Active Camera Model Badge HUD with Ergonomic Steppers */
 .camera-model-badge-container {
   position: absolute;
-  top: 60px;
+  top: 86px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;
@@ -3756,7 +3756,7 @@ body::before {
   }
 }
 
-@media (max-width: 600px) {
+@media (max-width: 600px), (orientation: landscape) and (max-height: 550px) {
   html, body {
     width: 100vw;
     height: 100%;
@@ -4238,6 +4238,460 @@ body::before {
 .device-wrapper.device-max .camera-category-bar { height: 22px; margin-bottom: 3px; }
 .device-wrapper.device-max .mode-dial-wrapper { height: 26px; margin-bottom: 3px; }
 .device-wrapper.device-max .shutter-row { height: 80px; }
+
+/* ==========================================================================
+   Full Landscape Mode Engine (4:3 Golden Viewfinder & Right-Hand Thumb Grip)
+   Supports: Simulated Desktop Mode & Real Mobile Device Landscape Rotation
+   ========================================================================== */
+
+/* 1. Simulated Desktop Device Frame Geometry */
+.device-wrapper.orientation-landscape {
+  width: var(--device-height, 852px) !important;
+  height: var(--device-width, 393px) !important;
+  max-width: 95vw !important;
+  max-height: 95vh !important;
+  transform-origin: center center;
+}
+
+.device-wrapper.orientation-landscape.device-se {
+  width: 667px !important;
+  height: 375px !important;
+}
+.device-wrapper.orientation-landscape.device-mini {
+  width: 812px !important;
+  height: 375px !important;
+}
+.device-wrapper.orientation-landscape.device-standard {
+  width: 852px !important;
+  height: 393px !important;
+}
+.device-wrapper.orientation-landscape.device-max {
+  width: 932px !important;
+  height: 430px !important;
+}
+
+.device-wrapper.orientation-landscape .iphone-frame {
+  border-radius: calc(var(--device-radius, 54px) * 0.7) !important;
+  display: flex !important;
+  flex-direction: row !important;
+}
+
+.device-wrapper.orientation-landscape .device-hardware-buttons {
+  display: none !important;
+}
+
+/* 2. Core Landscape Layout for Simulated Mode and Native .landscape-mode */
+.device-wrapper.orientation-landscape .ios-status-bar,
+.camera-app.landscape-mode .ios-status-bar {
+  display: none !important;
+}
+
+.device-wrapper.orientation-landscape .dynamic-island,
+.camera-app.landscape-mode .dynamic-island {
+  display: none !important;
+}
+
+.device-wrapper.orientation-landscape .ios-home-indicator,
+.camera-app.landscape-mode .ios-home-indicator {
+  display: none !important;
+}
+
+.device-wrapper.orientation-landscape .camera-app,
+.camera-app.landscape-mode {
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: stretch !important;
+  justify-content: space-between !important;
+  width: 100% !important;
+  height: 100% !important;
+  overflow: hidden !important;
+  position: relative !important;
+  background: #000 !important;
+}
+
+/* Top Toolbar: pinned horizontally in optical area */
+.device-wrapper.orientation-landscape .camera-top-toolbar,
+.camera-app.landscape-mode .camera-top-toolbar {
+  position: absolute !important;
+  top: 6px !important;
+  left: 12px !important;
+  right: 130px !important;
+  width: auto !important;
+  height: 32px !important;
+  display: flex !important;
+  justify-content: flex-start !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 0 !important;
+  background: none !important;
+  z-index: 55 !important;
+}
+
+.device-wrapper.orientation-landscape .camera-top-toolbar .toolbar-btn,
+.camera-app.landscape-mode .camera-top-toolbar .toolbar-btn {
+  width: 30px !important;
+  height: 30px !important;
+  font-size: 11px !important;
+}
+
+/* Camera Model Badge HUD: top-right of optical area */
+.device-wrapper.orientation-landscape .camera-model-badge-container,
+.camera-app.landscape-mode .camera-model-badge-container {
+  position: absolute !important;
+  top: 6px !important;
+  right: 138px !important;
+  left: auto !important;
+  transform: none !important;
+  z-index: 55 !important;
+}
+
+.device-wrapper.orientation-landscape .camera-model-badge,
+.camera-app.landscape-mode .camera-model-badge {
+  padding: 2px 8px !important;
+  height: 24px !important;
+  font-size: 10px !important;
+}
+
+/* Landscape Viewfinder: Strict 4:3 Photographic Ratio */
+.device-wrapper.orientation-landscape .viewfinder-container,
+.camera-app.landscape-mode .viewfinder-container {
+  position: absolute !important;
+  top: 42px !important;
+  bottom: 46px !important;
+  left: 14px !important;
+  right: 136px !important;
+  width: auto !important;
+  height: auto !important;
+  max-height: calc(100% - 88px) !important;
+  aspect-ratio: 4 / 3 !important;
+  margin: auto !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+  transform: none !important;
+  z-index: 10 !important;
+}
+
+.device-wrapper.orientation-landscape .viewfinder-media,
+.camera-app.landscape-mode .viewfinder-media {
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+}
+
+.device-wrapper.orientation-landscape .lens-dynamic-canvas,
+.camera-app.landscape-mode .lens-dynamic-canvas {
+  width: 100% !important;
+  height: 100% !important;
+}
+
+/* Zoom Ruler: horizontally below 4:3 Viewfinder */
+.device-wrapper.orientation-landscape .fimo-zoom-ruler-deck,
+.camera-app.landscape-mode .fimo-zoom-ruler-deck {
+  position: absolute !important;
+  bottom: 6px !important;
+  left: 14px !important;
+  right: 136px !important;
+  width: auto !important;
+  max-width: 440px !important;
+  margin: 0 auto !important;
+  height: 34px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  z-index: 55 !important;
+  background: rgba(18, 20, 26, 0.88) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  border-radius: 17px !important;
+  padding: 0 10px !important;
+}
+
+/* Camera Bottom Section Container: Full Landscape Overlay with click-through */
+.device-wrapper.orientation-landscape .camera-bottom-section,
+.camera-app.landscape-mode .camera-bottom-section {
+  position: absolute !important;
+  inset: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: none !important;
+  border: none !important;
+  pointer-events: none !important;
+  display: block !important;
+  z-index: 50 !important;
+  padding: 0 !important;
+}
+
+.device-wrapper.orientation-landscape .fimo-hardware-bar,
+.camera-app.landscape-mode .fimo-hardware-bar,
+.device-wrapper.orientation-landscape .camera-category-bar,
+.camera-app.landscape-mode .camera-category-bar,
+.device-wrapper.orientation-landscape .mode-dial-wrapper,
+.camera-app.landscape-mode .mode-dial-wrapper {
+  display: none !important;
+}
+
+/* Right Shutter Grip Column: Ergonomic for Right Thumb */
+.device-wrapper.orientation-landscape .shutter-row,
+.camera-app.landscape-mode .shutter-row {
+  position: absolute !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  right: 0 !important;
+  width: 124px !important;
+  height: 100% !important;
+  background: linear-gradient(270deg, #090a0d 0%, #15171d 100%) !important;
+  border-left: 1px solid rgba(255, 255, 255, 0.14) !important;
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+  padding: 14px 6px !important;
+  box-sizing: border-box !important;
+  pointer-events: auto !important;
+  gap: 10px !important;
+}
+
+.device-wrapper.orientation-landscape .fimo-zoom-ruler-deck,
+.camera-app.landscape-mode .fimo-zoom-ruler-deck {
+  pointer-events: auto !important;
+}
+
+.device-wrapper.orientation-landscape .bottom-quick-btn,
+.camera-app.landscape-mode .bottom-quick-btn {
+  order: 1 !important;
+  width: 44px !important;
+  height: 44px !important;
+}
+
+.device-wrapper.orientation-landscape .fimo-shutter-capsule,
+.camera-app.landscape-mode .fimo-shutter-capsule {
+  order: 2 !important;
+  margin: auto 0 !important;
+  flex-direction: column !important;
+  width: 76px !important;
+  height: auto !important;
+  padding: 8px 0 !important;
+  gap: 6px !important;
+}
+
+.device-wrapper.orientation-landscape .shutter-btn-outer,
+.camera-app.landscape-mode .shutter-btn-outer {
+  width: 62px !important;
+  height: 62px !important;
+}
+
+.device-wrapper.orientation-landscape .shutter-btn-inner,
+.camera-app.landscape-mode .shutter-btn-inner {
+  width: 50px !important;
+  height: 50px !important;
+}
+
+.device-wrapper.orientation-landscape .gallery-thumbnail-btn,
+.camera-app.landscape-mode .gallery-thumbnail-btn {
+  order: 3 !important;
+  width: 44px !important;
+  height: 44px !important;
+}
+
+/* Control Drawer in Landscape: Left Slide-out Sheet */
+.device-wrapper.orientation-landscape .control-drawer,
+.camera-app.landscape-mode .control-drawer {
+  position: absolute !important;
+  top: 42px !important;
+  bottom: 46px !important;
+  left: 14px !important;
+  right: auto !important;
+  width: 250px !important;
+  height: auto !important;
+  max-height: calc(100% - 88px) !important;
+  z-index: 60 !important;
+  background: rgba(14, 16, 22, 0.96) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  border-radius: 14px !important;
+  backdrop-filter: blur(24px) !important;
+  -webkit-backdrop-filter: blur(24px) !important;
+  padding: 8px !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  transform: translateX(-110%);
+  transition: transform 0.25s cubic-bezier(0.2, 0.9, 0.3, 1);
+}
+
+.device-wrapper.orientation-landscape .control-drawer.open,
+.camera-app.landscape-mode .control-drawer.open {
+  transform: translateX(0) !important;
+}
+
+/* 3. Real Mobile Device Media Query for Landscape */
+@media (orientation: landscape) and (max-height: 550px) {
+  .showcase-panel {
+    display: none !important;
+  }
+  .showcase-container {
+    width: 100vw !important;
+    height: 100% !important;
+    height: 100dvh !important;
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  .device-wrapper {
+    width: 100vw !important;
+    height: 100% !important;
+    height: 100dvh !important;
+    transform: none !important;
+  }
+  .iphone-frame {
+    border: none !important;
+    border-radius: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+  }
+  .ios-status-bar,
+  .dynamic-island,
+  .ios-home-indicator {
+    display: none !important;
+  }
+  .camera-app {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: stretch !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    height: 100% !important;
+    overflow: hidden !important;
+    position: relative !important;
+    background: #000 !important;
+  }
+  .camera-top-toolbar {
+    position: absolute !important;
+    top: 6px !important;
+    left: 12px !important;
+    right: 130px !important;
+    width: auto !important;
+    height: 32px !important;
+    display: flex !important;
+    justify-content: flex-start !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding: 0 !important;
+    background: none !important;
+    z-index: 55 !important;
+  }
+  .camera-model-badge-container {
+    position: absolute !important;
+    top: 6px !important;
+    right: 138px !important;
+    left: auto !important;
+    transform: none !important;
+    z-index: 55 !important;
+  }
+  .viewfinder-container {
+    position: absolute !important;
+    top: 42px !important;
+    bottom: 46px !important;
+    left: 14px !important;
+    right: 136px !important;
+    width: auto !important;
+    height: auto !important;
+    max-height: calc(100% - 88px) !important;
+    aspect-ratio: 4 / 3 !important;
+    margin: auto !important;
+    border-radius: 12px !important;
+    overflow: hidden !important;
+    transform: none !important;
+    z-index: 10 !important;
+  }
+  .viewfinder-media,
+  .lens-dynamic-canvas {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+  }
+  .fimo-zoom-ruler-deck {
+    position: absolute !important;
+    bottom: 6px !important;
+    left: 14px !important;
+    right: 136px !important;
+    width: auto !important;
+    max-width: 440px !important;
+    margin: 0 auto !important;
+    height: 34px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    z-index: 55 !important;
+    background: rgba(18, 20, 26, 0.88) !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+    border-radius: 17px !important;
+    padding: 0 10px !important;
+  }
+  .camera-bottom-section {
+    position: absolute !important;
+    inset: 0 !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: none !important;
+    border: none !important;
+    pointer-events: none !important;
+    display: block !important;
+    z-index: 50 !important;
+    padding: 0 !important;
+  }
+  .fimo-hardware-bar,
+  .camera-category-bar,
+  .mode-dial-wrapper {
+    display: none !important;
+  }
+  .shutter-row {
+    position: absolute !important;
+    top: 0 !important;
+    bottom: 0 !important;
+    right: 0 !important;
+    width: 124px !important;
+    height: 100% !important;
+    background: linear-gradient(270deg, #090a0d 0%, #15171d 100%) !important;
+    border-left: 1px solid rgba(255, 255, 255, 0.14) !important;
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    padding: 14px 6px !important;
+    box-sizing: border-box !important;
+    pointer-events: auto !important;
+    gap: 10px !important;
+  }
+  .fimo-zoom-ruler-deck {
+    pointer-events: auto !important;
+  }
+  .bottom-quick-btn {
+    order: 1 !important;
+    width: 44px !important;
+    height: 44px !important;
+  }
+  .fimo-shutter-capsule {
+    order: 2 !important;
+    margin: auto 0 !important;
+    flex-direction: column !important;
+    width: 76px !important;
+    height: auto !important;
+    padding: 8px 0 !important;
+    gap: 6px !important;
+  }
+  .shutter-btn-outer {
+    width: 62px !important;
+    height: 62px !important;
+  }
+  .shutter-btn-inner {
+    width: 50px !important;
+    height: 50px !important;
+  }
+  .gallery-thumbnail-btn {
+    order: 3 !important;
+    width: 44px !important;
+    height: 44px !important;
+  }
+}
+
+
 
 /* ==========================================================================
    Gallery Count Badge & Modals Extension

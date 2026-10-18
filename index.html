@@ -224,6 +224,18 @@
             <button class="btn-secondary ios-ver-btn" data-ios="17" style="flex: 1; padding: 5px; font-size: 10px;">iOS 17</button>
             <button class="btn-secondary ios-ver-btn" data-ios="16" style="flex: 1; padding: 5px; font-size: 10px;">iOS 16</button>
           </div>
+
+          <div style="font-size: 11px; font-weight: 700; color: var(--accent-mint); margin-top: 10px; margin-bottom: 5px;">
+            화면 방향 (Orientation)
+          </div>
+          <div style="display: flex; gap: 5px;">
+            <button class="btn-secondary orientation-btn active" id="btn-orient-portrait" data-orientation="portrait" style="flex: 1; padding: 6px; font-size: 10.5px;">
+              📱 세로 모드 (3:4)
+            </button>
+            <button class="btn-secondary orientation-btn" id="btn-orient-landscape" data-orientation="landscape" style="flex: 1; padding: 6px; font-size: 10.5px;">
+              🔄 가로 모드 (4:3)
+            </button>
+          </div>
         </div>
       </div>
 
@@ -232,6 +244,7 @@
         <div style="font-size: 12px; font-weight: 700; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 0.5px;">조작 팁</div>
         <div class="key-hints">
           <span class="key-chip">Space : 셔터 촬영</span>
+          <span class="key-chip">R : 가로/세로 회전</span>
           <span class="key-chip">1 : Vintage 모드</span>
           <span class="key-chip">2 : Standard ID</span>
           <span class="key-chip">3 : Color ID</span>
@@ -240,7 +253,7 @@
     </aside>
 
     <!-- Center: iPhone 16 Pro Frame -->
-    <main class="device-wrapper">
+    <main class="device-wrapper device-standard">
       
       <!-- Hardware Buttons (Mock) -->
       <div class="device-hardware-buttons">
@@ -295,6 +308,9 @@
             </button>
             <button class="toolbar-btn" id="btn-grid" title="격자 안내선">
               <svg class="tb-svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="3" y1="15" x2="21" y2="15"/></svg>
+            </button>
+            <button class="toolbar-btn" id="btn-rotate-orientation" title="가로/세로 화면 회전 (R)">
+              <svg class="tb-svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12a9 9 0 0 0-9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M3 12a9 9 0 0 0 9 9 9.75 9.75 0 0 0 6.74-2.74L21 16"/><path d="M16 16h5v5"/></svg>
             </button>
             <button class="toolbar-btn" id="btn-flip" title="카메라/모델 전환">
               <svg class="tb-svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M11 19H4a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h3l2-3h6l2 3h3a2 2 0 0 1 2 2v4"/><circle cx="10" cy="12" r="3.5"/><path d="m16 16 3-3 3 3"/><path d="M19 13v6a2 2 0 0 1-2 2h-2"/></svg>

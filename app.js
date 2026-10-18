@@ -2665,9 +2665,19 @@ function executeCapture() {
 
   showDynamicIslandBanner('PHOTO SAVED', 'PROCESSED', 2200);
 
+  const isLandscape = state.orientation === 'landscape' ||
+                      document.querySelector('.camera-app')?.classList.contains('landscape-mode') ||
+                      document.querySelector('.device-wrapper')?.classList.contains('orientation-landscape') ||
+                      (window.innerWidth > window.innerHeight && window.innerHeight <= 550);
+
   const captureCanvas = document.createElement('canvas');
-  captureCanvas.width = 780;
-  captureCanvas.height = 1040;
+  if (isLandscape) {
+    captureCanvas.width = 1040;
+    captureCanvas.height = 780;
+  } else {
+    captureCanvas.width = 780;
+    captureCanvas.height = 1040;
+  }
   const ctx = captureCanvas.getContext('2d');
 
   const cam = CAMERAS[state.activeCamera];
@@ -2723,9 +2733,9 @@ function executeCapture() {
       }
       ctx.filter = filterToApply;
 
-      // Crop video to exact 3:4 target ratio
+      // Crop video to exact target ratio (4:3 in landscape, 3:4 in portrait)
       const vAspect = video.videoWidth / video.videoHeight;
-      const targetAspect = 780 / 1040;
+      const targetAspect = captureCanvas.width / captureCanvas.height;
       let sx, sy, sw, sh;
       if (vAspect > targetAspect) {
         sh = video.videoHeight;
@@ -3150,7 +3160,7 @@ function executeCapture() {
     flashFired: state.flashMode === 'on',
     width: captureCanvas.width,
     height: captureCanvas.height,
-    aspectRatio: `${captureCanvas.width}:${captureCanvas.height} (3:4)`,
+    aspectRatio: isLandscape ? `${captureCanvas.width}:${captureCanvas.height} (4:3 가로)` : `${captureCanvas.width}:${captureCanvas.height} (3:4 세로)`,
     colorSpace: 'sRGB Display P3',
     exif: {
       camera: cam.name,
@@ -5277,8 +5287,50 @@ function initEventListeners() {
       switchCamera('sihyun-color');
     } else if (e.key === '6') {
       switchCamera('passport-id');
+    } else if (e.key === 'r' || e.key === 'R') {
+      e.preventDefault();
+      toggleOrientation();
     }
   });
+}
+
+function toggleOrientation() {
+  const next = state.orientation === 'landscape' ? 'portrait' : 'landscape';
+  setOrientation(next);
+}
+
+function setOrientation(orient) {
+  state.orientation = orient;
+  const deviceWrapper = document.querySelector('.device-wrapper');
+  const cameraApp = document.querySelector('.camera-app');
+  const dimDisplay = document.getElementById('active-viewport-dim');
+  const orientBtns = document.querySelectorAll('.orientation-btn');
+
+  orientBtns.forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.orientation === orient);
+  });
+
+  if (orient === 'landscape') {
+    deviceWrapper?.classList.add('orientation-landscape');
+    cameraApp?.classList.add('landscape-mode');
+    soundEngine.playTick();
+    if (dimDisplay && deviceWrapper) {
+      const activeDevBtn = document.querySelector('.device-select-btn.active');
+      const w = activeDevBtn ? activeDevBtn.dataset.height : 852;
+      const h = activeDevBtn ? activeDevBtn.dataset.width : 393;
+      dimDisplay.textContent = `${w} × ${h} pt (가로)`;
+    }
+  } else {
+    deviceWrapper?.classList.remove('orientation-landscape');
+    cameraApp?.classList.remove('landscape-mode');
+    soundEngine.playTick();
+    if (dimDisplay && deviceWrapper) {
+      const activeDevBtn = document.querySelector('.device-select-btn.active');
+      const w = activeDevBtn ? activeDevBtn.dataset.width : 393;
+      const h = activeDevBtn ? activeDevBtn.dataset.height : 852;
+      dimDisplay.textContent = `${w} × ${h} pt`;
+    }
+  }
 }
 
 // ==========================================================================
@@ -5289,6 +5341,7 @@ function initDeviceAndOSSwitcher() {
   const dimDisplay = document.getElementById('active-viewport-dim');
   const deviceBtns = document.querySelectorAll('.device-select-btn');
   const iosBtns = document.querySelectorAll('.ios-ver-btn');
+  const orientBtns = document.querySelectorAll('.orientation-btn');
 
   deviceBtns.forEach(btn => {
     btn.addEventListener('click', () => {
@@ -5309,7 +5362,11 @@ function initDeviceAndOSSwitcher() {
       }
 
       if (dimDisplay) {
-        dimDisplay.textContent = `${w} × ${h} pt`;
+        if (state.orientation === 'landscape') {
+          dimDisplay.textContent = `${h} × ${w} pt (가로)`;
+        } else {
+          dimDisplay.textContent = `${w} × ${h} pt`;
+        }
       }
     });
   });
@@ -5325,6 +5382,39 @@ function initDeviceAndOSSwitcher() {
         deviceWrapper.classList.add(`ios-${ver}`);
       }
     });
+  });
+
+  orientBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      setOrientation(btn.dataset.orientation);
+    });
+  });
+
+  const btnRotate = document.getElementById('btn-rotate-orientation');
+  if (btnRotate) {
+    btnRotate.addEventListener('click', () => {
+      toggleOrientation();
+    });
+  }
+
+  // Auto-detect mobile device orientation changes
+  if (window.screen && window.screen.orientation) {
+    window.screen.orientation.addEventListener('change', () => {
+      const type = window.screen.orientation.type;
+      if (type.startsWith('landscape')) {
+        setOrientation('landscape');
+      } else {
+        setOrientation('portrait');
+      }
+    });
+  }
+
+  window.addEventListener('resize', () => {
+    if (window.innerWidth > window.innerHeight && window.innerHeight <= 550) {
+      if (state.orientation !== 'landscape') {
+        setOrientation('landscape');
+      }
+    }
   });
 
   // iOS Safari 100dvh & AudioContext First Touch Unlock
@@ -5393,3 +5483,6 @@ window.enableWebcam = enableWebcam;
 window.useStudioModel = useStudioModel;
 window.opticalFlareEngine = opticalFlareEngine;
 window.alignModeDial = alignModeDial;
+window.setOrientation = setOrientation;
+window.toggleOrientation = toggleOrientation;
+
