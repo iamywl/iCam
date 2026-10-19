@@ -506,7 +506,7 @@
   }
 
   // --------------------------------------------------------------------------
-  // 5. Public Engine Interface
+  // 5. Public Film Spectral Engine Interface
   // --------------------------------------------------------------------------
   const FilmSpectralEngine = {
     profiles: PROFILES,
@@ -516,7 +516,7 @@
     },
 
     /**
-     * Process an HTML5 Canvas in-place using full spectral colorimetry
+     * Process an HTML5 Canvas in-place using full spectral colorimetry and parametric grading
      */
     processCanvas(canvas, camId, options = {}) {
       if (!canvas || !canvas.getContext) return;
@@ -525,6 +525,15 @@
       try {
         const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         processImageData(imgData, camId, options);
+        
+        // Chain Parametric Color Grading if active
+        if (global.ParametricColorEngine && global.ParametricColorEngine.enabled) {
+          const rec = options.recipe || global.ParametricColorEngine.activeRecipe;
+          if (rec) {
+            global.ParametricColorEngine.processImageData(imgData, rec);
+          }
+        }
+
         ctx.putImageData(imgData, 0, 0);
       } catch (err) {
         console.warn('[SpectralEngine] Canvas processing failed:', err);
@@ -547,6 +556,376 @@
     }
   };
 
+  // --------------------------------------------------------------------------
+  // 6. Professional Parametric Color Grading Engine (Lightroom-Grade HSL Pipeline)
+  // --------------------------------------------------------------------------
+  function rgbToHsl(r, g, b) {
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    let h = 0, s = 0, l = (max + min) / 2.0;
+
+    if (max !== min) {
+      const d = max - min;
+      s = l > 0.5 ? d / (2.0 - max - min) : d / (max + min);
+      switch (max) {
+        case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6.0; break;
+        case g: h = ((b - r) / d + 2) / 6.0; break;
+        case b: h = ((r - g) / d + 4) / 6.0; break;
+      }
+    }
+    return [h * 360, s, l];
+  }
+
+  function hslToRgb(h, s, l) {
+    h = ((h % 360) + 360) % 360 / 360.0;
+    if (s === 0) return [l, l, l];
+
+    function hue2rgb(p, q, t) {
+      if (t < 0) t += 1;
+      if (t > 1) t -= 1;
+      if (t < 1/6) return p + (q - p) * 6 * t;
+      if (t < 1/2) return q;
+      if (t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+      return p;
+    }
+
+    const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+    const p = 2 * l - q;
+    const r = hue2rgb(p, q, h + 1/3);
+    const g = hue2rgb(p, q, h);
+    const b = hue2rgb(p, q, h - 1/3);
+    return [r, g, b];
+  }
+
+  const HSL_COLOR_CHANNELS = {
+    red:     { center: 0,   range: 35 },
+    orange:  { center: 30,  range: 25 },
+    yellow:  { center: 60,  range: 25 },
+    green:   { center: 120, range: 45 },
+    aqua:    { center: 180, range: 35 },
+    blue:    { center: 240, range: 40 },
+    purple:  { center: 280, range: 30 },
+    magenta: { center: 320, range: 35 }
+  };
+
+  const PRESET_RECIPES = {
+    // 1. Donggi Photo Kamakura Summer Recipe (User's Exact Reference Screenshot)
+    'donggi-summer': {
+      id: 'donggi-summer',
+      name: '청량 여름 필름 (Kamakura Summer)',
+      desc: '동기 레시피: 노출 +1.23, 대비 -88, 하이라이트 -100, 암부 +45, 흰색 -89, 검정 +11, 도자기 스킨 & 청량 에메랄드',
+      tone: {
+        exposure: 1.23,
+        contrast: -88,
+        highlights: -100,
+        shadows: 45,
+        whites: -89,
+        blacks: 11
+      },
+      color: {
+        temp: 3,
+        tint: -9,
+        vibrance: 9,
+        saturation: 6
+      },
+      hsl: {
+        red:     { hue: 0, sat: 10,  lum: 16 },
+        orange:  { hue: 0, sat: -14, lum: 11 }, // 투명 뽀샤시 피부톤
+        yellow:  { hue: 0, sat: 11,  lum: 12 }, // 따사로운 자연광
+        green:   { hue: 9, sat: 6,   lum: 17 }  // 청량 에메랄드 잎사귀
+      }
+    },
+
+    // 2. NewJeans Ditto '98 Winter VHS
+    'ditto-winter-98': {
+      id: 'ditto-winter-98',
+      name: "Ditto '98 Winter",
+      desc: '뉴진스 Ditto 감성: 1998 겨울 교실 복도, 쿨톤 섀도우 & 소프트 블룸',
+      tone: {
+        exposure: 0.65,
+        contrast: -45,
+        highlights: -75,
+        shadows: 35,
+        whites: -55,
+        blacks: 14
+      },
+      color: {
+        temp: -8,
+        tint: 4,
+        vibrance: -4,
+        saturation: -6
+      },
+      hsl: {
+        orange: { hue: 2,  sat: -10, lum: 14 },
+        blue:   { hue: -4, sat: 12,  lum: -6 },
+        aqua:   { hue: -6, sat: 10,  lum: 5 }
+      }
+    },
+
+    // 3. Tokyo Y2K Cyber Digicam
+    'tokyo-y2k-ccd': {
+      id: 'tokyo-y2k-ccd',
+      name: 'Tokyo Y2K CCD',
+      desc: '2003 도쿄 시부야 디카 감성: 또렷한 원색, 시안 하이라이트',
+      tone: {
+        exposure: 0.35,
+        contrast: -25,
+        highlights: -60,
+        shadows: 20,
+        whites: -30,
+        blacks: 5
+      },
+      color: {
+        temp: -4,
+        tint: -5,
+        vibrance: 12,
+        saturation: 8
+      },
+      hsl: {
+        red:    { hue: 2, sat: 12, lum: 8 },
+        orange: { hue: 0, sat: -8, lum: 12 },
+        aqua:   { hue: 5, sat: 14, lum: 10 }
+      }
+    },
+
+    // 4. Fuji Superia 400 Emerald
+    'fuji-superia': {
+      id: 'fuji-superia',
+      name: 'Fujicolor Superia 400',
+      desc: '후지 특유의 풍부한 청록 섀도우와 싱그러운 녹색 계조',
+      tone: {
+        exposure: 0.45,
+        contrast: -35,
+        highlights: -70,
+        shadows: 30,
+        whites: -45,
+        blacks: 8
+      },
+      color: {
+        temp: -2,
+        tint: -12,
+        vibrance: 14,
+        saturation: 7
+      },
+      hsl: {
+        orange: { hue: 0,  sat: -12, lum: 10 },
+        green:  { hue: 14, sat: 18,  lum: 15 },
+        yellow: { hue: -5, sat: 8,   lum: 8 }
+      }
+    },
+
+    // 5. Kodak Portra 400 Golden Skin
+    'kodak-portra': {
+      id: 'kodak-portra',
+      name: 'Kodak Portra 400',
+      desc: '황금빛 오후 따스한 스킨톤과 부드러운 하이라이트 롤오프',
+      tone: {
+        exposure: 0.50,
+        contrast: -40,
+        highlights: -80,
+        shadows: 25,
+        whites: -50,
+        blacks: 6
+      },
+      color: {
+        temp: 8,
+        tint: -3,
+        vibrance: 8,
+        saturation: 4
+      },
+      hsl: {
+        red:    { hue: 0,  sat: 8,   lum: 10 },
+        orange: { hue: 3,  sat: -6,  lum: 14 },
+        yellow: { hue: 5,  sat: 12,  lum: 10 }
+      }
+    }
+  };
+
+  function applyParametricGrading(imageData, recipe) {
+    if (!recipe) return imageData;
+    const data = imageData.data;
+    const len = data.length;
+
+    const tone = recipe.tone || {};
+    const color = recipe.color || {};
+    const hslMods = recipe.hsl || {};
+
+    const ev = tone.exposure || 0;
+    const evMult = Math.pow(2, ev);
+
+    const contrastVal = (tone.contrast || 0) / 100.0;
+    const contrastFactor = 1.0 + contrastVal * 0.75;
+
+    const hiVal = (tone.highlights || 0) / 100.0;
+    const whVal = (tone.whites || 0) / 100.0;
+    const shVal = (tone.shadows || 0) / 100.0;
+    const blVal = (tone.blacks || 0) / 100.0;
+
+    const tempVal = (color.temp || 0) / 100.0;
+    const tintVal = (color.tint || 0) / 100.0;
+
+    const rTemp = 1.0 + tempVal * 0.22 + tintVal * 0.08;
+    const gTemp = 1.0 - tintVal * 0.18;
+    const bTemp = 1.0 - tempVal * 0.22 + tintVal * 0.06;
+
+    const vibVal = (color.vibrance || 0) / 100.0;
+    const satVal = (color.saturation || 0) / 100.0;
+
+    const channels = ['red', 'orange', 'yellow', 'green', 'aqua', 'blue', 'purple', 'magenta'];
+    const channelMods = [];
+    for (let ch of channels) {
+      if (hslMods[ch]) {
+        channelMods.push({
+          center: HSL_COLOR_CHANNELS[ch].center,
+          range: HSL_COLOR_CHANNELS[ch].range,
+          hue: hslMods[ch].hue || 0,
+          sat: (hslMods[ch].sat || 0) / 100.0,
+          lum: (hslMods[ch].lum || 0) / 100.0
+        });
+      }
+    }
+
+    for (let i = 0; i < len; i += 4) {
+      let r = data[i] / 255.0;
+      let g = data[i + 1] / 255.0;
+      let b = data[i + 2] / 255.0;
+
+      // 1. White Balance
+      r *= rTemp;
+      g *= gTemp;
+      b *= bTemp;
+
+      // 2. Exposure
+      r *= evMult;
+      g *= evMult;
+      b *= evMult;
+
+      let lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+
+      // 3. Highlights & Whites
+      if (lum > 0.42) {
+        const hiWeight = Math.min(1.0, (lum - 0.42) / 0.58);
+        const hiMod = 1.0 + hiVal * hiWeight * 0.45;
+        r *= hiMod;
+        g *= hiMod;
+        b *= hiMod;
+
+        if (lum > 0.68) {
+          const whWeight = (lum - 0.68) / 0.32;
+          const whMod = 1.0 + whVal * whWeight * 0.35;
+          r *= whMod;
+          g *= whMod;
+          b *= whMod;
+        }
+      }
+
+      // 4. Shadows & Blacks
+      if (lum < 0.68) {
+        const shWeight = Math.max(0.0, (0.68 - lum) / 0.68);
+        const shBoost = shVal * shWeight * 0.38;
+        r += shBoost;
+        g += shBoost;
+        b += shBoost;
+
+        const blBoost = blVal * (1.0 - lum) * 0.18;
+        r += blBoost;
+        g += blBoost;
+        b += blBoost;
+      }
+
+      // 5. Contrast (midpoint 0.42)
+      r = (r - 0.42) * contrastFactor + 0.42;
+      g = (g - 0.42) * contrastFactor + 0.42;
+      b = (b - 0.42) * contrastFactor + 0.42;
+
+      r = Math.max(0.0, Math.min(1.0, r));
+      g = Math.max(0.0, Math.min(1.0, g));
+      b = Math.max(0.0, Math.min(1.0, b));
+
+      // 6. HSL Color Mixer & Vibrance
+      let [h, s, l] = rgbToHsl(r, g, b);
+
+      if (channelMods.length > 0 && s > 0.02) {
+        for (let ch of channelMods) {
+          let diff = Math.abs(h - ch.center);
+          if (diff > 180) diff = 360 - diff;
+          if (diff < ch.range) {
+            const w = 1.0 - (diff / ch.range);
+            const weight = w * w * (3.0 - 2.0 * w);
+            h += ch.hue * weight;
+            s += ch.sat * weight * s;
+            l += ch.lum * weight * 0.35;
+          }
+        }
+      }
+
+      if (satVal !== 0) {
+        s += satVal * s;
+      }
+      if (vibVal !== 0) {
+        const vibWeight = (1.0 - s);
+        s += vibVal * vibWeight * 0.7;
+      }
+
+      s = Math.max(0.0, Math.min(1.0, s));
+      l = Math.max(0.0, Math.min(1.0, l));
+
+      const [finalR, finalG, finalB] = hslToRgb(h, s, l);
+
+      data[i]     = Math.min(255, Math.max(0, Math.round(finalR * 255.0)));
+      data[i + 1] = Math.min(255, Math.max(0, Math.round(finalG * 255.0)));
+      data[i + 2] = Math.min(255, Math.max(0, Math.round(finalB * 255.0)));
+    }
+
+    return imageData;
+  }
+
+  const ParametricColorEngine = {
+    presets: PRESET_RECIPES,
+    activeRecipe: JSON.parse(JSON.stringify(PRESET_RECIPES['donggi-summer'])),
+    enabled: true,
+
+    getRecipe(id) {
+      return PRESET_RECIPES[id] || null;
+    },
+
+    setRecipe(recipe) {
+      this.activeRecipe = JSON.parse(JSON.stringify(recipe));
+    },
+
+    processCanvas(canvas, recipe = this.activeRecipe) {
+      if (!canvas || !canvas.getContext) return;
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      try {
+        const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        applyParametricGrading(imgData, recipe);
+        ctx.putImageData(imgData, 0, 0);
+      } catch (err) {
+        console.warn('[ParametricColorEngine] Canvas processing failed:', err);
+      }
+    },
+
+    processImageData(imageData, recipe = this.activeRecipe) {
+      return applyParametricGrading(imageData, recipe);
+    },
+
+    getLivePreviewCSS(recipe = this.activeRecipe) {
+      if (!recipe) return '';
+      const t = recipe.tone || {};
+      const c = recipe.color || {};
+      const ev = t.exposure || 0;
+      const contrast = 1.0 + (t.contrast || 0) / 160.0;
+      const bright = Math.pow(2, ev * 0.45);
+      const sat = 1.0 + (c.saturation || 0) / 100.0 + (c.vibrance || 0) / 180.0;
+      const sepia = (c.temp || 0) > 0 ? (c.temp / 100.0) * 0.12 : 0;
+      const hueRotate = (c.tint || 0) * -0.2;
+      return `brightness(${bright.toFixed(3)}) contrast(${contrast.toFixed(3)}) saturate(${sat.toFixed(3)}) sepia(${sepia.toFixed(3)}) hue-rotate(${hueRotate.toFixed(1)}deg)`;
+    }
+  };
+
   global.FilmSpectralEngine = FilmSpectralEngine;
+  global.ParametricColorEngine = ParametricColorEngine;
 
 })(typeof window !== 'undefined' ? window : this);
+
