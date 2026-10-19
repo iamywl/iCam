@@ -2,11 +2,11 @@
   "schemaVersion": "1.0.0",
   "projectName": "iCam / SnapStudio",
   "loopArchitecture": "Closed-Loop Engineering (Plan -> Registry Check -> Develop -> Automated Verify -> State Update -> Feedback Re-Plan)",
-  "lastUpdated": "2026-10-19T09:25:00+09:00",
+  "lastUpdated": "2026-10-19T10:10:00+09:00",
   "metrics": {
-    "totalRegisteredErrorCases": 11,
+    "totalRegisteredErrorCases": 12,
     "resolvedAndGuardedCount": 11,
-    "activeOpenCount": 0,
+    "activeOpenCount": 1,
     "automatedChecksCount": 790,
     "regressionPassRate": "100%"
   },
@@ -175,6 +175,21 @@
       "assertionKey": "eight_real_iphone_models_portrait_and_landscape_440_checks",
       "status": "RESOLVED_AND_GUARDED",
       "lastVerifiedAt": "2026-10-19T09:25:00+09:00"
+    },
+    {
+      "id": "ERR-012",
+      "title": "3중 정보 중복, 뷰파인더 HUD 과밀화, 필터 칩 텍스트 잘림 및 모바일 Safe-Area 셔터 조작성 저하",
+      "category": "HUMAN_CENTRIC_UI_UX_AND_SAFE_AREA",
+      "severity": "CRITICAL",
+      "discoveredInPhase": "Real iPhone Live Screenshot Inspection",
+      "symptom": "1) 동일한 필터명(예: Peach Glow)이 상단 배너, 뷰파인더 플로팅 스위처, 하단 트레이 3곳에 중복 노출됨. 2) 플래시·카메라 전환 버튼이 상단 툴바와 하단 하드웨어 바에 중복 존재. 3) 뷰파인더 내부 텍스트(35mm F/2.0, Canon IXY, 24/36, Ai AF, OPTICAL READY, 날짜/문구)가 난립하여 피사체를 가림. 4) 필터 칩 텍스트('Sunset C...')가 말림. 5) 실제 아이폰 사파리 브라우저 환경에서 하단 셔터 및 모드 다이얼이 iOS 홈 인디케이터 바(하단 34px)와 겹쳐 조작성이 저하됨.",
+      "rootCause": "DOM BoundingBox 비충돌 검증만 통과하면 합격으로 판정하고, 정보 아키텍처(IA)의 중복 제거, 뷰파인더 시야 무결성, 텍스트 가독성, 실제 모바일 Safe Area 여백에 대한 시각적 휴리스틱 검증 기준이 부재했음.",
+      "resolution": "1) QAAgent에 '4대 UI/UX 시각 감사 휴리스틱' 탑재. 2) 정보 중복 단일화(필터명은 하단 트레이 1곳, 플래시/전환은 상단 툴바로 통일). 3) 뷰파인더 HUD 미니멀화(클래식 톤앤매너 1~2개 컬러로 정돈, 불필요한 가짜 텍스트 제거). 4) 필터 칩 min-width 및 가로 스크롤 패딩 확보. 5) 뷰파인더 높이를 정밀 축소하여 셔터 독 전체가 Safe Area 위로 100% 완전 노출되도록 보정.",
+      "preventionRule": "QA 검증 시 BoundingBox뿐만 아니라 (1) 텍스트/버튼 중복도 <= 1, (2) 뷰파인더 중앙 70% 영역 텍스트 배제, (3) 텍스트 말림(ellipsis/overflow) 0건, (4) shutter.bottom <= window.innerHeight - 34px(Safe Area)을 자동화 어설션으로 강제해야 한다.",
+      "regressionTestScript": "scripts/test-iphone-lineup.py",
+      "assertionKey": "zero_redundancy_and_safe_area_dock_integrity",
+      "status": "OPEN_IN_PROGRESS",
+      "lastVerifiedAt": "2026-10-19T10:10:00+09:00"
     }
   ]
 }
