@@ -214,12 +214,12 @@
       "discoveredInPhase": "User Explicit Reference Recipe Feedback (@donggi_photo)",
       "symptom": "사용자가 제시한 동기 레시피(노출 +1.23, 대비 -88, 밝은영역 -100, 어두운영역 +45, 흰색 -89, 검정 +11, 색온도 +3, 색조 -9, 주황 채도-14/휘도+11, 초록 색조+9/휘도+17 등)와 같은 정밀한 파라메트릭 사진 보정 값이 아닌 단순 CSS 틴트에만 의존하여, 현대 폰카메라에서 그 시절·그 감성의 맑고 뽀샤시한 질감이 구현되지 못함.",
       "rootCause": "카메라 필터를 단순한 색상 레이어/틴트로 오인하여, 사진가들이 실제 필름 룩을 빚어낼 때 사용하는 톤 다이내믹 레인지(하이라이트 압축/섀도우 리프트) 및 특정 파장대별 HSL 색상혼합(주황 피부톤 채도감쇄/초록 에메랄드화)을 수치적으로 연결하지 못함.",
-      "resolution": "1) 4대 에이전트 지침 전면 개편(추상적 형용사 금지, 14개 정량 파라미터 레시피 의무화). 2) ParametricColorEngine(밝기 6종, 색상 4종, 8채널 HSL 색상혼합기) 구축. 3) 프로 레시피 조율 UI(#pro-recipe-sheet) 및 퀵 프리셋 인터랙션 설계. 4) 사용자 개발 지시 후 실 구현 및 전수 자동화 검증 예정.",
-      "preventionRule": "모든 카메라는 단순 CSS 문자열이 아닌 (1) 밝기 6종, (2) 색상 4종, (3) 8채널 HSL 색상혼합 객체로 정의된 정량적 사진 레시피를 보유해야 하며, 사용자가 직접 수치를 조율할 수 있는 인터페이스를 제공해야 한다.",
+      "resolution": "1) 4대 에이전트 지침 전면 개편(추상적 형용사 금지, 14개 정량 파라미터 레시피 의무화). 2) ParametricColorEngine(Float32 에어리 톤커브, 8채널 HSL 색상혼합기, 동기 여름 감성 @donggi_photo 레시피 1:1 정밀 일치) 구현 완료. 3) 뷰파인더 렌더링 파이프라인(renderStudioModel, switchCamera, selectCameraFilter, executeCapture)에 완전 직결하여 뷰파인더 픽셀이 실시간으로 극적 변환되도록 구축. 4) 프로 레시피 모달(#pro-recipe-modal) 및 14종 실시간 슬라이더, 시그니처 7종 프리셋 칩, Before/After 실시간 비교 토글, 뷰파인더 HUD 실시간 수치 동기화 완비. 5) scripts/test-parametric-recipe.py 7개 전 항목 및 iPhone 8개 기종 회귀 검증 100% 통과.",
+      "preventionRule": "모든 카메라는 단순 CSS 문자열이 아닌 (1) 밝기 6종, (2) 색상 4종, (3) 8채널 HSL 색상혼합 객체로 정의된 정량적 사진 레시피를 보유해야 하며, 사용자가 직접 수치를 조율할 수 있는 인터페이스를 제공해야 한다. 뷰파인더 캔버스는 반드시 레시피 변경 시 픽셀 단위로 실시간 재렌더링되어야 한다.",
       "regressionTestScript": "scripts/test-parametric-recipe.py",
       "assertionKey": "parametric_photo_recipe_tuning_engine",
-      "status": "OPEN_IN_PROGRESS",
-      "lastVerifiedAt": "2026-10-19T17:45:00+09:00"
+      "status": "RESOLVED_AND_GUARDED",
+      "lastVerifiedAt": "2026-10-19T21:43:00+09:00"
     }
   ]
 }

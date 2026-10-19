@@ -448,10 +448,18 @@
               <div class="fimo-center-focus-box" id="fimo-center-focus-box"></div>
             </div>
 
-            <!-- FIMO Status Line (날짜 ON / 사진 문구 OFF) -->
+            <!-- FIMO Status Line (날짜 ON / 사진 문구 OFF / 프로 레시피 / 비교 B/A) -->
             <div class="fimo-vf-status-line" id="fimo-vf-status-line">
               <span class="fimo-status-date active" id="fimo-toggle-date" title="날짜 스탬프 켜기/끄기">날짜 <b class="fimo-val-on">ON</b></span>
               <span class="fimo-status-caption" id="fimo-toggle-caption" title="사진 문구 켜기/끄기">사진 문구 <b class="fimo-val-off">OFF</b></span>
+              <button class="fimo-status-recipe-btn active" id="btn-toggle-pro-recipe" title="카메라 세부 조율 프로 레시피 열기">🎛️ <b>레시피 조율</b></button>
+              <button class="fimo-status-compare-btn" id="btn-viewfinder-compare" title="길게 누르거나 클릭하여 원본/보정 실시간 비교"><b>비교 B/A</b></button>
+            </div>
+            
+            <!-- Live Active Recipe HUD Banner on Viewfinder -->
+            <div class="viewfinder-recipe-pill" id="viewfinder-recipe-pill" title="현재 활성화된 사진가 감성 레시피">
+              <span class="vr-dot"></span>
+              <span id="vr-recipe-name">동기 여름 레시피 (+1.23 EV / -88 CONTRAST)</span>
             </div>
 
             <!-- FIMO Vintage Photo Caption Overlay (Visible when 사진 문구 ON) -->
@@ -2574,6 +2582,273 @@
             <span id="modal-orient-text">가로/세로 화면 회전 전환</span>
           </button>
         </div>
+  <!-- Pro Parametric Recipe / Tone Mixer Modal Sheet -->
+  <div class="modal-backdrop" id="pro-recipe-modal">
+    <div class="modal-dialog pro-recipe-dialog">
+      <div class="modal-header">
+        <div>
+          <div class="modal-title" style="display: flex; align-items: center; gap: 8px;">
+            <span>🎛️ 프로 레시피 / 카메라 색감 조율</span>
+            <span class="recipe-pro-pill">PRO ENGINE</span>
+          </div>
+          <div class="modal-subtitle">인스타그램/라이트룸 감성 사진가 레시피 14종 파라미터 실시간 제어</div>
+        </div>
+        <button class="modal-close-btn" id="btn-close-recipe-modal">✕</button>
+      </div>
+
+      <div class="modal-body pro-recipe-body">
+        <!-- Preset Quick Bar -->
+        <div class="recipe-preset-section">
+          <div class="recipe-section-label">시그니처 프리셋 레시피</div>
+          <div class="recipe-preset-scroll" id="recipe-preset-scroll">
+            <button class="recipe-preset-chip active" data-preset="donggi-summer">
+              <span class="preset-chip-emoji">🌸</span>
+              <div class="preset-chip-text">
+                <b>동기 여름 감성</b>
+                <small>@donggi_photo 카마쿠라</small>
+              </div>
+            </button>
+            <button class="recipe-preset-chip" data-preset="ditto-winter-98">
+              <span class="preset-chip-emoji">📼</span>
+              <div class="preset-chip-text">
+                <b>뉴진스 Ditto '98</b>
+                <small>겨울 VHS & 쿨톤</small>
+              </div>
+            </button>
+            <button class="recipe-preset-chip" data-preset="tokyo-y2k-ccd">
+              <span class="preset-chip-emoji">💿</span>
+              <div class="preset-chip-text">
+                <b>도쿄 Y2K CCD</b>
+                <small>시부야 디카 & 뽀샤시</small>
+              </div>
+            </button>
+            <button class="recipe-preset-chip" data-preset="fuji-superia">
+              <span class="preset-chip-emoji">🍃</span>
+              <div class="preset-chip-text">
+                <b>후지 슈퍼리아 400</b>
+                <small>청록 섀도우 & 에메랄드</small>
+              </div>
+            </button>
+            <button class="recipe-preset-chip" data-preset="kodak-portra">
+              <span class="preset-chip-emoji">🎞️</span>
+              <div class="preset-chip-text">
+                <b>코닥 포트라 400</b>
+                <small>골든아워 웜톤 스킨</small>
+              </div>
+            </button>
+            <button class="recipe-preset-chip" data-preset="leica-monochrome">
+              <span class="preset-chip-emoji">🔴</span>
+              <div class="preset-chip-text">
+                <b>라이카 모노크롬</b>
+                <small>판크로매틱 흑백</small>
+              </div>
+            </button>
+            <button class="recipe-preset-chip" data-preset="raw-neutral">
+              <span class="preset-chip-emoji">📷</span>
+              <div class="preset-chip-text">
+                <b>원본 센서 플랫</b>
+                <small>보정 전 원본 (0.0)</small>
+              </div>
+            </button>
+          </div>
+        </div>
+
+        <!-- Group 1: 밝기 💡 (Tone Curves) -->
+        <div class="recipe-param-group">
+          <div class="recipe-group-title">
+            <span>💡 밝기 (Tone Curves)</span>
+            <span class="recipe-group-badge">에어리 하이키 톤</span>
+          </div>
+
+          <div class="recipe-slider-row">
+            <div class="slider-info">
+              <span class="slider-label">노출 (Exposure)</span>
+              <span class="slider-val" id="val-exposure">+1.23</span>
+            </div>
+            <input type="range" class="recipe-range-slider" id="slider-exposure" min="-3.00" max="3.00" step="0.01" value="1.23">
+          </div>
+
+          <div class="recipe-slider-row">
+            <div class="slider-info">
+              <span class="slider-label">대비 (Contrast)</span>
+              <span class="slider-val" id="val-contrast">-88</span>
+            </div>
+            <input type="range" class="recipe-range-slider" id="slider-contrast" min="-100" max="100" step="1" value="-88">
+          </div>
+
+          <div class="recipe-slider-row">
+            <div class="slider-info">
+              <span class="slider-label">밝은 영역 (Highlights)</span>
+              <span class="slider-val" id="val-highlights">-100</span>
+            </div>
+            <input type="range" class="recipe-range-slider" id="slider-highlights" min="-100" max="100" step="1" value="-100">
+          </div>
+
+          <div class="recipe-slider-row">
+            <div class="slider-info">
+              <span class="slider-label">어두운 영역 (Shadows)</span>
+              <span class="slider-val" id="val-shadows">+45</span>
+            </div>
+            <input type="range" class="recipe-range-slider" id="slider-shadows" min="-100" max="100" step="1" value="45">
+          </div>
+
+          <div class="recipe-slider-row">
+            <div class="slider-info">
+              <span class="slider-label">흰색 계열 (Whites)</span>
+              <span class="slider-val" id="val-whites">-89</span>
+            </div>
+            <input type="range" class="recipe-range-slider" id="slider-whites" min="-100" max="100" step="1" value="-89">
+          </div>
+
+          <div class="recipe-slider-row">
+            <div class="slider-info">
+              <span class="slider-label">검정 계열 (Blacks)</span>
+              <span class="slider-val" id="val-blacks">+11</span>
+            </div>
+            <input type="range" class="recipe-range-slider" id="slider-blacks" min="-100" max="100" step="1" value="11">
+          </div>
+        </div>
+
+        <!-- Group 2: 색상 🎨 (Color Balance) -->
+        <div class="recipe-param-group">
+          <div class="recipe-group-title">
+            <span>🎨 색상 (Color Balance)</span>
+            <span class="recipe-group-badge">화이트밸런스</span>
+          </div>
+
+          <div class="recipe-slider-row">
+            <div class="slider-info">
+              <span class="slider-label">색온도 (Temp)</span>
+              <span class="slider-val" id="val-temp">+3</span>
+            </div>
+            <input type="range" class="recipe-range-slider" id="slider-temp" min="-100" max="100" step="1" value="3">
+          </div>
+
+          <div class="recipe-slider-row">
+            <div class="slider-info">
+              <span class="slider-label">색조 (Tint)</span>
+              <span class="slider-val" id="val-tint">-9</span>
+            </div>
+            <input type="range" class="recipe-range-slider" id="slider-tint" min="-100" max="100" step="1" value="-9">
+          </div>
+
+          <div class="recipe-slider-row">
+            <div class="slider-info">
+              <span class="slider-label">생동감 (Vibrance)</span>
+              <span class="slider-val" id="val-vibrance">+9</span>
+            </div>
+            <input type="range" class="recipe-range-slider" id="slider-vibrance" min="-100" max="100" step="1" value="9">
+          </div>
+
+          <div class="recipe-slider-row">
+            <div class="slider-info">
+              <span class="slider-label">채도 (Saturation)</span>
+              <span class="slider-val" id="val-saturation">+6</span>
+            </div>
+            <input type="range" class="recipe-range-slider" id="slider-saturation" min="-100" max="100" step="1" value="6">
+          </div>
+        </div>
+
+        <!-- Group 3: 색상 혼합 🌈 (HSL Selective Color) -->
+        <div class="recipe-param-group">
+          <div class="recipe-group-title">
+            <span>🌈 색상 혼합 (HSL Selective Color)</span>
+            <span class="recipe-group-badge">스킨톤 & 청량감 핵심</span>
+          </div>
+
+          <!-- Red -->
+          <div class="recipe-hsl-subgroup">
+            <div class="hsl-dot red"></div>
+            <span class="hsl-subgroup-name">빨간색 (Red)</span>
+          </div>
+          <div class="recipe-slider-row">
+            <div class="slider-info">
+              <span class="slider-label">🔴 빨강 채도</span>
+              <span class="slider-val" id="val-hsl-red-sat">+10</span>
+            </div>
+            <input type="range" class="recipe-range-slider" id="slider-hsl-red-sat" min="-100" max="100" step="1" value="10">
+          </div>
+          <div class="recipe-slider-row">
+            <div class="slider-info">
+              <span class="slider-label">🔴 빨강 휘도</span>
+              <span class="slider-val" id="val-hsl-red-lum">+16</span>
+            </div>
+            <input type="range" class="recipe-range-slider" id="slider-hsl-red-lum" min="-100" max="100" step="1" value="16">
+          </div>
+
+          <!-- Orange -->
+          <div class="recipe-hsl-subgroup" style="margin-top: 10px;">
+            <div class="hsl-dot orange"></div>
+            <span class="hsl-subgroup-name">주황색 (Orange) — 피부 붉은기 제거 / 맑은 도자기 톤</span>
+          </div>
+          <div class="recipe-slider-row">
+            <div class="slider-info">
+              <span class="slider-label">🟠 주황 채도</span>
+              <span class="slider-val" id="val-hsl-orange-sat">-14</span>
+            </div>
+            <input type="range" class="recipe-range-slider" id="slider-hsl-orange-sat" min="-100" max="100" step="1" value="-14">
+          </div>
+          <div class="recipe-slider-row">
+            <div class="slider-info">
+              <span class="slider-label">🟠 주황 휘도</span>
+              <span class="slider-val" id="val-hsl-orange-lum">+11</span>
+            </div>
+            <input type="range" class="recipe-range-slider" id="slider-hsl-orange-lum" min="-100" max="100" step="1" value="11">
+          </div>
+
+          <!-- Yellow -->
+          <div class="recipe-hsl-subgroup" style="margin-top: 10px;">
+            <div class="hsl-dot yellow"></div>
+            <span class="hsl-subgroup-name">노란색 (Yellow) — 따사로운 여름 햇살</span>
+          </div>
+          <div class="recipe-slider-row">
+            <div class="slider-info">
+              <span class="slider-label">🟡 노랑 채도</span>
+              <span class="slider-val" id="val-hsl-yellow-sat">+11</span>
+            </div>
+            <input type="range" class="recipe-range-slider" id="slider-hsl-yellow-sat" min="-100" max="100" step="1" value="11">
+          </div>
+          <div class="recipe-slider-row">
+            <div class="slider-info">
+              <span class="slider-label">🟡 노랑 휘도</span>
+              <span class="slider-val" id="val-hsl-yellow-lum">+12</span>
+            </div>
+            <input type="range" class="recipe-range-slider" id="slider-hsl-yellow-lum" min="-100" max="100" step="1" value="12">
+          </div>
+
+          <!-- Green -->
+          <div class="recipe-hsl-subgroup" style="margin-top: 10px;">
+            <div class="hsl-dot green"></div>
+            <span class="hsl-subgroup-name">초록색 (Green) — 청량한 에메랄드 나뭇잎</span>
+          </div>
+          <div class="recipe-slider-row">
+            <div class="slider-info">
+              <span class="slider-label">🟢 초록 색조</span>
+              <span class="slider-val" id="val-hsl-green-hue">+9</span>
+            </div>
+            <input type="range" class="recipe-range-slider" id="slider-hsl-green-hue" min="-50" max="50" step="1" value="9">
+          </div>
+          <div class="recipe-slider-row">
+            <div class="slider-info">
+              <span class="slider-label">🟢 초록 채도</span>
+              <span class="slider-val" id="val-hsl-green-sat">+6</span>
+            </div>
+            <input type="range" class="recipe-range-slider" id="slider-hsl-green-sat" min="-100" max="100" step="1" value="6">
+          </div>
+          <div class="recipe-slider-row">
+            <div class="slider-info">
+              <span class="slider-label">🟢 초록 휘도</span>
+              <span class="slider-val" id="val-hsl-green-lum">+17</span>
+            </div>
+            <input type="range" class="recipe-range-slider" id="slider-hsl-green-lum" min="-100" max="100" step="1" value="17">
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer pro-recipe-footer">
+        <button class="btn-secondary" id="btn-recipe-reset">🔄 기본값 리셋</button>
+        <button class="btn-secondary" id="btn-recipe-compare" title="누르고 있으면 원본 사진과 실시간 비교됩니다">👁️ 원본 비교 (B/A)</button>
+        <button class="btn-primary" id="btn-recipe-apply">✓ 레시피 적용 완료</button>
       </div>
     </div>
   </div>

@@ -1660,6 +1660,11 @@ function renderStudioModel(canvas, toneVal = 35) {
   }
 
   ctx.restore();
+
+  // Parametric Color Science & Film Recipe Processing
+  if (!state.isBeforeModeActive && window.ParametricColorEngine && window.ParametricColorEngine.enabled) {
+    window.ParametricColorEngine.processCanvas(canvas, window.ParametricColorEngine.activeRecipe);
+  }
 }
 
 // ==========================================================================
@@ -1865,8 +1870,25 @@ function switchCamera(camId) {
     }
   }
 
-  // 7. Apply Camera-specific Filter to Media
+  // 7. Apply Camera-specific Filter & Parametric Photographic Recipe
+  if (!state.isCustomRecipe && window.ParametricColorEngine) {
+    const defaultRecipe = window.ParametricColorEngine.getRecipeForCamera(camId);
+    if (defaultRecipe) {
+      window.ParametricColorEngine.setRecipe(defaultRecipe);
+      if (typeof syncProRecipeSlidersToUI === 'function') {
+        syncProRecipeSlidersToUI(defaultRecipe);
+      }
+    }
+  }
+
+  if (state.cameraSource === 'model') {
+    const modelCanvas = document.getElementById('model-canvas');
+    if (modelCanvas) renderStudioModel(modelCanvas, state.retouchTone);
+  }
   applyCurrentCameraFilter();
+  if (typeof updateRecipeHudUI === 'function') {
+    updateRecipeHudUI();
+  }
 
   // 8. Update Right Spec Sidebar
   updateRightSpecCard(camId);
@@ -1920,6 +1942,10 @@ function selectCameraFilter(filterKey) {
 
   soundEngine.playTick();
   state.selectedFilters[state.activeCamera] = filterKey;
+  if (state.cameraSource === 'model') {
+    const modelCanvas = document.getElementById('model-canvas');
+    if (modelCanvas) renderStudioModel(modelCanvas, state.retouchTone);
+  }
   applyCurrentCameraFilter();
 
   // Update active state on chips in current drawer & smooth center scroll
@@ -1988,18 +2014,22 @@ function applyCurrentCameraFilter() {
   const evVal = typeof state.fimoExposureEV === 'number' ? state.fimoExposureEV : 0.0;
   const evCss = Math.abs(evVal) > 0.01 ? `brightness(${(1 + evVal * 0.14).toFixed(3)}) ` : '';
 
-  if (cam.filters) {
-    const activeFilterKey = state.selectedFilters[cam.id];
-    const filterSpec = cam.filters[activeFilterKey] || Object.values(cam.filters)[0];
-    mediaFilterEl.style.filter = `${evCss}${filterSpec.css} url(#spectralMatrixFilter)`;
-  } else if (cam.id === 'sihyun-color') {
-    const toneRatio = 1 + (state.retouchTone - 35) * 0.0035;
-    mediaFilterEl.style.filter = `${evCss}brightness(${toneRatio}) contrast(${1 + (state.retouchTone - 35) * 0.001}) url(#spectralMatrixFilter)`;
+  if (state.cameraSource === 'webcam') {
+    const recipeCss = (window.ParametricColorEngine && window.ParametricColorEngine.enabled && !state.isBeforeModeActive)
+      ? window.ParametricColorEngine.getLivePreviewCSS(window.ParametricColorEngine.activeRecipe)
+      : '';
+    mediaFilterEl.style.filter = state.isBeforeModeActive
+      ? 'none'
+      : `${recipeCss} ${evCss}url(#spectralMatrixFilter)`;
   } else {
-    mediaFilterEl.style.filter = `${evCss}url(#spectralMatrixFilter)`;
+    // Model Canvas has pixel-level Float32 spectral & parametric color grading directly on canvas context
+    mediaFilterEl.style.filter = 'none';
   }
 
   updateFilterHud();
+  if (typeof updateRecipeHudUI === 'function') {
+    updateRecipeHudUI();
+  }
 }
 
 // Right Spec Card Update
@@ -6021,6 +6051,267 @@ function initDeviceAndOSSwitcher() {
 }
 
 // ==========================================================================
+// 6.5. Pro Parametric Recipe & Tone Mixer Controller (Photographer Science)
+// ==========================================================================
+
+function openProRecipeModal() {
+  const modal = document.getElementById('pro-recipe-modal');
+  if (!modal) return;
+  modal.classList.add('open');
+  if (window.ParametricColorEngine) {
+    syncProRecipeSlidersToUI(window.ParametricColorEngine.activeRecipe);
+  }
+}
+
+function closeProRecipeModal() {
+  const modal = document.getElementById('pro-recipe-modal');
+  if (modal) modal.classList.remove('open');
+}
+
+function setSliderVal(sliderId, valId, value, fmt) {
+  const slider = document.getElementById(sliderId);
+  const valEl = document.getElementById(valId);
+  if (slider) slider.value = value;
+  if (valEl) valEl.textContent = fmt ? fmt(value) : value;
+}
+
+function syncProRecipeSlidersToUI(recipe) {
+  if (!recipe) return;
+  const t = recipe.tone || {};
+  const c = recipe.color || {};
+  const hsl = recipe.hsl || {};
+
+  // Tone
+  setSliderVal('slider-exposure', 'val-exposure', t.exposure !== undefined ? t.exposure : 1.23, (v) => (v >= 0 ? '+' : '') + Number(v).toFixed(2));
+  setSliderVal('slider-contrast', 'val-contrast', t.contrast !== undefined ? t.contrast : -88, (v) => (v >= 0 ? '+' : '') + v);
+  setSliderVal('slider-highlights', 'val-highlights', t.highlights !== undefined ? t.highlights : -100, (v) => (v >= 0 ? '+' : '') + v);
+  setSliderVal('slider-shadows', 'val-shadows', t.shadows !== undefined ? t.shadows : 45, (v) => (v >= 0 ? '+' : '') + v);
+  setSliderVal('slider-whites', 'val-whites', t.whites !== undefined ? t.whites : -89, (v) => (v >= 0 ? '+' : '') + v);
+  setSliderVal('slider-blacks', 'val-blacks', t.blacks !== undefined ? t.blacks : 11, (v) => (v >= 0 ? '+' : '') + v);
+
+  // Color
+  setSliderVal('slider-temp', 'val-temp', c.temp !== undefined ? c.temp : 3, (v) => (v >= 0 ? '+' : '') + v);
+  setSliderVal('slider-tint', 'val-tint', c.tint !== undefined ? c.tint : -9, (v) => (v >= 0 ? '+' : '') + v);
+  setSliderVal('slider-vibrance', 'val-vibrance', c.vibrance !== undefined ? c.vibrance : 9, (v) => (v >= 0 ? '+' : '') + v);
+  setSliderVal('slider-saturation', 'val-saturation', c.saturation !== undefined ? c.saturation : 6, (v) => (v >= 0 ? '+' : '') + v);
+
+  // HSL
+  const rRed = hsl.red || {};
+  const rOrange = hsl.orange || {};
+  const rYellow = hsl.yellow || {};
+  const rGreen = hsl.green || {};
+
+  setSliderVal('slider-hsl-red-sat', 'val-hsl-red-sat', rRed.sat !== undefined ? rRed.sat : 10, (v) => (v >= 0 ? '+' : '') + v);
+  setSliderVal('slider-hsl-red-lum', 'val-hsl-red-lum', rRed.lum !== undefined ? rRed.lum : 16, (v) => (v >= 0 ? '+' : '') + v);
+
+  setSliderVal('slider-hsl-orange-sat', 'val-hsl-orange-sat', rOrange.sat !== undefined ? rOrange.sat : -14, (v) => (v >= 0 ? '+' : '') + v);
+  setSliderVal('slider-hsl-orange-lum', 'val-hsl-orange-lum', rOrange.lum !== undefined ? rOrange.lum : 11, (v) => (v >= 0 ? '+' : '') + v);
+
+  setSliderVal('slider-hsl-yellow-sat', 'val-hsl-yellow-sat', rYellow.sat !== undefined ? rYellow.sat : 11, (v) => (v >= 0 ? '+' : '') + v);
+  setSliderVal('slider-hsl-yellow-lum', 'val-hsl-yellow-lum', rYellow.lum !== undefined ? rYellow.lum : 12, (v) => (v >= 0 ? '+' : '') + v);
+
+  setSliderVal('slider-hsl-green-hue', 'val-hsl-green-hue', rGreen.hue !== undefined ? rGreen.hue : 9, (v) => (v >= 0 ? '+' : '') + v);
+  setSliderVal('slider-hsl-green-sat', 'val-hsl-green-sat', rGreen.sat !== undefined ? rGreen.sat : 6, (v) => (v >= 0 ? '+' : '') + v);
+  setSliderVal('slider-hsl-green-lum', 'val-hsl-green-lum', rGreen.lum !== undefined ? rGreen.lum : 17, (v) => (v >= 0 ? '+' : '') + v);
+
+  // Update preset chip active state
+  document.querySelectorAll('.recipe-preset-chip').forEach(chip => {
+    chip.classList.toggle('active', chip.dataset.preset === recipe.id);
+  });
+
+  updateRecipeHudUI();
+}
+
+function updateRecipeFromSliders() {
+  if (!window.ParametricColorEngine) return;
+  const current = window.ParametricColorEngine.activeRecipe || {};
+  if (!current.tone) current.tone = {};
+  if (!current.color) current.color = {};
+  if (!current.hsl) current.hsl = {};
+
+  const getNum = (id, def = 0) => {
+    const el = document.getElementById(id);
+    return el ? parseFloat(el.value) : def;
+  };
+
+  current.tone.exposure = getNum('slider-exposure', 1.23);
+  current.tone.contrast = getNum('slider-contrast', -88);
+  current.tone.highlights = getNum('slider-highlights', -100);
+  current.tone.shadows = getNum('slider-shadows', 45);
+  current.tone.whites = getNum('slider-whites', -89);
+  current.tone.blacks = getNum('slider-blacks', 11);
+
+  current.color.temp = getNum('slider-temp', 3);
+  current.color.tint = getNum('slider-tint', -9);
+  current.color.vibrance = getNum('slider-vibrance', 9);
+  current.color.saturation = getNum('slider-saturation', 6);
+
+  current.hsl.red = { hue: 0, sat: getNum('slider-hsl-red-sat', 10), lum: getNum('slider-hsl-red-lum', 16) };
+  current.hsl.orange = { hue: 0, sat: getNum('slider-hsl-orange-sat', -14), lum: getNum('slider-hsl-orange-lum', 11) };
+  current.hsl.yellow = { hue: 0, sat: getNum('slider-hsl-yellow-sat', 11), lum: getNum('slider-hsl-yellow-lum', 12) };
+  current.hsl.green = { hue: getNum('slider-hsl-green-hue', 9), sat: getNum('slider-hsl-green-sat', 6), lum: getNum('slider-hsl-green-lum', 17) };
+
+  state.isCustomRecipe = true;
+  window.ParametricColorEngine.setRecipe(current);
+
+  // Trigger live viewfinder update
+  if (state.cameraSource === 'model') {
+    const canvas = document.getElementById('model-canvas');
+    if (canvas) renderStudioModel(canvas, state.retouchTone);
+  } else {
+    applyCurrentCameraFilter();
+  }
+  updateRecipeHudUI();
+}
+
+function updateRecipeHudUI() {
+  const pill = document.getElementById('viewfinder-recipe-pill');
+  const label = document.getElementById('vr-recipe-name');
+  if (!pill || !label || !window.ParametricColorEngine) return;
+
+  const rec = window.ParametricColorEngine.activeRecipe;
+  if (!rec) return;
+
+  const ev = (rec.tone?.exposure >= 0 ? '+' : '') + Number(rec.tone?.exposure || 0).toFixed(2);
+  const ct = (rec.tone?.contrast >= 0 ? '+' : '') + (rec.tone?.contrast || 0);
+  const name = rec.name || (state.isCustomRecipe ? '커스텀 조율 레시피' : '프로 레시피');
+  label.textContent = `${name} (${ev} EV / ${ct} CONTRAST)`;
+}
+
+function setBeforeCompareMode(active) {
+  state.isBeforeModeActive = active;
+  const compareBtn1 = document.getElementById('btn-viewfinder-compare');
+  const compareBtn2 = document.getElementById('btn-recipe-compare');
+  if (compareBtn1) compareBtn1.classList.toggle('comparing', active);
+  if (compareBtn2) compareBtn2.classList.toggle('comparing', active);
+
+  const pill = document.getElementById('viewfinder-recipe-pill');
+  const label = document.getElementById('vr-recipe-name');
+  if (label && pill) {
+    if (active) {
+      label.textContent = '● [BEFORE] 원본 표준 센서 색감 (RAW 0.0)';
+      label.style.color = '#f97316';
+    } else {
+      label.style.color = '#e2e8f0';
+      updateRecipeHudUI();
+    }
+  }
+
+  if (state.cameraSource === 'model') {
+    const canvas = document.getElementById('model-canvas');
+    if (canvas) renderStudioModel(canvas, state.retouchTone);
+  } else {
+    applyCurrentCameraFilter();
+  }
+}
+
+function initProRecipeUI() {
+  const btnToggle = document.getElementById('btn-toggle-pro-recipe');
+  const btnClose = document.getElementById('btn-close-recipe-modal');
+  const btnApply = document.getElementById('btn-recipe-apply');
+  const btnReset = document.getElementById('btn-recipe-reset');
+  const btnCompareVf = document.getElementById('btn-viewfinder-compare');
+  const btnCompareModal = document.getElementById('btn-recipe-compare');
+
+  if (btnToggle) btnToggle.addEventListener('click', openProRecipeModal);
+  if (btnClose) btnClose.addEventListener('click', closeProRecipeModal);
+  if (btnApply) btnApply.addEventListener('click', closeProRecipeModal);
+
+  // Reset to default active preset
+  if (btnReset) {
+    btnReset.addEventListener('click', () => {
+      if (window.ParametricColorEngine) {
+        const activeChip = document.querySelector('.recipe-preset-chip.active');
+        const presetId = activeChip ? activeChip.dataset.preset : 'donggi-summer';
+        const rec = window.ParametricColorEngine.resetToPreset(presetId);
+        state.isCustomRecipe = false;
+        syncProRecipeSlidersToUI(rec);
+        if (state.cameraSource === 'model') {
+          const canvas = document.getElementById('model-canvas');
+          if (canvas) renderStudioModel(canvas, state.retouchTone);
+        } else {
+          applyCurrentCameraFilter();
+        }
+        showDynamicIslandBanner('RECIPE RESET', rec.name, 1500);
+      }
+    });
+  }
+
+  // Before / After Touch & Hold & Click handlers
+  const wireCompare = (btn) => {
+    if (!btn) return;
+    let isPressed = false;
+    btn.addEventListener('mousedown', (e) => { e.preventDefault(); isPressed = true; setBeforeCompareMode(true); });
+    btn.addEventListener('touchstart', (e) => { e.preventDefault(); isPressed = true; setBeforeCompareMode(true); }, { passive: false });
+    window.addEventListener('mouseup', () => { if (isPressed) { isPressed = false; setBeforeCompareMode(false); } });
+    window.addEventListener('touchend', () => { if (isPressed) { isPressed = false; setBeforeCompareMode(false); } });
+    btn.addEventListener('mouseleave', () => { if (isPressed) { isPressed = false; setBeforeCompareMode(false); } });
+  };
+  wireCompare(btnCompareVf);
+  wireCompare(btnCompareModal);
+
+  // Preset Chips
+  document.querySelectorAll('.recipe-preset-chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const presetId = chip.dataset.preset;
+      if (window.ParametricColorEngine) {
+        const rec = window.ParametricColorEngine.resetToPreset(presetId);
+        if (rec) {
+          state.isCustomRecipe = false;
+          syncProRecipeSlidersToUI(rec);
+          if (state.cameraSource === 'model') {
+            const canvas = document.getElementById('model-canvas');
+            if (canvas) renderStudioModel(canvas, state.retouchTone);
+          } else {
+            applyCurrentCameraFilter();
+          }
+          showDynamicIslandBanner('RECIPE LOADED', rec.name, 1600);
+        }
+      }
+    });
+  });
+
+  // Slider Input Listeners
+  const sliderDefs = [
+    { id: 'slider-exposure', valId: 'val-exposure', fmt: (v) => (v >= 0 ? '+' : '') + Number(v).toFixed(2) },
+    { id: 'slider-contrast', valId: 'val-contrast', fmt: (v) => (v >= 0 ? '+' : '') + v },
+    { id: 'slider-highlights', valId: 'val-highlights', fmt: (v) => (v >= 0 ? '+' : '') + v },
+    { id: 'slider-shadows', valId: 'val-shadows', fmt: (v) => (v >= 0 ? '+' : '') + v },
+    { id: 'slider-whites', valId: 'val-whites', fmt: (v) => (v >= 0 ? '+' : '') + v },
+    { id: 'slider-blacks', valId: 'val-blacks', fmt: (v) => (v >= 0 ? '+' : '') + v },
+    { id: 'slider-temp', valId: 'val-temp', fmt: (v) => (v >= 0 ? '+' : '') + v },
+    { id: 'slider-tint', valId: 'val-tint', fmt: (v) => (v >= 0 ? '+' : '') + v },
+    { id: 'slider-vibrance', valId: 'val-vibrance', fmt: (v) => (v >= 0 ? '+' : '') + v },
+    { id: 'slider-saturation', valId: 'val-saturation', fmt: (v) => (v >= 0 ? '+' : '') + v },
+    { id: 'slider-hsl-red-sat', valId: 'val-hsl-red-sat', fmt: (v) => (v >= 0 ? '+' : '') + v },
+    { id: 'slider-hsl-red-lum', valId: 'val-hsl-red-lum', fmt: (v) => (v >= 0 ? '+' : '') + v },
+    { id: 'slider-hsl-orange-sat', valId: 'val-hsl-orange-sat', fmt: (v) => (v >= 0 ? '+' : '') + v },
+    { id: 'slider-hsl-orange-lum', valId: 'val-hsl-orange-lum', fmt: (v) => (v >= 0 ? '+' : '') + v },
+    { id: 'slider-hsl-yellow-sat', valId: 'val-hsl-yellow-sat', fmt: (v) => (v >= 0 ? '+' : '') + v },
+    { id: 'slider-hsl-yellow-lum', valId: 'val-hsl-yellow-lum', fmt: (v) => (v >= 0 ? '+' : '') + v },
+    { id: 'slider-hsl-green-hue', valId: 'val-hsl-green-hue', fmt: (v) => (v >= 0 ? '+' : '') + v },
+    { id: 'slider-hsl-green-sat', valId: 'val-hsl-green-sat', fmt: (v) => (v >= 0 ? '+' : '') + v },
+    { id: 'slider-hsl-green-lum', valId: 'val-hsl-green-lum', fmt: (v) => (v >= 0 ? '+' : '') + v }
+  ];
+
+  sliderDefs.forEach(item => {
+    const el = document.getElementById(item.id);
+    const valEl = document.getElementById(item.valId);
+    if (el) {
+      el.addEventListener('input', () => {
+        if (valEl) valEl.textContent = item.fmt ? item.fmt(el.value) : el.value;
+        updateRecipeFromSliders();
+      });
+    }
+  });
+
+  // Initial Sync
+  if (window.ParametricColorEngine) {
+    syncProRecipeSlidersToUI(window.ParametricColorEngine.activeRecipe);
+  }
+}
+
+// ==========================================================================
 // 7. Application Bootstrap
 // ==========================================================================
 window.addEventListener('DOMContentLoaded', () => {
@@ -6037,6 +6328,7 @@ window.addEventListener('DOMContentLoaded', () => {
   initEventListeners();
   initDeviceAndOSSwitcher();
   initFimoUI();
+  initProRecipeUI();
 
   // Connect Start Camera button and viewfinder touch
   const btnStartCam = document.getElementById('btn-start-camera');
@@ -6075,7 +6367,13 @@ window.DeviceDetector = DeviceDetector;
 window.selectDevicePreset = selectDevicePreset;
 window.autoScaleDeviceFrame = autoScaleDeviceFrame;
 window.openDeviceSelectorModal = openDeviceSelectorModal;
-window.closeDeviceSelectorModal = closeDeviceSelectorModal;
 window.FIMO_CAMERA_PERSONAS = FIMO_CAMERA_PERSONAS;
 window.FIMO_ORDERED_CAMERAS = FIMO_ORDERED_CAMERAS;
 window.CAM_SVG_ICONS = CAM_SVG_ICONS;
+window.openProRecipeModal = openProRecipeModal;
+window.closeProRecipeModal = closeProRecipeModal;
+window.syncProRecipeSlidersToUI = syncProRecipeSlidersToUI;
+window.setBeforeCompareMode = setBeforeCompareMode;
+window.updateRecipeFromSliders = updateRecipeFromSliders;
+window.updateRecipeHudUI = updateRecipeHudUI;
+

@@ -738,7 +738,70 @@
         orange: { hue: 3,  sat: -6,  lum: 14 },
         yellow: { hue: 5,  sat: 12,  lum: 10 }
       }
+    },
+
+    // 6. Leica M Monochrome Panchromatic
+    'leica-monochrome': {
+      id: 'leica-monochrome',
+      name: 'Leica M Monochrom',
+      desc: '라이카 특유의 깊은 계조와 모노크롬 판크로매틱 명암비',
+      tone: {
+        exposure: 0.30,
+        contrast: 25,
+        highlights: -60,
+        shadows: 20,
+        whites: 10,
+        blacks: -12
+      },
+      color: {
+        temp: 0,
+        tint: 0,
+        vibrance: -100,
+        saturation: -100
+      },
+      hsl: {}
+    },
+
+    // 7. Raw Neutral (Original / Reset Baseline)
+    'raw-neutral': {
+      id: 'raw-neutral',
+      name: 'Original Raw Baseline',
+      desc: '보정 전 원본 센서 표준 색감 (0.0 Flat)',
+      tone: {
+        exposure: 0.0,
+        contrast: 0,
+        highlights: 0,
+        shadows: 0,
+        whites: 0,
+        blacks: 0
+      },
+      color: {
+        temp: 0,
+        tint: 0,
+        vibrance: 0,
+        saturation: 0
+      },
+      hsl: {}
     }
+  };
+
+  const CAMERA_PRESET_MAP = {
+    'fuji-quicksnap': 'donggi-summer',
+    'citypop-80s': 'donggi-summer',
+    'kyocera-samurai': 'donggi-summer',
+    'polaroid-sx70': 'donggi-summer',
+    'sony-cybershot': 'ditto-winter-98',
+    'sony-handycam': 'ditto-winter-98',
+    'canon-ixy': 'tokyo-y2k-ccd',
+    'olympus-mju': 'fuji-superia',
+    'contax-t2': 'kodak-portra',
+    'ricoh-gr': 'kodak-portra',
+    'oldfilm-35mm': 'kodak-portra',
+    'hasselblad-500cm': 'kodak-portra',
+    'instax-mini': 'kodak-portra',
+    'sihyun-color': 'donggi-summer',
+    'leica-m': 'leica-monochrome',
+    'passport-id': 'raw-neutral'
   };
 
   function applyParametricGrading(imageData, recipe) {
@@ -751,10 +814,11 @@
     const hslMods = recipe.hsl || {};
 
     const ev = tone.exposure || 0;
-    const evMult = Math.pow(2, ev);
+    // Photographic exposure curve with soft shoulder rolloff
+    const evFactor = Math.pow(2.0, ev * 0.65);
 
     const contrastVal = (tone.contrast || 0) / 100.0;
-    const contrastFactor = 1.0 + contrastVal * 0.75;
+    const contrastFactor = 1.0 + contrastVal * 0.55;
 
     const hiVal = (tone.highlights || 0) / 100.0;
     const whVal = (tone.whites || 0) / 100.0;
@@ -764,9 +828,9 @@
     const tempVal = (color.temp || 0) / 100.0;
     const tintVal = (color.tint || 0) / 100.0;
 
-    const rTemp = 1.0 + tempVal * 0.22 + tintVal * 0.08;
-    const gTemp = 1.0 - tintVal * 0.18;
-    const bTemp = 1.0 - tempVal * 0.22 + tintVal * 0.06;
+    const rTemp = 1.0 + tempVal * 0.18 + tintVal * 0.06;
+    const gTemp = 1.0 - tintVal * 0.14;
+    const bTemp = 1.0 - tempVal * 0.18 + tintVal * 0.05;
 
     const vibVal = (color.vibrance || 0) / 100.0;
     const satVal = (color.saturation || 0) / 100.0;
@@ -785,6 +849,8 @@
       }
     }
 
+    const isMonochrome = satVal <= -0.98;
+
     for (let i = 0; i < len; i += 4) {
       let r = data[i] / 255.0;
       let g = data[i + 1] / 255.0;
@@ -795,52 +861,55 @@
       g *= gTemp;
       b *= bTemp;
 
-      // 2. Exposure
-      r *= evMult;
-      g *= evMult;
-      b *= evMult;
+      // 2. Exposure with soft shoulder rolloff to preserve highlights
+      if (evFactor > 1.0) {
+        r = 1.0 - Math.exp(-r * evFactor * 1.05);
+        g = 1.0 - Math.exp(-g * evFactor * 1.05);
+        b = 1.0 - Math.exp(-b * evFactor * 1.05);
+      } else {
+        r *= evFactor;
+        g *= evFactor;
+        b *= evFactor;
+      }
 
       let lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
 
-      // 3. Highlights & Whites
-      if (lum > 0.42) {
-        const hiWeight = Math.min(1.0, (lum - 0.42) / 0.58);
-        const hiMod = 1.0 + hiVal * hiWeight * 0.45;
-        r *= hiMod;
-        g *= hiMod;
-        b *= hiMod;
-
-        if (lum > 0.68) {
-          const whWeight = (lum - 0.68) / 0.32;
-          const whMod = 1.0 + whVal * whWeight * 0.35;
-          r *= whMod;
-          g *= whMod;
-          b *= whMod;
-        }
+      // 3. Highlights & Whites Compression (Soft gentle rolloff, no digital muddy clamp)
+      if (lum > 0.35) {
+        const hiWeight = Math.min(1.0, (lum - 0.35) / 0.65);
+        const hiComp = 1.0 + (hiVal * 0.25 + whVal * 0.15) * hiWeight;
+        r *= hiComp;
+        g *= hiComp;
+        b *= hiComp;
       }
 
-      // 4. Shadows & Blacks
-      if (lum < 0.68) {
-        const shWeight = Math.max(0.0, (0.68 - lum) / 0.68);
-        const shBoost = shVal * shWeight * 0.38;
-        r += shBoost;
-        g += shBoost;
-        b += shBoost;
-
-        const blBoost = blVal * (1.0 - lum) * 0.18;
-        r += blBoost;
-        g += blBoost;
-        b += blBoost;
+      // 4. Shadows (+45) & Blacks (+11) Lift (Gentle vintage milky lift)
+      if (lum < 0.75) {
+        const shWeight = Math.max(0.0, (0.75 - lum) / 0.75);
+        const lift = (shVal * 0.28 + blVal * 0.16) * shWeight;
+        r += lift;
+        g += lift;
+        b += lift;
       }
 
-      // 5. Contrast (midpoint 0.42)
-      r = (r - 0.42) * contrastFactor + 0.42;
-      g = (g - 0.42) * contrastFactor + 0.42;
-      b = (b - 0.42) * contrastFactor + 0.42;
+      // 5. Contrast (Midpoint 0.52 for bright, airy Japanese summer high-key look)
+      const pivot = 0.52;
+      r = (r - pivot) * contrastFactor + pivot;
+      g = (g - pivot) * contrastFactor + pivot;
+      b = (b - pivot) * contrastFactor + pivot;
 
       r = Math.max(0.0, Math.min(1.0, r));
       g = Math.max(0.0, Math.min(1.0, g));
       b = Math.max(0.0, Math.min(1.0, b));
+
+      if (isMonochrome) {
+        const mono = 0.2126 * r + 0.7152 * g + 0.0722 * b;
+        const finalByte = Math.min(255, Math.max(0, Math.round(mono * 255.0)));
+        data[i] = finalByte;
+        data[i + 1] = finalByte;
+        data[i + 2] = finalByte;
+        continue;
+      }
 
       // 6. HSL Color Mixer & Vibrance
       let [h, s, l] = rgbToHsl(r, g, b);
@@ -864,7 +933,7 @@
       }
       if (vibVal !== 0) {
         const vibWeight = (1.0 - s);
-        s += vibVal * vibWeight * 0.7;
+        s += vibVal * vibWeight * 0.65;
       }
 
       s = Math.max(0.0, Math.min(1.0, s));
@@ -882,6 +951,7 @@
 
   const ParametricColorEngine = {
     presets: PRESET_RECIPES,
+    cameraPresetMap: CAMERA_PRESET_MAP,
     activeRecipe: JSON.parse(JSON.stringify(PRESET_RECIPES['donggi-summer'])),
     enabled: true,
 
@@ -889,8 +959,21 @@
       return PRESET_RECIPES[id] || null;
     },
 
+    getRecipeForCamera(camId) {
+      const presetId = CAMERA_PRESET_MAP[camId] || 'donggi-summer';
+      return PRESET_RECIPES[presetId] || PRESET_RECIPES['donggi-summer'];
+    },
+
     setRecipe(recipe) {
       this.activeRecipe = JSON.parse(JSON.stringify(recipe));
+    },
+
+    resetToPreset(presetId) {
+      if (PRESET_RECIPES[presetId]) {
+        this.activeRecipe = JSON.parse(JSON.stringify(PRESET_RECIPES[presetId]));
+        return this.activeRecipe;
+      }
+      return null;
     },
 
     processCanvas(canvas, recipe = this.activeRecipe) {
@@ -915,11 +998,11 @@
       const t = recipe.tone || {};
       const c = recipe.color || {};
       const ev = t.exposure || 0;
-      const contrast = 1.0 + (t.contrast || 0) / 160.0;
-      const bright = Math.pow(2, ev * 0.45);
-      const sat = 1.0 + (c.saturation || 0) / 100.0 + (c.vibrance || 0) / 180.0;
+      const contrast = 1.0 + (t.contrast || 0) / 180.0;
+      const bright = Math.pow(2, ev * 0.42);
+      const sat = Math.max(0.0, 1.0 + (c.saturation || 0) / 100.0 + (c.vibrance || 0) / 200.0);
       const sepia = (c.temp || 0) > 0 ? (c.temp / 100.0) * 0.12 : 0;
-      const hueRotate = (c.tint || 0) * -0.2;
+      const hueRotate = (c.tint || 0) * -0.22;
       return `brightness(${bright.toFixed(3)}) contrast(${contrast.toFixed(3)}) saturate(${sat.toFixed(3)}) sepia(${sepia.toFixed(3)}) hue-rotate(${hueRotate.toFixed(1)}deg)`;
     }
   };
