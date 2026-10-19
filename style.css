@@ -7998,4 +7998,92 @@ body.native-fluid-mode .device-wrapper.orientation-landscape {
   }
 }
 
+/* ==========================================================================
+   FIMO Vintage Photo Caption Overlay & Curved Exposure Arc Wheel
+   ========================================================================== */
+.fimo-caption-overlay {
+  position: absolute;
+  left: 50%;
+  bottom: 34px;
+  transform: translateX(-50%);
+  z-index: 28;
+  pointer-events: none;
+  padding: 2px 10px;
+  border-radius: 6px;
+  background: rgba(10, 12, 16, 0.42);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: 0.5px solid rgba(255, 255, 255, 0.14);
+  white-space: nowrap;
+  max-width: 86%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.fimo-caption-text {
+  font-family: "Georgia", "Times New Roman", "Apple SD Gothic Neo", serif;
+  font-size: 10.5px;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  color: rgba(255, 248, 231, 0.95);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
+}
+
+.fimo-exposure-arc-wheel {
+  position: absolute;
+  right: 6px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 108px;
+  border-radius: 50px 0 0 50px;
+  background: radial-gradient(circle at 120% 50%, rgba(28, 30, 36, 0.72) 0%, rgba(16, 18, 22, 0.42) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-right: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 27;
+  cursor: pointer;
+  user-select: none;
+  box-shadow: -2px 0 10px rgba(0, 0, 0, 0.35);
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.fimo-exposure-arc-wheel:hover {
+  border-color: rgba(245, 199, 103, 0.45);
+}
+
+.fimo-exp-arc-track {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 82px;
+  width: 100%;
+}
+
+.fimo-exp-num {
+  font-family: var(--font-hud-mono, monospace);
+  font-size: 9px;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.65);
+  line-height: 1;
+}
+
+.fimo-exp-tick {
+  width: 6px;
+  height: 1.5px;
+  background: rgba(255, 255, 255, 0.32);
+  border-radius: 1px;
+}
+
+.fimo-exp-tick.active {
+  width: 10px;
+  height: 2px;
+  background: #ff9f1c;
+  box-shadow: 0 0 5px rgba(255, 159, 28, 0.85);
+}
+
+
 

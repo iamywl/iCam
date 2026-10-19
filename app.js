@@ -74,6 +74,7 @@ const state = {
   fimoDateEnabled: true,
   fimoCaptionEnabled: false,
   fimoZoomLevel: 1.0,
+  fimoExposureEV: 0.0,
   fimoFilmRemaining: 24,
   fimoFilmTotal: 27
 };
@@ -84,6 +85,7 @@ const FIMO_CAMERA_PERSONAS = {
     personaName: 'Osaka Classic',
     isNew: true,
     subtitle: 'half frame 72',
+    captionText: 'OSAKA 1988 // HALF-FRAME',
     heroImg: 'assets/hero/kyocera-samurai_hero.png',
     thumbs: ['assets/hero/kyocera-samurai_hero.png', 'assets/hero/seoul_instc_hero.jpg', 'assets/hero/thumb_cat1.jpg']
   },
@@ -91,6 +93,7 @@ const FIMO_CAMERA_PERSONAS = {
     personaName: 'Butterfilm',
     isNew: true,
     subtitle: 'personal color studio',
+    captionText: '내가 당신을 사랑할 때 보이는 순간들',
     heroImg: 'assets/hero/sihyun-color_hero.png',
     thumbs: ['assets/hero/sihyun-color_hero.png', 'assets/hero/thumb_cat2.jpg', 'assets/hero/thumb_cat3.jpg']
   },
@@ -98,6 +101,7 @@ const FIMO_CAMERA_PERSONAS = {
     personaName: 'Seoul instc',
     isNew: false,
     subtitle: 'film white',
+    captionText: 'SEOUL // INSTANT MEMORY',
     heroImg: 'assets/hero/seoul_instc_hero.jpg',
     thumbs: ['assets/hero/thumb_cat1.jpg', 'assets/hero/thumb_cat2.jpg', 'assets/hero/thumb_cat3.jpg']
   },
@@ -105,6 +109,7 @@ const FIMO_CAMERA_PERSONAS = {
     personaName: 'Lime Memory',
     isNew: false,
     subtitle: 'all-weather 35mm',
+    captionText: '초록빛 계절의 기억, Lime',
     heroImg: 'assets/hero/olympus-mju_hero.png',
     thumbs: ['assets/hero/olympus-mju_hero.png', 'assets/hero/thumb_cat1.jpg', 'assets/hero/thumb_cat2.jpg']
   },
@@ -112,6 +117,7 @@ const FIMO_CAMERA_PERSONAS = {
     personaName: 'Cold Snap',
     isNew: false,
     subtitle: 'y2k peach ccd',
+    captionText: 'SHIBUYA 2003 // COLD SNAP',
     heroImg: 'assets/hero/canon-ixy_hero.png',
     thumbs: ['assets/hero/canon-ixy_hero.png', 'assets/hero/thumb_cat3.jpg', 'assets/hero/thumb_cat1.jpg']
   },
@@ -119,6 +125,7 @@ const FIMO_CAMERA_PERSONAS = {
     personaName: 'Nature Core',
     isNew: false,
     subtitle: '28mm street snap',
+    captionText: '숲과 바람의 기록, Nature',
     heroImg: 'assets/hero/ricoh-gr_hero.png',
     thumbs: ['assets/hero/ricoh-gr_hero.png', 'assets/hero/thumb_cat2.jpg', 'assets/hero/thumb_cat1.jpg']
   },
@@ -126,6 +133,7 @@ const FIMO_CAMERA_PERSONAS = {
     personaName: 'Pearl 08',
     isNew: false,
     subtitle: 'titanium zeiss t*',
+    captionText: '2008 PEARL // GOLDEN HOUR',
     heroImg: 'assets/hero/contax-t2_hero.png',
     thumbs: ['assets/hero/contax-t2_hero.png', 'assets/hero/thumb_cat1.jpg', 'assets/hero/thumb_cat3.jpg']
   },
@@ -133,6 +141,7 @@ const FIMO_CAMERA_PERSONAS = {
     personaName: 'Sunny Saver',
     isNew: false,
     subtitle: 'disposable 1986',
+    captionText: '1986 写ルンです // SUNNY DAY',
     heroImg: 'assets/hero/fuji-quicksnap_hero.png',
     thumbs: ['assets/hero/fuji-quicksnap_hero.png', 'assets/hero/thumb_cat1.jpg', 'assets/hero/thumb_cat2.jpg']
   },
@@ -140,20 +149,23 @@ const FIMO_CAMERA_PERSONAS = {
     personaName: 'Lazy Monkey',
     isNew: false,
     subtitle: 'minidv 3ccd camcorder',
+    captionText: '영원히 기억될 방과 후의 조각',
     heroImg: 'assets/hero/sony-handycam_hero.png',
     thumbs: ['assets/hero/sony-handycam_hero.png', 'assets/hero/thumb_cat3.jpg', 'assets/hero/thumb_cat2.jpg']
   },
   'sony-cybershot': {
     personaName: 'Night Tape 98',
     isNew: false,
-    subtitle: 'cyber cool blue',
+    subtitle: 'ditto 98 winter vhs',
+    captionText: '1998.12.19 우리의 겨울, Ditto',
     heroImg: 'assets/hero/sony-cybershot_hero.png',
     thumbs: ['assets/hero/sony-cybershot_hero.png', 'assets/hero/thumb_cat1.jpg', 'assets/hero/thumb_cat3.jpg']
   },
   'citypop-80s': {
     personaName: 'Pocari Blue',
     isNew: false,
-    subtitle: 'sunset neon 1986',
+    subtitle: 'tokyo bubble 1986',
+    captionText: '푸른 여름의 조각, 포카리 블루',
     heroImg: 'assets/hero/citypop-80s_hero.png',
     thumbs: ['assets/hero/citypop-80s_hero.png', 'assets/hero/thumb_cat2.jpg', 'assets/hero/thumb_cat1.jpg']
   },
@@ -161,6 +173,7 @@ const FIMO_CAMERA_PERSONAS = {
     personaName: "Wedding '95",
     isNew: false,
     subtitle: 'portra 400 halation',
+    captionText: '1995.05 우리의 가장 빛나던 날',
     heroImg: 'assets/hero/oldfilm-35mm_hero.png',
     thumbs: ['assets/hero/oldfilm-35mm_hero.png', 'assets/hero/thumb_cat1.jpg', 'assets/hero/thumb_cat2.jpg']
   },
@@ -168,6 +181,7 @@ const FIMO_CAMERA_PERSONAS = {
     personaName: 'Ohio Summer',
     isNew: false,
     subtitle: 'vintage folding instant',
+    captionText: 'OHIO 1979 // SUMMER BREEZE',
     heroImg: 'assets/hero/polaroid-sx70_hero.png',
     thumbs: ['assets/hero/polaroid-sx70_hero.png', 'assets/hero/thumb_cat3.jpg', 'assets/hero/thumb_cat1.jpg']
   },
@@ -175,6 +189,7 @@ const FIMO_CAMERA_PERSONAS = {
     personaName: 'Day Classic',
     isNew: false,
     subtitle: 'summilux rangefinder',
+    captionText: 'WETZLAR // TIMELESS MOMENT',
     heroImg: 'assets/hero/leica-m_hero.png',
     thumbs: ['assets/hero/leica-m_hero.png', 'assets/hero/thumb_cat2.jpg', 'assets/hero/thumb_cat3.jpg']
   },
@@ -182,6 +197,7 @@ const FIMO_CAMERA_PERSONAS = {
     personaName: 'Dark Akan 77',
     isNew: false,
     subtitle: 'medium format 6x6',
+    captionText: '1977 AKAN // DEEP SHADOW',
     heroImg: 'assets/hero/hasselblad_hero.png',
     thumbs: ['assets/hero/hasselblad_hero.png', 'assets/hero/thumb_cat1.jpg', 'assets/hero/thumb_cat2.jpg']
   },
@@ -189,6 +205,7 @@ const FIMO_CAMERA_PERSONAS = {
     personaName: 'Passport ID',
     isNew: false,
     subtitle: 'official 3.5x4.5 studio',
+    captionText: 'OFFICIAL STUDIO RECORD',
     heroImg: 'assets/hero/passport-id_hero.png',
     thumbs: ['assets/hero/passport-id_hero.png', 'assets/hero/thumb_cat3.jpg', 'assets/hero/thumb_cat2.jpg']
   }
@@ -213,44 +230,60 @@ const FIMO_ORDERED_CAMERAS = [
   'passport-id'
 ];
 
-// Authentic High-Detail Vector SVG Icons for 16 Iconic Cameras & Collectible Bodies
+// Authentic High-Detail Vector SVG Icons Matching User's Reference 16 Collectible Camera Bodies 1:1
 const CAM_SVG_ICONS = {
-  'leica-m': `<svg viewBox="0 0 96 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg leica-svg"><defs><linearGradient id="lm_top" x1="0" y1="0" x2="0" y2="18" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#FFFFFF"/><stop offset="40%" stop-color="#E2E8F0"/><stop offset="100%" stop-color="#94A3B8"/></linearGradient><linearGradient id="lm_body" x1="0" y1="18" x2="0" y2="60" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#1E232D"/><stop offset="100%" stop-color="#0E1116"/></linearGradient><radialGradient id="lm_lens_glass" cx="45%" cy="40%" r="55%"><stop offset="0%" stop-color="#A78BFA"/><stop offset="30%" stop-color="#6366F1"/><stop offset="70%" stop-color="#1E1B4B"/><stop offset="100%" stop-color="#090A0F"/></radialGradient><linearGradient id="lm_chrome" x1="0" y1="0" x2="96" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#CBD5E1"/><stop offset="50%" stop-color="#FFFFFF"/><stop offset="100%" stop-color="#94A3B8"/></linearGradient></defs><rect x="14" y="6" width="10" height="4" rx="1" fill="url(#lm_chrome)"/><rect x="62" y="5" width="16" height="5" rx="1.5" fill="url(#lm_chrome)"/><circle cx="70" cy="4" r="3" fill="#DC2626"/><rect x="36" y="7" width="12" height="3" rx="0.8" fill="#475569"/><rect x="8" y="9" width="80" height="49" rx="6" fill="url(#lm_body)" stroke="#334155" stroke-width="1"/><rect x="8" y="9" width="80" height="15" rx="5" fill="url(#lm_top)"/><line x1="8" y1="24" x2="88" y2="24" stroke="#64748B" stroke-width="0.8"/><rect x="10" y="25" width="76" height="31" rx="4" fill="#13171F" opacity="0.95"/><line x1="12" y1="28" x2="84" y2="28" stroke="#1F2937" stroke-width="0.5" stroke-dasharray="2 2"/><line x1="12" y1="53" x2="84" y2="53" stroke="#1F2937" stroke-width="0.5" stroke-dasharray="2 2"/><rect x="66" y="13" width="13" height="7" rx="1.5" fill="#38BDF8" stroke="#0284C7" stroke-width="0.8"/><rect x="46" y="14" width="7" height="5" rx="1" fill="#FEF08A" stroke="#CA8A04" stroke-width="0.6" opacity="0.9"/><rect x="23" y="13.5" width="5" height="6" rx="1" fill="#38BDF8" stroke="#0284C7" stroke-width="0.6"/><circle cx="25" cy="33" r="6.5" fill="#DC2626" stroke="#B91C1C" stroke-width="0.6"/><text x="25" y="35" fill="#FFFFFF" font-size="4.5" font-weight="900" font-family="'Times New Roman', serif" text-anchor="middle">Leica</text><circle cx="48" cy="38" r="18" fill="#1E293B" stroke="url(#lm_chrome)" stroke-width="2"/><circle cx="48" cy="38" r="14.5" fill="#0F172A" stroke="#475569" stroke-width="1"/><circle cx="48" cy="38" r="11" fill="url(#lm_lens_glass)" stroke="#312E81" stroke-width="0.8"/><path d="M41 33 A 8 8 0 0 1 54 34" stroke="#FFFFFF" stroke-width="1.4" stroke-linecap="round" opacity="0.85"/><circle cx="53" cy="42" r="2" fill="#38BDF8" opacity="0.7"/><circle cx="43" cy="43" r="1" fill="#A855F7" opacity="0.6"/></svg>`,
+  // 01. Osaka Classic (Matte Silver-Grey Minimalist Compact Body)
+  'kyocera-samurai': `<svg viewBox="0 0 96 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg samurai-svg osaka-classic-svg"><defs><linearGradient id="oc_body" x1="0" y1="8" x2="96" y2="58" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#E5E7EB"/><stop offset="50%" stop-color="#CBD5E1"/><stop offset="100%" stop-color="#94A3B8"/></linearGradient></defs><rect x="64" y="6" width="13" height="4" rx="1.2" fill="#94A3B8"/><rect x="18" y="7" width="9" height="3" rx="1" fill="#64748B"/><rect x="10" y="10" width="76" height="46" rx="6" fill="url(#oc_body)" stroke="#64748B" stroke-width="1.2"/><line x1="10" y1="22" x2="86" y2="22" stroke="#94A3B8" stroke-width="0.8"/><rect x="16" y="14" width="13" height="5.5" rx="1.2" fill="#FEF08A" stroke="#CA8A04" stroke-width="0.6"/><rect x="44" y="14" width="8" height="5" rx="1" fill="#38BDF8" stroke="#0284C7" stroke-width="0.6"/><circle cx="58" cy="16.5" r="2" fill="#EF4444"/><circle cx="48" cy="38" r="15.5" fill="#334155" stroke="#E2E8F0" stroke-width="2"/><circle cx="48" cy="38" r="11.5" fill="#0F172A" stroke="#64748B" stroke-width="1"/><circle cx="48" cy="38" r="7.5" fill="#1E293B"/><path d="M43 34 A 6 6 0 0 1 53 35" stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="round" opacity="0.85"/><text x="23" y="49" fill="#334155" font-size="4.2" font-weight="900" font-family="sans-serif">OSAKA</text></svg>`,
 
-  'contax-t2': `<svg viewBox="0 0 96 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg contax-svg"><defs><linearGradient id="ct_titanium" x1="0" y1="0" x2="96" y2="64" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#FFFDF5"/><stop offset="25%" stop-color="#F2E3C6"/><stop offset="60%" stop-color="#DDC38F"/><stop offset="100%" stop-color="#AC894B"/></linearGradient><radialGradient id="ct_glass" cx="42%" cy="38%" r="58%"><stop offset="0%" stop-color="#34D399"/><stop offset="35%" stop-color="#059669"/><stop offset="75%" stop-color="#064E3B"/><stop offset="100%" stop-color="#022C22"/></radialGradient></defs><rect x="62" y="6" width="14" height="4" rx="1.2" fill="#DDC38F" stroke="#927238" stroke-width="0.8"/><rect x="18" y="7" width="10" height="3" rx="1" fill="#AC894B"/><rect x="8" y="9" width="80" height="48" rx="5" fill="url(#ct_titanium)" stroke="#8C6D37" stroke-width="1.2"/><line x1="8" y1="21" x2="88" y2="21" stroke="#AC894B" stroke-width="0.5"/><text x="18" y="37" fill="#DC2626" font-size="8.5" font-weight="900" font-family="'Arial Black', sans-serif">T*</text><text x="16" y="27" fill="#6B4F1D" font-size="4.5" font-weight="800" font-family="sans-serif" letter-spacing="0.5">CONTAX</text><rect x="64" y="13" width="14" height="6.5" rx="1.5" fill="#FEF08A" stroke="#CA8A04" stroke-width="0.6"/><rect x="52" y="14" width="7" height="5" rx="1" fill="#60A5FA" stroke="#2563EB" stroke-width="0.6"/><circle cx="44" cy="16.5" r="2.2" fill="#DC2626" stroke="#991B1B" stroke-width="0.5"/><circle cx="48" cy="38" r="17" fill="#EAD7B2" stroke="#8C6D37" stroke-width="1.5"/><circle cx="48" cy="38" r="13" fill="#18181B" stroke="#DDC38F" stroke-width="1"/><circle cx="48" cy="38" r="9.5" fill="url(#ct_glass)"/><path d="M43 33 A 6.5 6.5 0 0 1 53 34" stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="round" opacity="0.9"/><circle cx="52" cy="42" r="1.5" fill="#6EE7B7" opacity="0.8"/></svg>`,
+  // 02. Butterfilm (Olive-Gold Champagne Top Plate & Warm Camel-Brown Leather Body)
+  'sihyun-color': `<svg viewBox="0 0 96 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg colorstudio-svg butterfilm-svg"><defs><linearGradient id="bf_top" x1="0" y1="8" x2="96" y2="24" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#E6D7B2"/><stop offset="50%" stop-color="#C8B482"/><stop offset="100%" stop-color="#9E8854"/></linearGradient><linearGradient id="bf_leather" x1="0" y1="22" x2="0" y2="58" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#855231"/><stop offset="100%" stop-color="#58331B"/></linearGradient></defs><rect x="64" y="6" width="12" height="4" rx="1.2" fill="#C8B482" stroke="#786336" stroke-width="0.7"/><rect x="20" y="7" width="8" height="3" rx="1" fill="#A16207"/><rect x="10" y="10" width="76" height="46" rx="6" fill="url(#bf_leather)" stroke="#58331B" stroke-width="1.2"/><rect x="10" y="10" width="76" height="14" rx="5" fill="url(#bf_top)"/><line x1="10" y1="24" x2="86" y2="24" stroke="#432411" stroke-width="1"/><rect x="16" y="14" width="12" height="6" rx="1.2" fill="#FEF08A" stroke="#A16207" stroke-width="0.6"/><rect x="62" y="14" width="11" height="5.5" rx="1" fill="#38BDF8" stroke="#0369A1" stroke-width="0.6"/><circle cx="48" cy="38" r="15.5" fill="#D6C498" stroke="#58331B" stroke-width="1.5"/><circle cx="48" cy="38" r="11.5" fill="#1C1917" stroke="#A89260" stroke-width="1"/><circle cx="48" cy="38" r="7.5" fill="#292524"/><path d="M43 34 A 5.5 5.5 0 0 1 53 35" stroke="#FEF08A" stroke-width="1.2" stroke-linecap="round" opacity="0.85"/></svg>`,
 
-  'ricoh-gr': `<svg viewBox="0 0 96 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg ricoh-svg"><defs><linearGradient id="gr_chassis" x1="0" y1="0" x2="0" y2="64" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#26282E"/><stop offset="100%" stop-color="#121316"/></linearGradient><radialGradient id="gr_lens" cx="45%" cy="40%" r="55%"><stop offset="0%" stop-color="#FBBF24"/><stop offset="40%" stop-color="#78350F"/><stop offset="85%" stop-color="#18181B"/><stop offset="100%" stop-color="#09090B"/></radialGradient></defs><rect x="46" y="6" width="14" height="4" rx="1" fill="#374151" stroke="#1F2937" stroke-width="0.8"/><rect x="66" y="6.5" width="12" height="3.5" rx="1" fill="#1F2937"/><circle cx="62" cy="8" r="2.5" fill="#047857" stroke="#10B981" stroke-width="1"/><rect x="8" y="9" width="80" height="48" rx="4.5" fill="url(#gr_chassis)" stroke="#374151" stroke-width="1"/><rect x="66" y="11" width="20" height="44" rx="3.5" fill="#0A0B0D" stroke="#1F2937" stroke-width="0.8"/><line x1="72" y1="16" x2="72" y2="50" stroke="#27272A" stroke-width="1" stroke-dasharray="1 3"/><line x1="78" y1="16" x2="78" y2="50" stroke="#27272A" stroke-width="1" stroke-dasharray="1 3"/><line x1="84" y1="16" x2="84" y2="50" stroke="#27272A" stroke-width="1" stroke-dasharray="1 3"/><text x="18" y="24" fill="#F3F4F6" font-size="8" font-weight="900" font-family="'Arial Black', sans-serif">GR</text><rect x="18" y="28" width="8" height="4.5" rx="1" fill="#0284C7"/><circle cx="31" cy="20" r="2" fill="#EF4444"/><circle cx="43" cy="37" r="16" fill="#1F2937" stroke="#4B5563" stroke-width="1.5"/><circle cx="43" cy="37" r="12" fill="#09090B" stroke="#374151" stroke-width="1"/><circle cx="43" cy="37" r="8.5" fill="url(#gr_lens)"/><line x1="37" y1="37" x2="49" y2="37" stroke="#27272A" stroke-width="1"/><path d="M39 33 A 5 5 0 0 1 47 34" stroke="#FFFFFF" stroke-width="1" stroke-linecap="round" opacity="0.85"/></svg>`,
+  // 03. Seoul instc (Cream/Off-White Square Instant Body with Orange Shutter Button)
+  'instax-mini': `<svg viewBox="0 0 96 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg instax-svg seoul-instc-svg"><defs><linearGradient id="si_cream" x1="16" y1="6" x2="80" y2="58" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#FFFDF9"/><stop offset="60%" stop-color="#F5F0E6"/><stop offset="100%" stop-color="#E6DEC8"/></linearGradient></defs><rect x="20" y="6" width="56" height="52" rx="12" fill="url(#si_cream)" stroke="#D6CBB5" stroke-width="1.5"/><rect x="28" y="12" width="12" height="7" rx="1.8" fill="#FEF08A" stroke="#CA8A04" stroke-width="0.7"/><rect x="58" y="12" width="9" height="7" rx="1.8" fill="#1E293B"/><circle cx="63" cy="25" r="4.2" fill="#F97316" stroke="#EA580C" stroke-width="0.8"/><circle cx="46" cy="36" r="15.5" fill="#E7E0D0" stroke="#C7B99E" stroke-width="1.5"/><circle cx="46" cy="36" r="11.5" fill="#1F2937" stroke="#9CA3AF" stroke-width="1.2"/><circle cx="46" cy="36" r="7" fill="#0F172A"/><path d="M42 32 A 5 5 0 0 1 50 33" stroke="#FFFFFF" stroke-width="1.1" stroke-linecap="round" opacity="0.9"/><text x="48" y="54" fill="#78716C" font-size="3.8" font-weight="800" font-family="sans-serif" text-anchor="middle">instc</text></svg>`,
 
-  'olympus-mju': `<svg viewBox="0 0 96 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg olympus-svg"><defs><linearGradient id="mju_body" x1="0" y1="0" x2="96" y2="64" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3F3F46"/><stop offset="45%" stop-color="#18181B"/><stop offset="100%" stop-color="#09090B"/></linearGradient><radialGradient id="mju_glass" cx="45%" cy="40%" r="55%"><stop offset="0%" stop-color="#38BDF8"/><stop offset="50%" stop-color="#0284C7"/><stop offset="100%" stop-color="#0C4A6E"/></radialGradient></defs><rect x="8" y="9" width="80" height="48" rx="12" fill="url(#mju_body)" stroke="#52525B" stroke-width="1.2"/><path d="M36 9 C50 25 50 41 36 57" stroke="#71717A" stroke-width="1.8" stroke-linecap="round"/><text x="58" y="36" fill="#F59E0B" font-size="14" font-weight="900" font-style="italic" font-family="'Times New Roman', serif">μ</text><text x="70" y="36" fill="#FBBF24" font-size="6.5" font-weight="900" font-family="sans-serif">-II</text><text x="56" y="46" fill="#A1A1AA" font-size="3.8" font-weight="700" font-family="sans-serif" letter-spacing="0.5">OLYMPUS</text><rect x="15" y="16" width="12" height="6.5" rx="2" fill="#FEF08A" stroke="#CA8A04" stroke-width="0.8"/><circle cx="21" cy="28" r="2.8" fill="#EF4444" stroke="#991B1B" stroke-width="0.6"/><circle cx="27" cy="41" r="10" fill="#18181B" stroke="#71717A" stroke-width="1.2"/><circle cx="27" cy="41" r="6.5" fill="url(#mju_glass)"/><path d="M24 38 A 4 4 0 0 1 30 39" stroke="#FFFFFF" stroke-width="0.9" stroke-linecap="round" opacity="0.85"/></svg>`,
+  // 04. Lime Memory (Olive/Lime Sage Green Rangefinder Body)
+  'olympus-mju': `<svg viewBox="0 0 96 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg olympus-svg lime-memory-svg"><defs><linearGradient id="lm_sage" x1="0" y1="10" x2="96" y2="58" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#A3B88C"/><stop offset="50%" stop-color="#849B6B"/><stop offset="100%" stop-color="#62784B"/></linearGradient></defs><rect x="62" y="6" width="14" height="4" rx="1.2" fill="#CBD5E1" stroke="#64748B" stroke-width="0.7"/><rect x="18" y="7" width="10" height="3" rx="1" fill="#94A3B8"/><rect x="10" y="10" width="76" height="46" rx="6" fill="url(#lm_sage)" stroke="#4D5E3A" stroke-width="1.2"/><rect x="10" y="10" width="76" height="12" rx="5" fill="#D8E2DC" opacity="0.85"/><line x1="10" y1="22" x2="86" y2="22" stroke="#4D5E3A" stroke-width="0.8"/><rect x="16" y="13" width="12" height="6" rx="1.2" fill="#FEF08A" stroke="#CA8A04" stroke-width="0.6"/><rect x="64" y="13.5" width="11" height="5" rx="1" fill="#38BDF8" stroke="#0284C7" stroke-width="0.6"/><circle cx="48" cy="38" r="15" fill="#E2E8F0" stroke="#4D5E3A" stroke-width="1.5"/><circle cx="48" cy="38" r="11" fill="#1E293B" stroke="#94A3B8" stroke-width="1"/><circle cx="48" cy="38" r="7" fill="#0F172A"/><path d="M44 34 A 5 5 0 0 1 52 35" stroke="#86EFAC" stroke-width="1.1" stroke-linecap="round" opacity="0.9"/></svg>`,
 
-  'sony-cybershot': `<svg viewBox="0 0 96 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg cybershot-svg"><defs><linearGradient id="cs_silver" x1="0" y1="0" x2="96" y2="64" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#FFFFFF"/><stop offset="35%" stop-color="#E2E8F0"/><stop offset="70%" stop-color="#94A3B8"/><stop offset="100%" stop-color="#64748B"/></linearGradient></defs><rect x="8" y="11" width="80" height="44" rx="5" fill="url(#cs_silver)" stroke="#64748B" stroke-width="1.2"/><rect x="8" y="11" width="34" height="44" rx="4" fill="#F1F5F9" stroke="#94A3B8" stroke-width="0.8"/><rect x="14" y="16" width="12" height="9" rx="1.2" fill="#0055FF"/><text x="20" y="22" fill="#FFFFFF" font-size="4" font-weight="900" font-family="sans-serif" text-anchor="middle">ZEISS</text><text x="14" y="35" fill="#EA580C" font-size="4.8" font-weight="900" font-family="sans-serif">Cyber-shot</text><text x="14" y="43" fill="#475569" font-size="3.2" font-weight="700" font-family="sans-serif">5.0 MEGAPIXELS</text><rect x="48" y="15" width="15" height="6.5" rx="1.2" fill="#FEF08A" stroke="#CA8A04" stroke-width="0.6"/><circle cx="68" cy="18" r="2.2" fill="#EA580C"/><circle cx="66" cy="35" r="14" fill="#1E293B" stroke="#CBD5E1" stroke-width="1.5"/><circle cx="66" cy="35" r="9.5" fill="#0284C7" stroke="#38BDF8" stroke-width="0.8"/><circle cx="66" cy="35" r="5" fill="#0F172A"/><path d="M62 31 A 4.5 4.5 0 0 1 70 32" stroke="#FFFFFF" stroke-width="1" stroke-linecap="round" opacity="0.85"/></svg>`,
+  // 05. Cold Snap (Brushed Silver Y2K Digital Compact with Telescopic Lens)
+  'canon-ixy': `<svg viewBox="0 0 96 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg ixy-svg cold-snap-svg"><defs><radialGradient id="ixy_brush" cx="62%" cy="55%" r="60%"><stop offset="0%" stop-color="#FFFFFF"/><stop offset="40%" stop-color="#E2E8F0"/><stop offset="80%" stop-color="#CBD5E1"/><stop offset="100%" stop-color="#94A3B8"/></radialGradient></defs><rect x="62" y="6" width="14" height="4" rx="1.2" fill="#94A3B8"/><rect x="8" y="10" width="80" height="46" rx="8" fill="url(#ixy_brush)" stroke="#94A3B8" stroke-width="1.2"/><text x="16" y="25" fill="#DC2626" font-size="6.8" font-weight="900" font-family="'Times New Roman', serif">Canon</text><text x="16" y="33" fill="#1E293B" font-size="4" font-weight="800" font-family="sans-serif">IXY DIGITAL</text><rect x="38" y="14" width="10" height="5" rx="1" fill="#FEF08A" stroke="#CA8A04" stroke-width="0.6"/><circle cx="32" cy="16.5" r="1.8" fill="#F97316"/><circle cx="58" cy="34" r="17" fill="#E2E8F0" stroke="#94A3B8" stroke-width="1.8"/><circle cx="58" cy="34" r="13" fill="#1E293B" stroke="#64748B" stroke-width="1"/><circle cx="58" cy="34" r="8.5" fill="#0284C7"/><path d="M54 30 A 5.5 5.5 0 0 1 62 31" stroke="#FFFFFF" stroke-width="1.1" stroke-linecap="round" opacity="0.9"/></svg>`,
 
-  'sony-handycam': `<svg viewBox="0 0 96 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg handycam-svg"><defs><linearGradient id="hc_silver" x1="0" y1="0" x2="96" y2="64" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#F8FAFC"/><stop offset="50%" stop-color="#CBD5E1"/><stop offset="100%" stop-color="#64748B"/></linearGradient></defs><rect x="24" y="12" width="46" height="42" rx="6" fill="url(#hc_silver)" stroke="#475569" stroke-width="1"/><polygon points="24,18 4,22 4,48 24,44" fill="#1E293B" stroke="#38BDF8" stroke-width="1"/><polygon points="22,20 6,24 6,46 22,42" fill="#0284C7"/><text x="14" y="34" fill="#FFFFFF" font-size="3.5" font-weight="900" font-family="monospace" text-anchor="middle">● REC</text><rect x="34" y="7" width="22" height="6" rx="2" fill="#334155" stroke="#1E293B" stroke-width="0.8"/><circle cx="39" cy="10" r="1" fill="#94A3B8"/><circle cx="45" cy="10" r="1" fill="#94A3B8"/><circle cx="51" cy="10" r="1" fill="#94A3B8"/><circle cx="29" cy="17" r="2.2" fill="#EF4444" stroke="#B91C1C" stroke-width="0.6"/><rect x="70" y="20" width="18" height="26" rx="3" fill="#1E293B" stroke="#475569" stroke-width="1.2"/><circle cx="79" cy="33" r="8.5" fill="#0F172A" stroke="#0284C7" stroke-width="1"/><circle cx="79" cy="33" r="5" fill="#38BDF8"/><path d="M76 30 A 3.5 3.5 0 0 1 82 31" stroke="#FFFFFF" stroke-width="0.8" opacity="0.9"/><text x="47" y="24" fill="#0F172A" font-size="4" font-weight="900" font-family="sans-serif">SONY</text><text x="38" y="36" fill="#1E293B" font-size="4.2" font-weight="800" font-style="italic" font-family="sans-serif">Handycam</text><rect x="38" y="41" width="16" height="4" rx="1" fill="#1E3A8A"/><text x="46" y="44" fill="#FFFFFF" font-size="2.6" font-weight="900" font-family="sans-serif" text-anchor="middle">MiniDV</text></svg>`,
+  // 06. Nature Core (Forest Green & Silver Two-Tone Retro Street Camera)
+  'ricoh-gr': `<svg viewBox="0 0 96 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg ricoh-svg nature-core-svg"><defs><linearGradient id="nc_green" x1="0" y1="20" x2="0" y2="58" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#2D5A43"/><stop offset="100%" stop-color="#1B3B2B"/></linearGradient></defs><rect x="62" y="6" width="14" height="4" rx="1" fill="#CBD5E1" stroke="#64748B" stroke-width="0.7"/><rect x="10" y="10" width="76" height="46" rx="5.5" fill="url(#nc_green)" stroke="#142E21" stroke-width="1.2"/><rect x="10" y="10" width="76" height="13" rx="5" fill="#E2E8F0"/><line x1="10" y1="23" x2="86" y2="23" stroke="#0F2419" stroke-width="0.9"/><rect x="16" y="13.5" width="12" height="6" rx="1.2" fill="#FEF08A" stroke="#CA8A04" stroke-width="0.6"/><rect x="64" y="14" width="11" height="5" rx="1" fill="#38BDF8" stroke="#0284C7" stroke-width="0.6"/><circle cx="48" cy="38" r="15.5" fill="#CBD5E1" stroke="#1B3B2B" stroke-width="1.5"/><circle cx="48" cy="38" r="11.5" fill="#18181B" stroke="#94A3B8" stroke-width="1"/><circle cx="48" cy="38" r="7.5" fill="#064E3B"/><path d="M43 34 A 5.5 5.5 0 0 1 53 35" stroke="#6EE7B7" stroke-width="1.1" stroke-linecap="round" opacity="0.9"/></svg>`,
 
-  'canon-ixy': `<svg viewBox="0 0 96 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg ixy-svg"><defs><radialGradient id="ixy_brush" cx="62%" cy="55%" r="60%"><stop offset="0%" stop-color="#FFFFFF"/><stop offset="40%" stop-color="#E2E8F0"/><stop offset="80%" stop-color="#CBD5E1"/><stop offset="100%" stop-color="#94A3B8"/></radialGradient></defs><rect x="8" y="10" width="80" height="46" rx="8" fill="url(#ixy_brush)" stroke="#94A3B8" stroke-width="1.2"/><text x="18" y="24" fill="#DC2626" font-size="7.5" font-weight="900" font-family="'Times New Roman', serif">Canon</text><text x="18" y="32" fill="#1E293B" font-size="4.2" font-weight="800" font-family="sans-serif">IXY DIGITAL</text><rect x="42" y="15" width="8" height="4.5" rx="1" fill="#FEF08A" stroke="#CA8A04" stroke-width="0.6"/><circle cx="34" cy="17" r="1.8" fill="#F97316"/><circle cx="38" cy="17" r="1.8" fill="#38BDF8"/><circle cx="60" cy="34" r="17" fill="#E2E8F0" stroke="#94A3B8" stroke-width="1.8"/><circle cx="60" cy="34" r="13" fill="#1E293B" stroke="#64748B" stroke-width="1"/><circle cx="60" cy="34" r="8.5" fill="#0284C7"/><path d="M56 30 A 5.5 5.5 0 0 1 64 31" stroke="#FFFFFF" stroke-width="1" stroke-linecap="round" opacity="0.85"/><text x="60" y="46" fill="#64748B" font-size="2.6" font-weight="700" text-anchor="middle">CANON ZOOM LENS</text></svg>`,
+  // 07. Pearl 08 (Warm Pearl-Champagne Metallic Slim Digital/Film Compact)
+  'contax-t2': `<svg viewBox="0 0 96 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg contax-svg pearl-08-svg"><defs><linearGradient id="ct_titanium" x1="0" y1="0" x2="96" y2="64" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#FFFDF5"/><stop offset="30%" stop-color="#F3E7CE"/><stop offset="70%" stop-color="#DEC89E"/><stop offset="100%" stop-color="#B59866"/></linearGradient><radialGradient id="ct_glass" cx="42%" cy="38%" r="58%"><stop offset="0%" stop-color="#34D399"/><stop offset="40%" stop-color="#059669"/><stop offset="100%" stop-color="#022C22"/></radialGradient></defs><rect x="62" y="6" width="14" height="4" rx="1.2" fill="#DEC89E" stroke="#927238" stroke-width="0.8"/><rect x="18" y="7" width="10" height="3" rx="1" fill="#B59866"/><rect x="8" y="9" width="80" height="48" rx="7" fill="url(#ct_titanium)" stroke="#9A7B46" stroke-width="1.2"/><line x1="8" y1="21" x2="88" y2="21" stroke="#B59866" stroke-width="0.6"/><text x="16" y="36" fill="#DC2626" font-size="8" font-weight="900" font-family="'Arial Black', sans-serif">T*</text><rect x="64" y="13" width="14" height="6" rx="1.5" fill="#FEF08A" stroke="#CA8A04" stroke-width="0.6"/><rect x="50" y="13.5" width="8" height="5" rx="1" fill="#60A5FA" stroke="#2563EB" stroke-width="0.6"/><circle cx="52" cy="38" r="16.5" fill="#EFE2C6" stroke="#9A7B46" stroke-width="1.5"/><circle cx="52" cy="38" r="12.5" fill="#18181B" stroke="#DEC89E" stroke-width="1"/><circle cx="52" cy="38" r="8.5" fill="url(#ct_glass)"/><path d="M47 33 A 6 6 0 0 1 57 34" stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="round" opacity="0.9"/></svg>`,
 
-  'fuji-quicksnap': `<svg viewBox="0 0 96 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg quicksnap-svg"><defs><linearGradient id="qs_wrap" x1="0" y1="0" x2="96" y2="64" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#15803D"/><stop offset="42%" stop-color="#16A34A"/><stop offset="43%" stop-color="#FACC15"/><stop offset="58%" stop-color="#EAB308"/><stop offset="59%" stop-color="#15803D"/><stop offset="100%" stop-color="#166534"/></linearGradient></defs><rect x="74" y="6" width="12" height="4" rx="1" fill="#18181B"/><line x1="77" y1="6" x2="77" y2="10" stroke="#52525B" stroke-width="0.8"/><line x1="80" y1="6" x2="80" y2="10" stroke="#52525B" stroke-width="0.8"/><line x1="83" y1="6" x2="83" y2="10" stroke="#52525B" stroke-width="0.8"/><rect x="8" y="9" width="80" height="48" rx="5" fill="url(#qs_wrap)" stroke="#14532D" stroke-width="1.2"/><rect x="14" y="14" width="12" height="8" rx="1.5" fill="#DC2626" stroke="#991B1B" stroke-width="0.8"/><circle cx="20" cy="18" r="2" fill="#FEF08A"/><text x="32" y="24" fill="#FFFFFF" font-size="6" font-weight="900" font-family="'Arial Black', sans-serif">QuickSnap</text><text x="32" y="32" fill="#FACC15" font-size="4.2" font-weight="900" font-family="sans-serif">写ルンです 27枚撮</text><rect x="66" y="14" width="14" height="10" rx="1.5" fill="#FEF08A" stroke="#CA8A04" stroke-width="0.8"/><rect x="52" y="16" width="8" height="6" rx="1" fill="#38BDF8"/><circle cx="34" cy="42" r="10" fill="#18181B" stroke="#047857" stroke-width="1.5"/><circle cx="34" cy="42" r="6" fill="#0F172A" stroke="#10B981" stroke-width="0.8"/><circle cx="34" cy="42" r="3" fill="#38BDF8"/></svg>`,
+  // 08. Sunny Saver (Yellow & Red/Brown Wavy Disposable Camera matching user screenshot!)
+  'fuji-quicksnap': `<svg viewBox="0 0 96 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg quicksnap-svg sunny-saver-svg"><defs><linearGradient id="ss_yellow" x1="0" y1="10" x2="96" y2="56" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#FDE047"/><stop offset="50%" stop-color="#FACC15"/><stop offset="100%" stop-color="#EAB308"/></linearGradient></defs><rect x="66" y="6" width="12" height="4" rx="1" fill="#EF4444"/><rect x="8" y="10" width="80" height="46" rx="6" fill="#432818" stroke="#29170E" stroke-width="1.2"/><path d="M16 10 H80 C84 10 86 14 86 20 V46 C74 44 68 32 52 32 C36 32 28 48 10 46 V20 C10 14 12 10 16 10 Z" fill="url(#ss_yellow)"/><path d="M10 42 C26 44 36 28 54 30 C70 32 76 46 86 44 V50 C86 53 83 56 80 56 H16 C13 56 10 53 10 50 Z" fill="#DC2626"/><rect x="64" y="14" width="13" height="8" rx="1.5" fill="#FEF08A" stroke="#CA8A04" stroke-width="0.8"/><rect x="20" y="15" width="9" height="6" rx="1" fill="#1E293B"/><circle cx="48" cy="36" r="14" fill="#29170E" stroke="#FACC15" stroke-width="1.8"/><circle cx="48" cy="36" r="10" fill="#0F172A" stroke="#78350F" stroke-width="1"/><circle cx="48" cy="36" r="5.5" fill="#1E293B"/><path d="M44 32 A 4.5 4.5 0 0 1 52 33" stroke="#FFFFFF" stroke-width="1.1" stroke-linecap="round" opacity="0.9"/></svg>`,
 
-  'instax-mini': `<svg viewBox="0 0 96 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg instax-svg"><rect x="36" y="4" width="24" height="12" rx="1.5" fill="#FFFFFF" stroke="#E2E8F0" stroke-width="0.8"/><rect x="39" y="5" width="18" height="8" rx="0.8" fill="#F472B6" opacity="0.8"/><rect x="14" y="10" width="68" height="48" rx="18" fill="#FCE7F3" stroke="#F472B6" stroke-width="1.5"/><circle cx="48" cy="36" r="18" fill="#FDF2F8" stroke="#DB2777" stroke-width="1.8"/><circle cx="48" cy="36" r="12" fill="#374151" stroke="#F472B6" stroke-width="1"/><circle cx="48" cy="36" r="7" fill="#1E293B"/><circle cx="56" cy="30" r="2.5" fill="#E2E8F0" stroke="#94A3B8" stroke-width="0.8"/><ellipse cx="68" cy="22" rx="3" ry="4.5" fill="#FEF08A" stroke="#CA8A04" stroke-width="0.6"/><circle cx="26" cy="22" r="3.8" fill="#EC4899" stroke="#BE185D" stroke-width="0.8"/><text x="48" y="52" fill="#DB2777" font-size="4" font-weight="900" font-family="sans-serif" text-anchor="middle">instax mini</text></svg>`,
+  // 09. Lazy Monkey (Silver Flip-Screen MiniDV Camcorder)
+  'sony-handycam': `<svg viewBox="0 0 96 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg handycam-svg lazy-monkey-svg"><defs><linearGradient id="hc_silver" x1="0" y1="0" x2="96" y2="64" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#F8FAFC"/><stop offset="50%" stop-color="#CBD5E1"/><stop offset="100%" stop-color="#64748B"/></linearGradient></defs><rect x="6" y="20" width="32" height="24" rx="2.5" fill="#334155" stroke="#94A3B8" stroke-width="1.2"/><rect x="9" y="23" width="26" height="18" rx="1.5" fill="#0284C7"/><text x="22" y="34" fill="#FFFFFF" font-size="4.2" font-weight="900" font-family="monospace" text-anchor="middle">● REC</text><rect x="38" y="28" width="6" height="8" fill="#64748B"/><rect x="44" y="10" width="44" height="44" rx="6" fill="url(#hc_silver)" stroke="#475569" stroke-width="1.2"/><circle cx="66" cy="28" r="13" fill="#1E293B" stroke="#E2E8F0" stroke-width="1.8"/><circle cx="66" cy="28" r="8.5" fill="#0F172A" stroke="#38BDF8" stroke-width="1"/><circle cx="66" cy="28" r="4.5" fill="#0284C7"/><path d="M62 24 A 4 4 0 0 1 70 25" stroke="#FFFFFF" stroke-width="1" opacity="0.9"/><rect x="52" y="45" width="28" height="4" rx="1.5" fill="#334155"/></svg>`,
 
-  'hasselblad-500cm': `<svg viewBox="0 0 96 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg hasselblad-svg"><defs><linearGradient id="hb_chrome" x1="0" y1="0" x2="96" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#E2E8F0"/><stop offset="50%" stop-color="#FFFFFF"/><stop offset="100%" stop-color="#94A3B8"/></linearGradient></defs><polygon points="30,12 36,4 60,4 66,12" fill="#27272A" stroke="#CBD5E1" stroke-width="1"/><rect x="42" y="3" width="12" height="2" fill="#CBD5E1"/><rect x="22" y="12" width="52" height="46" rx="4" fill="#18181B" stroke="url(#hb_chrome)" stroke-width="2"/><rect x="24" y="14" width="48" height="42" rx="3" fill="#111827"/><rect x="74" y="24" width="8" height="18" rx="2" fill="url(#hb_chrome)"/><circle cx="78" cy="26" r="3.2" fill="#09090B"/><circle cx="48" cy="35" r="18" fill="#09090B" stroke="url(#hb_chrome)" stroke-width="2"/><circle cx="48" cy="35" r="13.5" fill="#18181B" stroke="#94A3B8" stroke-width="1"/><circle cx="48" cy="35" r="8.5" fill="#0284C7"/><path d="M43 30 A 6 6 0 0 1 53 31" stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="round" opacity="0.85"/><text x="48" y="50" fill="#CBD5E1" font-size="3.2" font-weight="900" font-family="'Times New Roman', serif" text-anchor="middle">HASSELBLAD</text></svg>`,
+  // 10. Night Tape 98 (Matte Black Hi8/VHS Camcorder with Flip-Out Screen - NewJeans Ditto Aesthetic)
+  'sony-cybershot': `<svg viewBox="0 0 96 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg cybershot-svg night-tape-svg"><defs><linearGradient id="nt_black" x1="40" y1="8" x2="90" y2="56" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3F3F46"/><stop offset="50%" stop-color="#27272A"/><stop offset="100%" stop-color="#18181B"/></linearGradient></defs><rect x="6" y="20" width="32" height="24" rx="2.5" fill="#18181B" stroke="#52525B" stroke-width="1.2"/><rect x="9" y="23" width="26" height="18" rx="1.5" fill="#0F172A"/><text x="22" y="34" fill="#38BDF8" font-size="4.2" font-weight="900" font-family="monospace" text-anchor="middle">DITTO 98</text><rect x="38" y="28" width="6" height="8" fill="#27272A"/><rect x="44" y="10" width="44" height="44" rx="6" fill="url(#nt_black)" stroke="#52525B" stroke-width="1.2"/><circle cx="66" cy="28" r="13" fill="#09090B" stroke="#71717A" stroke-width="1.8"/><circle cx="66" cy="28" r="8.5" fill="#1E293B" stroke="#38BDF8" stroke-width="1"/><circle cx="66" cy="28" r="4.5" fill="#0F172A"/><path d="M62 24 A 4 4 0 0 1 70 25" stroke="#38BDF8" stroke-width="1.1" opacity="0.9"/><circle cx="52" cy="16" r="2.2" fill="#EF4444"/><rect x="52" y="45" width="28" height="4" rx="1.5" fill="#09090B"/></svg>`,
 
-  'polaroid-sx70': `<svg viewBox="0 0 96 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg sx70-svg"><defs><linearGradient id="sx_leather" x1="0" y1="0" x2="96" y2="64" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#D97706"/><stop offset="100%" stop-color="#92400e"/></linearGradient></defs><polygon points="18,52 48,10 78,52" fill="url(#sx_leather)" stroke="#E2E8F0" stroke-width="2"/><polygon points="42,10 48,4 54,10" fill="#E2E8F0" stroke="#94A3B8" stroke-width="0.8"/><rect x="12" y="48" width="72" height="10" rx="2.5" fill="#E2E8F0" stroke="#64748B" stroke-width="1"/><rect x="22" y="51" width="8" height="4" fill="#EF4444"/><rect x="30" y="51" width="8" height="4" fill="#F97316"/><rect x="38" y="51" width="8" height="4" fill="#FACC15"/><rect x="46" y="51" width="8" height="4" fill="#22C55E"/><rect x="54" y="51" width="8" height="4" fill="#3B82F6"/><circle cx="48" cy="34" r="10" fill="#CA8A04" stroke="#FEF08A" stroke-width="1.2"/><circle cx="48" cy="34" r="6" fill="#78350F"/><circle cx="48" cy="34" r="3" fill="#0284C7"/><circle cx="74" cy="53" r="3" fill="#DC2626"/></svg>`,
+  // 11. Pocari Blue (Classic Black & Silver 35mm Film Camera - Tokyo Bubble & Summer Sky)
+  'citypop-80s': `<svg viewBox="0 0 96 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg citypop-svg pocari-blue-svg"><defs><linearGradient id="pb_chrome" x1="0" y1="8" x2="96" y2="24" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#F8FAFC"/><stop offset="50%" stop-color="#CBD5E1"/><stop offset="100%" stop-color="#94A3B8"/></linearGradient></defs><polygon points="34,11 40,5 56,5 62,11" fill="url(#pb_chrome)" stroke="#64748B" stroke-width="0.8"/><rect x="66" y="6" width="12" height="5" rx="1" fill="#CBD5E1"/><rect x="18" y="7" width="10" height="4" rx="1" fill="#94A3B8"/><rect x="10" y="11" width="76" height="45" rx="5.5" fill="#18181B" stroke="#475569" stroke-width="1.2"/><rect x="10" y="11" width="76" height="12" rx="4.5" fill="url(#pb_chrome)"/><line x1="10" y1="23" x2="86" y2="23" stroke="#64748B" stroke-width="0.8"/><circle cx="48" cy="37" r="16" fill="#E2E8F0" stroke="#475569" stroke-width="1.5"/><circle cx="48" cy="37" r="12" fill="#0F172A" stroke="#38BDF8" stroke-width="1.2"/><circle cx="48" cy="37" r="7.5" fill="#0284C7"/><path d="M43 33 A 5.5 5.5 0 0 1 53 34" stroke="#FFFFFF" stroke-width="1.2" stroke-linecap="round" opacity="0.9"/></svg>`,
 
-  'kyocera-samurai': `<svg viewBox="0 0 96 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg samurai-svg"><rect x="26" y="6" width="44" height="52" rx="7" fill="#18181B" stroke="#3F3F46" stroke-width="1.2"/><rect x="26" y="20" width="44" height="3" fill="#DC2626"/><rect x="32" y="10" width="32" height="7" rx="1.5" fill="#065F46" stroke="#10B981" stroke-width="0.8"/><text x="48" y="15.5" fill="#34D399" font-size="4.2" font-weight="900" text-anchor="middle" font-family="monospace">72 EXP</text><circle cx="48" cy="36" r="15" fill="#09090B" stroke="#52525B" stroke-width="1.8"/><circle cx="48" cy="36" r="10" fill="#1E293B" stroke="#0284C7" stroke-width="1"/><circle cx="48" cy="36" r="5" fill="#0F172A"/><path d="M44 32 A 4.5 4.5 0 0 1 52 33" stroke="#FFFFFF" stroke-width="1" stroke-linecap="round" opacity="0.8"/><text x="48" y="55" fill="#EF4444" font-size="4" font-weight="900" font-family="sans-serif" text-anchor="middle">SAMURAI X3.0</text></svg>`,
+  // 12. Wedding '95 (Champagne-Silver 90s Film Compact Camera)
+  'oldfilm-35mm': `<svg viewBox="0 0 96 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg oldfilm-svg wedding-95-svg"><defs><linearGradient id="w95_body" x1="0" y1="10" x2="96" y2="56" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#F5EFE6"/><stop offset="50%" stop-color="#E2D6C1"/><stop offset="100%" stop-color="#C2B299"/></linearGradient></defs><rect x="64" y="6" width="12" height="4" rx="1.2" fill="#C2B299"/><rect x="10" y="10" width="76" height="46" rx="7" fill="url(#w95_body)" stroke="#9C8B70" stroke-width="1.2"/><rect x="16" y="15" width="13" height="6.5" rx="1.5" fill="#FEF08A" stroke="#CA8A04" stroke-width="0.6"/><rect x="44" y="15" width="8" height="5" rx="1" fill="#38BDF8" stroke="#0284C7" stroke-width="0.6"/><circle cx="48" cy="37" r="15.5" fill="#D5C7B2" stroke="#9C8B70" stroke-width="1.5"/><circle cx="48" cy="37" r="11.5" fill="#1C1917" stroke="#E2D6C1" stroke-width="1"/><circle cx="48" cy="37" r="7.5" fill="#44403C"/><path d="M43 33 A 5.5 5.5 0 0 1 53 34" stroke="#FDE047" stroke-width="1.1" stroke-linecap="round" opacity="0.85"/></svg>`,
 
-  'citypop-80s': `<svg viewBox="0 0 96 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg citypop-svg"><defs><linearGradient id="cp_sunset" x1="0" y1="0" x2="96" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#FF007F"/><stop offset="50%" stop-color="#8B5CF6"/><stop offset="100%" stop-color="#00F5FF"/></linearGradient></defs><rect x="8" y="9" width="80" height="48" rx="6" fill="#18181B" stroke="#3F3F46" stroke-width="1.2"/><rect x="14" y="14" width="68" height="30" rx="3" fill="url(#cp_sunset)"/><rect x="22" y="19" width="52" height="20" rx="3" fill="#09090B"/><circle cx="34" cy="29" r="6" fill="#FFFFFF"/><circle cx="34" cy="29" r="3" fill="#18181B"/><circle cx="62" cy="29" r="6" fill="#FFFFFF"/><circle cx="62" cy="29" r="3" fill="#18181B"/><polygon points="34,29 62,29 56,33 40,33" fill="#78350F"/><polygon points="26,52 70,52 66,45 30,45" fill="#CBD5E1"/><text x="48" y="50" fill="#09090B" font-size="3" font-weight="900" text-anchor="middle">▶ PLAY // 1986</text></svg>`,
+  // 13. Ohio Summer (Slate-Blue & Silver Vintage Rangefinder Camera)
+  'polaroid-sx70': `<svg viewBox="0 0 96 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg sx70-svg ohio-summer-svg"><defs><linearGradient id="os_blue" x1="0" y1="20" x2="0" y2="56" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#64748B"/><stop offset="100%" stop-color="#334155"/></linearGradient></defs><rect x="62" y="6" width="13" height="4" rx="1" fill="#CBD5E1"/><rect x="18" y="7" width="9" height="3" rx="1" fill="#94A3B8"/><rect x="10" y="10" width="76" height="46" rx="6" fill="url(#os_blue)" stroke="#1E293B" stroke-width="1.2"/><rect x="10" y="10" width="76" height="13" rx="5" fill="#E2E8F0"/><line x1="10" y1="23" x2="86" y2="23" stroke="#1E293B" stroke-width="0.8"/><rect x="16" y="13.5" width="12" height="6" rx="1.2" fill="#FEF08A" stroke="#CA8A04" stroke-width="0.6"/><rect x="64" y="14" width="10" height="5" rx="1" fill="#38BDF8" stroke="#0284C7" stroke-width="0.6"/><circle cx="48" cy="38" r="15.5" fill="#E2E8F0" stroke="#334155" stroke-width="1.5"/><circle cx="48" cy="38" r="11.5" fill="#0F172A" stroke="#94A3B8" stroke-width="1"/><circle cx="48" cy="38" r="7.5" fill="#1E3A8A"/><path d="M43 34 A 5.5 5.5 0 0 1 53 35" stroke="#93C5FD" stroke-width="1.1" stroke-linecap="round" opacity="0.9"/></svg>`,
 
-  'oldfilm-35mm': `<svg viewBox="0 0 96 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg oldfilm-svg"><rect x="24" y="5" width="12" height="4" rx="1.5" fill="#71717A"/><rect x="12" y="9" width="36" height="48" rx="4" fill="#18181B" stroke="#CA8A04" stroke-width="1.5"/><rect x="12" y="20" width="36" height="26" fill="#FACC15"/><text x="30" y="33" fill="#78350F" font-size="7" font-weight="900" text-anchor="middle" font-family="'Arial Black', sans-serif">PORTRA</text><text x="30" y="41" fill="#DC2626" font-size="5" font-weight="900" text-anchor="middle" font-family="sans-serif">400</text><path d="M48 24 L82 24 L78 44 L48 44 Z" fill="#27272A" stroke="#52525B" stroke-width="1"/><rect x="52" y="26" width="3.5" height="4" rx="0.8" fill="#FFFFFF"/><rect x="60" y="26" width="3.5" height="4" rx="0.8" fill="#FFFFFF"/><rect x="68" y="26" width="3.5" height="4" rx="0.8" fill="#FFFFFF"/><rect x="52" y="38" width="3.5" height="4" rx="0.8" fill="#FFFFFF"/><rect x="60" y="38" width="3.5" height="4" rx="0.8" fill="#FFFFFF"/><rect x="68" y="38" width="3.5" height="4" rx="0.8" fill="#FFFFFF"/></svg>`,
+  // 14. Day Classic (Classic Leica M Black & Chrome Rangefinder)
+  'leica-m': `<svg viewBox="0 0 96 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg leica-svg day-classic-svg"><defs><linearGradient id="lm_top" x1="0" y1="0" x2="0" y2="18" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#FFFFFF"/><stop offset="40%" stop-color="#E2E8F0"/><stop offset="100%" stop-color="#94A3B8"/></linearGradient><linearGradient id="lm_body" x1="0" y1="18" x2="0" y2="60" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#1E232D"/><stop offset="100%" stop-color="#0E1116"/></linearGradient><radialGradient id="lm_lens_glass" cx="45%" cy="40%" r="55%"><stop offset="0%" stop-color="#A78BFA"/><stop offset="30%" stop-color="#6366F1"/><stop offset="70%" stop-color="#1E1B4B"/><stop offset="100%" stop-color="#090A0F"/></radialGradient><linearGradient id="lm_chrome" x1="0" y1="0" x2="96" y2="0" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#CBD5E1"/><stop offset="50%" stop-color="#FFFFFF"/><stop offset="100%" stop-color="#94A3B8"/></linearGradient></defs><rect x="14" y="6" width="10" height="4" rx="1" fill="url(#lm_chrome)"/><rect x="62" y="5" width="16" height="5" rx="1.5" fill="url(#lm_chrome)"/><circle cx="70" cy="4" r="3" fill="#DC2626"/><rect x="8" y="9" width="80" height="49" rx="6" fill="url(#lm_body)" stroke="#334155" stroke-width="1"/><rect x="8" y="9" width="80" height="15" rx="5" fill="url(#lm_top)"/><line x1="8" y1="24" x2="88" y2="24" stroke="#64748B" stroke-width="0.8"/><rect x="66" y="13" width="13" height="7" rx="1.5" fill="#38BDF8" stroke="#0284C7" stroke-width="0.8"/><rect x="46" y="14" width="7" height="5" rx="1" fill="#FEF08A" stroke="#CA8A04" stroke-width="0.6" opacity="0.9"/><circle cx="25" cy="33" r="6" fill="#DC2626"/><text x="25" y="35" fill="#FFFFFF" font-size="4.2" font-weight="900" font-family="'Times New Roman', serif" text-anchor="middle">Leica</text><circle cx="48" cy="38" r="17" fill="#1E293B" stroke="url(#lm_chrome)" stroke-width="2"/><circle cx="48" cy="38" r="13" fill="#0F172A" stroke="#475569" stroke-width="1"/><circle cx="48" cy="38" r="9.5" fill="url(#lm_lens_glass)"/><path d="M42 33 A 7 7 0 0 1 54 34" stroke="#FFFFFF" stroke-width="1.3" stroke-linecap="round" opacity="0.85"/></svg>`,
 
-  'sihyun-color': `<svg viewBox="0 0 96 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg colorstudio-svg"><defs><radialGradient id="octa_glow" cx="50%" cy="50%" r="50%"><stop offset="0%" stop-color="#FFFFFF"/><stop offset="35%" stop-color="#FED7AA"/><stop offset="70%" stop-color="#F472B6"/><stop offset="100%" stop-color="#8B5CF6"/></radialGradient></defs><polygon points="34,7 62,7 82,24 82,40 62,57 34,57 14,40 14,24" fill="url(#octa_glow)" stroke="#C084FC" stroke-width="2"/><polygon points="38,14 58,14 74,27 74,37 58,50 38,50 22,37 22,27" fill="#18181B" opacity="0.35"/><circle cx="48" cy="32" r="10" fill="#FFFFFF" stroke="#FDE047" stroke-width="1.5"/><text x="48" y="35" fill="#8B5CF6" font-size="4.5" font-weight="900" text-anchor="middle">STUDIO</text></svg>`,
+  // 15. Dark Akan 77 (Dark Walnut-Brown & Black 1977 Vintage Film Camera)
+  'hasselblad-500cm': `<svg viewBox="0 0 96 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg hasselblad-svg dark-akan-svg"><defs><linearGradient id="da_walnut" x1="0" y1="20" x2="96" y2="58" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#5C3A21"/><stop offset="50%" stop-color="#3E2723"/><stop offset="100%" stop-color="#271612"/></linearGradient></defs><rect x="62" y="6" width="13" height="4" rx="1" fill="#78716C"/><rect x="18" y="7" width="9" height="3" rx="1" fill="#57534E"/><rect x="10" y="10" width="76" height="46" rx="6" fill="url(#da_walnut)" stroke="#1C1917" stroke-width="1.4"/><rect x="10" y="10" width="76" height="13" rx="5" fill="#292524"/><line x1="10" y1="23" x2="86" y2="23" stroke="#78350F" stroke-width="0.9"/><rect x="16" y="13.5" width="12" height="6" rx="1.2" fill="#FEF08A" stroke="#CA8A04" stroke-width="0.6"/><rect x="64" y="14" width="11" height="5" rx="1" fill="#F59E0B" stroke="#B45309" stroke-width="0.6"/><circle cx="48" cy="38" r="15.5" fill="#1C1917" stroke="#A16207" stroke-width="1.5"/><circle cx="48" cy="38" r="11.5" fill="#09090B" stroke="#57534E" stroke-width="1"/><circle cx="48" cy="38" r="7.5" fill="#271612"/><path d="M43 34 A 5.5 5.5 0 0 1 53 35" stroke="#FBBF24" stroke-width="1.1" stroke-linecap="round" opacity="0.85"/></svg>`,
 
+  // 16. Passport ID (Official Studio Portrait Camera)
   'passport-id': `<svg viewBox="0 0 96 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg passport-svg"><rect x="22" y="6" width="52" height="52" rx="5" fill="#1E3A8A" stroke="#3B82F6" stroke-width="1.2"/><circle cx="48" cy="22" r="9" stroke="#FACC15" stroke-width="1.2" fill="none"/><circle cx="48" cy="22" r="5" stroke="#FACC15" stroke-width="0.8" fill="none"/><rect x="42" y="34" width="12" height="8" rx="1.5" stroke="#FACC15" stroke-width="1" fill="none"/><line x1="42" y1="38" x2="54" y2="38" stroke="#FACC15" stroke-width="0.8"/><circle cx="48" cy="38" r="2" fill="#FACC15"/><text x="48" y="52" fill="#93C5FD" font-size="4" font-weight="900" font-family="sans-serif" text-anchor="middle" letter-spacing="1">PASSPORT</text></svg>`,
 
   'default': `<svg viewBox="0 0 96 64" fill="none" xmlns="http://www.w3.org/2000/svg" class="cam-svg default-svg"><rect x="8" y="10" width="80" height="46" rx="6" fill="#18181B" stroke="#475569" stroke-width="1.2"/><circle cx="48" cy="33" r="16" fill="#0F172A" stroke="#94A3B8" stroke-width="1.5"/><circle cx="48" cy="33" r="10" fill="#0284C7"/></svg>`
 };
 
-// 6 Iconic Cameras Architecture Definition
+// 16 Iconic Cameras Architecture Definition
 const CAMERAS = {
   'canon-ixy': {
     id: 'canon-ixy',
@@ -305,22 +338,22 @@ const CAMERAS = {
     id: 'sony-handycam',
     name: 'Sony DCR Handycam',
     shortName: 'HANDYCAM',
-    sub: 'MiniDV Classic',
+    sub: 'Ditto School Cam',
     icon: '📹',
     badge: 'MINI-DV',
     osdId: 'sony-handycam-osd',
     drawerId: 'drawer-sony-handycam',
     filters: {
       'handy-minidv': {
-        name: 'MiniDV Classic',
-        desc: '소니 3CCD 비디오 톤',
-        css: 'brightness(1.03) contrast(1.10) saturate(1.15) sepia(0.03)',
+        name: 'Ditto School Cam',
+        desc: '98년 겨울 방과 후 교실·운동장 캠코더 감성',
+        css: 'brightness(1.03) contrast(1.06) saturate(0.94) sepia(0.04)',
         tintRgba: null
       },
       'handy-vhs': {
         name: 'Hi8 Tape Glitch',
         desc: '스캔라인 테이프 글리치',
-        css: 'brightness(1.02) contrast(1.12) saturate(1.12) sepia(0.04)',
+        css: 'brightness(1.02) contrast(1.10) saturate(0.96) sepia(0.05)',
         tintRgba: null
       },
       'handy-super8': {
@@ -353,23 +386,23 @@ const CAMERAS = {
   'sony-cybershot': {
     id: 'sony-cybershot',
     name: 'Sony Cyber-shot DSC-P10',
-    shortName: 'CYBER-SHOT',
-    sub: 'CCD Cool Blue',
+    shortName: 'NIGHT TAPE 98',
+    sub: "Ditto '98 Winter",
     icon: '💿',
-    badge: 'CYBER Y2K',
+    badge: 'DITTO 98 VHS',
     osdId: 'sony-cybershot-osd',
     drawerId: 'drawer-sony-cybershot',
     filters: {
       'cyber-cool': {
-        name: 'CCD Cool Blue',
-        desc: '차가운 블루 틴트',
-        css: 'brightness(1.03) contrast(1.10) saturate(1.10)',
+        name: "Ditto '98 Winter",
+        desc: '뉴진스 Ditto 감성의 1998 겨울 청회색 섀도우 & 소프트 블룸',
+        css: 'brightness(1.04) contrast(1.04) saturate(0.92) sepia(0.03)',
         tintRgba: null
       },
       'cyber-magenta': {
-        name: 'Clean Cyber White',
-        desc: 'CCD 센서 투명하고 새하얀 피부',
-        css: 'brightness(1.04) contrast(1.12) saturate(1.12)',
+        name: 'Bunnies VHS Tape',
+        desc: '아련한 첫사랑의 기억, 뽀얀 하이라이트 할레이션',
+        css: 'brightness(1.05) contrast(1.06) saturate(0.95)',
         tintRgba: null
       },
       'cyber-flash': {
@@ -1002,6 +1035,9 @@ window.state = state;
 window.CAMERAS = CAMERAS;
 window.CAMERA_ORDER = CAMERA_ORDER;
 window.CAMERA_CATEGORIES = CAMERA_CATEGORIES;
+window.FIMO_CAMERA_PERSONAS = FIMO_CAMERA_PERSONAS;
+window.FIMO_ORDERED_CAMERAS = FIMO_ORDERED_CAMERAS;
+window.CAM_SVG_ICONS = CAM_SVG_ICONS;
 
 function getCameraCategory(camId) {
   for (const [cat, cams] of Object.entries(CAMERA_CATEGORIES)) {
@@ -1727,9 +1763,12 @@ function switchCamera(camId) {
   if (badgeIcon) badgeIcon.innerHTML = CAM_SVG_ICONS[camId] || CAM_SVG_ICONS['default'];
   if (badgeSub) badgeSub.textContent = cam.sub;
 
-  // Update FIMO Showcase Hero Card & Viewfinder Mini Camera Body Button
+  // Update FIMO Showcase Hero Card, Viewfinder Mini Camera Body Button & Caption Overlay
   updateFimoHeroCard(camId);
   updateFimoMiniCamRender(camId);
+  if (typeof updateFimoCaptionOverlay === 'function') {
+    updateFimoCaptionOverlay(camId);
+  }
 
   // 5. Update Equipped State in Camera Bag Modal Cards
   document.querySelectorAll('.camera-bag-grid .bag-cam-card').forEach(card => {
@@ -1917,15 +1956,18 @@ function applyCurrentCameraFilter() {
     }
   }
 
+  const evVal = typeof state.fimoExposureEV === 'number' ? state.fimoExposureEV : 0.0;
+  const evCss = Math.abs(evVal) > 0.01 ? `brightness(${(1 + evVal * 0.14).toFixed(3)}) ` : '';
+
   if (cam.filters) {
     const activeFilterKey = state.selectedFilters[cam.id];
     const filterSpec = cam.filters[activeFilterKey] || Object.values(cam.filters)[0];
-    mediaFilterEl.style.filter = `${filterSpec.css} url(#spectralMatrixFilter)`;
+    mediaFilterEl.style.filter = `${evCss}${filterSpec.css} url(#spectralMatrixFilter)`;
   } else if (cam.id === 'sihyun-color') {
     const toneRatio = 1 + (state.retouchTone - 35) * 0.0035;
-    mediaFilterEl.style.filter = `brightness(${toneRatio}) contrast(${1 + (state.retouchTone - 35) * 0.001}) url(#spectralMatrixFilter)`;
+    mediaFilterEl.style.filter = `${evCss}brightness(${toneRatio}) contrast(${1 + (state.retouchTone - 35) * 0.001}) url(#spectralMatrixFilter)`;
   } else {
-    mediaFilterEl.style.filter = 'url(#spectralMatrixFilter)';
+    mediaFilterEl.style.filter = `${evCss}url(#spectralMatrixFilter)`;
   }
 
   updateFilterHud();
@@ -2702,15 +2744,20 @@ function executeCapture() {
     ctx.fillRect(0, 0, captureCanvas.width, captureCanvas.height);
   }
 
-  // 2. Determine Filter CSS for Subject
+  // 2. Determine Filter CSS for Subject (including EV compensation)
+  const evVal = typeof state.fimoExposureEV === 'number' ? state.fimoExposureEV : 0.0;
+  const evCss = Math.abs(evVal) > 0.01 ? `brightness(${(1 + evVal * 0.14).toFixed(3)}) ` : '';
+
   let activeFilter = 'none';
   if (cam.filters) {
     const fKey = state.selectedFilters[cam.id];
     const spec = cam.filters[fKey] || Object.values(cam.filters)[0];
-    activeFilter = spec.css;
+    activeFilter = `${evCss}${spec.css}`;
   } else if (cam.id === 'sihyun-color') {
     const toneRatio = 1 + (state.retouchTone - 35) * 0.0035;
-    activeFilter = `brightness(${toneRatio}) contrast(${1 + (state.retouchTone - 35) * 0.001})`;
+    activeFilter = `${evCss}brightness(${toneRatio}) contrast(${1 + (state.retouchTone - 35) * 0.001})`;
+  } else if (evCss) {
+    activeFilter = evCss.trim();
   }
 
   // 3. Draw Subject (Transparent Model or Mirrored/Unmirrored Webcam)
@@ -2829,7 +2876,7 @@ function executeCapture() {
 
   if (cam.id === 'canon-ixy') {
     const ixyDateToggle = document.getElementById('toggle-ixy-date');
-    if (!ixyDateToggle || ixyDateToggle.classList.contains('active')) {
+    if (state.fimoDateEnabled && (!ixyDateToggle || ixyDateToggle.classList.contains('active'))) {
       ctx.save();
       ctx.font = 'bold 26px "Courier New", monospace';
       ctx.fillStyle = '#ff9500';
@@ -2857,10 +2904,19 @@ function executeCapture() {
     }
   } else if (cam.id === 'sony-cybershot') {
     // Pure clean photograph: No brand text or megapixel watermark stamped on photo!
+    if (state.fimoDateEnabled) {
+      ctx.save();
+      ctx.font = 'bold 20px "Courier New", monospace';
+      ctx.fillStyle = '#ff9500';
+      ctx.shadowColor = 'rgba(255, 149, 0, 0.7)';
+      ctx.shadowBlur = 6;
+      ctx.fillText(vt.quartzDate, captureCanvas.width - 150, captureCanvas.height - 40);
+      ctx.restore();
+    }
   } else if (cam.id === 'olympus-mju') {
     // Pure clean photograph: No OLYMPUS brand watermark banner stamped on photo!
     const mjuDateToggle = document.getElementById('toggle-mju-date');
-    if (!mjuDateToggle || mjuDateToggle.classList.contains('active')) {
+    if (state.fimoDateEnabled && (!mjuDateToggle || mjuDateToggle.classList.contains('active'))) {
       ctx.save();
       ctx.font = 'bold 20px monospace';
       ctx.fillStyle = '#ff9f0a';
@@ -2872,7 +2928,7 @@ function executeCapture() {
   } else if (cam.id === 'contax-t2') {
     // Pure clean photograph: No red LED bar or CONTAX brand text stamped on photo!
     const contaxLedToggle = document.getElementById('toggle-contax-led');
-    if (contaxLedToggle && contaxLedToggle.classList.contains('active')) {
+    if (state.fimoDateEnabled && (!contaxLedToggle || contaxLedToggle.classList.contains('active'))) {
       ctx.save();
       ctx.font = 'bold 18px "Courier New", monospace';
       ctx.fillStyle = '#ff453a';
@@ -3004,13 +3060,15 @@ function executeCapture() {
       ctx.fillText('ALPHA 1 • 1972 LAND CAMERA', 90, captureCanvas.height - 48);
     }
 
-    ctx.font = 'bold 18px "Courier New", monospace';
-    ctx.fillStyle = '#6e7075';
-    ctx.fillText(vt.quartzDate, captureCanvas.width - 160, captureCanvas.height - 60);
+    if (state.fimoDateEnabled) {
+      ctx.font = 'bold 18px "Courier New", monospace';
+      ctx.fillStyle = '#6e7075';
+      ctx.fillText(vt.quartzDate, captureCanvas.width - 160, captureCanvas.height - 60);
+    }
   } else if (cam.id === 'fuji-quicksnap') {
     // 1986 Fuji QuickSnap: Authentic Amber Quartz Date Imprint with NO top-left watermark
     const quicksnapDateToggle = document.getElementById('toggle-quicksnap-date');
-    if (!quicksnapDateToggle || quicksnapDateToggle.classList.contains('active')) {
+    if (state.fimoDateEnabled && (!quicksnapDateToggle || quicksnapDateToggle.classList.contains('active'))) {
       ctx.save();
       ctx.font = 'bold 22px "Impact", "Arial Black", sans-serif';
       ctx.fillStyle = '#ff9100';
@@ -3039,13 +3097,15 @@ function executeCapture() {
     }
 
     // Pure clean photograph: Top-left cyber LCD banner & bottom-right Yashica text REMOVED!
-    ctx.save();
-    ctx.font = 'bold 18px monospace';
-    ctx.fillStyle = '#ff9100';
-    ctx.shadowColor = 'rgba(255, 145, 0, 0.8)';
-    ctx.shadowBlur = 6;
-    ctx.fillText(vt.quartzDate, captureCanvas.width - 150, captureCanvas.height - 45);
-    ctx.restore();
+    if (state.fimoDateEnabled) {
+      ctx.save();
+      ctx.font = 'bold 18px monospace';
+      ctx.fillStyle = '#ff9100';
+      ctx.shadowColor = 'rgba(255, 145, 0, 0.8)';
+      ctx.shadowBlur = 6;
+      ctx.fillText(vt.quartzDate, captureCanvas.width - 150, captureCanvas.height - 45);
+      ctx.restore();
+    }
   } else if (cam.id === 'instax-mini') {
     const frameToggle = document.getElementById('toggle-instax-frame');
     if (!frameToggle || frameToggle.classList.contains('active')) {
@@ -3060,7 +3120,7 @@ function executeCapture() {
     }
 
     const dateToggle = document.getElementById('toggle-instax-date');
-    if (!dateToggle || dateToggle.classList.contains('active')) {
+    if (state.fimoDateEnabled && (!dateToggle || dateToggle.classList.contains('active'))) {
       ctx.font = '20px "Courier New", monospace';
       ctx.fillStyle = '#8c8f99';
       ctx.fillText(vt.quartzDate, captureCanvas.width - 170, captureCanvas.height - 55);
@@ -3106,6 +3166,26 @@ function executeCapture() {
     ctx.fillText('Studio Signature', captureCanvas.width - 270, captureCanvas.height - 45);
   }
 
+  // 5.5. Poetic Vintage Photo Caption Imprint (when 사진 문구 ON)
+  const persona = FIMO_CAMERA_PERSONAS[cam.id];
+  const activeCaptionText = state.fimoCaptionEnabled && persona && persona.captionText
+    ? persona.captionText
+    : null;
+
+  if (activeCaptionText) {
+    ctx.save();
+    ctx.font = '600 22px -apple-system, "Apple SD Gothic Neo", "Noto Sans KR", sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillStyle = 'rgba(255, 252, 240, 0.94)';
+    ctx.shadowColor = 'rgba(0, 0, 0, 0.85)';
+    ctx.shadowBlur = 8;
+    ctx.shadowOffsetY = 2;
+    const captionY = (cam.id === 'polaroid-sx70' || cam.id === 'instax-mini')
+      ? captureCanvas.height - 175
+      : captureCanvas.height - 82;
+    ctx.fillText(activeCaptionText, captureCanvas.width / 2, captionY);
+    ctx.restore();
+  }
 
   // 6. Dynamic Optical Lens Filter Synthesis with Light-Source Detection
   if (state.lensFilter && state.lensFilter !== 'none' && state.lensFilter !== 'cpl') {
@@ -3137,6 +3217,9 @@ function executeCapture() {
     ? `${Math.round(23.5 * currentZoom)}mm eq. (${currentZoom.toFixed(1)}x)`
     : (cam.exposure ? cam.exposure.focal : '28mm eq.');
 
+  const evSign = evVal > 0 ? '+' : '';
+  const evRecordStr = `${evSign}${evVal.toFixed(1)} EV`;
+
   const photoRecord = {
     id: 'snap_' + Date.now(),
     dataUrl: dataUrl,
@@ -3147,10 +3230,13 @@ function executeCapture() {
     }),
     cameraKey: cam.id,
     cameraName: cam.name,
+    personaName: persona ? persona.personaName : cam.name,
     lensModel: cam.lensModel || 'Precision Optical Glass',
     filterName: filterSpec.name,
     filterDesc: filterSpec.desc,
     opticalLens: state.lensFilter !== 'none' ? state.lensFilter.toUpperCase() : 'Clear (None)',
+    caption: activeCaptionText || '',
+    exposureEV: evRecordStr,
 
     shutterSpeed: cam.exposure ? cam.exposure.shutter : '1/125s',
     aperture: cam.exposure ? cam.exposure.aperture : 'f/2.8',
@@ -3164,6 +3250,7 @@ function executeCapture() {
     colorSpace: 'sRGB Display P3',
     exif: {
       camera: cam.name,
+      persona: persona ? persona.personaName : cam.name,
       lens: cam.lensModel || 'Precision Optical Glass',
       filter: filterSpec.name,
       optical: state.lensFilter !== 'none' ? state.lensFilter.toUpperCase() : 'Clear (None)',
@@ -3171,6 +3258,8 @@ function executeCapture() {
       aperture: cam.exposure ? cam.exposure.aperture : 'f/2.8',
       iso: cam.exposure ? cam.exposure.iso : 'ISO 100',
       focal: focalStr,
+      exposureBias: evRecordStr,
+      caption: activeCaptionText || 'None',
       flash: state.flashMode === 'on' ? 'Fired' : 'Off',
       timestamp: new Date().toISOString()
     }
@@ -3941,6 +4030,20 @@ function updateFimoMiniCamRender(camId) {
   }
 }
 
+function updateFimoCaptionOverlay(camId = state.activeCamera) {
+  const overlayEl = document.getElementById('fimo-caption-overlay');
+  const textEl = document.getElementById('fimo-caption-text');
+  const persona = FIMO_CAMERA_PERSONAS[camId];
+  const captionStr = (persona && persona.captionText) ? persona.captionText : 'OUR TIMELESS MEMORY';
+  if (textEl) {
+    textEl.textContent = captionStr;
+  }
+  if (overlayEl) {
+    overlayEl.style.display = state.fimoCaptionEnabled ? 'flex' : 'none';
+  }
+}
+window.updateFimoCaptionOverlay = updateFimoCaptionOverlay;
+
 function renderCameraBagGrid(filterCat = 'all', filterBrand = 'all') {
   const grid = document.getElementById('camera-bag-grid');
   if (!grid) return;
@@ -4053,6 +4156,7 @@ function initFimoUI() {
       state.fimoCaptionEnabled = !state.fimoCaptionEnabled;
       toggleCaption.classList.toggle('active', state.fimoCaptionEnabled);
       toggleCaption.innerHTML = `사진 문구 <b class="${state.fimoCaptionEnabled ? 'fimo-val-on' : 'fimo-val-off'}">${state.fimoCaptionEnabled ? 'ON' : 'OFF'}</b>`;
+      updateFimoCaptionOverlay(state.activeCamera);
       showDynamicIslandBanner('PHOTO CAPTION', state.fimoCaptionEnabled ? 'ON' : 'OFF', 1200);
     });
   }
@@ -4221,6 +4325,53 @@ function initFimoUI() {
   // Expose global helper
   window.setFimoZoom = (z) => applyZoom(z, { animate: true, showBanner: true, playSound: true });
 
+  // 5.5. Curved Exposure Arc Wheel & EV Compensation (-2.0 to +2.0 EV)
+  const expArcWheel = document.getElementById('fimo-exposure-arc-wheel');
+  const expTopValEl = document.getElementById('fimo-exp-top-val');
+  const expBotValEl = document.getElementById('fimo-exp-bot-val');
+  const evSteps = [-1.5, -1.0, -0.5, 0.0, 0.5, 1.0, 1.5];
+
+  function applyExposureEV(ev, options = {}) {
+    const { showBanner = true, playSound = true } = options;
+    const clampedEV = Math.max(-2.0, Math.min(2.0, Math.round(ev * 2) / 2));
+    state.fimoExposureEV = clampedEV;
+
+    // Map EV (-2.0..+2.0) to vintage arc dial numbers (3..7 where 0.0 EV = 5 / 4)
+    const dialTopNum = Math.round(5 + clampedEV * 2);
+    const dialBotNum = dialTopNum - 1;
+    if (expTopValEl) expTopValEl.textContent = String(dialTopNum);
+    if (expBotValEl) expBotValEl.textContent = String(dialBotNum);
+
+    applyCurrentCameraFilter();
+
+    if (playSound) soundEngine.playTick();
+    if (showBanner) {
+      const sign = clampedEV > 0 ? '+' : '';
+      showDynamicIslandBanner('EXPOSURE', `EV ${sign}${clampedEV.toFixed(1)} (DIAL ${dialTopNum}/${dialBotNum})`, 1000);
+    }
+  }
+
+  window.setFimoExposureEV = (ev) => applyExposureEV(ev, { showBanner: true, playSound: true });
+
+  const cycleExposureEV = () => {
+    const curIdx = evSteps.findIndex(v => Math.abs(v - state.fimoExposureEV) < 0.1);
+    const nextIdx = curIdx === -1 ? 3 : (curIdx + 1) % evSteps.length;
+    applyExposureEV(evSteps[nextIdx], { showBanner: true, playSound: true });
+  };
+
+  if (expArcWheel) {
+    expArcWheel.addEventListener('click', (e) => {
+      e.stopPropagation();
+      cycleExposureEV();
+    });
+    expArcWheel.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      const step = e.deltaY < 0 ? 0.5 : -0.5;
+      applyExposureEV(state.fimoExposureEV + step, { showBanner: true, playSound: true });
+    }, { passive: false });
+  }
+
   // 6. 4 Hardware Round Buttons
   const hwMore = document.getElementById('fimo-hw-more');
   if (hwMore) {
@@ -4245,8 +4396,7 @@ function initFimoUI() {
   if (hwExp) {
     hwExp.addEventListener('click', (e) => {
       e.stopPropagation();
-      soundEngine.playTick();
-      showDynamicIslandBanner('EXPOSURE', 'EV ±0.0 AUTO', 1200);
+      cycleExposureEV();
     });
   }
 
@@ -4301,6 +4451,7 @@ function initFimoUI() {
   // Initial Sync
   updateFimoHeroCard(state.activeCamera);
   updateFimoMiniCamRender(state.activeCamera);
+  updateFimoCaptionOverlay(state.activeCamera);
 }
 
 function initCameraBagModal() {
@@ -5796,4 +5947,6 @@ window.selectDevicePreset = selectDevicePreset;
 window.autoScaleDeviceFrame = autoScaleDeviceFrame;
 window.openDeviceSelectorModal = openDeviceSelectorModal;
 window.closeDeviceSelectorModal = closeDeviceSelectorModal;
-
+window.FIMO_CAMERA_PERSONAS = FIMO_CAMERA_PERSONAS;
+window.FIMO_ORDERED_CAMERAS = FIMO_ORDERED_CAMERAS;
+window.CAM_SVG_ICONS = CAM_SVG_ICONS;

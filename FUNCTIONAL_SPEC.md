@@ -439,4 +439,27 @@ iCam은 브라우저 표준 Web API를 활용하여 사용자의 접속 기기, 
 - `scale = Math.min(1, Math.min(availableH / targetH, availableW / targetW))`
 - 어떤 모니터 해상도에서도 셔터 버튼 및 조작계가 화면 밖으로 잘려나가지 않고(Zero-Clipping) 항상 100% 시각적으로 온전히 노출됩니다.
 
+---
+
+## 14. 빈티지 감성 문구(Photo Caption), 곡면 노출 아크 다이얼(EV), 및 폐루프(Closed-Loop) 상태 관리 명세
+
+### 14.1 감성 사진 문구 (`사진 문구 ON/OFF` & 캡처 인화 파이프라인)
+- **뷰파인더 토글**: 뷰파인더 하단 상태줄의 `사진 문구 OFF/ON` (`#fimo-toggle-caption`) 클릭 시 `state.fimoCaptionEnabled` 상태가 전환되며, 뷰파인더 내 `#fimo-caption-overlay`에 현재 카메라 페르소나의 시그니처 감성 문구가 실시간 표시됩니다.
+- **시그니처 문구 프리셋**:
+  - `Night Tape 98` (뉴진스 Ditto 감성): `"1998.12.19 우리의 겨울, Ditto"`
+  - `Lazy Monkey` (방과 후 캠코더): `"영원히 기억될 방과 후의 조각"`
+  - `Pocari Blue` (도쿄 시티팝 & 포카리 여름): `"푸른 여름의 조각, 포카리 블루"`
+  - `Sunny Saver` (1986 일본 버블 우츠룬데스): `"1986 写ルンです // SUNNY DAY"`
+  - `Osaka Classic` (1988 오사카 하프프레임): `"OSAKA 1988 // HALF-FRAME"`
+  - `Cold Snap` (도쿄 Y2K 디카): `"SHIBUYA 2003 // COLD SNAP"`
+  - `Butterfilm`: `"내가 당신을 사랑할 때 보이는 순간들"`
+- **캡처 캔버스 인화**: `state.fimoCaptionEnabled === true`일 때 `executeCapture()`에서 최종 사진 하단 중앙에 아날로그 필름 자막/레터링 스타일로 감성 문구를 정밀 인화하고 EXIF 메타데이터(`caption`)에 기록합니다.
+
+### 14.2 우측 곡면 노출 보정 아크 다이얼 (`#fimo-exposure-arc-wheel`)
+- 레퍼런스 뷰파인더(`media_1792094004994.png`) 우측의 아날로그 곡면 노출 휠(`5 / 4` 게이지 및 눈금)을 뷰파인더 우측에 구현하고, 하단 `☀` 노출 버튼(`#fimo-hw-exp`) 또는 아크 휠 클릭/드래그를 통해 `EV -2.0 ~ +2.0` 노출 보정(`state.fimoExposureEV`)을 실시간 제어합니다.
+- 설정된 노출값은 라이브 뷰파인더 밝기와 `executeCapture()` 결과물 캔버스 및 EXIF에 동시 반영됩니다.
+
+### 14.3 오류 상태 레지스트리 (`ERROR_STATE_REGISTRY.json`) 기반 루프 검증
+- 모든 기능 변경 전후로 `ERROR_STATE_REGISTRY.json`의 `ERR-001` ~ `ERR-010`을 대조하며, `python3 scripts/test-loop-engineering.py`를 통해 100% 자동 검증합니다.
+
 

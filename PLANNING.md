@@ -405,4 +405,65 @@ GitHub 리포지토리의 `main`, `master`, `develop` 브랜치 푸시 및 PR �
 
 ## 9. 최종 결론
 
-SnapStudio는 **"12대 독립 카메라 라인업(라이카 M, 80s 시티팝, 시네스틸/올드필름, Y2K 디카, 캠코더, 프로필 스튜디오 등)"**, **"광학 컬러 사이언스 기반 정밀 고증"**, **"실시간 라이브 배경 컬러 치환"**, **"탈부착 광학 렌즈 필터"**, **"모듈형 필터 레지스트리 아키텍처"**, **"자동화된 3-Tier CI/CD"**를 통해 기술적 완성도와 아날로그의 정서적 감성을 완벽하게 융합한 독보적인 차세대 iOS 카메라 제품입니다.
+SnapStudio는 **"16대 독립 카메라 라인업(라이카 M, 80s 시티팝, 시네스틸/올드필름, Y2K 디카, 캠코더, 프로필 스튜디오 등)"**, **"광학 컬러 사이언스 기반 정밀 고증"**, **"실시간 라이브 배경 컬러 치환"**, **"탈부착 광학 렌즈 필터"**, **"모듈형 필터 레지스트리 아키텍처"**, **"자동화된 3-Tier CI/CD"**를 통해 기술적 완성도와 아날로그의 정서적 감성을 완벽하게 융합한 독보적인 차세대 iOS 카메라 제품입니다.
+
+---
+
+## 10. 3대 핵심 빈티지 감성 확장 기획 & 폐루프(Closed-Loop) 엔지니어링 명세
+
+사용자의 핵심 감성 니즈와 레퍼런스 카메라 아카이브를 완벽히 구현하기 위해 다음 **3대 빈티지 감성 기둥(Aesthetic Pillars)**과 **폐루프 엔지니어링(Closed-Loop Engineering)** 아키텍처를 수립합니다.
+
+### 10.1 [Pillar 1] 뉴진스 "Ditto" 감성 ('98 Winter VHS & High School Camcorder Nostalgia)
+- **핵심 무드**: 1998년 겨울 방학 학교 복도와 눈 내리는 운동장, 오래된 캠코더(Hi8 / MiniDV)와 초기 사이버샷으로 친구들과 서로를 찍어주던 아련하고 몽환적인 청춘의 기억.
+- **대표 매핑 카메라**:
+  - **`Night Tape 98` (`sony-cybershot`)**: 매트 블랙 Hi8/VHS 나이트 캠코더 & 쿨 블루 CCD 바디.
+  - **`Lazy Monkey` (`sony-handycam`)**: 실버 스위블 플립 스크린 MiniDV 3CCD 캠코더.
+- **컬러 사이언스 & 분광 설계**:
+  - **섀도우(Toe)**: 약간 물 빠진 청회색·시안 틴트(Desaturated Cool-Cyan Shadows, `toe: 0.024`).
+  - **미드톤(Gamma)**: 창백하면서도 따뜻한 겨울 실내/운동장 피부 톤 보존.
+  - **하이라이트(Shoulder & Halation)**: 눈부신 창가 햇살이 부드럽게 번지는 크리미 소프트 할레이션(`shoulder: 0.91`, Soft Bloom).
+- **시그니처 필터 프리셋**:
+  - `Ditto '98 Winter` (1998 겨울 학교 운동장 청회색·소프트 블룸)
+  - `Bunnies VHS Tape` (아날로그 테이프 질감과 첫사랑의 아련한 노스탤지어)
+  - `After School Snow` (방과 후 교실 창가 뽀얀 겨울 햇살)
+- **시그니처 감성 문구 (`사진 문구 ON`)**:
+  - `"1998.12.19 우리의 겨울, Ditto"`
+  - `"영원히 기억될 방과 후의 조각"`
+
+### 10.2 [Pillar 2] 도쿄 Y2K & 1980년대 일본 버블 경제 감성 (Tokyo Y2K & Showa/Heisei Bubble Economy)
+- **핵심 무드**: 1986~1991년 도쿄 신주쿠·롯폰기·긴자의 찬란한 야경과 버블 경제의 낙관주의, 나가이 히로시 일러스트 같은 쇼난 해변의 **포카리 블루(Pocari Blue)**, 그리고 2000년대 초반 시부야·하라주쿠 거리의 메탈릭 Y2K CCD 직광 플래시 스냅.
+- **대표 매핑 카메라**:
+  - **`Pocari Blue` (`citypop-80s`)**: 청량한 코발트 블루 하늘과 1986 시티팝 선셋 네온을 담는 클래식 블랙&실버 35mm 필름 카메라.
+  - **`Sunny Saver` (`fuji-quicksnap`)**: 1986년 일본 버블 시대의 아이콘, 옐로우 & 레드/브라운 물결 스트라이프 일회용 카메라(`写ルンです`).
+  - **`Osaka Classic` (`kyocera-samurai`)**: 1988년 오사카·도쿄 하이테크 열풍의 실버-그레이 하프프레임 72컷 카메라.
+  - **`Cold Snap` (`canon-ixy`) & `Pearl 08` (`contax-t2`)**: 2000년대 도쿄 하라주쿠 Y2K 브러시드 실버 디카 & 샴페인 펄 프리미엄 컴팩트.
+- **시그니처 감성 문구 (`사진 문구 ON`)**:
+  - `"TOKYO 1989 // 泡沫の記憶"`
+  - `"푸른 여름의 조각, 포카리 블루"`
+  - `"SHIBUYA 2003 // FLASH SNAP"`
+  - `"OSAKA 1988 // HALF-FRAME"`
+
+### 10.3 [Pillar 3] 사용자 업로드 레퍼런스 16종 실물 카메라 라인업 1:1 매핑 명세
+
+| 순서 | 레퍼런스 페르소나 명 | 내부 카메라 ID | 레퍼런스 바디 컬러 & 산업 디자인 특징 | 시그니처 사진 문구 (`사진 문구 ON`) |
+| :---: | :--- | :--- | :--- | :--- |
+| 01 | **Osaka Classic** (`NEW`) | `kyocera-samurai` | 매트 실버-그레이 미니멀 컴팩트 바디 & 블랙 렌즈 경통 | `OSAKA 1988 // HALF-FRAME` |
+| 02 | **Butterfilm** (`NEW`) | `sihyun-color` | 올리브-골드 상판 & 따뜻한 카멜 브라운 가죽 바디 | `내가 당신을 사랑할 때 보이는 순간들` |
+| 03 | **Seoul instc** | `instax-mini` | 크림 화이트 스퀘어 바디 & 우상단 오렌지 포인트 셔터 | `SEOUL // INSTANT MEMORY` |
+| 04 | **Lime Memory** | `olympus-mju` | 올리브/라임 그린 클래식 레인지파인더 스타일 바디 | `초록빛 계절의 기억, Lime` |
+| 05 | **Cold Snap** | `canon-ixy` | 브러시드 실버 Y2K 디지털 컴팩트 & 다단 줌 경통 | `SHIBUYA 2003 // COLD SNAP` |
+| 06 | **Nature Core** | `ricoh-gr` | 포레스트 그린 & 실버 투톤 레트로 스냅 카메라 | `숲과 바람의 기록, Nature` |
+| 07 | **Pearl 08** | `contax-t2` | 샴페인 펄 메탈릭 슬림 컴팩트 & 칼자이스 T* 렌즈 | `2008 PEARL // GOLDEN HOUR` |
+| 08 | **Sunny Saver** | `fuji-quicksnap` | 옐로우 & 레드/브라운 물결 그래픽 일회용 필름 카메라 | `1986 写ルンです // SUNNY DAY` |
+| 09 | **Lazy Monkey** | `sony-handycam` | 실버 스위블 플립 LCD 미니DV 캠코더 (`REC`) | `영원히 기억될 방과 후의 조각` |
+| 10 | **Night Tape 98** | `sony-cybershot` | 매트 블랙 Hi8/VHS 나이트 캠코더 (뉴진스 Ditto 감성) | `1998.12.19 우리의 겨울, Ditto` |
+| 11 | **Pocari Blue** | `citypop-80s` | 클래식 블랙 & 실버 크롬 35mm SLR/RF 필름 카메라 | `푸른 여름의 조각, 포카리 블루` |
+| 12 | **Wedding '95** | `oldfilm-35mm` | 1995년 샴페인 실버 필름 컴팩트 & 포트라 400 웜톤 | `1995.05 우리의 가장 빛나던 날` |
+| 13 | **Ohio Summer** | `polaroid-sx70` | 슬레이트 블루 & 실버 빈티지 아날로그 카메라 | `OHIO 1979 // SUMMER BREEZE` |
+| 14 | **Day Classic** | `leica-m` | 정통 블랙 페인트 & 실버 크롬 레인지파인더 카메라 | `WETZLAR // TIMELESS MOMENT` |
+| 15 | **Dark Akan 77** | `hasselblad-500cm` | 다크 월넛 브라운 & 블랙 1977년 빈티지 필름 카메라 | `1977 AKAN // DEEP SHADOW` |
+| 16 | **Passport ID** | `passport-id` | 스튜디오 블루 & 골드 공식 규격 포트레이트 카메라 | `OFFICIAL STUDIO RECORD` |
+
+### 10.4 폐루프 엔지니어링 (Closed-Loop Engineering) 및 오류 상태 관리
+- 모든 기획-개발-검증 과정은 [`LOOP_ENGINEERING.md`](./LOOP_ENGINEERING.md) 및 [`ERROR_STATE_REGISTRY.json`](./ERROR_STATE_REGISTRY.json)에 의해 통제됩니다.
+- 과거 발생했던 10대 핵심 오류(`ERR-001` 배율 미반영 ~ `ERR-010` 루프 거버넌스)는 상태 레지스트리에 영구 기록되며, `scripts/test-loop-engineering.py`를 통해 매 빌드마다 자동 회귀 검증됩니다.

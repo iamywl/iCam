@@ -56,22 +56,22 @@
       halation: null
     },
 
-    // 3. Sony Cyber-shot DSC-P10 (2003 1/1.8" Super HAD CCD)
+    // 3. Sony Cyber-shot DSC-P10 / Night Tape 98 (NewJeans "Ditto" '98 Winter VHS & Cool-Warm Nostalgia)
     'sony-cybershot': {
       spectralMatrix: [
-        [1.03, -0.01, -0.01],
-        [-0.01, 1.03, -0.02],
-        [-0.01, -0.02, 1.04]
+        [1.02, -0.01, -0.01],
+        [-0.01, 1.03, -0.01],
+        [-0.01, -0.01, 1.05]
       ],
       hdCurves: {
-        r: { toe: 0.012, gamma: 1.12, shoulder: 0.94 },
-        g: { toe: 0.012, gamma: 1.14, shoulder: 0.94 },
-        b: { toe: 0.015, gamma: 1.15, shoulder: 0.93 }
+        r: { toe: 0.022, gamma: 1.08, shoulder: 0.92 }, // Soft winter skin warmth & creamy highlight bloom
+        g: { toe: 0.024, gamma: 1.10, shoulder: 0.92 }, // Nostalgic muted cyan-grey shadow toe
+        b: { toe: 0.028, gamma: 1.12, shoulder: 0.91 }  // '98 Winter VHS cool shadow depth
       },
-      grain: { amount: 0.022, roughness: 0.5, colorGrain: false },
+      grain: { amount: 0.032, roughness: 0.6, colorGrain: false },
       chromaticAberration: 0.0,
-      vignette: 0.15,
-      halation: null
+      vignette: 0.16,
+      halation: { threshold: 0.86, radius: 14, color: [220, 240, 255, 0.22] }
     },
 
     // 4. Olympus μ [mju:]-II (Stylus Epic 35mm F/2.8 4-element Glass)
@@ -182,22 +182,22 @@
       halation: null
     },
 
-    // 10. Sony Handycam DCR (MiniDV Tape CCD)
+    // 10. Sony Handycam DCR / Lazy Monkey (MiniDV 3CCD High School Camcorder & Ditto Soft Bloom)
     'sony-handycam': {
       spectralMatrix: [
         [1.03, -0.01, -0.01],
         [-0.01, 1.03, -0.01],
-        [-0.01, -0.02, 1.04]
+        [-0.01, -0.01, 1.04]
       ],
       hdCurves: {
-        r: { toe: 0.018, gamma: 1.10, shoulder: 0.92 },
-        g: { toe: 0.018, gamma: 1.10, shoulder: 0.92 },
-        b: { toe: 0.020, gamma: 1.12, shoulder: 0.90 }
+        r: { toe: 0.022, gamma: 1.08, shoulder: 0.91 },
+        g: { toe: 0.022, gamma: 1.09, shoulder: 0.91 },
+        b: { toe: 0.025, gamma: 1.11, shoulder: 0.90 }
       },
-      grain: { amount: 0.030, roughness: 0.5, colorGrain: false },
+      grain: { amount: 0.032, roughness: 0.5, colorGrain: false },
       chromaticAberration: 0.0,
-      vignette: 0.14,
-      halation: null
+      vignette: 0.15,
+      halation: { threshold: 0.88, radius: 12, color: [255, 235, 210, 0.20] }
     },
 
     // 11. Hasselblad 500C/M (Carl Zeiss Planar 80mm F/2.8 T* Medium Format)
@@ -218,22 +218,22 @@
       halation: null
     },
 
-    // 12. City Pop '86 (Japanese Bubble Summer Resort Aesthetic)
+    // 12. City Pop '86 / Pocari Blue (Japanese Bubble Economy & Refreshing Summer Cobalt-Cyan)
     'citypop-80s': {
       spectralMatrix: [
-        [1.04, 0.00, -0.03],
-        [-0.02, 1.02, 0.00],
-        [-0.02, 0.00, 1.04]
+        [1.03, -0.01, -0.02],
+        [-0.01, 1.04, 0.01],
+        [-0.02, 0.01, 1.06]
       ],
       hdCurves: {
-        r: { toe: 0.024, gamma: 1.08, shoulder: 0.94 },
-        g: { toe: 0.020, gamma: 1.06, shoulder: 0.92 },
-        b: { toe: 0.026, gamma: 1.10, shoulder: 0.94 }
+        r: { toe: 0.022, gamma: 1.08, shoulder: 0.94 },
+        g: { toe: 0.020, gamma: 1.10, shoulder: 0.93 },
+        b: { toe: 0.026, gamma: 1.12, shoulder: 0.94 }
       },
-      grain: { amount: 0.038, roughness: 0.7, colorGrain: false },
+      grain: { amount: 0.036, roughness: 0.7, colorGrain: false },
       chromaticAberration: 0.0,
-      vignette: 0.18,
-      halation: null
+      vignette: 0.16,
+      halation: { threshold: 0.87, radius: 14, color: [255, 120, 180, 0.22] }
     },
 
     // 13. Canon IXY Digital (PowerShot Digic Sensor)
