@@ -243,8 +243,72 @@ async def main():
             assert capture_test['hasCapturedUrl'] is True, "state.lastCapturedUrl must be populated"
             print("  ✓ Test 7 Passed: Captured photo processed and stored with active recipe.")
 
+            # Test 8: 16-Camera Dedicated Recipe Mapping & Distinctness Audit
+            msg_id += 1
+            cam_recipes_audit = await eval_js(ws, msg_id, """(() => {
+                const cams = [
+                    'canon-ixy', 'sony-handycam', 'sony-cybershot', 'olympus-mju',
+                    'contax-t2', 'ricoh-gr', 'leica-m', 'citypop-80s',
+                    'oldfilm-35mm', 'hasselblad-500cm', 'polaroid-sx70', 'fuji-quicksnap',
+                    'kyocera-samurai', 'instax-mini', 'sihyun-color', 'passport-id'
+                ];
+                const engine = window.ParametricColorEngine;
+                const results = {};
+                for (const c of cams) {
+                    const rec = engine.getRecipeForCamera(c);
+                    results[c] = {
+                        hasRecipe: !!rec,
+                        recipeId: rec ? rec.id : null,
+                        name: rec ? rec.name : null,
+                        contrast: rec ? rec.tone.contrast : null,
+                        saturation: rec ? rec.color.saturation : null
+                    };
+                }
+                return results;
+            })()""")
+            assert len(cam_recipes_audit) == 16, "Must test all 16 cameras"
+            for cam_id, info in cam_recipes_audit.items():
+                assert info['hasRecipe'] is True, f"Camera {cam_id} must have a dedicated recipe"
+                assert info['recipeId'] is not None, f"Camera {cam_id} recipeId must not be null"
+            assert cam_recipes_audit['ricoh-gr']['saturation'] == -100, "Ricoh GR must be true monochrome"
+            assert cam_recipes_audit['leica-m']['saturation'] == -100, "Leica M must be true monochrome"
+            assert cam_recipes_audit['instax-mini']['contrast'] >= 10, "Instax Mini must have punchy flash contrast"
+            print("  ✓ Test 8 Passed: All 16 cameras have authentic, dedicated 1:1 recipes.")
+
+            # Test 9: Dynamic Range & Zero Solarization Audit (Keyboard Scene: Deep Blacks & Crisp Whites)
+            msg_id += 1
+            dynamic_range_audit = await eval_js(ws, msg_id, """(() => {
+                const engine = window.ParametricColorEngine;
+                // Create synthetic 2-pixel test image: Pixel 0 = Black text (20,20,20), Pixel 1 = White keycap (240,240,240)
+                const c = document.createElement('canvas');
+                c.width = 2; c.height = 1;
+                const ctx = c.getContext('2d');
+                const imgData = ctx.createImageData(2, 1);
+                // Pixel 0: Black text
+                imgData.data[0] = 20; imgData.data[1] = 20; imgData.data[2] = 20; imgData.data[3] = 255;
+                // Pixel 1: White keycap
+                imgData.data[4] = 240; imgData.data[5] = 240; imgData.data[6] = 240; imgData.data[7] = 255;
+
+                const graded = engine.processImageData(imgData, engine.getRecipeForCamera('fuji-quicksnap'));
+                const blackR = graded.data[0];
+                const whiteR = graded.data[4];
+                const dynamicRangeDelta = whiteR - blackR;
+                return {
+                    blackR,
+                    whiteR,
+                    dynamicRangeDelta,
+                    zeroSolarization: blackR < 40 && whiteR > 215 && dynamicRangeDelta > 180
+                };
+            })()""")
+            print(f"  ✓ Dynamic Range Audit: Black={dynamic_range_audit['blackR']}, White={dynamic_range_audit['whiteR']}, Delta={dynamic_range_audit['dynamicRangeDelta']}")
+            assert dynamic_range_audit['blackR'] <= 40, f"Black text must stay dark (<=40), got {dynamic_range_audit['blackR']}"
+            assert dynamic_range_audit['whiteR'] >= 215, f"White keycaps must stay bright (>=215), got {dynamic_range_audit['whiteR']}"
+            assert dynamic_range_audit['dynamicRangeDelta'] >= 180, f"Dynamic range delta must be >= 180, got {dynamic_range_audit['dynamicRangeDelta']}"
+            assert dynamic_range_audit['zeroSolarization'] is True, "Must have zero solarization or dynamic range collapse"
+            print("  ✓ Test 9 Passed: Dynamic Range Delta > 180 verified, zero solarization on keyboard textures.")
+
             print("\n================================================================================")
-            print("🎉 ALL 7 PARAMETRIC RECIPE & TONE MIXER AUDIT CHECKS PASSED (ERR-014 RESOLVED)!")
+            print("🎉 ALL 9 PARAMETRIC RECIPE & VINTAGE COLOR AUDIT CHECKS PASSED!")
             print("================================================================================")
 
     finally:

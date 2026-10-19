@@ -71,7 +71,7 @@
       grain: { amount: 0.032, roughness: 0.6, colorGrain: false },
       chromaticAberration: 0.0,
       vignette: 0.16,
-      halation: { threshold: 0.86, radius: 14, color: [220, 240, 255, 0.22] }
+      halation: null
     },
 
     // 4. Olympus μ [mju:]-II (Stylus Epic 35mm F/2.8 4-element Glass)
@@ -197,7 +197,7 @@
       grain: { amount: 0.032, roughness: 0.5, colorGrain: false },
       chromaticAberration: 0.0,
       vignette: 0.15,
-      halation: { threshold: 0.88, radius: 12, color: [255, 235, 210, 0.20] }
+      halation: null
     },
 
     // 11. Hasselblad 500C/M (Carl Zeiss Planar 80mm F/2.8 T* Medium Format)
@@ -233,7 +233,7 @@
       grain: { amount: 0.036, roughness: 0.7, colorGrain: false },
       chromaticAberration: 0.0,
       vignette: 0.16,
-      halation: { threshold: 0.87, radius: 14, color: [255, 120, 180, 0.22] }
+      halation: null
     },
 
     // 13. Canon IXY Digital (PowerShot Digic Sensor)
@@ -524,11 +524,10 @@
       if (!ctx) return;
       try {
         const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        processImageData(imgData, camId, options);
         
-        // Chain Parametric Color Grading if active
+        // Master Single-Pass Authentic Color Grading
         if (global.ParametricColorEngine && global.ParametricColorEngine.enabled) {
-          const rec = options.recipe || global.ParametricColorEngine.activeRecipe;
+          const rec = options.recipe || (camId ? global.ParametricColorEngine.getRecipeForCamera(camId) : null) || global.ParametricColorEngine.activeRecipe;
           if (rec) {
             global.ParametricColorEngine.processImageData(imgData, rec);
           }
@@ -609,7 +608,420 @@
   };
 
   const PRESET_RECIPES = {
-    // 1. Donggi Photo Kamakura Summer Recipe (User's Exact Reference Screenshot)
+    // ------------------------------------------------------------------------
+    // A. 16 Camera-Specific Authentic Photographic Recipes (1:1 Calibrated)
+    // ------------------------------------------------------------------------
+
+    // 1. Canon IXY Digital (2004 CCD Digicam / Peach Skin Glow / Vibrant Primary CCD)
+    'canon-ixy-recipe': {
+      id: 'canon-ixy-recipe',
+      name: 'Canon IXY Digital 2004',
+      desc: '2000년대 얼짱 디카: 투명한 복숭아빛 피부톤, 맑고 선명한 원색 CCD 발색과 Y2K 감성',
+      tone: {
+        exposure: 0.16,
+        contrast: 10,
+        highlights: -12,
+        shadows: 8,
+        whites: 4,
+        blacks: 2
+      },
+      color: {
+        temp: 4,
+        tint: 2,
+        vibrance: 12,
+        saturation: 6
+      },
+      hsl: {
+        orange: { hue: 2, sat: -4, lum: 14 },
+        red:    { hue: 1, sat: 12, lum: 8 },
+        yellow: { hue: 2, sat: 6,  lum: 6 }
+      }
+    },
+
+    // 2. Sony Handycam DCR-TRV900 (1999 3CCD MiniDV Camcorder / Warm Broadcast Nostalgia)
+    'sony-handycam-recipe': {
+      id: 'sony-handycam-recipe',
+      name: 'Sony DCR-TRV900 3CCD MiniDV',
+      desc: '90년대 후반 방송용 캠코더: 부드럽고 따뜻한 아날로그 비디오 계조와 묵직한 3CCD 색감',
+      tone: {
+        exposure: 0.08,
+        contrast: 6,
+        highlights: -15,
+        shadows: 8,
+        whites: -6,
+        blacks: 4
+      },
+      color: {
+        temp: 5,
+        tint: -2,
+        vibrance: 8,
+        saturation: 4
+      },
+      hsl: {
+        yellow: { hue: 4, sat: 10, lum: 6 },
+        orange: { hue: 2, sat: -4, lum: 8 },
+        green:  { hue: 4, sat: 8,  lum: 4 }
+      }
+    },
+
+    // 3. Sony Cyber-shot DSC-P10 (2003 Cyber Digicam / Cool Blue Shadows & Flash Punch)
+    'sony-cybershot-recipe': {
+      id: 'sony-cybershot-recipe',
+      name: 'Sony Cyber-shot DSC-P10',
+      desc: '세기말 테크노 Y2K 감성: 차가운 쿨블루 섀도우, 쨍하고 선명한 직광 플래시 대비',
+      tone: {
+        exposure: 0.10,
+        contrast: 12,
+        highlights: -8,
+        shadows: -2,
+        whites: 8,
+        blacks: -4
+      },
+      color: {
+        temp: -7,
+        tint: 2,
+        vibrance: 10,
+        saturation: 8
+      },
+      hsl: {
+        blue:   { hue: 0,  sat: 16, lum: 4 },
+        aqua:   { hue: -4, sat: 14, lum: 6 },
+        orange: { hue: -2, sat: -8, lum: 10 }
+      }
+    },
+
+    // 4. Olympus μ [mju:]-II (Stylus Epic 35mm F/2.8 / High-Contrast Street Snap)
+    'olympus-mju-recipe': {
+      id: 'olympus-mju-recipe',
+      name: 'Olympus μ [mju:] II 35mm F/2.8',
+      desc: '컴팩트 필름 명기: 또렷한 콘트라스트와 생동감 넘치는 원색, 날카로운 선예도',
+      tone: {
+        exposure: 0.10,
+        contrast: 14,
+        highlights: -16,
+        shadows: 4,
+        whites: 6,
+        blacks: -4
+      },
+      color: {
+        temp: 2,
+        tint: -4,
+        vibrance: 14,
+        saturation: 10
+      },
+      hsl: {
+        red:   { hue: 0, sat: 14, lum: 6 },
+        blue:  { hue: 0, sat: 12, lum: -2 },
+        green: { hue: 8, sat: 14, lum: 8 }
+      }
+    },
+
+    // 5. Contax T2 (Carl Zeiss Sonnar 38mm F/2.8 T* / 3D Pop & Velvety Shadows)
+    'contax-t2-recipe': {
+      id: 'contax-t2-recipe',
+      name: 'Contax T2 Carl Zeiss T*',
+      desc: '칼 자이스 조나 렌즈의 입체감: 깊고 묵직한 벨벳 암부와 은은하게 차오르는 하이라이트',
+      tone: {
+        exposure: 0.06,
+        contrast: 12,
+        highlights: -18,
+        shadows: -4,
+        whites: 2,
+        blacks: -8
+      },
+      color: {
+        temp: 3,
+        tint: -2,
+        vibrance: 10,
+        saturation: 6
+      },
+      hsl: {
+        orange: { hue: 2,  sat: -4, lum: 12 },
+        yellow: { hue: 4,  sat: 8,  lum: 6 },
+        red:    { hue: -2, sat: 10, lum: 4 }
+      }
+    },
+
+    // 6. Ricoh GR1s (Moriyama Daido High-Contrast Street Monochrome)
+    'ricoh-gr-recipe': {
+      id: 'ricoh-gr-recipe',
+      name: 'Ricoh GR1s High-Contrast B&W',
+      desc: '모리야마 다이도 스트리트 모노크롬: 거칠고 강렬한 흑백 대비, 깊고 짙은 딥 블랙',
+      tone: {
+        exposure: 0.0,
+        contrast: 28,
+        highlights: -25,
+        shadows: -12,
+        whites: 14,
+        blacks: -16
+      },
+      color: {
+        temp: 0,
+        tint: 0,
+        vibrance: -100,
+        saturation: -100
+      },
+      hsl: {}
+    },
+
+    // 7. Leica M Monochrom (Summilux 50mm Rangefinder Fine Art B&W)
+    'leica-m-recipe': {
+      id: 'leica-m-recipe',
+      name: 'Leica M Monochrom Summilux',
+      desc: '라이카 M의 정수: 풍부한 은염 계조, 섬세한 중간톤 디테일과 품격 있는 명암 밸런스',
+      tone: {
+        exposure: 0.05,
+        contrast: 18,
+        highlights: -20,
+        shadows: -4,
+        whites: 8,
+        blacks: -8
+      },
+      color: {
+        temp: 0,
+        tint: 0,
+        vibrance: -100,
+        saturation: -100
+      },
+      hsl: {}
+    },
+
+    // 8. 1980s City Pop (Sunset Cobalt Blue & Golden Glow)
+    'citypop-80s-recipe': {
+      id: 'citypop-80s-recipe',
+      name: '1980s City Pop Sunset',
+      desc: '시티팝 황혼 감성: 코발트 블루 섀도우, 샴페인 골드 노을빛과 네온 마젠타 하이라이트',
+      tone: {
+        exposure: 0.15,
+        contrast: 12,
+        highlights: -10,
+        shadows: 4,
+        whites: 4,
+        blacks: -2
+      },
+      color: {
+        temp: 7,
+        tint: 6,
+        vibrance: 16,
+        saturation: 10
+      },
+      hsl: {
+        blue:    { hue: -6, sat: 22, lum: -4 },
+        magenta: { hue: 4,  sat: 16, lum: 8 },
+        yellow:  { hue: 6,  sat: 14, lum: 12 },
+        orange:  { hue: 4,  sat: 8,  lum: 10 }
+      }
+    },
+
+    // 9. Old Film 35mm (Kodak Portra 400 Vintage Golden Skin)
+    'oldfilm-35mm-recipe': {
+      id: 'oldfilm-35mm-recipe',
+      name: 'Kodak Portra 400 Vintage',
+      desc: '클래식 골든 아워: 따스한 황금빛 스킨톤, 부드러운 하이라이트 롤오프와 포근한 감성',
+      tone: {
+        exposure: 0.14,
+        contrast: 6,
+        highlights: -20,
+        shadows: 8,
+        whites: -10,
+        blacks: 4
+      },
+      color: {
+        temp: 7,
+        tint: -3,
+        vibrance: 8,
+        saturation: 4
+      },
+      hsl: {
+        orange: { hue: 3, sat: -6, lum: 14 },
+        yellow: { hue: 5, sat: 12, lum: 10 },
+        red:    { hue: 1, sat: 6,  lum: 6 }
+      }
+    },
+
+    // 10. Hasselblad 500C/M (Carl Zeiss Planar 80mm Medium Format 6x6)
+    'hasselblad-500cm-recipe': {
+      id: 'hasselblad-500cm-recipe',
+      name: 'Hasselblad 500C/M Planar 80mm',
+      desc: '중형 6x6 포맷의 압도적 계조: 투명하고 부드러운 명암 전이, 자연스럽고 우아한 색채감',
+      tone: {
+        exposure: 0.08,
+        contrast: 8,
+        highlights: -16,
+        shadows: 6,
+        whites: -4,
+        blacks: 2
+      },
+      color: {
+        temp: 2,
+        tint: -1,
+        vibrance: 10,
+        saturation: 6
+      },
+      hsl: {
+        orange: { hue: 1,  sat: -4, lum: 10 },
+        green:  { hue: 6,  sat: 8,  lum: 8 },
+        blue:   { hue: -2, sat: 8,  lum: 4 }
+      }
+    },
+
+    // 11. Polaroid SX-70 (1972 Land Camera Faded Vintage Warmth)
+    'polaroid-sx70-recipe': {
+      id: 'polaroid-sx70-recipe',
+      name: 'Polaroid SX-70 Land Camera 1972',
+      desc: '빈티지 폴라로이드 감성: 은은하게 바랜 페이드 섀도우, 몽환적인 웜톤과 시안 틴트',
+      tone: {
+        exposure: 0.10,
+        contrast: 4,
+        highlights: -18,
+        shadows: 12,
+        whites: -12,
+        blacks: 8
+      },
+      color: {
+        temp: 6,
+        tint: -5,
+        vibrance: 6,
+        saturation: 2
+      },
+      hsl: {
+        orange: { hue: 4, sat: -8, lum: 12 },
+        yellow: { hue: 6, sat: 10, lum: 8 },
+        aqua:   { hue: 0, sat: 10, lum: 4 }
+      }
+    },
+
+    // 12. Fujifilm QuickSnap (1986 Disposable 400 ISO / Crisp Emerald Greens)
+    'fuji-quicksnap-recipe': {
+      id: 'fuji-quicksnap-recipe',
+      name: 'Fujicolor QuickSnap 400',
+      desc: '1986 일회용 플래시 카메라: 싱그러운 후지 에메랄드 그린, 산뜻한 발색과 경쾌한 콘트라스트',
+      tone: {
+        exposure: 0.12,
+        contrast: 8,
+        highlights: -14,
+        shadows: 6,
+        whites: -6,
+        blacks: 4
+      },
+      color: {
+        temp: -3,
+        tint: -6,
+        vibrance: 12,
+        saturation: 8
+      },
+      hsl: {
+        green:  { hue: 12, sat: 18, lum: 10 },
+        yellow: { hue: -4, sat: 8,  lum: 6 },
+        orange: { hue: 0,  sat: -6, lum: 8 }
+      }
+    },
+
+    // 13. Kyocera Samurai X3.0 (1988 Half-Frame 72-Shot SLR)
+    'kyocera-samurai-recipe': {
+      id: 'kyocera-samurai-recipe',
+      name: 'Kyocera Samurai X3.0 1988',
+      desc: '하프프레임 72컷 아날로그 감성: 경쾌한 색감, 빈티지 질감과 선명한 80년대 필름 룩',
+      tone: {
+        exposure: 0.12,
+        contrast: 10,
+        highlights: -12,
+        shadows: 8,
+        whites: -6,
+        blacks: 4
+      },
+      color: {
+        temp: 4,
+        tint: 3,
+        vibrance: 12,
+        saturation: 8
+      },
+      hsl: {
+        red:    { hue: 2, sat: 12, lum: 8 },
+        yellow: { hue: 4, sat: 10, lum: 8 },
+        blue:   { hue: 2, sat: 10, lum: 6 }
+      }
+    },
+
+    // 14. Fujifilm Instax Mini (Instant Chemical Dye Paper / Vibrant Flash Contrast)
+    'instax-mini-recipe': {
+      id: 'instax-mini-recipe',
+      name: 'Fujifilm Instax Mini Chemical',
+      desc: '즉석 인화지의 묘미: 플래시 발색의 높은 채도, 또렷한 D-min 블랙과 순백 프레임 조화',
+      tone: {
+        exposure: 0.12,
+        contrast: 14,
+        highlights: -14,
+        shadows: 4,
+        whites: 8,
+        blacks: -2
+      },
+      color: {
+        temp: 3,
+        tint: -2,
+        vibrance: 16,
+        saturation: 12
+      },
+      hsl: {
+        red:   { hue: 0,  sat: 16, lum: 8 },
+        green: { hue: 10, sat: 14, lum: 10 },
+        blue:  { hue: -4, sat: 14, lum: 4 }
+      }
+    },
+
+    // 15. Sihyun Color Studio (Porcelain Skin & Personal Background Clarity)
+    'sihyun-color-recipe': {
+      id: 'sihyun-color-recipe',
+      name: 'Sihyunhada Signature Portrait',
+      desc: '시현하다 퍼스널 프로필: 맑고 투명한 도자기 피부결, 퍼스널 컬러 배경의 또렷한 생기',
+      tone: {
+        exposure: 0.12,
+        contrast: 4,
+        highlights: -10,
+        shadows: 6,
+        whites: -4,
+        blacks: 2
+      },
+      color: {
+        temp: 1,
+        tint: 1,
+        vibrance: 8,
+        saturation: 4
+      },
+      hsl: {
+        orange: { hue: 2, sat: -8, lum: 14 },
+        red:    { hue: 0, sat: 6,  lum: 8 },
+        yellow: { hue: 2, sat: 4,  lum: 6 }
+      }
+    },
+
+    // 16. Passport & ID (5500K True Neutral Calibration Standard)
+    'passport-id-recipe': {
+      id: 'passport-id-recipe',
+      name: 'Standard 5500K Studio ID',
+      desc: '규격 증명/여권 표준 조명: 왜곡 없는 100% 정직한 원본 발색과 정확한 피부톤',
+      tone: {
+        exposure: 0.0,
+        contrast: 0,
+        highlights: 0,
+        shadows: 0,
+        whites: 0,
+        blacks: 0
+      },
+      color: {
+        temp: 0,
+        tint: 0,
+        vibrance: 0,
+        saturation: 0
+      },
+      hsl: {}
+    },
+
+    // ------------------------------------------------------------------------
+    // B. Signature Pro Preset Recipes (Custom Tunable Presets)
+    // ------------------------------------------------------------------------
+
+    // Donggi Photo Kamakura Summer Recipe
     'donggi-summer': {
       id: 'donggi-summer',
       name: '청량 여름 필름 (Kamakura Summer)',
@@ -630,13 +1042,13 @@
       },
       hsl: {
         red:     { hue: 0, sat: 10,  lum: 16 },
-        orange:  { hue: 0, sat: -14, lum: 11 }, // 투명 뽀샤시 피부톤
-        yellow:  { hue: 0, sat: 11,  lum: 12 }, // 따사로운 자연광
-        green:   { hue: 9, sat: 6,   lum: 17 }  // 청량 에메랄드 잎사귀
+        orange:  { hue: 0, sat: -14, lum: 11 },
+        yellow:  { hue: 0, sat: 11,  lum: 12 },
+        green:   { hue: 9, sat: 6,   lum: 17 }
       }
     },
 
-    // 2. NewJeans Ditto '98 Winter VHS
+    // NewJeans Ditto '98 Winter VHS
     'ditto-winter-98': {
       id: 'ditto-winter-98',
       name: "Ditto '98 Winter",
@@ -662,7 +1074,7 @@
       }
     },
 
-    // 3. Tokyo Y2K Cyber Digicam
+    // Tokyo Y2K Cyber Digicam
     'tokyo-y2k-ccd': {
       id: 'tokyo-y2k-ccd',
       name: 'Tokyo Y2K CCD',
@@ -688,7 +1100,7 @@
       }
     },
 
-    // 4. Fuji Superia 400 Emerald
+    // Fuji Superia 400 Emerald
     'fuji-superia': {
       id: 'fuji-superia',
       name: 'Fujicolor Superia 400',
@@ -714,7 +1126,7 @@
       }
     },
 
-    // 5. Kodak Portra 400 Golden Skin
+    // Kodak Portra 400 Golden Skin
     'kodak-portra': {
       id: 'kodak-portra',
       name: 'Kodak Portra 400',
@@ -734,13 +1146,13 @@
         saturation: 4
       },
       hsl: {
-        red:    { hue: 0,  sat: 8,   lum: 10 },
-        orange: { hue: 3,  sat: -6,  lum: 14 },
-        yellow: { hue: 5,  sat: 12,  lum: 10 }
+        red:    { hue: 0, sat: 8,   lum: 10 },
+        orange: { hue: 3, sat: -6,  lum: 14 },
+        yellow: { hue: 5, sat: 12,  lum: 10 }
       }
     },
 
-    // 6. Leica M Monochrome Panchromatic
+    // Leica M Monochrome Panchromatic
     'leica-monochrome': {
       id: 'leica-monochrome',
       name: 'Leica M Monochrom',
@@ -762,7 +1174,7 @@
       hsl: {}
     },
 
-    // 7. Raw Neutral (Original / Reset Baseline)
+    // Raw Neutral (Original Baseline)
     'raw-neutral': {
       id: 'raw-neutral',
       name: 'Original Raw Baseline',
@@ -786,22 +1198,22 @@
   };
 
   const CAMERA_PRESET_MAP = {
-    'fuji-quicksnap': 'donggi-summer',
-    'citypop-80s': 'donggi-summer',
-    'kyocera-samurai': 'donggi-summer',
-    'polaroid-sx70': 'donggi-summer',
-    'sony-cybershot': 'ditto-winter-98',
-    'sony-handycam': 'ditto-winter-98',
-    'canon-ixy': 'tokyo-y2k-ccd',
-    'olympus-mju': 'fuji-superia',
-    'contax-t2': 'kodak-portra',
-    'ricoh-gr': 'kodak-portra',
-    'oldfilm-35mm': 'kodak-portra',
-    'hasselblad-500cm': 'kodak-portra',
-    'instax-mini': 'kodak-portra',
-    'sihyun-color': 'donggi-summer',
-    'leica-m': 'leica-monochrome',
-    'passport-id': 'raw-neutral'
+    'canon-ixy': 'canon-ixy-recipe',
+    'sony-handycam': 'sony-handycam-recipe',
+    'sony-cybershot': 'sony-cybershot-recipe',
+    'olympus-mju': 'olympus-mju-recipe',
+    'contax-t2': 'contax-t2-recipe',
+    'ricoh-gr': 'ricoh-gr-recipe',
+    'leica-m': 'leica-m-recipe',
+    'citypop-80s': 'citypop-80s-recipe',
+    'oldfilm-35mm': 'oldfilm-35mm-recipe',
+    'hasselblad-500cm': 'hasselblad-500cm-recipe',
+    'polaroid-sx70': 'polaroid-sx70-recipe',
+    'fuji-quicksnap': 'fuji-quicksnap-recipe',
+    'kyocera-samurai': 'kyocera-samurai-recipe',
+    'instax-mini': 'instax-mini-recipe',
+    'sihyun-color': 'sihyun-color-recipe',
+    'passport-id': 'passport-id-recipe'
   };
 
   function applyParametricGrading(imageData, recipe) {
@@ -814,11 +1226,13 @@
     const hslMods = recipe.hsl || {};
 
     const ev = tone.exposure || 0;
-    // Photographic exposure curve with soft shoulder rolloff
-    const evFactor = Math.pow(2.0, ev * 0.65);
+    const evFactor = Math.pow(2.0, ev * 0.50);
 
     const contrastVal = (tone.contrast || 0) / 100.0;
-    const contrastFactor = 1.0 + contrastVal * 0.55;
+    // Dynamic Range Protected S-Curve: prevents crushing dynamic range into flat grey mush
+    const contrastFactor = contrastVal >= 0
+      ? 1.0 + contrastVal * 0.55
+      : Math.max(0.72, 1.0 + contrastVal * 0.32);
 
     const hiVal = (tone.highlights || 0) / 100.0;
     const whVal = (tone.whites || 0) / 100.0;
@@ -828,9 +1242,9 @@
     const tempVal = (color.temp || 0) / 100.0;
     const tintVal = (color.tint || 0) / 100.0;
 
-    const rTemp = 1.0 + tempVal * 0.18 + tintVal * 0.06;
-    const gTemp = 1.0 - tintVal * 0.14;
-    const bTemp = 1.0 - tempVal * 0.18 + tintVal * 0.05;
+    const rTemp = 1.0 + tempVal * 0.12 + tintVal * 0.05;
+    const gTemp = 1.0 - tintVal * 0.10;
+    const bTemp = 1.0 - tempVal * 0.12 + tintVal * 0.04;
 
     const vibVal = (color.vibrance || 0) / 100.0;
     const satVal = (color.saturation || 0) / 100.0;
@@ -861,39 +1275,39 @@
       g *= gTemp;
       b *= bTemp;
 
-      // 2. Exposure with soft shoulder rolloff to preserve highlights
-      if (evFactor > 1.0) {
-        r = 1.0 - Math.exp(-r * evFactor * 1.05);
-        g = 1.0 - Math.exp(-g * evFactor * 1.05);
-        b = 1.0 - Math.exp(-b * evFactor * 1.05);
-      } else {
-        r *= evFactor;
-        g *= evFactor;
-        b *= evFactor;
-      }
+      // 2. Exposure with soft photographic shoulder roll-off
+      r *= evFactor;
+      g *= evFactor;
+      b *= evFactor;
+
+      if (r > 0.90) { r = 0.90 + (1.0 - Math.exp(-(r - 0.90) * 4.0)) * 0.10; }
+      if (g > 0.90) { g = 0.90 + (1.0 - Math.exp(-(g - 0.90) * 4.0)) * 0.10; }
+      if (b > 0.90) { b = 0.90 + (1.0 - Math.exp(-(b - 0.90) * 4.0)) * 0.10; }
 
       let lum = 0.2126 * r + 0.7152 * g + 0.0722 * b;
 
-      // 3. Highlights & Whites Compression (Soft gentle rolloff, no digital muddy clamp)
-      if (lum > 0.35) {
-        const hiWeight = Math.min(1.0, (lum - 0.35) / 0.65);
-        const hiComp = 1.0 + (hiVal * 0.25 + whVal * 0.15) * hiWeight;
+      // 3. Highlights & Whites Compression (Natural shoulder roll-off, never clips to mud)
+      if (lum > 0.40) {
+        const hiWeight = Math.min(1.0, (lum - 0.40) / 0.60);
+        const whWeight = lum > 0.70 ? Math.min(1.0, (lum - 0.70) / 0.30) : 0.0;
+        const hiComp = 1.0 + (hiVal * 0.18 * hiWeight) + (whVal * 0.10 * whWeight);
         r *= hiComp;
         g *= hiComp;
         b *= hiComp;
       }
 
-      // 4. Shadows (+45) & Blacks (+11) Lift (Gentle vintage milky lift)
-      if (lum < 0.75) {
-        const shWeight = Math.max(0.0, (0.75 - lum) / 0.75);
-        const lift = (shVal * 0.28 + blVal * 0.16) * shWeight;
+      // 4. Shadows & Blacks (Gentle natural toe adjustment, maintains deep crisp blacks)
+      if (lum < 0.60) {
+        const shWeight = Math.max(0.0, (0.60 - lum) / 0.60);
+        const blWeight = lum < 0.25 ? Math.max(0.0, (0.25 - lum) / 0.25) : 0.0;
+        const lift = (shVal * 0.10 * shWeight) + (blVal * 0.06 * blWeight);
         r += lift;
         g += lift;
         b += lift;
       }
 
-      // 5. Contrast (Midpoint 0.52 for bright, airy Japanese summer high-key look)
-      const pivot = 0.52;
+      // 5. Contrast (Midpoint 0.50 natural S-curve)
+      const pivot = 0.50;
       r = (r - pivot) * contrastFactor + pivot;
       g = (g - pivot) * contrastFactor + pivot;
       b = (b - pivot) * contrastFactor + pivot;
@@ -911,19 +1325,21 @@
         continue;
       }
 
-      // 6. HSL Color Mixer & Vibrance
+      // 6. Gamut-Protected HSL Color Mixer & Vibrance
       let [h, s, l] = rgbToHsl(r, g, b);
 
-      if (channelMods.length > 0 && s > 0.02) {
+      // Gamut protection: only adjust colors if saturation > 0.06 (preserves neutral white keycaps & black text)
+      if (channelMods.length > 0 && s > 0.06) {
+        const satProtection = Math.min(1.0, (s - 0.06) / 0.12);
         for (let ch of channelMods) {
           let diff = Math.abs(h - ch.center);
           if (diff > 180) diff = 360 - diff;
           if (diff < ch.range) {
             const w = 1.0 - (diff / ch.range);
-            const weight = w * w * (3.0 - 2.0 * w);
+            const weight = w * w * (3.0 - 2.0 * w) * satProtection;
             h += ch.hue * weight;
             s += ch.sat * weight * s;
-            l += ch.lum * weight * 0.35;
+            l += ch.lum * weight * 0.25;
           }
         }
       }
@@ -933,7 +1349,7 @@
       }
       if (vibVal !== 0) {
         const vibWeight = (1.0 - s);
-        s += vibVal * vibWeight * 0.65;
+        s += vibVal * vibWeight * 0.50;
       }
 
       s = Math.max(0.0, Math.min(1.0, s));
@@ -952,7 +1368,7 @@
   const ParametricColorEngine = {
     presets: PRESET_RECIPES,
     cameraPresetMap: CAMERA_PRESET_MAP,
-    activeRecipe: JSON.parse(JSON.stringify(PRESET_RECIPES['donggi-summer'])),
+    activeRecipe: JSON.parse(JSON.stringify(PRESET_RECIPES['canon-ixy-recipe'] || PRESET_RECIPES['donggi-summer'])),
     enabled: true,
 
     getRecipe(id) {
@@ -960,8 +1376,8 @@
     },
 
     getRecipeForCamera(camId) {
-      const presetId = CAMERA_PRESET_MAP[camId] || 'donggi-summer';
-      return PRESET_RECIPES[presetId] || PRESET_RECIPES['donggi-summer'];
+      const presetId = CAMERA_PRESET_MAP[camId] || 'fuji-quicksnap-recipe';
+      return PRESET_RECIPES[presetId] || PRESET_RECIPES['fuji-quicksnap-recipe'];
     },
 
     setRecipe(recipe) {

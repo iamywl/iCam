@@ -2831,13 +2831,9 @@ function executeCapture() {
         ctx.scale(currentZoom, currentZoom);
         ctx.translate(-captureCanvas.width / 2, -captureCanvas.height / 2);
       }
-      let filterToApply = activeFilter;
-      if (state.flashMode === 'on') {
-        filterToApply = (filterToApply === 'none')
-          ? 'brightness(1.22) contrast(1.14)'
-          : filterToApply + ' brightness(1.2) contrast(1.1)';
-      }
-      ctx.filter = filterToApply;
+      // Pure sensor capture: prevent triple-filter compounding.
+      // High-precision film grading is performed authoritatively in single-pass by FilmSpectralEngine below.
+      ctx.filter = (state.flashMode === 'on') ? 'brightness(1.15) contrast(1.08)' : 'none';
 
       // Crop video to exact target ratio (4:3 in landscape, 3:4 in portrait)
       const vAspect = video.videoWidth / video.videoHeight;
@@ -2879,7 +2875,8 @@ function executeCapture() {
         ctx.scale(currentZoom, currentZoom);
         ctx.translate(-captureCanvas.width / 2, -captureCanvas.height / 2);
       }
-      ctx.filter = activeFilter;
+      // Pure model capture: prevent double-filtering
+      ctx.filter = (state.flashMode === 'on') ? 'brightness(1.15) contrast(1.08)' : 'none';
 
       const imgAspect = activeImg.naturalWidth / activeImg.naturalHeight;
       const canvasAspect = captureCanvas.width / captureCanvas.height;
