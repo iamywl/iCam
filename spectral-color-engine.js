@@ -146,22 +146,22 @@
       halation: null
     },
 
-    // 8. Polaroid SX-70 (1972 Time-Zero Land Film Diffusion)
+    // 8. Polaroid SX-70 (1972 Time-Zero Land Film Chemical Diffusion & Warm Creamy Halation)
     'polaroid-sx70': {
       spectralMatrix: [
-        [1.03, 0.00, -0.02],
-        [-0.01, 1.01, 0.00],
-        [-0.02, 0.01, 0.98]
+        [1.06, 0.00, -0.03], // Warm golden amber tones & nostalgic vintage skin
+        [-0.01, 1.02, 0.00],
+        [-0.03, 0.01, 0.94]  // Subdued blues, lifted creamy amber shadow floor
       ],
       hdCurves: {
-        r: { toe: 0.035, gamma: 1.05, shoulder: 0.92 },
-        g: { toe: 0.030, gamma: 1.03, shoulder: 0.90 },
-        b: { toe: 0.035, gamma: 1.00, shoulder: 0.90 }
+        r: { toe: 0.055, gamma: 1.08, shoulder: 0.86 }, // Vintage soft highlight knee & compressed contrast
+        g: { toe: 0.048, gamma: 1.06, shoulder: 0.86 },
+        b: { toe: 0.042, gamma: 1.02, shoulder: 0.85 }
       },
-      grain: { amount: 0.032, roughness: 0.6, colorGrain: false },
-      chromaticAberration: 0.0,
-      vignette: 0.18,
-      halation: null
+      grain: { amount: 0.042, roughness: 0.7, colorGrain: false }, // Broad chemical paste grain
+      chromaticAberration: 0.003, // 116mm 4-element glass edge dispersion
+      vignette: 0.24, // Iconic square format corner falloff
+      halation: { threshold: 0.82, radius: 18, color: [255, 215, 160, 0.32] } // Dreamy 1970s warm halation glow
     },
 
     // 9. Kyocera Samurai X3.0 (1988 Half-Frame 72-Shot SLR)
@@ -254,22 +254,22 @@
       halation: null
     },
 
-    // 14. Fujifilm Instax Mini (Instant Color Film)
+    // 14. Fujifilm Instax Mini (Instant Color Chemical Emulsion with Cyan-Teal Shadow Tone & Soft Flash Glow)
     'instax-mini': {
       spectralMatrix: [
-        [1.02, 0.00, -0.01],
-        [-0.01, 1.04, -0.02],
-        [-0.01, 0.00, 1.01]
+        [1.04, -0.01, -0.02], // Warm skin tone & vibrant flash pop
+        [-0.02, 1.05, -0.01], // Authentic Fuji emerald-green foliage response
+        [-0.03, -0.01, 1.08]  // Characteristic instant dye deep indigo-cyan shadow depth
       ],
       hdCurves: {
-        r: { toe: 0.030, gamma: 1.14, shoulder: 0.92 },
-        g: { toe: 0.025, gamma: 1.16, shoulder: 0.92 },
-        b: { toe: 0.032, gamma: 1.12, shoulder: 0.92 }
+        r: { toe: 0.045, gamma: 1.18, shoulder: 0.88 }, // Steep instant dynamic range (blown highlights, rich blacks)
+        g: { toe: 0.040, gamma: 1.20, shoulder: 0.88 },
+        b: { toe: 0.052, gamma: 1.15, shoulder: 0.87 }  // Raised blue-cyan toe for chemical paper look
       },
-      grain: { amount: 0.032, roughness: 0.6, colorGrain: false },
-      chromaticAberration: 0.0,
-      vignette: 0.18,
-      halation: null
+      grain: { amount: 0.038, roughness: 0.65, colorGrain: false }, // Physical dye diffusion texture
+      chromaticAberration: 0.002, // Subtle plastic lens dispersion
+      vignette: 0.22, // Instant camera plastic lens corner falloff
+      halation: { threshold: 0.84, radius: 16, color: [255, 230, 200, 0.28] } // Creamy flash highlight bloom
     },
 
     // 15. Sihyun Color Studio (High-Key Calibrated Studio Lighting)

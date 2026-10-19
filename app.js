@@ -289,7 +289,7 @@ const CAMERAS = {
     id: 'canon-ixy',
     name: 'Canon IXY Digital 50',
     shortName: 'CANON IXY',
-    sub: 'Peach Glow',
+    sub: '2004 CCD Retro Compact',
     icon: '📸',
     badge: 'Y2K DIGICAM',
     osdId: 'canon-ixy-osd',
@@ -338,7 +338,7 @@ const CAMERAS = {
     id: 'sony-handycam',
     name: 'Sony DCR Handycam',
     shortName: 'HANDYCAM',
-    sub: 'Ditto School Cam',
+    sub: '1999 MiniDV 3CCD Camcorder',
     icon: '📹',
     badge: 'MINI-DV',
     osdId: 'sony-handycam-osd',
@@ -387,7 +387,7 @@ const CAMERAS = {
     id: 'sony-cybershot',
     name: 'Sony Cyber-shot DSC-P10',
     shortName: 'NIGHT TAPE 98',
-    sub: "Ditto '98 Winter",
+    sub: '2003 Cyber-shot 5.1MP CCD',
     icon: '💿',
     badge: 'DITTO 98 VHS',
     osdId: 'sony-cybershot-osd',
@@ -436,46 +436,46 @@ const CAMERAS = {
     id: 'instax-mini',
     name: 'Fuji Instax & Polaroid',
     shortName: 'INSTAX',
-    sub: 'Instax Soft',
+    sub: 'Fujifilm Instant Color 800',
     icon: '🖼️',
     badge: 'INSTANT FILM',
     osdId: 'instax-frame',
     drawerId: 'drawer-instax-mini',
     filters: {
       'instax-card': {
-        name: 'Instax Soft',
-        desc: '화이트 카드 프레임',
-        css: 'brightness(1.03) contrast(1.06) saturate(1.10) sepia(0.02)',
+        name: 'Instax Color 800',
+        desc: '후지 화학 유제 특유의 청회색 섀도우 & 소프트 스킨',
+        css: 'brightness(1.04) contrast(1.14) saturate(1.12) sepia(0.04)',
         tintRgba: null
       },
       'polaroid-square': {
         name: 'Polaroid 600',
-        desc: '클래식 정방형 스퀘어',
-        css: 'brightness(1.02) contrast(1.08) saturate(1.10) sepia(0.05)',
+        desc: '따스한 골든 앰버 톤과 빈티지 스퀘어 발색',
+        css: 'brightness(1.05) contrast(1.12) saturate(1.14) sepia(0.08)',
         tintRgba: null
       },
       'instant-bw': {
-        name: 'Warm Mono',
-        desc: '웜톤 흑백 즉석사진',
-        css: 'grayscale(1) contrast(1.22) brightness(1.01)',
+        name: 'Silver Mono Pro',
+        desc: '깊은 흑은염 입자와 벨벳 블랙 계조',
+        css: 'grayscale(1) contrast(1.28) brightness(1.02)',
         tintRgba: null
       },
       'instant-rainbow': {
-        name: 'Rainbow Edge',
-        desc: '비비드 무지개 카드',
-        css: 'brightness(1.04) contrast(1.10) saturate(1.18)',
+        name: 'Vivid Chrome',
+        desc: '채도 높은 팝 컬러와 선명한 직광 플래시',
+        css: 'brightness(1.06) contrast(1.18) saturate(1.24)',
         tintRgba: null
       },
       'instax-warm': {
-        name: 'Instax Warm Gold',
-        desc: '따사로운 골든 즉석 인화지',
-        css: 'brightness(1.03) contrast(1.06) saturate(1.14) sepia(0.06)',
+        name: 'Warm Gold Emulsion',
+        desc: '석양빛 앰버 유제와 포근한 감성 톤',
+        css: 'brightness(1.05) contrast(1.10) saturate(1.16) sepia(0.10)',
         tintRgba: null
       },
       'instax-cool': {
-        name: 'Instax Cool Blue',
-        desc: '청량한 여름 블루 즉석사진',
-        css: 'brightness(1.03) contrast(1.08) saturate(1.08)',
+        name: 'Cyan Blue Hour',
+        desc: '새벽녘 청량한 시안 블루 즉석 인화지',
+        css: 'brightness(1.04) contrast(1.12) saturate(1.10) hue-rotate(-8deg)',
         tintRgba: null
       }
     }
@@ -485,7 +485,7 @@ const CAMERAS = {
     id: 'olympus-mju',
     name: 'Olympus μ [mju:] II',
     shortName: 'OLYMPUS μ2',
-    sub: 'μ Standard',
+    sub: 'Stylus Epic 35mm F/2.8',
     icon: '📷',
     badge: '35mm f/2.8 FILM',
     osdId: 'olympus-osd',
@@ -534,7 +534,7 @@ const CAMERAS = {
     id: 'contax-t2',
     name: 'Contax T2',
     shortName: 'CONTAX T2',
-    sub: 'Zeiss Warm T*',
+    sub: 'Carl Zeiss Sonnar 38mm T*',
     icon: '📸',
     badge: 'Carl Zeiss T*',
     osdId: 'contax-osd',
@@ -583,7 +583,7 @@ const CAMERAS = {
     id: 'ricoh-gr',
     name: 'Ricoh GR Digital',
     shortName: 'RICOH GRD',
-    sub: 'High-Contrast B&W',
+    sub: '28mm F/2.8 Street Snap',
     icon: '🎞️',
     badge: 'SNAP SHOOTER',
     osdId: 'ricoh-osd',
@@ -632,7 +632,7 @@ const CAMERAS = {
     id: 'leica-m',
     name: 'Leica M System',
     shortName: 'LEICA M',
-    sub: 'Summilux 50',
+    sub: 'Summilux-M 35mm Rangefinder',
     icon: '🔴',
     badge: 'RANGEFINDER M',
     osdId: 'leica-m-osd',
@@ -681,7 +681,7 @@ const CAMERAS = {
     id: 'citypop-80s',
     name: 'City Pop 80s',
     shortName: 'CITY POP 80s',
-    sub: 'Shonan Sunset 1986',
+    sub: '1986 Bubble Economy Retro',
     icon: '📼',
     badge: '1986 BUBBLE SOUND',
     osdId: 'citypop-osd',
@@ -730,7 +730,7 @@ const CAMERAS = {
     id: 'oldfilm-35mm',
     name: 'Old Film 35mm',
     shortName: 'OLD FILM 35',
-    sub: 'CineStill 800T',
+    sub: 'Kodak Portra & CineStill 35mm',
     icon: '🎞️',
     badge: 'ANALOG CINE 35',
     osdId: 'oldfilm-osd',
@@ -779,7 +779,7 @@ const CAMERAS = {
     id: 'hasselblad-500cm',
     name: 'Hasselblad 500C/M',
     shortName: 'HASSELBLAD',
-    sub: 'Planar 80mm Pop',
+    sub: 'Carl Zeiss Planar 80mm MF',
     icon: '📷',
     badge: '6x6 MEDIUM FORMAT',
     osdId: 'hasselblad-osd',
@@ -830,7 +830,7 @@ const CAMERAS = {
     id: 'polaroid-sx70',
     name: 'Polaroid SX-70',
     shortName: 'POLAROID SX-70',
-    sub: 'SX-70 Vintage Fade',
+    sub: '1972 Time-Zero Land Camera',
     icon: '📸',
     badge: '1972 LAND CAMERA',
     osdId: 'polaroid-sx70-osd',
@@ -881,7 +881,7 @@ const CAMERAS = {
     id: 'fuji-quicksnap',
     name: 'Fuji QuickSnap (写ルンです 1986)',
     shortName: 'QUICKSNAP 1986',
-    sub: 'Daylight 1986',
+    sub: '1986 写ルンです 32mm Plastic',
     icon: '📸',
     badge: '1986 BUBBLE ERA',
     osdId: 'quicksnap-osd',
@@ -932,7 +932,7 @@ const CAMERAS = {
     id: 'kyocera-samurai',
     name: 'Kyocera Samurai X3.0 (1988)',
     shortName: 'SAMURAI 1988',
-    sub: 'Half-Frame Crisp 72',
+    sub: '1988 Half-Frame 72-Shot SLR',
     icon: '🗡️',
     badge: '1988 CYBER HALF-FRAME',
     osdId: 'kyocera-samurai-osd',
@@ -983,7 +983,7 @@ const CAMERAS = {
     id: 'sihyun-color',
     name: 'Personal Color Studio',
     shortName: 'COLOR STUDIO',
-    sub: '#01 Blossom Pink',
+    sub: 'Signature Studio Lighting',
     icon: '🎨',
     badge: 'LIVE COLOR',
     osdId: 'mood-card-frame',
@@ -995,7 +995,7 @@ const CAMERAS = {
     id: 'passport-id',
     name: '여권 / 신분증 규격 카메라',
     shortName: 'PASSPORT ID',
-    sub: '대한민국 여권',
+    sub: 'Official Biometric Standard',
     icon: '🪪',
     badge: 'STANDARD ID',
     osdId: 'standard-id-hud',
@@ -1303,6 +1303,35 @@ class SoundFXEngine {
     this.init();
     if (!this.ctx) return;
     const now = this.ctx.currentTime;
+
+    if (camId === 'instax-mini') {
+      // Instax Mini: Mechanical leaf trip + Whirring electric motor & dual roller squeak
+      const clickOsc = this.ctx.createOscillator();
+      const clickGain = this.ctx.createGain();
+      clickOsc.type = 'triangle';
+      clickOsc.frequency.setValueAtTime(540, now);
+      clickOsc.frequency.exponentialRampToValueAtTime(60, now + 0.05);
+      clickGain.gain.setValueAtTime(0.4, now);
+      clickGain.gain.exponentialRampToValueAtTime(0.01, now + 0.05);
+      clickOsc.connect(clickGain);
+      clickGain.connect(this.ctx.destination);
+      clickOsc.start(now);
+      clickOsc.stop(now + 0.055);
+
+      // Motor whining pitch ramp
+      const motorOsc = this.ctx.createOscillator();
+      const motorGain = this.ctx.createGain();
+      motorOsc.type = 'sawtooth';
+      motorOsc.frequency.setValueAtTime(420, now + 0.06);
+      motorOsc.frequency.linearRampToValueAtTime(510, now + 0.35);
+      motorGain.gain.setValueAtTime(0.18, now + 0.06);
+      motorGain.gain.exponentialRampToValueAtTime(0.001, now + 0.42);
+      motorOsc.connect(motorGain);
+      motorGain.connect(this.ctx.destination);
+      motorOsc.start(now + 0.06);
+      motorOsc.stop(now + 0.43);
+      return;
+    }
 
     if (camId === 'polaroid-sx70') {
       // Polaroid SX-70: Soft leaf click followed by motorized roller ejection whine
@@ -1909,7 +1938,7 @@ function selectCameraFilter(filterKey) {
   const spec = cam.filters[filterKey];
   if (spec) {
     const badgeSub = document.getElementById('cam-badge-sub');
-    if (badgeSub) badgeSub.textContent = spec.name;
+    if (badgeSub) badgeSub.textContent = cam.sub;
     showDynamicIslandBanner(cam.shortName, spec.name, 1200);
   }
 }
@@ -3275,10 +3304,110 @@ function executeCapture() {
   thumbImg.style.display = 'block';
   thumbPlaceholder.style.display = 'none';
 
-  setTimeout(() => {
-    openGalleryModal();
-  }, 350);
+  if (cam.id === 'instax-mini' || cam.id === 'polaroid-sx70') {
+    triggerInstantFilmEjection(photoRecord, cam.id);
+  } else {
+    if (cam.id === 'fuji-quicksnap') {
+      setTimeout(() => {
+        soundEngine.playRatchetWind();
+      }, 420);
+    }
+    setTimeout(() => {
+      openGalleryModal();
+    }, 350);
+  }
 }
+
+// ==========================================================================
+// Instant Film Mechanical Ejection & Chemical Development Engine (ERR-013)
+// ==========================================================================
+function triggerInstantFilmEjection(photoRecord, camId) {
+  const overlay = document.getElementById('instant-ejection-overlay');
+  const card = document.getElementById('instant-film-card');
+  const photo = document.getElementById('instant-film-photo');
+  const mask = document.getElementById('instant-emulsion-mask');
+  const badge = document.getElementById('instant-card-badge');
+  const status = document.getElementById('instant-card-status');
+  const actionBar = document.getElementById('instant-action-bar');
+  if (!overlay || !card || !photo) {
+    setTimeout(() => openGalleryModal(), 350);
+    return;
+  }
+
+  const isPolaroid = (camId === 'polaroid-sx70');
+  overlay.classList.toggle('polaroid-mode', isPolaroid);
+  if (badge) {
+    badge.textContent = isPolaroid ? 'POLAROID SX-70' : 'instax mini';
+  }
+  if (status) {
+    status.textContent = 'EJECTING...';
+    status.classList.remove('developed');
+  }
+
+  // Reset classes and set photo src
+  card.classList.remove('ejecting', 'developing');
+  if (actionBar) actionBar.classList.remove('visible');
+  if (mask) mask.style.opacity = '1';
+  photo.src = photoRecord.dataUrl;
+
+  overlay.classList.add('active');
+
+  // Trigger mechanical ejection slide animation
+  void card.offsetWidth;
+  card.classList.add('ejecting');
+
+  // After 650ms, begin progressive chemical oxidation development
+  setTimeout(() => {
+    card.classList.add('developing');
+    if (status) status.textContent = 'DEVELOPING...';
+
+    let elapsed = 0;
+    const interval = setInterval(() => {
+      elapsed += 400;
+      const pct = Math.min(100, Math.round((elapsed / 3200) * 100));
+      if (status && pct < 100) {
+        status.textContent = `DEVELOPING ${pct}%`;
+      }
+      if (elapsed >= 3200) {
+        clearInterval(interval);
+        if (status) {
+          status.textContent = 'DEVELOPED';
+          status.classList.add('developed');
+        }
+        if (actionBar) {
+          actionBar.classList.add('visible');
+        }
+      }
+    }, 400);
+  }, 650);
+
+  function dismissEjection(e) {
+    if (e) e.stopPropagation();
+    overlay.classList.remove('active');
+    card.classList.remove('ejecting', 'developing');
+    cleanup();
+  }
+
+  function viewInGallery(e) {
+    if (e) e.stopPropagation();
+    dismissEjection();
+    openGalleryModal();
+  }
+
+  const btnView = document.getElementById('btn-instant-view-gallery');
+  const btnDismiss = document.getElementById('btn-instant-dismiss');
+
+  function cleanup() {
+    if (btnView) btnView.removeEventListener('click', viewInGallery);
+    if (btnDismiss) btnDismiss.removeEventListener('click', dismissEjection);
+    card.removeEventListener('click', viewInGallery);
+  }
+
+  if (btnView) btnView.addEventListener('click', viewInGallery, { once: true });
+  if (btnDismiss) btnDismiss.addEventListener('click', dismissEjection, { once: true });
+  card.addEventListener('click', viewInGallery, { once: true });
+}
+window.triggerInstantFilmEjection = triggerInstantFilmEjection;
 
 function updateGalleryBadge() {
   const topBadge = document.getElementById('gallery-badge-num');

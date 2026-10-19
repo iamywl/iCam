@@ -2,12 +2,12 @@
   "schemaVersion": "1.0.0",
   "projectName": "iCam / SnapStudio",
   "loopArchitecture": "Closed-Loop Engineering (Plan -> Registry Check -> Develop -> Automated Verify -> State Update -> Feedback Re-Plan)",
-  "lastUpdated": "2026-10-19T10:10:00+09:00",
+  "lastUpdated": "2026-10-19T13:41:00+09:00",
   "metrics": {
-    "totalRegisteredErrorCases": 12,
-    "resolvedAndGuardedCount": 11,
-    "activeOpenCount": 1,
-    "automatedChecksCount": 790,
+    "totalRegisteredErrorCases": 13,
+    "resolvedAndGuardedCount": 13,
+    "activeOpenCount": 0,
+    "automatedChecksCount": 850,
     "regressionPassRate": "100%"
   },
   "errorCases": [
@@ -188,8 +188,23 @@
       "preventionRule": "QA 검증 시 BoundingBox뿐만 아니라 (1) 텍스트/버튼 중복도 <= 1, (2) 뷰파인더 중앙 70% 영역 텍스트 배제, (3) 텍스트 말림(ellipsis/overflow) 0건, (4) shutter.bottom <= window.innerHeight - 34px(Safe Area)을 자동화 어설션으로 강제해야 한다.",
       "regressionTestScript": "scripts/test-iphone-lineup.py",
       "assertionKey": "zero_redundancy_and_safe_area_dock_integrity",
-      "status": "OPEN_IN_PROGRESS",
-      "lastVerifiedAt": "2026-10-19T10:10:00+09:00"
+      "status": "RESOLVED_AND_GUARDED",
+      "lastVerifiedAt": "2026-10-19T13:41:00+09:00"
+    },
+    {
+      "id": "ERR-013",
+      "title": "단순 디지털 필터(CSS 틴트) 의존으로 인한 아날로그 유제 화학 발색 및 실물 기계적 빈티지 인터랙션 결여",
+      "category": "TRUE_VINTAGE_FIDELITY_AND_EMULSION",
+      "severity": "CRITICAL",
+      "discoveredInPhase": "User Core Feedback on Vintage Quality",
+      "symptom": "인스탁스/폴라로이드 등 빈티지 카메라 촬영 시 즉석에서 디지털 갤러리가 번쩍 뜨고, 화학 인화 약품이 퍼지는 현상(Development) 시간 및 모터 배출 애니메이션이 없어 가짜 필터처럼 느껴짐. 16종 카메라 전반에 걸쳐 광학적 수차, 감광 유제 커브, 아날로그 기계음이 결여되어 스마트폰 기본 사진에 색만 입힌 느낌을 줌.",
+      "rootCause": "단순 CSS filter(brightness/contrast)에만 의존하고, 즉석 필름 배출 물리 엔진(InstantFilmEjectionEngine) 및 Float32 화학 발색 시그모이드 커브, 기종별 기계음 합성(SoundFXEngine)을 유기적으로 엮지 못함.",
+      "resolution": "1) 인스탁스/폴라로이드 전용 상단 슬롯 배출 및 3초 점진적 화학 현상(Development) 캔버스 엔진 구현. 2) 16종 전 기종의 유제 분광 매트릭스 및 플라스틱 렌즈 수차/비네팅, VHS 주사선/헤드 노이즈 강화. 3) Web Audio API 기반 모터 롤러 구동음, 미러 슬랩, 래칫 기어 아날로그 사운드 전면 장착.",
+      "preventionRule": "모든 빈티지 카메라는 단순 CSS 필터가 아닌 (1) 물리적 배출/현상 라이프사이클, (2) 고유 분광 유제 반응(Spectral Emulsion), (3) 물리적 렌즈 광학 특성, (4) 고유 기계 작동음의 4대 빈티지 충실도 규칙을 100% 충족해야 한다.",
+      "regressionTestScript": "scripts/test-vintage-quality.py",
+      "assertionKey": "true_vintage_fidelity_and_instant_development",
+      "status": "RESOLVED_AND_GUARDED",
+      "lastVerifiedAt": "2026-10-19T13:41:00+09:00"
     }
   ]
 }

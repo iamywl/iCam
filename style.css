@@ -4105,7 +4105,7 @@ body.native-mobile-device .fluid-device-pill {
     padding-left: 12px !important;
     padding-right: 12px !important;
     padding-bottom: 0 !important;
-    box-sizing: content-box !important;
+    box-sizing: border-box !important;
     display: flex !important;
     align-items: center !important;
     justify-content: space-between !important;
@@ -4181,10 +4181,11 @@ body.native-mobile-device .fluid-device-pill {
   }
 
   .control-drawer .filter-chip {
-    min-width: 46px !important;
-    padding: 1.5px 4px !important;
-    gap: 1px !important;
-    height: 32px !important;
+    min-width: 58px !important;
+    padding: 2px 6px !important;
+    gap: 1.5px !important;
+    height: 34px !important;
+    flex-shrink: 0 !important;
   }
 
   .control-drawer .filter-chip-sub {
@@ -4198,8 +4199,10 @@ body.native-mobile-device .fluid-device-pill {
   }
 
   .control-drawer .filter-chip-name {
-    font-size: 8px !important;
-    line-height: 1 !important;
+    font-size: 8.5px !important;
+    line-height: 1.1 !important;
+    white-space: nowrap !important;
+    overflow: visible !important;
   }
 
   .control-drawer .vintage-toggles {
@@ -8119,5 +8122,240 @@ body.native-fluid-mode .device-wrapper.orientation-landscape {
   box-shadow: 0 0 5px rgba(255, 159, 28, 0.85);
 }
 
+/* ==========================================================================
+   Optical Viewfinder Purity & Anti-Redundancy Guarantees (ERR-012)
+   ========================================================================== */
 
+.vf-filter-stepper {
+  display: none !important;
+}
 
+.rangefinder-hud-overlay {
+  display: none !important;
+}
+
+/* ==========================================================================
+   Instant Film Ejection & Chemical Emulsion Progressive Development System (ERR-013)
+   ========================================================================== */
+
+.instant-ejection-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(10, 12, 16, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  overflow: hidden;
+}
+
+.instant-ejection-overlay.active {
+  display: flex;
+  pointer-events: auto;
+  opacity: 1;
+}
+
+.instant-ejection-slot-rim {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 78%;
+  height: 5px;
+  background: #000000;
+  border-radius: 3px;
+  box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.95), 0 1px 1px rgba(255, 255, 255, 0.12);
+  z-index: 2;
+}
+
+.instant-film-card {
+  position: relative;
+  width: 236px;
+  height: 338px;
+  background: #fdfcf9;
+  border-radius: 6px;
+  padding: 10px 10px 14px 10px;
+  box-sizing: border-box;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.7), 0 4px 12px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  transform: translateY(0) scale(1);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.instant-film-card:active {
+  transform: scale(0.98);
+}
+
+.instant-film-card.ejecting {
+  animation: ejectFilmSlide 0.95s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes ejectFilmSlide {
+  0% {
+    transform: translateY(-90%) scale(0.88);
+    opacity: 0.1;
+  }
+  40% {
+    transform: translateY(4%) scale(1.02);
+    opacity: 1;
+  }
+  70% {
+    transform: translateY(-1%) scale(0.995);
+  }
+  100% {
+    transform: translateY(0) scale(1);
+    opacity: 1;
+  }
+}
+
+/* Polaroid SX-70 Classic Square Proportions */
+.instant-ejection-overlay.polaroid-mode .instant-film-card {
+  width: 260px;
+  height: 320px;
+  padding: 12px 12px 18px 12px;
+}
+
+.instant-photo-window {
+  position: relative;
+  width: 100%;
+  flex: 1;
+  border-radius: 2px;
+  overflow: hidden;
+  background: #141820;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.6);
+}
+
+.instant-film-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  filter: brightness(0.92) contrast(1.04);
+  transition: filter 3.2s cubic-bezier(0.2, 0.8, 0.25, 1);
+}
+
+.instant-film-card.developing .instant-film-photo {
+  animation: chemicalEmulsionOxidation 3.4s cubic-bezier(0.2, 0.8, 0.25, 1) forwards;
+}
+
+@keyframes chemicalEmulsionOxidation {
+  0% {
+    filter: brightness(0.25) contrast(0.65) saturate(0.15) hue-rotate(-20deg);
+  }
+  35% {
+    filter: brightness(0.65) contrast(0.88) saturate(0.6) hue-rotate(-10deg);
+  }
+  75% {
+    filter: brightness(0.95) contrast(1.02) saturate(0.95);
+  }
+  100% {
+    filter: brightness(1.0) contrast(1.05) saturate(1.0);
+  }
+}
+
+/* Chemical developer dye diffusion layer (starts opaque dark, progressively clears) */
+.instant-emulsion-mask {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 40%, rgba(26, 32, 44, 0.94) 0%, rgba(12, 14, 18, 0.98) 100%);
+  mix-blend-mode: multiply;
+  opacity: 1;
+  pointer-events: none;
+  transition: opacity 3.2s cubic-bezier(0.2, 0.8, 0.25, 1);
+}
+
+.instant-film-card.developing .instant-emulsion-mask {
+  opacity: 0;
+}
+
+.emulsion-chemical-grain {
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px);
+  background-size: 3px 3px;
+  opacity: 0.55;
+}
+
+.instant-card-bottom-margin {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 10px;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+.instant-card-badge {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: -0.4px;
+  color: #2b2e35;
+}
+
+.instant-card-status {
+  font-family: var(--font-hud-mono, monospace);
+  font-size: 9.5px;
+  font-weight: 700;
+  color: #ff9f1c;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+}
+
+.instant-card-status.developed {
+  color: #10b981;
+}
+
+.instant-action-bar {
+  display: flex;
+  gap: 12px;
+  margin-top: 18px;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.4s ease, transform 0.4s ease;
+  z-index: 5;
+}
+
+.instant-action-bar.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.instant-action-btn {
+  height: 38px;
+  padding: 0 16px;
+  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  font-size: 12.5px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  transition: background 0.2s ease, transform 0.15s ease;
+}
+
+.instant-action-btn:active {
+  transform: scale(0.96);
+}
+
+.instant-view-btn {
+  background: rgba(255, 255, 255, 0.95);
+  color: #121418;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+}
+
+.instant-dismiss-btn {
+  background: rgba(40, 44, 52, 0.85);
+  color: #f1f2f6;
+  backdrop-filter: blur(6px);
+}
