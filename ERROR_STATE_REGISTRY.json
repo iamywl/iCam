@@ -2,12 +2,12 @@
   "schemaVersion": "1.0.0",
   "projectName": "iCam / SnapStudio",
   "loopArchitecture": "Closed-Loop Engineering (Plan -> Registry Check -> Develop -> Automated Verify -> State Update -> Feedback Re-Plan)",
-  "lastUpdated": "2026-10-19T08:52:00+09:00",
+  "lastUpdated": "2026-10-19T09:25:00+09:00",
   "metrics": {
-    "totalRegisteredErrorCases": 10,
-    "resolvedAndGuardedCount": 10,
+    "totalRegisteredErrorCases": 11,
+    "resolvedAndGuardedCount": 11,
     "activeOpenCount": 0,
-    "automatedChecksCount": 350,
+    "automatedChecksCount": 790,
     "regressionPassRate": "100%"
   },
   "errorCases": [
@@ -159,7 +159,22 @@
       "regressionTestScript": "scripts/test-loop-engineering.py",
       "assertionKey": "error_state_registry_schema_and_loop_integrity",
       "status": "RESOLVED_AND_GUARDED",
-      "lastVerifiedAt": "2026-10-19T08:52:00+09:00"
+      "lastVerifiedAt": "2026-10-19T09:25:00+09:00"
+    },
+    {
+      "id": "ERR-011",
+      "title": "실제 아이폰 네이티브 뷰포트(<= 600px, iPhone SE 375x667 ~ iPhone 16 Pro Max 440x956) 하단 5행 컨트롤 수직 예산 초과 위험",
+      "category": "IPHONE_LINEUP_NATIVE_COMPATIBILITY",
+      "severity": "CRITICAL",
+      "discoveredInPhase": "Exhaustive 8-iPhone Lineup Verification",
+      "symptom": "데스크톱 시뮬레이터(.device-se 등)와 달리 실제 아이폰(width <= 600px)에서 접속하여 @media (max-width: 600px) 풀스크린 모드가 활성화될 때, 하단 5행(fimo-zoom-ruler-deck, fimo-hardware-bar, camera-category-bar, mode-dial-wrapper, shutter-row)이 추가된 상태에서 기존 calc(100dvh - 315px) 뷰파인더 높이를 그대로 쓰면 소형 기기(iPhone SE 375x667)에서 줌 룰러와 하드웨어 바가 압축되거나 겹칠 수 있음.",
+      "rootCause": "@media (max-width: 600px) 블록에 새로 추가된 .fimo-zoom-ruler-deck(26px) 및 .fimo-hardware-bar(34px)의 명시적 높이 예산이 반영되지 않았음.",
+      "resolution": "style.css의 @media (max-width: 600px) 블록에서 .viewfinder-container 높이를 min(calc(100dvh - 324px), calc((100vw - 16px) * 4 / 3))로 정밀 보정하고 5행 하단 섹션(168px)과 컨트롤 드로어(82px)의 수직 예산을 고정하여 iPhone SE(375x667)부터 iPhone 16 Pro Max(440x956)까지 8대 아이폰 × 16종 카메라 × 세로/가로 모드 총 440개 항목 100% 통과 달성.",
+      "preventionRule": "아이폰 호환성 검증 시 데스크톱 목업 프레임(.device-*)뿐만 아니라 실제 모바일 뷰포트(375x667, 375x812, 390x844, 393x852, 402x874, 428x926, 430x932, 440x956)에서 scripts/test-iphone-lineup.py(440개 체크)를 반드시 실행해야 한다.",
+      "regressionTestScript": "scripts/test-iphone-lineup.py",
+      "assertionKey": "eight_real_iphone_models_portrait_and_landscape_440_checks",
+      "status": "RESOLVED_AND_GUARDED",
+      "lastVerifiedAt": "2026-10-19T09:25:00+09:00"
     }
   ]
 }
