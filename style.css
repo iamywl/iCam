@@ -1282,9 +1282,9 @@ body.native-mobile-device .fluid-device-pill {
   inset: 0;
   z-index: 12;
   pointer-events: none;
-  opacity: 0.38;
+  opacity: 0.16;
   mix-blend-mode: overlay;
-  display: none;
+  display: block;
 }
 
 /* Y2K Camcorder OSD Overlay */

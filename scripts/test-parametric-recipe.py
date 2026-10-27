@@ -43,7 +43,10 @@ async def eval_js(ws, msg_id, expr):
         'returnByValue': True,
         'awaitPromise': True
     })
-    result = resp.get('result', {}).get('result', {})
+    res_obj = resp.get('result', {})
+    if 'exceptionDetails' in res_obj:
+        print(f"[JS ERROR in msg {msg_id}]:", res_obj['exceptionDetails'])
+    result = res_obj.get('result', {})
     if 'value' in result:
         return result['value']
     return result
@@ -72,12 +75,22 @@ async def main():
         f'http://127.0.0.1:{port}/index.html'
     ])
 
-    await asyncio.sleep(2.5)
-    msg_id = 1
+    targets = None
+    for _ in range(10):
+        await asyncio.sleep(1.0)
+        try:
+            res = urllib.request.urlopen(f'http://127.0.0.1:{debug_port}/json', timeout=2).read()
+            targets = json.loads(res.decode('utf-8'))
+            if targets:
+                break
+        except Exception:
+            pass
 
+    msg_id = 1
     try:
-        res = urllib.request.urlopen(f'http://127.0.0.1:{debug_port}/json').read()
-        targets = json.loads(res.decode('utf-8'))
+        if not targets:
+            print("[FAIL] Chrome CDP did not respond")
+            sys.exit(1)
         page_target = next((t for t in targets if t.get('type') == 'page'), None)
         if not page_target:
             print("[FAIL] No page target found in Chrome CDP")
