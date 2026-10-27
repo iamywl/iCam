@@ -3817,9 +3817,8 @@ async function enableWebcam(targetFacingMode) {
     return true;
   } catch (err) {
     console.warn('Webcam access failed or denied:', err);
-    if (promptOverlay) promptOverlay.style.display = 'flex';
+    if (promptOverlay) promptOverlay.style.display = 'none';
     useStudioModel('female');
-    showDynamicIslandBanner('STUDIO MODEL', '카메라 권한 필요', 2000);
     return false;
   }
 }
@@ -3827,6 +3826,8 @@ async function enableWebcam(targetFacingMode) {
 function useStudioModel(type = 'female') {
   const video = document.getElementById('camera-video');
   const modelCanvas = document.getElementById('model-canvas');
+  const promptOverlay = document.getElementById('camera-prompt-overlay');
+  if (promptOverlay) promptOverlay.style.display = 'none';
 
   if (video && video.srcObject) {
     video.srcObject.getTracks().forEach(track => track.stop());
@@ -4050,7 +4051,7 @@ function initQuickTakeShutter() {
         handledByPointer = true;
         startQuickTakeVideoRecording();
       }
-    }, 280);
+    }, 500);
   };
 
   const handlePointerUp = (e) => {
@@ -4755,16 +4756,19 @@ function initCarouselElasticPhysics() {
     let isOverbound = false;
 
     carousel.addEventListener('pointerdown', (e) => {
-      isDragging = true;
       startX = e.clientX;
+      isDragging = false;
       isOverbound = false;
       carousel.style.transition = 'none';
       carousel.style.scrollBehavior = 'auto';
     });
 
     const onPointerMove = (e) => {
-      if (!isDragging) return;
       const dx = e.clientX - startX;
+      if (!isDragging && Math.abs(dx) > 6) {
+        isDragging = true;
+      }
+      if (!isDragging) return;
       const currentScroll = carousel.scrollLeft;
       const maxScroll = Math.max(0, carousel.scrollWidth - carousel.clientWidth);
 
@@ -4790,7 +4794,7 @@ function initCarouselElasticPhysics() {
     };
 
     const onPointerEnd = () => {
-      if (!isDragging) return;
+      if (!isDragging && !isOverbound) return;
       isDragging = false;
       if (isOverbound) {
         carousel.style.transition = 'transform 0.42s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
@@ -4895,7 +4899,7 @@ function initSmoothModeDial() {
 
   // Drag Interactions
   wrapper.addEventListener('pointerdown', (e) => {
-    isDragging = true;
+    isDragging = false;
     startX = e.clientX;
     lastMoveX = e.clientX;
     lastMoveTime = Date.now();
@@ -4906,13 +4910,16 @@ function initSmoothModeDial() {
     const matrix = new WebKitCSSMatrix(style.transform);
     startTranslateX = matrix.m41;
     currentTranslateX = startTranslateX;
-
-    wrapper.setPointerCapture?.(e.pointerId);
   });
 
   wrapper.addEventListener('pointermove', (e) => {
-    if (!isDragging) return;
     const dx = e.clientX - startX;
+    if (!isDragging && Math.abs(dx) > 6) {
+      isDragging = true;
+      wrapper.setPointerCapture?.(e.pointerId);
+    }
+    if (!isDragging) return;
+
     const now = Date.now();
     const dt = now - lastMoveTime;
     if (dt > 0) {
@@ -4932,8 +4939,20 @@ function initSmoothModeDial() {
     }
   });
 
-  const onPointerEnd = () => {
-    if (!isDragging) return;
+  const onPointerEnd = (e) => {
+    if (wrapper.hasPointerCapture?.(e.pointerId)) {
+      try { wrapper.releasePointerCapture(e.pointerId); } catch(err) {}
+    }
+
+    const totalDist = Math.abs(e.clientX - startX);
+    if (!isDragging || totalDist < 6) {
+      isDragging = false;
+      const targetItem = e.target.closest('.mode-dial-item');
+      if (targetItem && targetItem.dataset.cam) {
+        switchCamera(targetItem.dataset.cam);
+        return;
+      }
+    }
     isDragging = false;
 
     const inertiaDist = velocity * 100;
@@ -4996,7 +5015,12 @@ function initSmoothModeDial() {
 function initEventListeners() {
   // 1. Bottom Camera Switcher Dial items & Edge Cues
   document.querySelectorAll('#mode-dial-list .mode-dial-item').forEach(item => {
-    item.addEventListener('click', () => switchCamera(item.dataset.cam));
+    const handleSwitch = (e) => {
+      e.stopPropagation();
+      switchCamera(item.dataset.cam);
+    };
+    item.addEventListener('click', handleSwitch);
+    item.addEventListener('touchend', handleSwitch, { passive: true });
   });
 
   const cuePrev = document.getElementById('btn-dial-cue-prev');
@@ -5125,9 +5149,33 @@ function initEventListeners() {
 
   // 9. Camera Filter Chips in All Drawers
   document.querySelectorAll('.filter-carousel .filter-chip').forEach(chip => {
-    chip.addEventListener('click', () => {
+    let chipTouchMoved = false;
+    let chipStartX = 0;
+    let chipStartY = 0;
+
+    chip.addEventListener('touchstart', (e) => {
+      chipTouchMoved = false;
+      chipStartX = e.touches[0].clientX;
+      chipStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    chip.addEventListener('touchmove', (e) => {
+      const dx = Math.abs(e.touches[0].clientX - chipStartX);
+      const dy = Math.abs(e.touches[0].clientY - chipStartY);
+      if (dx > 8 || dy > 8) chipTouchMoved = true;
+    }, { passive: true });
+
+    chip.addEventListener('touchend', (e) => {
+      if (!chipTouchMoved) {
+        e.stopPropagation();
+        const filterKey = chip.dataset.filter;
+        if (filterKey) selectCameraFilter(filterKey);
+      }
+    }, { passive: true });
+
+    chip.addEventListener('click', (e) => {
       const filterKey = chip.dataset.filter;
-      selectCameraFilter(filterKey);
+      if (filterKey) selectCameraFilter(filterKey);
     });
   });
 
@@ -6070,22 +6118,23 @@ function initDeviceAndOSSwitcher() {
 
   // Intelligent Hardware Auto-Adaptation on Initial Load
   const devInfo = DeviceDetector.getInfo();
+  const isMobileScreen = window.innerWidth <= 600 || (devInfo.isTouch && window.innerWidth <= 852 && window.innerHeight <= 550) || (/iPhone|Android/i.test(navigator.userAgent) && window.innerWidth <= 768);
+
   let savedPreset = null;
   try {
     savedPreset = localStorage.getItem('icam_device_preset');
   } catch (e) {}
 
-  if (savedPreset) {
+  if (isMobileScreen) {
+    selectDevicePreset('fluid', 0, 0, 0);
+    document.body.classList.add('native-mobile-device');
+  } else if (savedPreset) {
     const btn = document.querySelector(`.device-select-btn[data-device="${savedPreset}"]`);
     if (btn) {
       selectDevicePreset(savedPreset, btn.dataset.width, btn.dataset.height, btn.dataset.radius);
     }
   } else {
-    // Zero-friction Native Hardware Auto-Adaptation
-    if (devInfo.isTouch && (window.innerWidth <= 600 || window.innerHeight <= 550)) {
-      selectDevicePreset('fluid', 0, 0, 0);
-      document.body.classList.add('native-mobile-device');
-    } else if (devInfo.deviceCategory === 'Tablet' && devInfo.isTouch) {
+    if (devInfo.deviceCategory === 'Tablet' && devInfo.isTouch) {
       selectDevicePreset('tablet', 768, 1024, 28);
       document.body.classList.add('native-tablet-device');
     } else if (devInfo.os === 'Android') {

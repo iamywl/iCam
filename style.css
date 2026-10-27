@@ -1115,9 +1115,10 @@ body.native-mobile-device .fluid-device-pill {
   background: rgba(0, 0, 0, 0.45);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-  display: flex;
+  display: none !important;
   align-items: center;
   justify-content: center;
+  pointer-events: none;
 }
 
 .btn-start-camera {
@@ -1276,14 +1277,16 @@ body.native-mobile-device .fluid-device-pill {
    [Mode 1] Vintage / Film Overlays
    ========================================================================== */
 
-/* Film Grain Overlay */
+/* Film Grain Overlay: High-Performance GPU-Tiled Texture (Zero iOS WebKit Composite Stalls) */
 .film-grain-layer {
   position: absolute;
   inset: 0;
   z-index: 12;
   pointer-events: none;
-  opacity: 0.16;
-  mix-blend-mode: overlay;
+  opacity: 0.12;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.22'/%3E%3C/svg%3E");
+  background-repeat: repeat;
+  background-size: 140px 140px;
   display: block;
 }
 
@@ -4136,11 +4139,11 @@ body.native-mobile-device .fluid-device-pill {
     right: auto !important;
     transform: none !important;
     aspect-ratio: 3 / 4 !important;
-    height: min(calc(100dvh - 324px), calc((100vw - 16px) * 4 / 3)) !important;
-    height: min(calc(100vh - 324px), calc((100vw - 16px) * 4 / 3)) !important;
-    width: calc(min(calc(100dvh - 324px), calc((100vw - 16px) * 4 / 3)) * 3 / 4) !important;
-    width: calc(min(calc(100vh - 324px), calc((100vw - 16px) * 4 / 3)) * 3 / 4) !important;
-    max-height: calc(100dvh - 324px) !important;
+    height: min(calc(100dvh - 340px), calc((100vw - 16px) * 4 / 3)) !important;
+    height: min(calc(100vh - 340px), calc((100vw - 16px) * 4 / 3)) !important;
+    width: calc(min(calc(100dvh - 340px), calc((100vw - 16px) * 4 / 3)) * 3 / 4) !important;
+    width: calc(min(calc(100vh - 340px), calc((100vw - 16px) * 4 / 3)) * 3 / 4) !important;
+    max-height: calc(100dvh - 340px) !important;
     max-width: calc(100vw - 16px) !important;
     margin: 0 auto !important;
     border-radius: 16px !important;
@@ -4178,6 +4181,8 @@ body.native-mobile-device .fluid-device-pill {
     height: 36px !important;
     gap: 5px !important;
     padding: 1px 2px !important;
+    touch-action: pan-x !important;
+    -webkit-overflow-scrolling: touch !important;
   }
 
   .control-drawer .filter-chip {
@@ -4186,6 +4191,9 @@ body.native-mobile-device .fluid-device-pill {
     gap: 1.5px !important;
     height: 34px !important;
     flex-shrink: 0 !important;
+    touch-action: manipulation !important;
+    -webkit-tap-highlight-color: transparent !important;
+    cursor: pointer !important;
   }
 
   .control-drawer .filter-chip-sub {
@@ -4224,14 +4232,14 @@ body.native-mobile-device .fluid-device-pill {
     right: auto !important;
     width: 100% !important;
     height: auto !important;
-    min-height: 156px !important;
+    min-height: 154px !important;
     flex-shrink: 0 !important;
     display: flex !important;
     flex-direction: column !important;
     justify-content: flex-end !important;
     gap: 1px !important;
     margin-top: auto !important;
-    padding-bottom: max(4px, env(safe-area-inset-bottom, 4px)) !important;
+    padding-bottom: max(14px, env(safe-area-inset-bottom, 14px)) !important;
     z-index: 30 !important;
   }
 
