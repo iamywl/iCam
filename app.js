@@ -2862,6 +2862,11 @@ function executeCapture() {
 
   // 3. Draw Subject (Transparent Model or Mirrored/Unmirrored Webcam)
   const currentZoom = Math.max(1.0, Math.min(5.0, state.fimoZoomLevel || 1.0));
+  const baseCaptureFilter = (activeFilter && activeFilter !== 'none') ? activeFilter : '';
+  const flashFilter = (state.flashMode === 'on') ? 'brightness(1.15) contrast(1.08)' : '';
+  const subjectFilter = state.isCustomRecipe
+    ? (flashFilter || 'none')
+    : ([baseCaptureFilter, flashFilter].filter(Boolean).join(' ') || 'none');
 
   if (state.cameraSource === 'webcam') {
     const video = document.getElementById('camera-video');
@@ -2872,9 +2877,7 @@ function executeCapture() {
         ctx.scale(currentZoom, currentZoom);
         ctx.translate(-captureCanvas.width / 2, -captureCanvas.height / 2);
       }
-      // Pure sensor capture: prevent triple-filter compounding.
-      // High-precision film grading is performed authoritatively in single-pass by FilmSpectralEngine below.
-      ctx.filter = (state.flashMode === 'on') ? 'brightness(1.15) contrast(1.08)' : 'none';
+      ctx.filter = subjectFilter;
 
       // Crop video to exact target ratio (4:3 in landscape, 3:4 in portrait)
       const vAspect = video.videoWidth / video.videoHeight;
@@ -2916,8 +2919,7 @@ function executeCapture() {
         ctx.scale(currentZoom, currentZoom);
         ctx.translate(-captureCanvas.width / 2, -captureCanvas.height / 2);
       }
-      // Pure model capture: prevent double-filtering
-      ctx.filter = (state.flashMode === 'on') ? 'brightness(1.15) contrast(1.08)' : 'none';
+      ctx.filter = subjectFilter;
 
       const imgAspect = activeImg.naturalWidth / activeImg.naturalHeight;
       const canvasAspect = captureCanvas.width / captureCanvas.height;
@@ -2965,7 +2967,15 @@ function executeCapture() {
 
   // 4.5. Scientific Photographic Colorimetry & Film Emulsion Processing
   if (window.FilmSpectralEngine) {
-    window.FilmSpectralEngine.processCanvas(captureCanvas, cam.id);
+    const isCustom = !!state.isCustomRecipe;
+    const captureRecipe = (isCustom && window.ParametricColorEngine)
+      ? window.ParametricColorEngine.activeRecipe
+      : null;
+    window.FilmSpectralEngine.processCanvas(captureCanvas, cam.id, {
+      skipParametric: !isCustom,
+      recipe: captureRecipe,
+      grainIntensity: (cam.id === 'passport-id') ? 0 : 1.0
+    });
   }
 
   // 5. Camera-Specific OSD Watermarks & Frames (Clean Capture with Dynamic Live Dates)

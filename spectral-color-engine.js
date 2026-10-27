@@ -71,7 +71,7 @@
       grain: { amount: 0.032, roughness: 0.6, colorGrain: false },
       chromaticAberration: 0.0,
       vignette: 0.16,
-      halation: null
+      halation: { threshold: 0.95, radius: 14, color: [255, 160, 200, 0.16] }
     },
 
     // 4. Olympus μ [mju:]-II (Stylus Epic 35mm F/2.8 4-element Glass)
@@ -526,10 +526,29 @@
         const imgData = ctx.getImageData(0, 0, canvas.width, canvas.height);
         
         // Master Single-Pass Authentic Color Grading
-        if (global.ParametricColorEngine && global.ParametricColorEngine.enabled) {
+        if (!options.skipParametric && global.ParametricColorEngine && global.ParametricColorEngine.enabled) {
           const rec = options.recipe || (camId ? global.ParametricColorEngine.getRecipeForCamera(camId) : null) || global.ParametricColorEngine.activeRecipe;
           if (rec) {
             global.ParametricColorEngine.processImageData(imgData, rec);
+          }
+        }
+
+        // Authentic Poisson Silver Halide Grain synthesis directly on canvas
+        if (options.grainIntensity !== 0 && camId !== 'passport-id') {
+          const profile = PROFILES[camId] || PROFILES['fuji-quicksnap'];
+          const grainAmt = (profile.grain ? profile.grain.amount : 0.035) * (options.grainIntensity !== undefined ? options.grainIntensity : 1.0);
+          if (grainAmt > 0.005) {
+            const data = imgData.data;
+            const len = data.length;
+            for (let i = 0; i < len; i += 4) {
+              const r = data[i], g = data[i + 1], b = data[i + 2];
+              const lum = (0.2126 * r + 0.7152 * g + 0.0722 * b) / 255.0;
+              const grainDensity = Math.sqrt(Math.max(0.0, lum * (1.0 - lum))) * 2.0;
+              const noise = (Math.random() - 0.5) * grainAmt * grainDensity * 255.0;
+              data[i]     = Math.min(255, Math.max(0, r + noise));
+              data[i + 1] = Math.min(255, Math.max(0, g + noise));
+              data[i + 2] = Math.min(255, Math.max(0, b + noise));
+            }
           }
         }
 
