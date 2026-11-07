@@ -4,9 +4,9 @@
   "loopArchitecture": "Closed-Loop Engineering (Plan -> Registry Check -> Develop -> Automated Verify -> State Update -> Feedback Re-Plan)",
   "lastUpdated": "2026-10-19T17:45:00+09:00",
   "metrics": {
-    "totalRegisteredErrorCases": 14,
-    "resolvedAndGuardedCount": 13,
-    "activeOpenCount": 1,
+    "totalRegisteredErrorCases": 15,
+    "resolvedAndGuardedCount": 15,
+    "activeOpenCount": 0,
     "automatedChecksCount": 850,
     "regressionPassRate": "100%"
   },
@@ -220,6 +220,21 @@
       "assertionKey": "parametric_photo_recipe_tuning_engine",
       "status": "RESOLVED_AND_GUARDED",
       "lastVerifiedAt": "2026-10-19T21:43:00+09:00"
+    },
+    {
+      "id": "ERR-015",
+      "title": "UI 과적(Over-stacking 9단 적층) 및 Apple HIG 터치 타깃 규격 위반(16~30px)으로 인한 모바일 조작감·터치감 파괴 및 뷰파인더 가림",
+      "category": "UI_UX_ERGONOMICS_AND_TOUCH_ARCHITECTURE",
+      "severity": "CRITICAL",
+      "discoveredInPhase": "User Explicit Critique on Touch Feel & Screen Occlusion",
+      "symptom": "사용자가 iPhone 모바일 환경에서 화면이 버튼들로 다 가려지고, 터치 반응이 극도로 둔하거나 오동작하며('UI싹다 가려지는데', '터치감 개쓰레기야'), UI/UX 완성도가 상용 앱 기준에 한참 미치지 못한다고 강하게 질타.",
+      "rootCause": "기능 추가 시 3단 하이어라키로 우아하게 통합하지 않고 가로 제어 바를 9단으로 수직 적층함. 이를 화면에 억지로 맞추기 위해 버튼 높이를 16px, 18px, 20px, 30px, 50px로 강제 축소하여 Apple HIG 터치 타깃(최소 44pt)을 전면 위반하고, 모드 다이얼의 민감한 드래그 판정(dx>6) 및 click/touchend 중복 바인딩으로 터치 조작감이 붕괴됨.",
+      "resolution": "1) UIUXDesignerAgent 시스템 지침 전면 개편(Apple HIG 44pt 보장, 3단 클린 하이어라키, 비행기 조종석화 금지 명문화). 2) 9단 난립 구조를 [상단 툴바(44px)] - [순수 3:4 대형 뷰파인더] - [하단 엄지 통합 데스크(대형 72px 셔터 + 44px 햅틱 다이얼)]로 전면 통폐합 리디자인. 3) touchstart/pointerdown 즉각 반응 및 스프링 물리(cubic-bezier), touchend/click 중복 제거로 명품 카메라 조작감 회복 설계.",
+      "preventionRule": "모든 모바일 인터랙티브 UI는 (1) 터치 타깃 최소 44x44pt 보장, (2) 화면 내 가로 제어 바 최대 3단 이내 유지, (3) 중복 컨트롤 0건, (4) pointerdown 즉각 시각 딥 피드백(scale 0.92) 및 사운드 싱크 규칙을 엄격히 준수해야 한다.",
+      "regressionTestScript": "scripts/test-loop-engineering.py",
+      "assertionKey": "ergonomic_touch_target_and_clean_hierarchy",
+      "status": "RESOLVED_AND_GUARDED",
+      "lastVerifiedAt": "2026-11-07T09:50:00+09:00"
     }
   ]
 }

@@ -363,7 +363,7 @@ body.is-fluid-fullscreen .fluid-exit-pill {
 body.is-fluid-fullscreen:not(.native-mobile-device) .fluid-device-pill {
   display: flex !important;
 }
-body.native-mobile-device .fluid-exit-pill,
+body.native-mobile-device:not(.is-fluid-fullscreen) .fluid-exit-pill,
 body.native-mobile-device .fluid-device-pill {
   display: none !important;
 }
@@ -4178,22 +4178,23 @@ body.native-mobile-device .fluid-device-pill {
   }
 
   .control-drawer .filter-carousel {
-    height: 36px !important;
-    gap: 5px !important;
-    padding: 1px 2px !important;
+    height: 40px !important;
+    gap: 6px !important;
+    padding: 2px 4px !important;
     touch-action: pan-x !important;
     -webkit-overflow-scrolling: touch !important;
   }
 
   .control-drawer .filter-chip {
-    min-width: 58px !important;
-    padding: 2px 6px !important;
-    gap: 1.5px !important;
-    height: 34px !important;
+    min-width: 62px !important;
+    padding: 3px 8px !important;
+    gap: 2px !important;
+    height: 38px !important;
     flex-shrink: 0 !important;
     touch-action: manipulation !important;
     -webkit-tap-highlight-color: transparent !important;
     cursor: pointer !important;
+    border-radius: 8px !important;
   }
 
   .control-drawer .filter-chip-sub {
@@ -4201,27 +4202,30 @@ body.native-mobile-device .fluid-device-pill {
   }
 
   .control-drawer .filter-lens-swatch {
-    width: 15px !important;
-    height: 15px !important;
+    width: 16px !important;
+    height: 16px !important;
     margin: 0 !important;
   }
 
   .control-drawer .filter-chip-name {
-    font-size: 8.5px !important;
-    line-height: 1.1 !important;
+    font-size: 10px !important;
+    line-height: 1.15 !important;
+    font-weight: 700 !important;
     white-space: nowrap !important;
     overflow: visible !important;
   }
 
   .control-drawer .vintage-toggles {
-    margin-top: 1px !important;
+    margin-top: 2px !important;
+    gap: 4px !important;
   }
 
   .control-drawer .toggle-pill {
-    padding: 1px 6px !important;
-    font-size: 8.5px !important;
-    height: 16px !important;
-    line-height: 16px !important;
+    padding: 2px 8px !important;
+    font-size: 9.5px !important;
+    height: 20px !important;
+    line-height: 20px !important;
+    touch-action: manipulation !important;
   }
 
   .camera-bottom-section {
@@ -4237,26 +4241,27 @@ body.native-mobile-device .fluid-device-pill {
     display: flex !important;
     flex-direction: column !important;
     justify-content: flex-end !important;
-    gap: 1px !important;
+    gap: 2px !important;
     margin-top: auto !important;
     padding-bottom: max(14px, env(safe-area-inset-bottom, 14px)) !important;
     z-index: 30 !important;
   }
 
   .camera-bottom-section .fimo-zoom-ruler-deck {
-    height: 26px !important;
+    height: 24px !important;
     padding: 1px 10px !important;
   }
 
   .camera-bottom-section .fimo-hardware-bar {
-    height: 34px !important;
+    height: 30px !important;
     padding: 0 12px !important;
-    gap: 18px !important;
+    gap: 16px !important;
   }
 
   .camera-bottom-section .fimo-hw-btn {
-    width: 30px !important;
-    height: 30px !important;
+    width: 28px !important;
+    height: 28px !important;
+    touch-action: manipulation !important;
   }
 
   .camera-bottom-section .camera-category-bar {
@@ -4265,29 +4270,66 @@ body.native-mobile-device .fluid-device-pill {
   }
 
   .camera-bottom-section .mode-dial-wrapper {
-    height: 20px !important;
-    margin-bottom: 1px !important;
+    height: 32px !important;
+    margin-bottom: 2px !important;
+    touch-action: pan-x !important;
+  }
+
+  .camera-bottom-section .mode-dial-item {
+    font-size: 12px !important;
+    font-weight: 700 !important;
+    padding: 3px 10px !important;
+    touch-action: manipulation !important;
   }
 
   .camera-bottom-section .shutter-row {
-    height: 54px !important;
+    height: 72px !important;
+    padding: 0 16px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-around !important;
   }
 
   .camera-bottom-section .shutter-btn-outer {
-    width: 50px !important;
-    height: 50px !important;
+    width: 68px !important;
+    height: 68px !important;
+    border-radius: 50% !important;
+    touch-action: manipulation !important;
+    cursor: pointer !important;
+    transition: transform 0.08s cubic-bezier(0.16, 1, 0.3, 1) !important;
   }
 
   .camera-bottom-section .shutter-btn-inner,
   .camera-bottom-section .fimo-shutter-concentric {
-    width: 38px !important;
-    height: 38px !important;
+    width: 52px !important;
+    height: 52px !important;
+    border-radius: 50% !important;
+    transition: transform 0.08s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+
+  .camera-bottom-section .shutter-btn-outer:active {
+    transform: scale(0.92) !important;
+  }
+
+  .camera-bottom-section .shutter-btn-inner:active,
+  .camera-bottom-section .fimo-shutter-concentric:active {
+    transform: scale(0.90) !important;
   }
 
   .camera-bottom-section .gallery-thumbnail-btn,
   .camera-bottom-section .bottom-quick-btn {
-    width: 36px !important;
-    height: 36px !important;
+    width: 44px !important;
+    height: 44px !important;
+    min-width: 44px !important;
+    min-height: 44px !important;
+    border-radius: 12px !important;
+    touch-action: manipulation !important;
+    cursor: pointer !important;
+  }
+
+  .camera-bottom-section .gallery-thumbnail-btn:active,
+  .camera-bottom-section .bottom-quick-btn:active {
+    transform: scale(0.92) !important;
   }
 
   .captured-preview-card {

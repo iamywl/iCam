@@ -1374,7 +1374,24 @@
       s = Math.max(0.0, Math.min(1.0, s));
       l = Math.max(0.0, Math.min(1.0, l));
 
-      const [finalR, finalG, finalB] = hslToRgb(h, s, l);
+      let [finalR, finalG, finalB] = hslToRgb(h, s, l);
+
+      // 7. Optical Halation Glow (Warm red-amber bleed around high-luminance highlights)
+      const curLuma = 0.2126 * finalR + 0.7152 * finalG + 0.0722 * finalB;
+      if (curLuma > 0.82) {
+        const halation = Math.min(0.08, (curLuma - 0.82) / 0.18 * 0.045);
+        finalR = Math.min(1.0, finalR + halation * 1.35);
+        finalG = Math.min(1.0, finalG + halation * 0.45);
+      }
+
+      // 8. Physical Density-Dependent Silver Halide Grain (Bell curve peaking at midtones 0.35~0.65)
+      const grainFactor = Math.sin(Math.max(0.0, Math.min(1.0, curLuma)) * Math.PI) * 0.032;
+      if (grainFactor > 0.003) {
+        const noise = (Math.random() - 0.5) * grainFactor;
+        finalR = Math.max(0.0, Math.min(1.0, finalR + noise));
+        finalG = Math.max(0.0, Math.min(1.0, finalG + noise));
+        finalB = Math.max(0.0, Math.min(1.0, finalB + noise));
+      }
 
       data[i]     = Math.min(255, Math.max(0, Math.round(finalR * 255.0)));
       data[i + 1] = Math.min(255, Math.max(0, Math.round(finalG * 255.0)));

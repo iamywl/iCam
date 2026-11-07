@@ -396,37 +396,37 @@ const CAMERAS = {
       'cyber-cool': {
         name: "Ditto '98 Winter",
         desc: '뉴진스 Ditto 감성의 1998 겨울 청회색 섀도우 & 소프트 블룸',
-        css: 'brightness(1.06) contrast(1.18) saturate(1.15) hue-rotate(185deg) sepia(0.08)',
+        css: 'brightness(1.06) contrast(1.14) saturate(1.08) sepia(0.04) hue-rotate(-3deg)',
         tintRgba: null
       },
       'cyber-magenta': {
         name: 'Bunnies VHS Tape',
         desc: '아련한 첫사랑의 기억, 뽀얀 하이라이트 할레이션',
-        css: 'brightness(1.08) contrast(1.14) saturate(1.18) sepia(0.12) hue-rotate(-4deg)',
+        css: 'brightness(1.08) contrast(1.14) saturate(1.18) sepia(0.10) hue-rotate(-2deg)',
         tintRgba: null
       },
       'cyber-flash': {
         name: 'Flash Sharp',
         desc: '선명하고 쨍한 플래시',
-        css: 'brightness(1.15) contrast(1.28) saturate(1.24)',
+        css: 'brightness(1.12) contrast(1.22) saturate(1.18)',
         tintRgba: null
       },
       'cyber-matrix': {
         name: 'Y2K Pastel Glow',
         desc: '부드러운 라벤더-핑크 파스텔',
-        css: 'brightness(1.10) contrast(1.12) saturate(1.22) hue-rotate(15deg)',
+        css: 'brightness(1.08) contrast(1.10) saturate(1.16) hue-rotate(4deg)',
         tintRgba: null
       },
       'cyber-y2k-pink': {
         name: 'Cyber Pink CCD',
         desc: '밀레니엄 핑크 메탈릭 CCD 감성',
-        css: 'brightness(1.08) contrast(1.20) saturate(1.32) hue-rotate(330deg)',
+        css: 'brightness(1.08) contrast(1.16) saturate(1.20) hue-rotate(-4deg)',
         tintRgba: null
       },
       'cyber-silver': {
         name: 'Titanium CCD',
         desc: '선명하고 차가운 사이버 실버',
-        css: 'brightness(1.06) contrast(1.22) saturate(1.12) hue-rotate(190deg)',
+        css: 'brightness(1.06) contrast(1.18) saturate(1.04) hue-rotate(-2deg)',
         tintRgba: null
       }
     }
@@ -475,7 +475,7 @@ const CAMERAS = {
       'instax-cool': {
         name: 'Cyan Blue Hour',
         desc: '새벽녘 청량한 시안 블루 즉석 인화지',
-        css: 'brightness(1.06) contrast(1.20) saturate(1.20) hue-rotate(185deg)',
+        css: 'brightness(1.06) contrast(1.18) saturate(1.14) sepia(0.04) hue-rotate(-3deg)',
         tintRgba: null
       }
     }
@@ -702,7 +702,7 @@ const CAMERAS = {
       'city-pastel': {
         name: 'Pacific Breeze',
         desc: '타츠로 야마시타 감성의 눈부신 한낮 코발트 블루와 청량한 해변 바람',
-        css: 'brightness(1.08) contrast(1.16) saturate(1.32) hue-rotate(185deg)',
+        css: 'brightness(1.08) contrast(1.15) saturate(1.18) sepia(0.02) hue-rotate(-3deg)',
         tintRgba: null
       },
       'city-plastic': {
@@ -808,7 +808,7 @@ const CAMERAS = {
       'hassel-chromium': {
         name: 'Chromium Silver',
         desc: '북유럽 쿨톤 메탈릭 질감',
-        css: 'brightness(1.06) contrast(1.20) saturate(1.10) hue-rotate(185deg)',
+        css: 'brightness(1.06) contrast(1.16) saturate(1.06) sepia(0.03) hue-rotate(-2deg)',
         tintRgba: null
       },
       'hassel-gold': {
@@ -865,7 +865,7 @@ const CAMERAS = {
       'sx70-cyan': {
         name: 'Cool Instant Cyan',
         desc: '청량하고 서늘한 즉석 사이언 틴트',
-        css: 'brightness(1.05) contrast(1.16) saturate(1.18) hue-rotate(180deg)',
+        css: 'brightness(1.05) contrast(1.14) saturate(1.10) sepia(0.04) hue-rotate(-3deg)',
         tintRgba: null
       },
       'sx70-warm': {
@@ -973,7 +973,7 @@ const CAMERAS = {
       'samurai-night': {
         name: 'Tokyo Night Flight',
         desc: '나이트 플라이트 시티 나이트뷰 쿨톤 하이테크 네온',
-        css: 'brightness(1.06) contrast(1.22) saturate(1.24) hue-rotate(185deg)',
+        css: 'brightness(1.06) contrast(1.18) saturate(1.15) sepia(0.02) hue-rotate(-3deg)',
         tintRgba: null
       }
     }
@@ -1948,6 +1948,32 @@ function selectCameraFilter(filterKey) {
 
   soundEngine.playTick();
   state.selectedFilters[state.activeCamera] = filterKey;
+
+  // Calibrate Parametric Recipe to Sub-Filter Photographic Spec
+  if (window.ParametricColorEngine && !state.isCustomRecipe) {
+    const baseRec = window.ParametricColorEngine.getRecipeForCamera(state.activeCamera);
+    if (baseRec) {
+      const tunedRec = JSON.parse(JSON.stringify(baseRec));
+      if (filterKey.includes('flash') || filterKey.includes('sharp')) {
+        tunedRec.tone.contrast = (tunedRec.tone.contrast || 0) + 6;
+        tunedRec.tone.whites = (tunedRec.tone.whites || 0) + 4;
+        tunedRec.color.vibrance = (tunedRec.color.vibrance || 0) + 4;
+      } else if (filterKey.includes('cool') || filterKey.includes('silver') || filterKey.includes('cyan')) {
+        tunedRec.color.temp = (tunedRec.color.temp || 0) - 5;
+        tunedRec.color.tint = (tunedRec.color.tint || 0) + 2;
+      } else if (filterKey.includes('warm') || filterKey.includes('gold') || filterKey.includes('sunset')) {
+        tunedRec.color.temp = (tunedRec.color.temp || 0) + 5;
+        tunedRec.tone.shadows = (tunedRec.tone.shadows || 0) + 6;
+      } else if (filterKey.includes('pastel') || filterKey.includes('haze') || filterKey.includes('fade')) {
+        tunedRec.tone.contrast = (tunedRec.tone.contrast || 0) - 8;
+        tunedRec.tone.blacks = (tunedRec.tone.blacks || 0) + 8;
+      } else if (filterKey.includes('mono') || filterKey.includes('titanium') || filterKey.includes('bw')) {
+        tunedRec.color.saturation = -100;
+      }
+      window.ParametricColorEngine.setRecipe(tunedRec);
+    }
+  }
+
   if (state.cameraSource === 'model') {
     const modelCanvas = document.getElementById('model-canvas');
     if (modelCanvas) renderStudioModel(modelCanvas, state.retouchTone);
@@ -2040,14 +2066,12 @@ function applyCurrentCameraFilter() {
     lensCss = 'hue-rotate(15deg) contrast(1.05)';
   }
 
-  // Base Sub-Filter CSS or Custom Recipe CSS
+  // Authentic Recipe Live Preview CSS
   let baseCss = '';
-  if (state.isCustomRecipe && window.ParametricColorEngine && window.ParametricColorEngine.enabled) {
+  if (window.ParametricColorEngine && window.ParametricColorEngine.enabled) {
     baseCss = window.ParametricColorEngine.getLivePreviewCSS(window.ParametricColorEngine.activeRecipe);
   } else if (filterSpec && filterSpec.css) {
     baseCss = filterSpec.css;
-  } else if (window.ParametricColorEngine && window.ParametricColorEngine.enabled) {
-    baseCss = window.ParametricColorEngine.getLivePreviewCSS(window.ParametricColorEngine.activeRecipe);
   }
 
   const liveFilter = state.isBeforeModeActive
@@ -4912,9 +4936,11 @@ function initSmoothModeDial() {
     currentTranslateX = startTranslateX;
   });
 
+  let lastDialTapTime = 0;
+
   wrapper.addEventListener('pointermove', (e) => {
     const dx = e.clientX - startX;
-    if (!isDragging && Math.abs(dx) > 6) {
+    if (!isDragging && Math.abs(dx) > 14) {
       isDragging = true;
       wrapper.setPointerCapture?.(e.pointerId);
     }
@@ -4945,11 +4971,15 @@ function initSmoothModeDial() {
     }
 
     const totalDist = Math.abs(e.clientX - startX);
-    if (!isDragging || totalDist < 6) {
+    if (!isDragging || totalDist < 14) {
       isDragging = false;
       const targetItem = e.target.closest('.mode-dial-item');
       if (targetItem && targetItem.dataset.cam) {
-        switchCamera(targetItem.dataset.cam);
+        const now = Date.now();
+        if (now - lastDialTapTime > 350) {
+          lastDialTapTime = now;
+          switchCamera(targetItem.dataset.cam);
+        }
         return;
       }
     }
@@ -5014,13 +5044,20 @@ function initSmoothModeDial() {
 
 function initEventListeners() {
   // 1. Bottom Camera Switcher Dial items & Edge Cues
+  let lastItemTapTime = 0;
   document.querySelectorAll('#mode-dial-list .mode-dial-item').forEach(item => {
     const handleSwitch = (e) => {
       e.stopPropagation();
+      const now = Date.now();
+      if (now - lastItemTapTime < 350) return;
+      lastItemTapTime = now;
       switchCamera(item.dataset.cam);
     };
     item.addEventListener('click', handleSwitch);
-    item.addEventListener('touchend', handleSwitch, { passive: true });
+    item.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      handleSwitch(e);
+    }, { passive: false });
   });
 
   const cuePrev = document.getElementById('btn-dial-cue-prev');
