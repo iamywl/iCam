@@ -2533,26 +2533,17 @@ body.native-mobile-device .fluid-device-pill {
 }
 
 .filter-lens-swatch .swatch-reflection {
-  position: absolute;
-  top: 3px;
-  left: 4px;
-  width: 9px;
-  height: 5.5px;
-  border-radius: 50% 50% 40% 40% / 60% 60% 30% 30%;
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0.85) 0%, rgba(255, 255, 255, 0.1) 100%);
-  transform: rotate(-25deg);
-  pointer-events: none;
-  z-index: 2;
+  display: none;
 }
 
 .filter-lens-swatch .swatch-aperture-ring {
   position: absolute;
   inset: 1px;
   border-radius: 50%;
-  border: 0.5px dashed rgba(255, 255, 255, 0.25);
+  border: 0.5px solid rgba(255, 255, 255, 0.2);
   pointer-events: none;
   z-index: 3;
-  opacity: 0.65;
+  opacity: 0.6;
 }
 
 .filter-chip.active .filter-lens-swatch .swatch-aperture-ring {
@@ -3067,17 +3058,19 @@ body.native-mobile-device .fluid-device-pill {
   padding-bottom: 6px;
 }
 
-/* Camera Category Fast-Jump Tabs */
+/* Camera Category Fast-Jump Tabs - Refined Minimalist Analog Indices */
 .camera-category-bar {
   display: flex;
   align-items: center;
-  justify-content: center;
-  gap: 4px;
-  padding: 0 8px;
+  justify-content: flex-start;
+  gap: 12px;
+  padding: 0 16px;
   height: 24px;
   margin-bottom: 3px;
   overflow-x: auto;
   scrollbar-width: none;
+  background: transparent;
+  border: none;
 }
 
 .camera-category-bar::-webkit-scrollbar {
@@ -3085,32 +3078,32 @@ body.native-mobile-device .fluid-device-pill {
 }
 
 .cam-cat-pill {
-  background: rgba(25, 28, 35, 0.7);
-  border: 1px solid rgba(255, 255, 255, 0.10);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  color: rgba(255, 255, 255, 0.5);
-  font-size: 9.5px;
-  font-weight: 700;
-  letter-spacing: 0.5px;
-  padding: 2px 7.5px;
-  border-radius: 12px;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  color: rgba(255, 255, 255, 0.4);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  padding: 2px 4px;
+  border-radius: 0;
   cursor: pointer;
   white-space: nowrap;
-  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  transition: all 0.18s ease;
   text-transform: uppercase;
 }
 
 .cam-cat-pill:hover {
-  background: rgba(45, 50, 62, 0.8);
-  color: #fff;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .cam-cat-pill.active {
-  background: rgba(245, 199, 103, 0.18);
+  background: transparent;
   color: #f5c767;
-  border-color: rgba(245, 199, 103, 0.65);
-  box-shadow: 0 0 10px rgba(245, 199, 103, 0.28);
+  border-bottom-color: #f5c767;
+  font-weight: 700;
+  box-shadow: none;
 }
 
 /* Mode Switcher Dial - Tactile Rotary Camera Wheel with Touch Drag */
@@ -3120,7 +3113,7 @@ body.native-mobile-device .fluid-device-pill {
   margin-bottom: 4px;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   position: relative;
   overflow: hidden;
   user-select: none;
@@ -5867,7 +5860,7 @@ body.native-fluid-mode .device-wrapper.orientation-landscape {
   bottom: 10%;
   left: 50%;
   width: 1px;
-  background: dashed rgba(0, 229, 255, 0.35);
+  background: dashed rgba(255, 255, 255, 0.25);
   transform: translateX(-50%);
 }
 
@@ -5878,7 +5871,7 @@ body.native-fluid-mode .device-wrapper.orientation-landscape {
   left: -8px;
   width: 17px;
   height: 1px;
-  background: rgba(0, 229, 255, 0.6);
+  background: rgba(255, 255, 255, 0.35);
 }
 
 .samurai-half-frame-guide::before { top: 0; }
@@ -5891,28 +5884,28 @@ body.native-fluid-mode .device-wrapper.orientation-landscape {
 }
 
 .samurai-brand {
-  background: rgba(10, 25, 35, 0.85);
-  border: 1px solid rgba(0, 229, 255, 0.4);
-  color: #00e5ff;
-  font-family: 'Courier New', monospace;
-  font-size: 10.5px;
-  font-weight: 900;
-  padding: 3px 8px;
+  background: rgba(14, 16, 22, 0.7);
+  border: 0.5px solid rgba(255, 255, 255, 0.2);
+  color: rgba(255, 255, 255, 0.85);
+  font-family: -apple-system, BlinkMacSystemFont, monospace;
+  font-size: 9.5px;
+  font-weight: 700;
+  padding: 2px 6px;
   border-radius: 4px;
-  letter-spacing: 1px;
-  box-shadow: 0 0 10px rgba(0, 229, 255, 0.25);
+  letter-spacing: 0.8px;
+  box-shadow: none;
 }
 
 .samurai-exp-lcd {
-  background: #041014;
-  border: 1px solid rgba(0, 255, 128, 0.5);
-  color: #00ff80;
-  font-family: 'Courier New', monospace;
-  font-size: 11px;
-  font-weight: 800;
-  padding: 3px 8px;
+  background: rgba(14, 16, 22, 0.7);
+  border: 0.5px solid rgba(245, 199, 103, 0.35);
+  color: #f5c767;
+  font-family: -apple-system, BlinkMacSystemFont, monospace;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 6px;
   border-radius: 4px;
-  text-shadow: 0 0 6px #00ff80;
+  text-shadow: none;
 }
 
 .samurai-center-hud {
@@ -5927,15 +5920,15 @@ body.native-fluid-mode .device-wrapper.orientation-landscape {
 }
 
 .samurai-af-box {
-  width: 44px;
-  height: 30px;
-  border: 1px solid rgba(0, 255, 128, 0.6);
+  width: 36px;
+  height: 24px;
+  border: 0.8px solid rgba(255, 255, 255, 0.35);
   border-radius: 2px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #00ff80;
-  font-size: 9px;
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 8.5px;
   font-family: monospace;
 }
 
@@ -6948,8 +6941,8 @@ body.native-fluid-mode .device-wrapper.orientation-landscape {
   width: 8px;
   height: 8px;
   border-radius: 50%;
-  background: #10b981;
-  box-shadow: 0 0 6px #10b981;
+  background: #e02f2f;
+  box-shadow: 0 0 4px rgba(224, 47, 47, 0.6);
 }
 
 /* --------------------------------------------------------------------------
@@ -7138,44 +7131,44 @@ body.native-fluid-mode .device-wrapper.orientation-landscape {
 
 .fimo-bracket {
   position: absolute;
-  width: 22px;
-  height: 22px;
-  border-color: #ff6b35;
+  width: 20px;
+  height: 20px;
+  border-color: rgba(255, 255, 255, 0.45);
   border-style: solid;
   border-width: 0;
-  opacity: 0.92;
+  opacity: 0.85;
 }
 
 .fimo-bracket-tl {
   top: 0;
   left: 0;
-  border-top-width: 1.8px;
-  border-left-width: 1.8px;
-  border-top-left-radius: 3px;
+  border-top-width: 1.2px;
+  border-left-width: 1.2px;
+  border-top-left-radius: 2px;
 }
 
 .fimo-bracket-tr {
   top: 0;
   right: 0;
-  border-top-width: 1.8px;
-  border-right-width: 1.8px;
-  border-top-right-radius: 3px;
+  border-top-width: 1.2px;
+  border-right-width: 1.2px;
+  border-top-right-radius: 2px;
 }
 
 .fimo-bracket-bl {
   bottom: 0;
   left: 0;
-  border-bottom-width: 1.8px;
-  border-left-width: 1.8px;
-  border-bottom-left-radius: 3px;
+  border-bottom-width: 1.2px;
+  border-left-width: 1.2px;
+  border-bottom-left-radius: 2px;
 }
 
 .fimo-bracket-br {
   bottom: 0;
   right: 0;
-  border-bottom-width: 1.8px;
-  border-right-width: 1.8px;
-  border-bottom-right-radius: 3px;
+  border-bottom-width: 1.2px;
+  border-right-width: 1.2px;
+  border-bottom-right-radius: 2px;
 }
 
 .fimo-center-focus-box {
@@ -7183,12 +7176,12 @@ body.native-fluid-mode .device-wrapper.orientation-landscape {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 32px;
-  height: 20px;
-  border: 1.2px solid #ff6b35;
+  width: 24px;
+  height: 16px;
+  border: 0.8px solid rgba(255, 255, 255, 0.35);
   border-radius: 2px;
-  opacity: 0.85;
-  box-shadow: 0 0 6px rgba(255, 107, 53, 0.4);
+  opacity: 0.65;
+  box-shadow: none;
   pointer-events: none;
 }
 
@@ -7229,7 +7222,7 @@ body.native-fluid-mode .device-wrapper.orientation-landscape {
 }
 
 .fimo-val-on {
-  color: #ff6b35;
+  color: #f5c767;
   font-weight: 800;
 }
 
@@ -7323,7 +7316,7 @@ body.native-fluid-mode .device-wrapper.orientation-landscape {
   display: flex;
   flex-direction: column;
   align-items: center;
-  color: #ff6b35;
+  color: #f5c767;
   pointer-events: none;
   transition: left 0.18s cubic-bezier(0.16, 1, 0.3, 1);
 }
@@ -7336,7 +7329,7 @@ body.native-fluid-mode .device-wrapper.orientation-landscape {
 .fimo-caret-bar {
   width: 1.5px;
   height: 8px;
-  background: #ff6b35;
+  background: #f5c767;
 }
 
 .fimo-ruler-ticks {
@@ -7357,7 +7350,7 @@ body.native-fluid-mode .device-wrapper.orientation-landscape {
 }
 
 .fimo-tick-stop.active {
-  color: #fff;
+  color: #f5c767;
   font-weight: 800;
 }
 
@@ -7390,7 +7383,7 @@ body.native-fluid-mode .device-wrapper.orientation-landscape {
   display: flex;
   align-items: center;
   gap: 2px;
-  color: #ff6b35;
+  color: #f5c767;
   font-size: 11px;
   font-weight: 800;
 }
@@ -7405,38 +7398,40 @@ body.native-fluid-mode .device-wrapper.orientation-landscape {
   font-weight: 600;
 }
 
-/* 3. Tactile 4 Round Hardware Control Buttons */
+/* 3. Tactile 4 Round Hardware Control Buttons - Refined Milled Aluminum Dials */
 .fimo-hardware-bar {
   width: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 24px;
-  padding: 4px 16px 2px 16px;
+  gap: 20px;
+  padding: 2px 16px 1px 16px;
   box-sizing: border-box;
 }
 
 .fimo-hw-btn {
-  width: 40px;
-  height: 40px;
+  width: 36px;
+  height: 36px;
   border-radius: 50%;
-  background: rgba(30, 32, 38, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  color: rgba(255, 255, 255, 0.85);
+  background: rgba(22, 24, 28, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
   position: relative;
-  transition: all 0.18s ease;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4);
+  transition: all 0.18s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.35);
   padding: 0;
 }
 
 .fimo-hw-btn:hover {
-  background: rgba(45, 48, 58, 0.95);
-  border-color: rgba(255, 255, 255, 0.25);
-  color: #fff;
+  background: rgba(35, 38, 46, 0.85);
+  border-color: rgba(245, 199, 103, 0.35);
+  color: #f5c767;
   transform: translateY(-1px);
 }
 
@@ -7446,51 +7441,52 @@ body.native-fluid-mode .device-wrapper.orientation-landscape {
 
 .fimo-hw-dot-badge {
   position: absolute;
-  top: 1px;
-  right: 1px;
-  width: 13px;
-  height: 13px;
-  background: #ff6b35;
-  color: #fff;
-  font-size: 8.5px;
-  font-weight: 900;
+  top: 3px;
+  right: 3px;
+  width: 5px;
+  height: 5px;
+  background: #f5c767;
+  color: transparent;
+  font-size: 0;
   border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 5px rgba(255, 107, 53, 0.6);
+  box-shadow: 0 0 4px rgba(245, 199, 103, 0.6);
 }
 
-/* 4. Bottom Shutter Row with Capsule & Concentric Brushed Metallic Shutter */
+/* 4. Bottom Shutter Row with Transparent Hero Shutter Stage */
 .fimo-shutter-capsule {
   display: flex;
   align-items: center;
-  gap: 12px;
-  background: rgba(26, 28, 34, 0.82);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 44px;
-  padding: 3px 14px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.45);
+  justify-content: center;
+  gap: 16px;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 0;
 }
 
 .fimo-capsule-mode-btn {
-  background: transparent;
-  border: none;
-  color: rgba(255, 255, 255, 0.4);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(22, 24, 28, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.45);
   cursor: pointer;
-  padding: 4px;
+  padding: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: color 0.18s ease;
+  transition: all 0.18s ease;
 }
 
 .fimo-capsule-mode-btn.active {
-  color: #fff;
+  color: #f5c767;
+  border-color: rgba(245, 199, 103, 0.35);
+  background: rgba(245, 199, 103, 0.1);
 }
 
 .fimo-capsule-mode-btn:hover {
-  color: rgba(255, 255, 255, 0.8);
+  color: rgba(255, 255, 255, 0.85);
 }
 
 /* Concentric Brushed Metallic Shutter Button */
@@ -7515,21 +7511,26 @@ body.native-fluid-mode .device-wrapper.orientation-landscape {
 }
 
 .fimo-shutter-concentric {
-  width: 46px;
-  height: 46px;
+  width: 52px;
+  height: 52px;
   border-radius: 50%;
-  background: radial-gradient(circle, #f4f4f5 0%, #e4e4e7 35%, #a1a1aa 75%, #71717a 100%);
-  box-shadow: inset 0 1px 3px rgba(255, 255, 255, 0.8), 0 2px 6px rgba(0, 0, 0, 0.35);
-  border: 1px solid rgba(0, 0, 0, 0.25);
+  background: radial-gradient(circle at 35% 35%, #ffffff 0%, #e2e8f0 45%, #94a3b8 80%, #64748b 100%);
+  box-shadow: inset 0 2px 4px rgba(255, 255, 255, 0.9), 0 3px 8px rgba(0, 0, 0, 0.4);
+  border: 1.5px solid rgba(0, 0, 0, 0.35);
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .fimo-shutter-concentric::after {
   content: '';
-  position: absolute;
-  inset: 6px;
+  width: 14px;
+  height: 14px;
   border-radius: 50%;
-  border: 0.8px dashed rgba(0, 0, 0, 0.18);
+  background: radial-gradient(circle at 35% 35%, #ff4b4b 0%, #e02f2f 65%, #991b1b 100%);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.6);
+  border: 0.5px solid rgba(245, 199, 103, 0.4);
   pointer-events: none;
 }
 

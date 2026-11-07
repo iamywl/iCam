@@ -1773,7 +1773,8 @@ function switchCamera(camId) {
     const activeItem = document.querySelector(`#mode-dial-list .mode-dial-item[data-cam="${camId}"]`);
     if (dialList && activeItem) {
       const wrapper = dialList.parentElement;
-      const offset = (wrapper.offsetWidth / 2) - (activeItem.offsetLeft + activeItem.offsetWidth / 2);
+      const wrapperW = (wrapper && wrapper.offsetWidth) || (wrapper && wrapper.getBoundingClientRect().width) || 390;
+      const offset = (wrapperW / 2) - (activeItem.offsetLeft + activeItem.offsetWidth / 2);
       dialList.style.transform = `translateX(${offset}px)`;
     }
   }
@@ -4876,14 +4877,18 @@ function initSmoothModeDial() {
   let velocity = 0;
   let activeCamId = state.activeCamera || 'canon-ixy';
 
+  function getWrapperWidth() {
+    return (wrapper && wrapper.offsetWidth) || (wrapper && wrapper.getBoundingClientRect().width) || (wrapper && wrapper.parentElement ? wrapper.parentElement.offsetWidth : 0) || 390;
+  }
+
   function getCenterOffset(item) {
-    const wrapperW = wrapper.offsetWidth;
+    const wrapperW = getWrapperWidth();
     const itemCenter = item.offsetLeft + item.offsetWidth / 2;
     return (wrapperW / 2) - itemCenter;
   }
 
   function updateDialVisuals(currentOffset) {
-    const wrapperCenter = wrapper.offsetWidth / 2;
+    const wrapperCenter = getWrapperWidth() / 2;
     let closestItem = null;
     let closestDist = Infinity;
 
@@ -6493,7 +6498,15 @@ window.applyLensFilter = applyLensFilter;
 window.enableWebcam = enableWebcam;
 window.useStudioModel = useStudioModel;
 window.opticalFlareEngine = opticalFlareEngine;
-window.alignModeDial = alignModeDial;
+window.alignModeDial = window.alignModeDial || function(camId) {
+  const item = document.querySelector(`#mode-dial-list .mode-dial-item[data-cam="${camId}"]`);
+  if (!item) return;
+  const list = document.getElementById('mode-dial-list');
+  const wrapper = document.getElementById('mode-dial-wrapper');
+  const wrapperW = (wrapper && wrapper.offsetWidth) || 390;
+  const offset = (wrapperW / 2) - (item.offsetLeft + item.offsetWidth / 2);
+  if (list) list.style.transform = `translateX(${offset}px)`;
+};
 window.setOrientation = setOrientation;
 window.toggleOrientation = toggleOrientation;
 window.DeviceDetector = DeviceDetector;
