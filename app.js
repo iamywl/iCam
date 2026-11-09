@@ -1278,7 +1278,20 @@ class SoundFXEngine {
     }
   }
 
+  triggerHaptic(type = 'light') {
+    if (typeof navigator !== 'undefined' && typeof navigator.vibrate === 'function') {
+      try {
+        if (type === 'light') navigator.vibrate(8);
+        else if (type === 'medium') navigator.vibrate(18);
+        else if (type === 'heavy') navigator.vibrate(35);
+        else if (type === 'shutter') navigator.vibrate([24, 30, 14]);
+        else if (type === 'mount') navigator.vibrate([12, 20, 12]);
+      } catch (e) {}
+    }
+  }
+
   playRatchetWind() {
+    this.triggerHaptic('medium');
     this.init();
     if (!this.ctx) return;
     const now = this.ctx.currentTime;
@@ -1300,6 +1313,7 @@ class SoundFXEngine {
   }
 
   playShutter(camId = state?.activeCamera) {
+    this.triggerHaptic('shutter');
     this.init();
     if (!this.ctx) return;
     const now = this.ctx.currentTime;
@@ -1459,6 +1473,7 @@ class SoundFXEngine {
   }
 
   playTick() {
+    this.triggerHaptic('light');
     this.init();
     if (!this.ctx) return;
     const now = this.ctx.currentTime;
@@ -1550,6 +1565,7 @@ class SoundFXEngine {
   }
 
   playMount() {
+    this.triggerHaptic('mount');
     this.init();
     if (!this.ctx) return;
     const now = this.ctx.currentTime;
@@ -4068,6 +4084,7 @@ function initQuickTakeShutter() {
     isPointerHeld = true;
     didRecord = false;
     handledByPointer = false;
+    soundEngine.triggerHaptic('light');
     quickTakeStartTime = Date.now();
     clearTimeout(quickTakeHoldTimer);
     quickTakeHoldTimer = setTimeout(() => {
@@ -4945,9 +4962,9 @@ function initSmoothModeDial() {
 
   wrapper.addEventListener('pointermove', (e) => {
     const dx = e.clientX - startX;
-    if (!isDragging && Math.abs(dx) > 14) {
+    if (!isDragging && Math.abs(dx) > 6) {
       isDragging = true;
-      wrapper.setPointerCapture?.(e.pointerId);
+      try { wrapper.setPointerCapture?.(e.pointerId); } catch(err) {}
     }
     if (!isDragging) return;
 
@@ -4976,12 +4993,12 @@ function initSmoothModeDial() {
     }
 
     const totalDist = Math.abs(e.clientX - startX);
-    if (!isDragging || totalDist < 14) {
+    if (!isDragging || totalDist < 6) {
       isDragging = false;
       const targetItem = e.target.closest('.mode-dial-item');
       if (targetItem && targetItem.dataset.cam) {
         const now = Date.now();
-        if (now - lastDialTapTime > 350) {
+        if (now - lastDialTapTime > 250) {
           lastDialTapTime = now;
           switchCamera(targetItem.dataset.cam);
         }
@@ -4993,7 +5010,7 @@ function initSmoothModeDial() {
     const inertiaDist = velocity * 100;
     const targetTranslate = currentTranslateX + inertiaDist;
 
-    const wrapperCenter = wrapper.offsetWidth / 2;
+    const wrapperCenter = getWrapperWidth() / 2;
     let bestItem = items[0];
     let minD = Infinity;
 
@@ -5009,7 +5026,7 @@ function initSmoothModeDial() {
     const targetOffset = getCenterOffset(bestItem);
     currentTranslateX = targetOffset;
 
-    dialList.style.transition = 'transform 0.42s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+    dialList.style.transition = 'transform 0.32s cubic-bezier(0.2, 0.95, 0.3, 1.15)';
     dialList.style.transform = `translateX(${targetOffset}px)`;
     updateDialVisuals(targetOffset);
 
