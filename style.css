@@ -4154,10 +4154,10 @@ body.native-mobile-device .fluid-device-pill {
     right: auto !important;
     width: calc(100% - 16px) !important;
     max-width: 410px !important;
-    height: 82px !important;
-    max-height: 82px !important;
+    height: 88px !important;
+    max-height: 88px !important;
     margin: 2px auto 0 auto !important;
-    padding: 3px 8px !important;
+    padding: 2px 8px !important;
     flex-shrink: 0 !important;
     z-index: 20 !important;
     box-sizing: border-box !important;
@@ -4167,22 +4167,22 @@ body.native-mobile-device .fluid-device-pill {
   }
 
   .control-drawer .cam-drawer-header {
-    margin-bottom: 1px !important;
+    margin-bottom: 0px !important;
   }
 
   .control-drawer .filter-carousel {
-    height: 40px !important;
+    height: 38px !important;
     gap: 6px !important;
-    padding: 2px 4px !important;
+    padding: 1px 4px !important;
     touch-action: pan-x !important;
     -webkit-overflow-scrolling: touch !important;
   }
 
   .control-drawer .filter-chip {
-    min-width: 62px !important;
-    padding: 3px 8px !important;
-    gap: 2px !important;
-    height: 38px !important;
+    min-width: 58px !important;
+    padding: 2px 6px !important;
+    gap: 1px !important;
+    height: 34px !important;
     flex-shrink: 0 !important;
     touch-action: manipulation !important;
     -webkit-tap-highlight-color: transparent !important;
@@ -4195,29 +4195,29 @@ body.native-mobile-device .fluid-device-pill {
   }
 
   .control-drawer .filter-lens-swatch {
-    width: 16px !important;
-    height: 16px !important;
+    width: 15px !important;
+    height: 15px !important;
     margin: 0 !important;
   }
 
   .control-drawer .filter-chip-name {
-    font-size: 10px !important;
-    line-height: 1.15 !important;
+    font-size: 9.5px !important;
+    line-height: 1.1 !important;
     font-weight: 700 !important;
     white-space: nowrap !important;
     overflow: visible !important;
   }
 
   .control-drawer .vintage-toggles {
-    margin-top: 2px !important;
+    margin-top: 1px !important;
     gap: 4px !important;
   }
 
   .control-drawer .toggle-pill {
-    padding: 2px 8px !important;
-    font-size: 9.5px !important;
-    height: 20px !important;
-    line-height: 20px !important;
+    padding: 1px 7px !important;
+    font-size: 9px !important;
+    height: 18px !important;
+    line-height: 18px !important;
     touch-action: manipulation !important;
   }
 
@@ -4540,14 +4540,14 @@ body.native-mobile-device .fluid-device-pill {
   transform: translateX(-50%);
   border-radius: 20px;
 }
-.device-wrapper.device-standard .control-drawer { top: 542px; height: 96px; padding: 3px 8px; }
-.device-wrapper.device-standard .cam-drawer-header { margin-bottom: 1px; }
-.device-wrapper.device-standard .filter-chip { padding: 2px 5px; min-width: 52px; gap: 1px; height: 34px; }
-.device-wrapper.device-standard .filter-lens-swatch { width: 18px; height: 18px; margin: 0.5px 0; }
-.device-wrapper.device-standard .filter-chip-name { font-size: 9px; }
+.device-wrapper.device-standard .control-drawer { top: 540px; height: 98px; padding: 2px 8px; }
+.device-wrapper.device-standard .cam-drawer-header { margin-bottom: 0px; }
+.device-wrapper.device-standard .filter-chip { padding: 2px 4px; min-width: 50px; gap: 1px; height: 32px; }
+.device-wrapper.device-standard .filter-lens-swatch { width: 16px; height: 16px; margin: 0; }
+.device-wrapper.device-standard .filter-chip-name { font-size: 8.5px; }
 .device-wrapper.device-standard .filter-chip-sub { display: none; }
-.device-wrapper.device-standard .vintage-toggles { margin-top: 2px; }
-.device-wrapper.device-standard .toggle-pill { padding: 2px 7px; font-size: 9px; height: 18px; line-height: 18px; }
+.device-wrapper.device-standard .vintage-toggles { margin-top: 1px; }
+.device-wrapper.device-standard .toggle-pill { padding: 1px 7px; font-size: 8.5px; height: 18px; line-height: 18px; }
 .device-wrapper.device-standard .camera-bottom-section { top: 642px; height: 204px; }
 .device-wrapper.device-standard .fimo-zoom-ruler-deck { height: 32px; }
 .device-wrapper.device-standard .fimo-hardware-bar { height: 44px; }
@@ -8459,7 +8459,7 @@ body.native-fluid-mode .device-wrapper.orientation-landscape {
 
 .viewfinder-recipe-pill {
   position: absolute;
-  top: 42px;
+  top: 10px;
   left: 50%;
   transform: translateX(-50%);
   display: flex;

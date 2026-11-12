@@ -1895,7 +1895,9 @@ function switchCamera(camId) {
 
   // 7. Apply Camera-specific Filter & Parametric Photographic Recipe
   if (!state.isCustomRecipe && window.ParametricColorEngine) {
-    const defaultRecipe = window.ParametricColorEngine.getRecipeForCamera(camId);
+    const activeFKey = state.selectedFilters[camId] || (cam.filters ? Object.keys(cam.filters)[0] : null);
+    const subRecipe = (activeFKey && SUB_FILTER_RECIPES[activeFKey]) ? SUB_FILTER_RECIPES[activeFKey] : null;
+    const defaultRecipe = subRecipe || window.ParametricColorEngine.getRecipeForCamera(camId);
     if (defaultRecipe) {
       window.ParametricColorEngine.setRecipe(defaultRecipe);
       if (typeof syncProRecipeSlidersToUI === 'function') {
@@ -1958,6 +1960,1917 @@ function switchPrevFilter() {
   selectCameraFilter(filterKeys[prevIdx]);
 }
 
+// ==========================================================================
+// 84 Iconic Sub-Filter Dedicated Parametric Recipes
+// ==========================================================================
+const SUB_FILTER_RECIPES = {
+  "ixy-peach": {
+    "id": "ixy-peach",
+    "name": "Canon IXY Peach Glow",
+    "desc": "뽀샤시 복숭아빛 피부톤과 맑은 Y2K 디카 감성",
+    "tone": {
+      "exposure": 0.18,
+      "contrast": 10,
+      "highlights": -14,
+      "shadows": 8,
+      "whites": 6,
+      "blacks": -2
+    },
+    "color": {
+      "temp": 6,
+      "tint": 2,
+      "vibrance": 14,
+      "saturation": 8
+    },
+    "hsl": {
+      "orange": {
+        "hue": 2,
+        "sat": 12,
+        "lum": 16
+      },
+      "red": {
+        "hue": 1,
+        "sat": 14,
+        "lum": 8
+      }
+    }
+  },
+  "ixy-flash": {
+    "id": "ixy-flash",
+    "name": "Canon IXY Flash Pop",
+    "desc": "선명하고 쨍한 직광 디카 플래시 룩",
+    "tone": {
+      "exposure": 0.28,
+      "contrast": 20,
+      "highlights": -8,
+      "shadows": -6,
+      "whites": 18,
+      "blacks": -8
+    },
+    "color": {
+      "temp": 2,
+      "tint": 1,
+      "vibrance": 18,
+      "saturation": 14
+    },
+    "hsl": {
+      "red": {
+        "hue": 0,
+        "sat": 20,
+        "lum": 8
+      },
+      "yellow": {
+        "hue": 0,
+        "sat": 14,
+        "lum": 6
+      }
+    }
+  },
+  "ixy-pastel": {
+    "id": "ixy-pastel",
+    "name": "Canon IXY Pastel Haze",
+    "desc": "들뜬 파스텔 섀도우와 부드러운 로파이 블룸",
+    "tone": {
+      "exposure": 0.14,
+      "contrast": -12,
+      "highlights": -18,
+      "shadows": 18,
+      "whites": -4,
+      "blacks": 18
+    },
+    "color": {
+      "temp": 4,
+      "tint": 4,
+      "vibrance": 8,
+      "saturation": -4
+    },
+    "hsl": {
+      "magenta": {
+        "hue": -4,
+        "sat": 10,
+        "lum": 12
+      }
+    }
+  },
+  "ixy-night": {
+    "id": "ixy-night",
+    "name": "Canon IXY Clear Sunlight",
+    "desc": "창가 자연광 투명 얼짱 톤과 맑은 CCD 발색",
+    "tone": {
+      "exposure": 0.16,
+      "contrast": 14,
+      "highlights": -12,
+      "shadows": 6,
+      "whites": 10,
+      "blacks": -4
+    },
+    "color": {
+      "temp": 0,
+      "tint": 0,
+      "vibrance": 16,
+      "saturation": 10
+    },
+    "hsl": {
+      "blue": {
+        "hue": 0,
+        "sat": 20,
+        "lum": 6
+      },
+      "green": {
+        "hue": -4,
+        "sat": 16,
+        "lum": 8
+      }
+    }
+  },
+  "ixy-cool": {
+    "id": "ixy-cool",
+    "name": "Canon IXY Silver CCD",
+    "desc": "실버 디카 특유의 쿨톤 투명감과 도자기 피부",
+    "tone": {
+      "exposure": 0.1,
+      "contrast": 12,
+      "highlights": -14,
+      "shadows": 4,
+      "whites": 12,
+      "blacks": -2
+    },
+    "color": {
+      "temp": -10,
+      "tint": 3,
+      "vibrance": 10,
+      "saturation": -6
+    },
+    "hsl": {
+      "aqua": {
+        "hue": 0,
+        "sat": 18,
+        "lum": 10
+      },
+      "blue": {
+        "hue": 2,
+        "sat": 16,
+        "lum": 8
+      }
+    }
+  },
+  "ixy-sunset": {
+    "id": "ixy-sunset",
+    "name": "Canon IXY Sunset Cafe",
+    "desc": "골든아워 창가 노을빛 웜 글로우와 앰버 무드",
+    "tone": {
+      "exposure": 0.14,
+      "contrast": 16,
+      "highlights": -16,
+      "shadows": 12,
+      "whites": 8,
+      "blacks": -4
+    },
+    "color": {
+      "temp": 18,
+      "tint": -2,
+      "vibrance": 20,
+      "saturation": 16
+    },
+    "hsl": {
+      "orange": {
+        "hue": -4,
+        "sat": 24,
+        "lum": 14
+      },
+      "yellow": {
+        "hue": 4,
+        "sat": 22,
+        "lum": 10
+      }
+    }
+  },
+  "handy-minidv": {
+    "id": "handy-minidv",
+    "name": "Ditto School Cam",
+    "desc": "98년 겨울 방과 후 교실·운동장 캠코더 감성",
+    "tone": {
+      "exposure": 0.12,
+      "contrast": 8,
+      "highlights": -16,
+      "shadows": 12,
+      "whites": -4,
+      "blacks": 8
+    },
+    "color": {
+      "temp": 6,
+      "tint": -2,
+      "vibrance": 12,
+      "saturation": 6
+    },
+    "hsl": {
+      "yellow": {
+        "hue": 4,
+        "sat": 14,
+        "lum": 8
+      }
+    }
+  },
+  "handy-vhs": {
+    "id": "handy-vhs",
+    "name": "Hi8 Tape Glitch",
+    "desc": "스캔라인 아날로그 테이프 글리치 텍스처",
+    "tone": {
+      "exposure": 0.08,
+      "contrast": 12,
+      "highlights": -12,
+      "shadows": 8,
+      "whites": 6,
+      "blacks": 10
+    },
+    "color": {
+      "temp": 4,
+      "tint": -1,
+      "vibrance": 8,
+      "saturation": 6
+    },
+    "hsl": {}
+  },
+  "handy-super8": {
+    "id": "handy-super8",
+    "name": "Super 8mm Cine",
+    "desc": "골든 앰버 홈무비 8mm 시네 필름 룩",
+    "tone": {
+      "exposure": 0.1,
+      "contrast": 16,
+      "highlights": -18,
+      "shadows": 14,
+      "whites": 6,
+      "blacks": 6
+    },
+    "color": {
+      "temp": 16,
+      "tint": -3,
+      "vibrance": 16,
+      "saturation": 14
+    },
+    "hsl": {
+      "orange": {
+        "hue": -2,
+        "sat": 22,
+        "lum": 10
+      }
+    }
+  },
+  "handy-nightshot": {
+    "id": "handy-nightshot",
+    "name": "Retro Sunshine 90s",
+    "desc": "90s 여름 바캉스 햇살 캠코더 비디오",
+    "tone": {
+      "exposure": 0.18,
+      "contrast": 14,
+      "highlights": -10,
+      "shadows": 6,
+      "whites": 12,
+      "blacks": -4
+    },
+    "color": {
+      "temp": 8,
+      "tint": 1,
+      "vibrance": 18,
+      "saturation": 12
+    },
+    "hsl": {}
+  },
+  "handy-matrix": {
+    "id": "handy-matrix",
+    "name": "NightShot IR",
+    "desc": "00년대 캠코더 나이트샷 적외선 포스퍼 글로우",
+    "tone": {
+      "exposure": 0.2,
+      "contrast": 20,
+      "highlights": -10,
+      "shadows": -6,
+      "whites": 16,
+      "blacks": -10
+    },
+    "color": {
+      "temp": -12,
+      "tint": -14,
+      "vibrance": -10,
+      "saturation": -30
+    },
+    "hsl": {
+      "green": {
+        "hue": -10,
+        "sat": 40,
+        "lum": 20
+      }
+    }
+  },
+  "handy-golden": {
+    "id": "handy-golden",
+    "name": "Golden Hour Tape",
+    "desc": "황금빛 오후 따스한 방송용 테이프 톤",
+    "tone": {
+      "exposure": 0.12,
+      "contrast": 14,
+      "highlights": -16,
+      "shadows": 12,
+      "whites": 6,
+      "blacks": -2
+    },
+    "color": {
+      "temp": 20,
+      "tint": -2,
+      "vibrance": 18,
+      "saturation": 14
+    },
+    "hsl": {}
+  },
+  "cyber-cool": {
+    "id": "cyber-cool",
+    "name": "Ditto '98 Winter",
+    "desc": "뉴진스 Ditto 감성의 1998 겨울 청회색 섀도우 & 소프트 블룸",
+    "tone": {
+      "exposure": 0.12,
+      "contrast": 8,
+      "highlights": -16,
+      "shadows": 10,
+      "whites": 8,
+      "blacks": 6
+    },
+    "color": {
+      "temp": -10,
+      "tint": 4,
+      "vibrance": 10,
+      "saturation": -4
+    },
+    "hsl": {
+      "aqua": {
+        "hue": 4,
+        "sat": 18,
+        "lum": 12
+      },
+      "blue": {
+        "hue": 0,
+        "sat": 16,
+        "lum": 8
+      }
+    }
+  },
+  "cyber-magenta": {
+    "id": "cyber-magenta",
+    "name": "Bunnies VHS Tape",
+    "desc": "아련한 첫사랑의 기억, 뽀얀 하이라이트 할레이션",
+    "tone": {
+      "exposure": 0.14,
+      "contrast": 10,
+      "highlights": -14,
+      "shadows": 12,
+      "whites": 6,
+      "blacks": 8
+    },
+    "color": {
+      "temp": 2,
+      "tint": 10,
+      "vibrance": 14,
+      "saturation": 8
+    },
+    "hsl": {
+      "magenta": {
+        "hue": -2,
+        "sat": 20,
+        "lum": 14
+      }
+    }
+  },
+  "cyber-flash": {
+    "id": "cyber-flash",
+    "name": "Flash Sharp",
+    "desc": "선명하고 쨍한 사이버샷 직광 플래시",
+    "tone": {
+      "exposure": 0.26,
+      "contrast": 18,
+      "highlights": -8,
+      "shadows": -6,
+      "whites": 16,
+      "blacks": -6
+    },
+    "color": {
+      "temp": 0,
+      "tint": 1,
+      "vibrance": 16,
+      "saturation": 10
+    },
+    "hsl": {}
+  },
+  "cyber-matrix": {
+    "id": "cyber-matrix",
+    "name": "Y2K Pastel Glow",
+    "desc": "부드러운 라벤더-핑크 파스텔 사이버 글로우",
+    "tone": {
+      "exposure": 0.16,
+      "contrast": -6,
+      "highlights": -16,
+      "shadows": 14,
+      "whites": 4,
+      "blacks": 12
+    },
+    "color": {
+      "temp": -2,
+      "tint": 8,
+      "vibrance": 12,
+      "saturation": 6
+    },
+    "hsl": {
+      "purple": {
+        "hue": 4,
+        "sat": 18,
+        "lum": 14
+      }
+    }
+  },
+  "cyber-y2k-pink": {
+    "id": "cyber-y2k-pink",
+    "name": "Cyber Pink CCD",
+    "desc": "밀레니엄 핑크 메탈릭 CCD 감성",
+    "tone": {
+      "exposure": 0.15,
+      "contrast": 12,
+      "highlights": -12,
+      "shadows": 8,
+      "whites": 10,
+      "blacks": -2
+    },
+    "color": {
+      "temp": 4,
+      "tint": 12,
+      "vibrance": 18,
+      "saturation": 14
+    },
+    "hsl": {
+      "magenta": {
+        "hue": 0,
+        "sat": 26,
+        "lum": 16
+      }
+    }
+  },
+  "cyber-silver": {
+    "id": "cyber-silver",
+    "name": "Titanium CCD",
+    "desc": "선명하고 차가운 사이버 실버 메탈릭",
+    "tone": {
+      "exposure": 0.1,
+      "contrast": 14,
+      "highlights": -12,
+      "shadows": 4,
+      "whites": 12,
+      "blacks": -4
+    },
+    "color": {
+      "temp": -6,
+      "tint": 2,
+      "vibrance": 6,
+      "saturation": -10
+    },
+    "hsl": {}
+  },
+  "leica-summilux": {
+    "id": "leica-summilux",
+    "name": "Summilux 50",
+    "desc": "따뜻한 벨벳 톤 & 부드러운 보케 3D 팝",
+    "tone": {
+      "exposure": 0.12,
+      "contrast": 14,
+      "highlights": -16,
+      "shadows": 6,
+      "whites": 8,
+      "blacks": -4
+    },
+    "color": {
+      "temp": 4,
+      "tint": 1,
+      "vibrance": 16,
+      "saturation": 10
+    },
+    "hsl": {
+      "red": {
+        "hue": 0,
+        "sat": 18,
+        "lum": 6
+      },
+      "orange": {
+        "hue": 2,
+        "sat": 12,
+        "lum": 14
+      }
+    }
+  },
+  "leica-mono": {
+    "id": "leica-mono",
+    "name": "M Monochrom",
+    "desc": "깊고 섬세한 라이카 판크로매틱 흑백 계조",
+    "tone": {
+      "exposure": 0.06,
+      "contrast": 26,
+      "highlights": -20,
+      "shadows": -6,
+      "whites": 12,
+      "blacks": -12
+    },
+    "color": {
+      "temp": 0,
+      "tint": 0,
+      "vibrance": -100,
+      "saturation": -100
+    },
+    "hsl": {}
+  },
+  "leica-classic": {
+    "id": "leica-classic",
+    "name": "Classic M 35",
+    "desc": "투명하고 날카로운 선예도의 라이카 다큐멘터리 원색",
+    "tone": {
+      "exposure": 0.08,
+      "contrast": 12,
+      "highlights": -14,
+      "shadows": 4,
+      "whites": 6,
+      "blacks": -2
+    },
+    "color": {
+      "temp": 0,
+      "tint": 0,
+      "vibrance": 10,
+      "saturation": 4
+    },
+    "hsl": {}
+  },
+  "leica-red": {
+    "id": "leica-red",
+    "name": "Red Dot Color",
+    "desc": "라이카 특유의 깊은 원색 렌더링과 진한 빨간색",
+    "tone": {
+      "exposure": 0.1,
+      "contrast": 16,
+      "highlights": -12,
+      "shadows": 6,
+      "whites": 10,
+      "blacks": -6
+    },
+    "color": {
+      "temp": 2,
+      "tint": 2,
+      "vibrance": 20,
+      "saturation": 14
+    },
+    "hsl": {
+      "red": {
+        "hue": 0,
+        "sat": 26,
+        "lum": 8
+      }
+    }
+  },
+  "leica-noctilux": {
+    "id": "leica-noctilux",
+    "name": "Noctilux f/0.95 Dream",
+    "desc": "녹티룩스 극한 개방감 & 몽환적 보케 글로우",
+    "tone": {
+      "exposure": 0.18,
+      "contrast": 8,
+      "highlights": -18,
+      "shadows": 12,
+      "whites": 12,
+      "blacks": 0
+    },
+    "color": {
+      "temp": 3,
+      "tint": 2,
+      "vibrance": 14,
+      "saturation": 8
+    },
+    "hsl": {
+      "orange": {
+        "hue": 2,
+        "sat": 14,
+        "lum": 18
+      }
+    }
+  },
+  "leica-amber": {
+    "id": "leica-amber",
+    "name": "Barnack Amber",
+    "desc": "오스카 바르낙 클래식 황동 앰버 빈티지 톤",
+    "tone": {
+      "exposure": 0.08,
+      "contrast": 14,
+      "highlights": -14,
+      "shadows": 8,
+      "whites": 6,
+      "blacks": -2
+    },
+    "color": {
+      "temp": 16,
+      "tint": -1,
+      "vibrance": 12,
+      "saturation": 6
+    },
+    "hsl": {
+      "yellow": {
+        "hue": 4,
+        "sat": 20,
+        "lum": 8
+      }
+    }
+  },
+  "quicksnap-86": {
+    "id": "quicksnap-86",
+    "name": "写ルンです 1986 Daylight",
+    "desc": "1986년 원작 우츠룬데스의 청량한 에메랄드 풀잎과 맑은 피부톤",
+    "tone": {
+      "exposure": 0.12,
+      "contrast": 16,
+      "highlights": -14,
+      "shadows": 6,
+      "whites": 10,
+      "blacks": -4
+    },
+    "color": {
+      "temp": -2,
+      "tint": -4,
+      "vibrance": 18,
+      "saturation": 14
+    },
+    "hsl": {
+      "green": {
+        "hue": -8,
+        "sat": 26,
+        "lum": 10
+      },
+      "aqua": {
+        "hue": 4,
+        "sat": 20,
+        "lum": 6
+      }
+    }
+  },
+  "quicksnap-flash": {
+    "id": "quicksnap-flash",
+    "name": "Sun Flash Pop",
+    "desc": "버블시대 거리와 카페의 또렷하고 화사한 직광 플래시",
+    "tone": {
+      "exposure": 0.28,
+      "contrast": 24,
+      "highlights": -6,
+      "shadows": -8,
+      "whites": 18,
+      "blacks": -8
+    },
+    "color": {
+      "temp": 2,
+      "tint": 0,
+      "vibrance": 20,
+      "saturation": 14
+    },
+    "hsl": {}
+  },
+  "quicksnap-nostalgia": {
+    "id": "quicksnap-nostalgia",
+    "name": "Bubble Resort '87",
+    "desc": "80년대 버블 부유층의 여름 별장 휴양지 따사로운 햇살",
+    "tone": {
+      "exposure": 0.14,
+      "contrast": 14,
+      "highlights": -14,
+      "shadows": 10,
+      "whites": 8,
+      "blacks": 2
+    },
+    "color": {
+      "temp": 8,
+      "tint": -2,
+      "vibrance": 14,
+      "saturation": 10
+    },
+    "hsl": {}
+  },
+  "quicksnap-neon": {
+    "id": "quicksnap-neon",
+    "name": "Showa Memory '86",
+    "desc": "오렌지 쿼츠데이트와 쇼와 61년 아날로그 인화지 감성",
+    "tone": {
+      "exposure": 0.1,
+      "contrast": 12,
+      "highlights": -14,
+      "shadows": 8,
+      "whites": 6,
+      "blacks": 4
+    },
+    "color": {
+      "temp": 6,
+      "tint": 2,
+      "vibrance": 10,
+      "saturation": 8
+    },
+    "hsl": {}
+  },
+  "quicksnap-fujicolor": {
+    "id": "quicksnap-fujicolor",
+    "name": "Fujicolor Super HG",
+    "desc": "선명하고 쨍한 후지필름 원색 발색과 녹색 계조의 정점",
+    "tone": {
+      "exposure": 0.1,
+      "contrast": 18,
+      "highlights": -12,
+      "shadows": 4,
+      "whites": 12,
+      "blacks": -6
+    },
+    "color": {
+      "temp": -4,
+      "tint": -5,
+      "vibrance": 24,
+      "saturation": 18
+    },
+    "hsl": {
+      "green": {
+        "hue": -12,
+        "sat": 30,
+        "lum": 12
+      }
+    }
+  },
+  "quicksnap-party": {
+    "id": "quicksnap-party",
+    "name": "Party Flash 400",
+    "desc": "디스코텍과 파티장의 직광 플래시 & 샴페인 골드 글리터",
+    "tone": {
+      "exposure": 0.24,
+      "contrast": 20,
+      "highlights": -8,
+      "shadows": -4,
+      "whites": 16,
+      "blacks": -6
+    },
+    "color": {
+      "temp": 6,
+      "tint": 1,
+      "vibrance": 16,
+      "saturation": 12
+    },
+    "hsl": {}
+  },
+  "instax-card": {
+    "id": "instax-card",
+    "name": "Instax Color 800",
+    "desc": "후지 화학 유제 특유의 청회색 섀도우 & 소프트 스킨",
+    "tone": {
+      "exposure": 0.14,
+      "contrast": 16,
+      "highlights": -14,
+      "shadows": 6,
+      "whites": 10,
+      "blacks": 4
+    },
+    "color": {
+      "temp": 2,
+      "tint": -1,
+      "vibrance": 14,
+      "saturation": 10
+    },
+    "hsl": {}
+  },
+  "polaroid-square": {
+    "id": "polaroid-square",
+    "name": "Polaroid 600",
+    "desc": "따스한 골든 앰버 톤과 빈티지 스퀘어 발색",
+    "tone": {
+      "exposure": 0.12,
+      "contrast": 14,
+      "highlights": -16,
+      "shadows": 8,
+      "whites": 8,
+      "blacks": 6
+    },
+    "color": {
+      "temp": 12,
+      "tint": -2,
+      "vibrance": 14,
+      "saturation": 12
+    },
+    "hsl": {}
+  },
+  "instant-bw": {
+    "id": "instant-bw",
+    "name": "Silver Mono Pro",
+    "desc": "깊은 흑은염 입자와 벨벳 블랙 계조",
+    "tone": {
+      "exposure": 0.08,
+      "contrast": 24,
+      "highlights": -18,
+      "shadows": -4,
+      "whites": 12,
+      "blacks": -10
+    },
+    "color": {
+      "temp": 0,
+      "tint": 0,
+      "vibrance": -100,
+      "saturation": -100
+    },
+    "hsl": {}
+  },
+  "instant-rainbow": {
+    "id": "instant-rainbow",
+    "name": "Vivid Chrome",
+    "desc": "채도 높은 팝 컬러와 선명한 직광 플래시",
+    "tone": {
+      "exposure": 0.2,
+      "contrast": 18,
+      "highlights": -10,
+      "shadows": -4,
+      "whites": 14,
+      "blacks": -6
+    },
+    "color": {
+      "temp": 2,
+      "tint": 1,
+      "vibrance": 22,
+      "saturation": 18
+    },
+    "hsl": {}
+  },
+  "instax-warm": {
+    "id": "instax-warm",
+    "name": "Warm Gold Emulsion",
+    "desc": "석양빛 앰버 유제와 포근한 감성 톤",
+    "tone": {
+      "exposure": 0.12,
+      "contrast": 14,
+      "highlights": -16,
+      "shadows": 10,
+      "whites": 8,
+      "blacks": 4
+    },
+    "color": {
+      "temp": 16,
+      "tint": -2,
+      "vibrance": 16,
+      "saturation": 14
+    },
+    "hsl": {}
+  },
+  "instax-cool": {
+    "id": "instax-cool",
+    "name": "Cyan Blue Hour",
+    "desc": "새벽녘 청량한 시안 블루 즉석 인화지",
+    "tone": {
+      "exposure": 0.1,
+      "contrast": 14,
+      "highlights": -12,
+      "shadows": 6,
+      "whites": 10,
+      "blacks": 2
+    },
+    "color": {
+      "temp": -10,
+      "tint": 2,
+      "vibrance": 10,
+      "saturation": 4
+    },
+    "hsl": {
+      "aqua": {
+        "hue": 0,
+        "sat": 22,
+        "lum": 8
+      }
+    }
+  },
+  "mju-standard": {
+    "id": "mju-standard",
+    "name": "μ Standard",
+    "desc": "자연스러운 스트리트 필름",
+    "tone": {
+      "exposure": 0.1,
+      "contrast": 14,
+      "highlights": -14,
+      "shadows": 6,
+      "whites": 8,
+      "blacks": -2
+    },
+    "color": {
+      "temp": 2,
+      "tint": 0,
+      "vibrance": 12,
+      "saturation": 8
+    },
+    "hsl": {}
+  },
+  "mju-night": {
+    "id": "mju-night",
+    "name": "Daylight Street Flash",
+    "desc": "긴자 스트리트 한낮의 직광 플래시",
+    "tone": {
+      "exposure": 0.24,
+      "contrast": 18,
+      "highlights": -8,
+      "shadows": -6,
+      "whites": 16,
+      "blacks": -6
+    },
+    "color": {
+      "temp": 2,
+      "tint": 1,
+      "vibrance": 16,
+      "saturation": 12
+    },
+    "hsl": {}
+  },
+  "mju-chrome": {
+    "id": "mju-chrome",
+    "name": "μ Chrome Slide",
+    "desc": "선명한 슬라이드 발색",
+    "tone": {
+      "exposure": 0.1,
+      "contrast": 16,
+      "highlights": -16,
+      "shadows": 4,
+      "whites": 12,
+      "blacks": -6
+    },
+    "color": {
+      "temp": 0,
+      "tint": 0,
+      "vibrance": 18,
+      "saturation": 14
+    },
+    "hsl": {}
+  },
+  "mju-gold": {
+    "id": "mju-gold",
+    "name": "μ Gold 200",
+    "desc": "황금빛 웜톤 네거티브",
+    "tone": {
+      "exposure": 0.12,
+      "contrast": 12,
+      "highlights": -14,
+      "shadows": 10,
+      "whites": 6,
+      "blacks": 2
+    },
+    "color": {
+      "temp": 12,
+      "tint": -1,
+      "vibrance": 14,
+      "saturation": 12
+    },
+    "hsl": {}
+  },
+  "mju-velvia": {
+    "id": "mju-velvia",
+    "name": "μ Slide Vivid",
+    "desc": "비비드 슬라이드 짙은 발색",
+    "tone": {
+      "exposure": 0.08,
+      "contrast": 18,
+      "highlights": -14,
+      "shadows": 2,
+      "whites": 12,
+      "blacks": -8
+    },
+    "color": {
+      "temp": -2,
+      "tint": -2,
+      "vibrance": 22,
+      "saturation": 18
+    },
+    "hsl": {}
+  },
+  "mju-mono": {
+    "id": "mju-mono",
+    "name": "μ Noir Contrast",
+    "desc": "강렬한 거리 스냅 흑백 톤",
+    "tone": {
+      "exposure": 0.06,
+      "contrast": 26,
+      "highlights": -18,
+      "shadows": -6,
+      "whites": 12,
+      "blacks": -12
+    },
+    "color": {
+      "temp": 0,
+      "tint": 0,
+      "vibrance": -100,
+      "saturation": -100
+    },
+    "hsl": {}
+  },
+  "zeiss-warm": {
+    "id": "zeiss-warm",
+    "name": "Zeiss Warm T*",
+    "desc": "칼자이스 묵직한 웜톤",
+    "tone": {
+      "exposure": 0.1,
+      "contrast": 16,
+      "highlights": -14,
+      "shadows": 6,
+      "whites": 8,
+      "blacks": -4
+    },
+    "color": {
+      "temp": 6,
+      "tint": 0,
+      "vibrance": 14,
+      "saturation": 8
+    },
+    "hsl": {}
+  },
+  "zeiss-shadow": {
+    "id": "zeiss-shadow",
+    "name": "T* Rich Shadow",
+    "desc": "풍부한 암부와 섬세한 하이라이트",
+    "tone": {
+      "exposure": 0.08,
+      "contrast": 18,
+      "highlights": -18,
+      "shadows": 8,
+      "whites": 6,
+      "blacks": -8
+    },
+    "color": {
+      "temp": 2,
+      "tint": 0,
+      "vibrance": 12,
+      "saturation": 6
+    },
+    "hsl": {}
+  },
+  "titanium-classic": {
+    "id": "titanium-classic",
+    "name": "Titanium Classic",
+    "desc": "티타늄 바디 클래식 룩",
+    "tone": {
+      "exposure": 0.12,
+      "contrast": 12,
+      "highlights": -12,
+      "shadows": 6,
+      "whites": 8,
+      "blacks": -2
+    },
+    "color": {
+      "temp": 4,
+      "tint": 1,
+      "vibrance": 12,
+      "saturation": 6
+    },
+    "hsl": {}
+  },
+  "zeiss-mono": {
+    "id": "zeiss-mono",
+    "name": "Zeiss T* B&W",
+    "desc": "독일 광학 깊은 흑백 계조",
+    "tone": {
+      "exposure": 0.06,
+      "contrast": 26,
+      "highlights": -18,
+      "shadows": -6,
+      "whites": 12,
+      "blacks": -12
+    },
+    "color": {
+      "temp": 0,
+      "tint": 0,
+      "vibrance": -100,
+      "saturation": -100
+    },
+    "hsl": {}
+  },
+  "zeiss-champagne": {
+    "id": "zeiss-champagne",
+    "name": "T2 Champagne Gold",
+    "desc": "샴페인 골드 럭셔리 티타늄 룩",
+    "tone": {
+      "exposure": 0.12,
+      "contrast": 14,
+      "highlights": -14,
+      "shadows": 8,
+      "whites": 10,
+      "blacks": -2
+    },
+    "color": {
+      "temp": 12,
+      "tint": -1,
+      "vibrance": 14,
+      "saturation": 10
+    },
+    "hsl": {}
+  },
+  "zeiss-emerald": {
+    "id": "zeiss-emerald",
+    "name": "Sonnar Emerald",
+    "desc": "조나 38mm 투명한 청록 섀도우",
+    "tone": {
+      "exposure": 0.08,
+      "contrast": 14,
+      "highlights": -14,
+      "shadows": 6,
+      "whites": 8,
+      "blacks": -4
+    },
+    "color": {
+      "temp": -6,
+      "tint": -3,
+      "vibrance": 12,
+      "saturation": 6
+    },
+    "hsl": {}
+  },
+  "gr-bw-high": {
+    "id": "gr-bw-high",
+    "name": "High-Contrast B&W",
+    "desc": "모리야마 풍 강렬한 흑백",
+    "tone": {
+      "exposure": 0.0,
+      "contrast": 36,
+      "highlights": -25,
+      "shadows": -14,
+      "whites": 18,
+      "blacks": -20
+    },
+    "color": {
+      "temp": 0,
+      "tint": 0,
+      "vibrance": -100,
+      "saturation": -100
+    },
+    "hsl": {}
+  },
+  "gr-positive": {
+    "id": "gr-positive",
+    "name": "Positive Film",
+    "desc": "특유의 포지티브 필름 발색",
+    "tone": {
+      "exposure": 0.1,
+      "contrast": 18,
+      "highlights": -14,
+      "shadows": 4,
+      "whites": 10,
+      "blacks": -6
+    },
+    "color": {
+      "temp": 3,
+      "tint": 1,
+      "vibrance": 16,
+      "saturation": 12
+    },
+    "hsl": {}
+  },
+  "gr-street": {
+    "id": "gr-street",
+    "name": "Street Snap",
+    "desc": "신속하고 날카로운 스냅 룩",
+    "tone": {
+      "exposure": 0.1,
+      "contrast": 16,
+      "highlights": -12,
+      "shadows": 4,
+      "whites": 8,
+      "blacks": -4
+    },
+    "color": {
+      "temp": 0,
+      "tint": 0,
+      "vibrance": 14,
+      "saturation": 8
+    },
+    "hsl": {}
+  },
+  "gr-cross": {
+    "id": "gr-cross",
+    "name": "Cross Process",
+    "desc": "그런지한 교차 현상 발색",
+    "tone": {
+      "exposure": 0.12,
+      "contrast": 22,
+      "highlights": -16,
+      "shadows": 8,
+      "whites": 12,
+      "blacks": -8
+    },
+    "color": {
+      "temp": -6,
+      "tint": 10,
+      "vibrance": 18,
+      "saturation": 14
+    },
+    "hsl": {}
+  },
+  "gr-bleach": {
+    "id": "gr-bleach",
+    "name": "Bleach Bypass",
+    "desc": "거친 은염 탈색의 묵직한 질감",
+    "tone": {
+      "exposure": 0.06,
+      "contrast": 24,
+      "highlights": -18,
+      "shadows": -8,
+      "whites": 10,
+      "blacks": -10
+    },
+    "color": {
+      "temp": -2,
+      "tint": 0,
+      "vibrance": -35,
+      "saturation": -45
+    },
+    "hsl": {}
+  },
+  "gr-amber": {
+    "id": "gr-amber",
+    "name": "Amber Street 28",
+    "desc": "골목길 가로등 앰버 스냅",
+    "tone": {
+      "exposure": 0.1,
+      "contrast": 14,
+      "highlights": -14,
+      "shadows": 8,
+      "whites": 6,
+      "blacks": -2
+    },
+    "color": {
+      "temp": 16,
+      "tint": -1,
+      "vibrance": 14,
+      "saturation": 10
+    },
+    "hsl": {}
+  },
+  "city-sunset": {
+    "id": "city-sunset",
+    "name": "Shonan Sunset 1986",
+    "desc": "나가이 히로시 감성의 쇼난 코스트 샴페인 선셋과 청명한 하늘",
+    "tone": {
+      "exposure": 0.14,
+      "contrast": 16,
+      "highlights": -14,
+      "shadows": 8,
+      "whites": 10,
+      "blacks": -4
+    },
+    "color": {
+      "temp": 16,
+      "tint": -2,
+      "vibrance": 22,
+      "saturation": 18
+    },
+    "hsl": {
+      "orange": {
+        "hue": -4,
+        "sat": 24,
+        "lum": 14
+      },
+      "blue": {
+        "hue": 0,
+        "sat": 22,
+        "lum": 8
+      }
+    }
+  },
+  "city-tokyo": {
+    "id": "city-tokyo",
+    "name": "Showa Idol Glow",
+    "desc": "80s 쇼와 아이돌 앨범 자켓의 투명하고 화사한 도자기 복숭아빛 피부",
+    "tone": {
+      "exposure": 0.18,
+      "contrast": 8,
+      "highlights": -16,
+      "shadows": 10,
+      "whites": 8,
+      "blacks": 0
+    },
+    "color": {
+      "temp": 4,
+      "tint": 2,
+      "vibrance": 14,
+      "saturation": 10
+    },
+    "hsl": {
+      "red": {
+        "hue": 2,
+        "sat": 14,
+        "lum": 12
+      }
+    }
+  },
+  "city-pastel": {
+    "id": "city-pastel",
+    "name": "Pacific Breeze",
+    "desc": "타츠로 야마시타 감성의 눈부신 한낮 코발트 블루와 청량한 해변 바람",
+    "tone": {
+      "exposure": 0.12,
+      "contrast": 12,
+      "highlights": -14,
+      "shadows": 8,
+      "whites": 10,
+      "blacks": -2
+    },
+    "color": {
+      "temp": -6,
+      "tint": 0,
+      "vibrance": 18,
+      "saturation": 14
+    },
+    "hsl": {
+      "blue": {
+        "hue": 0,
+        "sat": 26,
+        "lum": 10
+      }
+    }
+  },
+  "city-plastic": {
+    "id": "city-plastic",
+    "name": "Plastic Love '88",
+    "desc": "타케우치 마리야 감성의 감미롭고 온화한 80s 아날로그 카세트 질감",
+    "tone": {
+      "exposure": 0.1,
+      "contrast": 10,
+      "highlights": -14,
+      "shadows": 12,
+      "whites": 6,
+      "blacks": 4
+    },
+    "color": {
+      "temp": 8,
+      "tint": 0,
+      "vibrance": 12,
+      "saturation": 8
+    },
+    "hsl": {}
+  },
+  "city-resort": {
+    "id": "city-resort",
+    "name": "Karuizawa '87",
+    "desc": "가루이자와 버블 피서지 별장 맑고 투명한 테라스 햇살 & 민트 그린",
+    "tone": {
+      "exposure": 0.14,
+      "contrast": 12,
+      "highlights": -12,
+      "shadows": 8,
+      "whites": 8,
+      "blacks": -2
+    },
+    "color": {
+      "temp": 2,
+      "tint": -4,
+      "vibrance": 16,
+      "saturation": 12
+    },
+    "hsl": {
+      "green": {
+        "hue": -4,
+        "sat": 22,
+        "lum": 10
+      }
+    }
+  },
+  "city-midnight": {
+    "id": "city-midnight",
+    "name": "Roppongi Drive",
+    "desc": "심야 롯폰기 하이웨이 시티라이트 네온 마젠타 & 코발트 앰비언트",
+    "tone": {
+      "exposure": 0.1,
+      "contrast": 20,
+      "highlights": -14,
+      "shadows": 4,
+      "whites": 12,
+      "blacks": -8
+    },
+    "color": {
+      "temp": -8,
+      "tint": 14,
+      "vibrance": 20,
+      "saturation": 16
+    },
+    "hsl": {
+      "magenta": {
+        "hue": 0,
+        "sat": 28,
+        "lum": 12
+      }
+    }
+  },
+  "film-cinestill": {
+    "id": "film-cinestill",
+    "name": "CineStill 800T",
+    "desc": "광원 붉은 할레이션 번짐과 텅스텐 시네마 감성",
+    "tone": {
+      "exposure": 0.12,
+      "contrast": 14,
+      "highlights": -16,
+      "shadows": 8,
+      "whites": 10,
+      "blacks": -4
+    },
+    "color": {
+      "temp": -8,
+      "tint": 6,
+      "vibrance": 14,
+      "saturation": 8
+    },
+    "hsl": {
+      "red": {
+        "hue": 0,
+        "sat": 22,
+        "lum": 10
+      }
+    }
+  },
+  "film-portra": {
+    "id": "film-portra",
+    "name": "Portra 400",
+    "desc": "따뜻한 골든 옐로우 피부톤과 부드러운 하이라이트 롤오프",
+    "tone": {
+      "exposure": 0.16,
+      "contrast": 10,
+      "highlights": -14,
+      "shadows": 10,
+      "whites": 6,
+      "blacks": 0
+    },
+    "color": {
+      "temp": 6,
+      "tint": 1,
+      "vibrance": 14,
+      "saturation": 8
+    },
+    "hsl": {
+      "orange": {
+        "hue": 2,
+        "sat": 12,
+        "lum": 16
+      }
+    }
+  },
+  "film-ektar": {
+    "id": "film-ektar",
+    "name": "Ektar 100",
+    "desc": "선명하고 강렬한 원색 콘트라스트",
+    "tone": {
+      "exposure": 0.1,
+      "contrast": 20,
+      "highlights": -12,
+      "shadows": 4,
+      "whites": 12,
+      "blacks": -6
+    },
+    "color": {
+      "temp": 2,
+      "tint": 0,
+      "vibrance": 22,
+      "saturation": 18
+    },
+    "hsl": {}
+  },
+  "film-superia": {
+    "id": "film-superia",
+    "name": "Superia 400",
+    "desc": "특유의 에메랄드 그린 섀도우",
+    "tone": {
+      "exposure": 0.1,
+      "contrast": 14,
+      "highlights": -12,
+      "shadows": 6,
+      "whites": 8,
+      "blacks": -2
+    },
+    "color": {
+      "temp": -4,
+      "tint": -4,
+      "vibrance": 16,
+      "saturation": 12
+    },
+    "hsl": {
+      "green": {
+        "hue": -8,
+        "sat": 22,
+        "lum": 8
+      }
+    }
+  },
+  "film-kodachrome": {
+    "id": "film-kodachrome",
+    "name": "Kodachrome 64",
+    "desc": "전설의 코다크롬 64 슬라이드 불멸의 원색",
+    "tone": {
+      "exposure": 0.12,
+      "contrast": 16,
+      "highlights": -14,
+      "shadows": 6,
+      "whites": 10,
+      "blacks": -4
+    },
+    "color": {
+      "temp": 4,
+      "tint": 1,
+      "vibrance": 18,
+      "saturation": 14
+    },
+    "hsl": {}
+  },
+  "film-velvia": {
+    "id": "film-velvia",
+    "name": "Velvia 50 Vivid",
+    "desc": "초고채도 풍경/인물 슬라이드 압도적 발색",
+    "tone": {
+      "exposure": 0.08,
+      "contrast": 20,
+      "highlights": -16,
+      "shadows": 2,
+      "whites": 12,
+      "blacks": -8
+    },
+    "color": {
+      "temp": -2,
+      "tint": -2,
+      "vibrance": 24,
+      "saturation": 20
+    },
+    "hsl": {}
+  },
+  "hassel-planar": {
+    "id": "hassel-planar",
+    "name": "Planar 80mm Pop",
+    "desc": "중형 렌즈 인물 분리감과 압도적 마이크로콘트라스트",
+    "tone": {
+      "exposure": 0.12,
+      "contrast": 16,
+      "highlights": -16,
+      "shadows": 6,
+      "whites": 10,
+      "blacks": -4
+    },
+    "color": {
+      "temp": 2,
+      "tint": 0,
+      "vibrance": 14,
+      "saturation": 8
+    },
+    "hsl": {}
+  },
+  "hassel-trix": {
+    "id": "hassel-trix",
+    "name": "Tri-X 400 MF",
+    "desc": "중형 롤필름 깊은 은염 흑백",
+    "tone": {
+      "exposure": 0.06,
+      "contrast": 24,
+      "highlights": -18,
+      "shadows": -4,
+      "whites": 10,
+      "blacks": -10
+    },
+    "color": {
+      "temp": 0,
+      "tint": 0,
+      "vibrance": -100,
+      "saturation": -100
+    },
+    "hsl": {}
+  },
+  "hassel-astia": {
+    "id": "hassel-astia",
+    "name": "Astia 100F Slide",
+    "desc": "투명하고 부드러운 스킨톤의 포트레이트 슬라이드",
+    "tone": {
+      "exposure": 0.16,
+      "contrast": 8,
+      "highlights": -14,
+      "shadows": 8,
+      "whites": 6,
+      "blacks": 0
+    },
+    "color": {
+      "temp": 3,
+      "tint": 1,
+      "vibrance": 12,
+      "saturation": 6
+    },
+    "hsl": {}
+  },
+  "hassel-chromium": {
+    "id": "hassel-chromium",
+    "name": "Chromium Silver",
+    "desc": "북유럽 쿨톤 메탈릭 질감과 맑은 콘트라스트",
+    "tone": {
+      "exposure": 0.1,
+      "contrast": 14,
+      "highlights": -14,
+      "shadows": 4,
+      "whites": 12,
+      "blacks": -4
+    },
+    "color": {
+      "temp": -6,
+      "tint": 2,
+      "vibrance": 8,
+      "saturation": -6
+    },
+    "hsl": {}
+  },
+  "hassel-gold": {
+    "id": "hassel-gold",
+    "name": "Portra 160 MF Gold",
+    "desc": "중형 롤필름 따뜻한 포트레이트 골드 스튜디오",
+    "tone": {
+      "exposure": 0.12,
+      "contrast": 12,
+      "highlights": -14,
+      "shadows": 8,
+      "whites": 8,
+      "blacks": -2
+    },
+    "color": {
+      "temp": 8,
+      "tint": 0,
+      "vibrance": 14,
+      "saturation": 10
+    },
+    "hsl": {}
+  },
+  "hassel-mono": {
+    "id": "hassel-mono",
+    "name": "Acros 100 Precision",
+    "desc": "초미립자 정밀 흑백 해상력",
+    "tone": {
+      "exposure": 0.06,
+      "contrast": 28,
+      "highlights": -20,
+      "shadows": -6,
+      "whites": 12,
+      "blacks": -12
+    },
+    "color": {
+      "temp": 0,
+      "tint": 0,
+      "vibrance": -100,
+      "saturation": -100
+    },
+    "hsl": {}
+  },
+  "sx70-fade": {
+    "id": "sx70-fade",
+    "name": "SX-70 Vintage Fade",
+    "desc": "1970년대 따뜻하게 바랜 유제와 매트 섀도우",
+    "tone": {
+      "exposure": 0.14,
+      "contrast": -10,
+      "highlights": -16,
+      "shadows": 14,
+      "whites": -2,
+      "blacks": 16
+    },
+    "color": {
+      "temp": 10,
+      "tint": 0,
+      "vibrance": 8,
+      "saturation": 2
+    },
+    "hsl": {}
+  },
+  "sx70-color600": {
+    "id": "sx70-color600",
+    "name": "Color Protection 600",
+    "desc": "사이언/마젠타 즉석사진 화학 발색",
+    "tone": {
+      "exposure": 0.12,
+      "contrast": 14,
+      "highlights": -12,
+      "shadows": 6,
+      "whites": 10,
+      "blacks": 2
+    },
+    "color": {
+      "temp": 2,
+      "tint": 4,
+      "vibrance": 16,
+      "saturation": 12
+    },
+    "hsl": {}
+  },
+  "sx70-expired": {
+    "id": "sx70-expired",
+    "name": "Expired Film 1979",
+    "desc": "유통기한 지난 필름의 황록색 빈티지 변색",
+    "tone": {
+      "exposure": 0.1,
+      "contrast": -6,
+      "highlights": -14,
+      "shadows": 12,
+      "whites": 0,
+      "blacks": 14
+    },
+    "color": {
+      "temp": 12,
+      "tint": -8,
+      "vibrance": 8,
+      "saturation": 4
+    },
+    "hsl": {}
+  },
+  "sx70-sepia": {
+    "id": "sx70-sepia",
+    "name": "Sepia Dream",
+    "desc": "클래식 브라운 세피아 모노크롬",
+    "tone": {
+      "exposure": 0.08,
+      "contrast": 18,
+      "highlights": -14,
+      "shadows": 4,
+      "whites": 8,
+      "blacks": -4
+    },
+    "color": {
+      "temp": 24,
+      "tint": 0,
+      "vibrance": -80,
+      "saturation": -85
+    },
+    "hsl": {}
+  },
+  "sx70-cyan": {
+    "id": "sx70-cyan",
+    "name": "Cool Instant Cyan",
+    "desc": "청량하고 서늘한 즉석 사이언 틴트",
+    "tone": {
+      "exposure": 0.1,
+      "contrast": 12,
+      "highlights": -12,
+      "shadows": 8,
+      "whites": 8,
+      "blacks": 2
+    },
+    "color": {
+      "temp": -12,
+      "tint": 2,
+      "vibrance": 10,
+      "saturation": 4
+    },
+    "hsl": {
+      "aqua": {
+        "hue": 0,
+        "sat": 22,
+        "lum": 8
+      }
+    }
+  },
+  "sx70-warm": {
+    "id": "sx70-warm",
+    "name": "Golden Polaroid",
+    "desc": "풍부한 호박빛 골든 아워 즉석사진",
+    "tone": {
+      "exposure": 0.14,
+      "contrast": 14,
+      "highlights": -16,
+      "shadows": 10,
+      "whites": 8,
+      "blacks": 0
+    },
+    "color": {
+      "temp": 18,
+      "tint": -2,
+      "vibrance": 18,
+      "saturation": 14
+    },
+    "hsl": {}
+  },
+  "samurai-half": {
+    "id": "samurai-half",
+    "name": "Half-Frame Crisp 72",
+    "desc": "야시카 광학 줌 렌즈의 또렷한 선예도와 세로 분할 72컷",
+    "tone": {
+      "exposure": 0.12,
+      "contrast": 16,
+      "highlights": -14,
+      "shadows": 6,
+      "whites": 10,
+      "blacks": -4
+    },
+    "color": {
+      "temp": 2,
+      "tint": 0,
+      "vibrance": 14,
+      "saturation": 8
+    },
+    "hsl": {}
+  },
+  "samurai-cyber": {
+    "id": "samurai-cyber",
+    "name": "Bubble High-Tech '88",
+    "desc": "1988년 도쿄 하이테크 미래지향 에메랄드 HUD와 맑은 선예도",
+    "tone": {
+      "exposure": 0.14,
+      "contrast": 18,
+      "highlights": -12,
+      "shadows": 4,
+      "whites": 12,
+      "blacks": -4
+    },
+    "color": {
+      "temp": -4,
+      "tint": -4,
+      "vibrance": 18,
+      "saturation": 14
+    },
+    "hsl": {
+      "green": {
+        "hue": -6,
+        "sat": 20,
+        "lum": 8
+      }
+    }
+  },
+  "samurai-tokyo": {
+    "id": "samurai-tokyo",
+    "name": "Shinjuku Golden Hour",
+    "desc": "신주쿠 마천루에 반사되는 찬란한 황혼의 황금빛 햇살",
+    "tone": {
+      "exposure": 0.12,
+      "contrast": 14,
+      "highlights": -14,
+      "shadows": 8,
+      "whites": 8,
+      "blacks": -2
+    },
+    "color": {
+      "temp": 14,
+      "tint": -1,
+      "vibrance": 16,
+      "saturation": 12
+    },
+    "hsl": {}
+  },
+  "samurai-titanium": {
+    "id": "samurai-titanium",
+    "name": "Ryuichi B&W 1988",
+    "desc": "80s 뉴웨이브 사카모토 류이치 감성의 하이콘트라스트 흑백",
+    "tone": {
+      "exposure": 0.06,
+      "contrast": 28,
+      "highlights": -20,
+      "shadows": -6,
+      "whites": 12,
+      "blacks": -12
+    },
+    "color": {
+      "temp": 0,
+      "tint": 0,
+      "vibrance": -100,
+      "saturation": -100
+    },
+    "hsl": {}
+  },
+  "samurai-macro": {
+    "id": "samurai-macro",
+    "name": "Yashica Macro Pop",
+    "desc": "야시카 매크로 렌즈의 극대화된 펀치감과 컬러 팝",
+    "tone": {
+      "exposure": 0.14,
+      "contrast": 20,
+      "highlights": -10,
+      "shadows": 4,
+      "whites": 12,
+      "blacks": -6
+    },
+    "color": {
+      "temp": 2,
+      "tint": 1,
+      "vibrance": 20,
+      "saturation": 16
+    },
+    "hsl": {}
+  },
+  "samurai-night": {
+    "id": "samurai-night",
+    "name": "Tokyo Night Flight",
+    "desc": "나이트 플라이트 시티 나이트뷰 쿨톤 하이테크 네온",
+    "tone": {
+      "exposure": 0.1,
+      "contrast": 16,
+      "highlights": -14,
+      "shadows": 4,
+      "whites": 10,
+      "blacks": -4
+    },
+    "color": {
+      "temp": -8,
+      "tint": 4,
+      "vibrance": 12,
+      "saturation": 6
+    },
+    "hsl": {}
+  }
+};
+
 // Centralized Filter Selector with Graphic Swatch Sync & Auto-Center Scroll
 function selectCameraFilter(filterKey) {
   const cam = CAMERAS[state.activeCamera];
@@ -1968,26 +3881,15 @@ function selectCameraFilter(filterKey) {
 
   // Calibrate Parametric Recipe to Sub-Filter Photographic Spec
   if (window.ParametricColorEngine && !state.isCustomRecipe) {
-    const baseRec = window.ParametricColorEngine.getRecipeForCamera(state.activeCamera);
-    if (baseRec) {
-      const tunedRec = JSON.parse(JSON.stringify(baseRec));
-      if (filterKey.includes('flash') || filterKey.includes('sharp')) {
-        tunedRec.tone.contrast = (tunedRec.tone.contrast || 0) + 6;
-        tunedRec.tone.whites = (tunedRec.tone.whites || 0) + 4;
-        tunedRec.color.vibrance = (tunedRec.color.vibrance || 0) + 4;
-      } else if (filterKey.includes('cool') || filterKey.includes('silver') || filterKey.includes('cyan')) {
-        tunedRec.color.temp = (tunedRec.color.temp || 0) - 5;
-        tunedRec.color.tint = (tunedRec.color.tint || 0) + 2;
-      } else if (filterKey.includes('warm') || filterKey.includes('gold') || filterKey.includes('sunset')) {
-        tunedRec.color.temp = (tunedRec.color.temp || 0) + 5;
-        tunedRec.tone.shadows = (tunedRec.tone.shadows || 0) + 6;
-      } else if (filterKey.includes('pastel') || filterKey.includes('haze') || filterKey.includes('fade')) {
-        tunedRec.tone.contrast = (tunedRec.tone.contrast || 0) - 8;
-        tunedRec.tone.blacks = (tunedRec.tone.blacks || 0) + 8;
-      } else if (filterKey.includes('mono') || filterKey.includes('bw') || filterKey.includes('trix') || filterKey === 'samurai-titanium' || filterKey === 'sx70-sepia') {
-        tunedRec.color.saturation = -100;
+    const subRecipe = SUB_FILTER_RECIPES[filterKey];
+    if (subRecipe) {
+      window.ParametricColorEngine.setRecipe(subRecipe);
+      if (typeof syncProRecipeSlidersToUI === 'function') {
+        syncProRecipeSlidersToUI(subRecipe);
       }
-      window.ParametricColorEngine.setRecipe(tunedRec);
+    } else {
+      const baseRec = window.ParametricColorEngine.getRecipeForCamera(state.activeCamera);
+      if (baseRec) window.ParametricColorEngine.setRecipe(baseRec);
     }
   }
 
@@ -1996,6 +3898,9 @@ function selectCameraFilter(filterKey) {
     if (modelCanvas) renderStudioModel(modelCanvas, state.retouchTone);
   }
   applyCurrentCameraFilter();
+  if (typeof updateRecipeHudUI === 'function') {
+    updateRecipeHudUI();
+  }
 
   // Update active state on chips in current drawer & smooth center scroll
   const drawer = document.getElementById(cam.drawerId);
@@ -2912,11 +4817,8 @@ function executeCapture() {
 
   // 3. Draw Subject (Transparent Model or Mirrored/Unmirrored Webcam)
   const currentZoom = Math.max(1.0, Math.min(5.0, state.fimoZoomLevel || 1.0));
-  const baseCaptureFilter = (activeFilter && activeFilter !== 'none') ? activeFilter : '';
   const flashFilter = (state.flashMode === 'on') ? 'brightness(1.15) contrast(1.08)' : '';
-  const subjectFilter = state.isCustomRecipe
-    ? (flashFilter || 'none')
-    : ([baseCaptureFilter, flashFilter].filter(Boolean).join(' ') || 'none');
+  const subjectFilter = flashFilter || 'none';
 
   if (state.cameraSource === 'webcam') {
     const video = document.getElementById('camera-video');
@@ -3017,12 +4919,9 @@ function executeCapture() {
 
   // 4.5. Scientific Photographic Colorimetry & Film Emulsion Processing
   if (window.FilmSpectralEngine) {
-    const isCustom = !!state.isCustomRecipe;
-    const captureRecipe = (isCustom && window.ParametricColorEngine)
-      ? window.ParametricColorEngine.activeRecipe
-      : null;
+    const captureRecipe = window.ParametricColorEngine ? window.ParametricColorEngine.activeRecipe : null;
     window.FilmSpectralEngine.processCanvas(captureCanvas, cam.id, {
-      skipParametric: !isCustom,
+      skipParametric: false,
       recipe: captureRecipe,
       grainIntensity: (cam.id === 'passport-id') ? 0 : 1.0
     });
@@ -6341,6 +8240,9 @@ function updateRecipeHudUI() {
   const ct = (rec.tone?.contrast >= 0 ? '+' : '') + (rec.tone?.contrast || 0);
   const name = rec.name || (state.isCustomRecipe ? '커스텀 조율 레시피' : '프로 레시피');
   label.textContent = `${name} (${ev} EV / ${ct} CONTRAST)`;
+
+  // Keep viewfinder clean and pristine in standard camera mode: show pill only when customizing or comparing
+  pill.style.display = (state.isCustomRecipe || state.isBeforeModeActive) ? 'flex' : 'none';
 }
 
 function setBeforeCompareMode(active) {
@@ -6356,8 +8258,10 @@ function setBeforeCompareMode(active) {
     if (active) {
       label.textContent = '● [BEFORE] 원본 표준 센서 색감 (RAW 0.0)';
       label.style.color = '#f97316';
+      pill.style.display = 'flex';
     } else {
       label.style.color = '#e2e8f0';
+      pill.style.display = state.isCustomRecipe ? 'flex' : 'none';
       updateRecipeHudUI();
     }
   }
