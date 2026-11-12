@@ -61,13 +61,20 @@ async def main():
         f'http://127.0.0.1:{port}/index.html'
     ])
 
-    await asyncio.sleep(2.0)
     msg_id = 1
 
     try:
-        res = urllib.request.urlopen(f'http://127.0.0.1:{debug_port}/json').read()
-        targets = json.loads(res.decode('utf-8'))
-        page_target = next((t for t in targets if t.get('type') == 'page'), None)
+        page_target = None
+        for _ in range(10):
+            try:
+                res = urllib.request.urlopen(f'http://127.0.0.1:{debug_port}/json').read()
+                targets = json.loads(res.decode('utf-8'))
+                page_target = next((t for t in targets if t.get('type') == 'page'), None)
+                if page_target:
+                    break
+            except Exception:
+                await asyncio.sleep(0.5)
+
         if not page_target:
             raise RuntimeError("No page target found")
 
