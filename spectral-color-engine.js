@@ -23,55 +23,55 @@
     // 1. Fuji QuickSnap 1986 (Fujicolor Super HG 400 Emulsion + 32mm F/10 Plastic Lens)
     'fuji-quicksnap': {
       spectralMatrix: [
-        [1.00, -0.01, -0.01],
-        [-0.01, 1.03, -0.01],
-        [-0.01, -0.01, 1.02]
+        [0.98, -0.01, -0.01],
+        [-0.01, 1.05, -0.01],
+        [-0.01, -0.01, 1.03]
       ],
       hdCurves: {
         r: { toe: 0.020, gamma: 1.10, shoulder: 0.96 },
         g: { toe: 0.018, gamma: 1.12, shoulder: 0.96 }, // Peak green quantum efficiency & natural sky blue
         b: { toe: 0.020, gamma: 1.10, shoulder: 0.96 }  // Clean shadow density without milky cast
       },
-      grain: { amount: 0.035, roughness: 0.7, colorGrain: false }, // Subtle micro-grain
+      grain: { amount: 0.14, roughness: 0.7, colorGrain: false }, // Rich authentic 400 ISO silver halide grain
       chromaticAberration: 0.0,
-      vignette: 0.16,
+      vignette: 0.22,
       halation: null
     },
 
     // 2. Kodak Portra 400 / OldFilm 35mm (Kodak Vision/Portra T-GRAIN Emulsion)
     'oldfilm-35mm': {
       spectralMatrix: [
-        [1.03, -0.01, -0.01],
+        [1.05, -0.01, -0.01],
         [-0.01, 1.02, -0.01],
-        [-0.01, -0.02, 1.00]
+        [-0.01, -0.02, 0.98]
       ],
       hdCurves: {
         r: { toe: 0.022, gamma: 1.06, shoulder: 0.96 }, // Warm golden skin tone preservation
         g: { toe: 0.018, gamma: 1.04, shoulder: 0.96 },
         b: { toe: 0.016, gamma: 1.02, shoulder: 0.96 }
       },
-      grain: { amount: 0.038, roughness: 0.7, colorGrain: false },
+      grain: { amount: 0.15, roughness: 0.7, colorGrain: false },
       chromaticAberration: 0.0,
-      vignette: 0.16,
-      halation: null
+      vignette: 0.20,
+      halation: { threshold: 0.88, radius: 16, color: [255, 60, 20, 0.28] }
     },
 
     // 3. Sony Cyber-shot DSC-P10 / Night Tape 98 (NewJeans "Ditto" '98 Winter VHS & Cool-Warm Nostalgia)
     'sony-cybershot': {
       spectralMatrix: [
-        [1.02, -0.01, -0.01],
-        [-0.01, 1.03, -0.01],
-        [-0.01, -0.01, 1.05]
+        [1.01, -0.01, -0.01],
+        [-0.01, 1.02, -0.01],
+        [-0.01, -0.01, 1.06]
       ],
       hdCurves: {
         r: { toe: 0.022, gamma: 1.08, shoulder: 0.92 }, // Soft winter skin warmth & creamy highlight bloom
         g: { toe: 0.024, gamma: 1.10, shoulder: 0.92 }, // Nostalgic muted cyan-grey shadow toe
         b: { toe: 0.028, gamma: 1.12, shoulder: 0.91 }  // '98 Winter VHS cool shadow depth
       },
-      grain: { amount: 0.032, roughness: 0.6, colorGrain: false },
+      grain: { amount: 0.10, roughness: 0.5, colorGrain: false },
       chromaticAberration: 0.0,
-      vignette: 0.16,
-      halation: { threshold: 0.95, radius: 14, color: [255, 160, 200, 0.16] }
+      vignette: 0.18,
+      halation: { threshold: 0.88, radius: 14, color: [220, 240, 255, 0.22] }
     },
 
     // 4. Olympus μ [mju:]-II (Stylus Epic 35mm F/2.8 4-element Glass)
@@ -86,9 +86,9 @@
         g: { toe: 0.016, gamma: 1.14, shoulder: 0.95 },
         b: { toe: 0.018, gamma: 1.10, shoulder: 0.95 }
       },
-      grain: { amount: 0.035, roughness: 0.7, colorGrain: false },
+      grain: { amount: 0.13, roughness: 0.7, colorGrain: false },
       chromaticAberration: 0.0,
-      vignette: 0.16,
+      vignette: 0.20,
       halation: null
     },
 
@@ -104,9 +104,9 @@
         g: { toe: 0.010, gamma: 1.14, shoulder: 0.96 },
         b: { toe: 0.012, gamma: 1.12, shoulder: 0.96 }
       },
-      grain: { amount: 0.028, roughness: 0.6, colorGrain: false },
+      grain: { amount: 0.12, roughness: 0.6, colorGrain: false },
       chromaticAberration: 0.0,
-      vignette: 0.14,
+      vignette: 0.18,
       halation: null
     },
 
@@ -122,9 +122,9 @@
         g: { toe: 0.010, gamma: 1.18, shoulder: 0.96 },
         b: { toe: 0.010, gamma: 1.18, shoulder: 0.96 }
       },
-      grain: { amount: 0.035, roughness: 0.7, colorGrain: false },
+      grain: { amount: 0.14, roughness: 0.7, colorGrain: false },
       chromaticAberration: 0.0,
-      vignette: 0.14,
+      vignette: 0.18,
       halation: null
     },
 
@@ -140,9 +140,9 @@
         g: { toe: 0.014, gamma: 1.16, shoulder: 0.95 },
         b: { toe: 0.016, gamma: 1.14, shoulder: 0.95 }
       },
-      grain: { amount: 0.035, roughness: 0.7, colorGrain: false },
+      grain: { amount: 0.15, roughness: 0.75, colorGrain: false },
       chromaticAberration: 0.0,
-      vignette: 0.16,
+      vignette: 0.22,
       halation: null
     },
 
@@ -158,9 +158,9 @@
         g: { toe: 0.048, gamma: 1.06, shoulder: 0.86 },
         b: { toe: 0.042, gamma: 1.02, shoulder: 0.85 }
       },
-      grain: { amount: 0.042, roughness: 0.7, colorGrain: false }, // Broad chemical paste grain
+      grain: { amount: 0.16, roughness: 0.7, colorGrain: false }, // Broad chemical paste grain
       chromaticAberration: 0.003, // 116mm 4-element glass edge dispersion
-      vignette: 0.24, // Iconic square format corner falloff
+      vignette: 0.26, // Iconic square format corner falloff
       halation: { threshold: 0.82, radius: 18, color: [255, 215, 160, 0.32] } // Dreamy 1970s warm halation glow
     },
 
@@ -176,9 +176,9 @@
         g: { toe: 0.018, gamma: 1.14, shoulder: 0.94 },
         b: { toe: 0.022, gamma: 1.10, shoulder: 0.94 }
       },
-      grain: { amount: 0.040, roughness: 0.8, colorGrain: false },
+      grain: { amount: 0.15, roughness: 0.8, colorGrain: false },
       chromaticAberration: 0.0,
-      vignette: 0.16,
+      vignette: 0.22,
       halation: null
     },
 
@@ -194,9 +194,9 @@
         g: { toe: 0.022, gamma: 1.09, shoulder: 0.91 },
         b: { toe: 0.025, gamma: 1.11, shoulder: 0.90 }
       },
-      grain: { amount: 0.032, roughness: 0.5, colorGrain: false },
+      grain: { amount: 0.11, roughness: 0.5, colorGrain: false },
       chromaticAberration: 0.0,
-      vignette: 0.15,
+      vignette: 0.18,
       halation: null
     },
 
@@ -212,9 +212,9 @@
         g: { toe: 0.008, gamma: 1.10, shoulder: 0.98 },
         b: { toe: 0.009, gamma: 1.08, shoulder: 0.98 }
       },
-      grain: { amount: 0.020, roughness: 0.5, colorGrain: false },
+      grain: { amount: 0.08, roughness: 0.5, colorGrain: false },
       chromaticAberration: 0.0,
-      vignette: 0.12,
+      vignette: 0.14,
       halation: null
     },
 
@@ -230,9 +230,9 @@
         g: { toe: 0.020, gamma: 1.10, shoulder: 0.93 },
         b: { toe: 0.026, gamma: 1.12, shoulder: 0.94 }
       },
-      grain: { amount: 0.036, roughness: 0.7, colorGrain: false },
+      grain: { amount: 0.13, roughness: 0.7, colorGrain: false },
       chromaticAberration: 0.0,
-      vignette: 0.16,
+      vignette: 0.20,
       halation: null
     },
 
@@ -248,10 +248,10 @@
         g: { toe: 0.012, gamma: 1.14, shoulder: 0.94 },
         b: { toe: 0.016, gamma: 1.12, shoulder: 0.92 }
       },
-      grain: { amount: 0.025, roughness: 0.5, colorGrain: false },
+      grain: { amount: 0.09, roughness: 0.5, colorGrain: false },
       chromaticAberration: 0.0,
-      vignette: 0.15,
-      halation: null
+      vignette: 0.18,
+      halation: { threshold: 0.86, radius: 14, color: [255, 220, 220, 0.20] }
     },
 
     // 14. Fujifilm Instax Mini (Instant Color Chemical Emulsion with Cyan-Teal Shadow Tone & Soft Flash Glow)
@@ -266,9 +266,9 @@
         g: { toe: 0.040, gamma: 1.20, shoulder: 0.88 },
         b: { toe: 0.052, gamma: 1.15, shoulder: 0.87 }  // Raised blue-cyan toe for chemical paper look
       },
-      grain: { amount: 0.038, roughness: 0.65, colorGrain: false }, // Physical dye diffusion texture
+      grain: { amount: 0.14, roughness: 0.65, colorGrain: false }, // Physical dye diffusion texture
       chromaticAberration: 0.002, // Subtle plastic lens dispersion
-      vignette: 0.22, // Instant camera plastic lens corner falloff
+      vignette: 0.24, // Instant camera plastic lens corner falloff
       halation: { threshold: 0.84, radius: 16, color: [255, 230, 200, 0.28] } // Creamy flash highlight bloom
     },
 
@@ -284,7 +284,7 @@
         g: { toe: 0.008, gamma: 1.05, shoulder: 0.98 },
         b: { toe: 0.008, gamma: 1.05, shoulder: 0.98 }
       },
-      grain: { amount: 0.015, roughness: 0.4, colorGrain: false },
+      grain: { amount: 0.04, roughness: 0.4, colorGrain: false },
       chromaticAberration: 0.0,
       vignette: 0.10,
       halation: null
@@ -302,7 +302,7 @@
         g: { toe: 0.005, gamma: 1.02, shoulder: 0.99 },
         b: { toe: 0.005, gamma: 1.02, shoulder: 0.99 }
       },
-      grain: { amount: 0.008, roughness: 0.3, colorGrain: false },
+      grain: { amount: 0.0, roughness: 0.0, colorGrain: false },
       chromaticAberration: 0.0,
       vignette: 0.00,
       halation: null
@@ -533,10 +533,38 @@
           }
         }
 
+        // Optical Lens Radial Vignette (Authentic 35mm / instant camera falloff)
+        const profile = PROFILES[camId] || PROFILES['fuji-quicksnap'];
+        const vignetteAmt = (camId === 'passport-id' || options.skipVignette) ? 0 : (profile.vignette || 0.18);
+        if (vignetteAmt > 0.01 && canvas.width > 20 && canvas.height > 20) {
+          const data = imgData.data;
+          const width = canvas.width;
+          const height = canvas.height;
+          const cx = width / 2;
+          const cy = height / 2;
+          const maxDist = Math.hypot(cx, cy);
+          for (let y = 0; y < height; y++) {
+            const dy = y - cy;
+            const rowIdx = y * width;
+            for (let x = 0; x < width; x++) {
+              const dx = x - cx;
+              const dist = Math.hypot(dx, dy) / maxDist;
+              // Smooth cosine-fourth falloff starting after 45% radius
+              if (dist > 0.45) {
+                const normDist = (dist - 0.45) / 0.55;
+                const vignFactor = 1.0 - vignetteAmt * Math.pow(normDist, 2.0);
+                const pIdx = (rowIdx + x) * 4;
+                data[pIdx]     = Math.min(255, Math.max(0, Math.round(data[pIdx] * vignFactor)));
+                data[pIdx + 1] = Math.min(255, Math.max(0, Math.round(data[pIdx + 1] * vignFactor)));
+                data[pIdx + 2] = Math.min(255, Math.max(0, Math.round(data[pIdx + 2] * vignFactor)));
+              }
+            }
+          }
+        }
+
         // Authentic Poisson Silver Halide Grain synthesis directly on canvas
         if (options.grainIntensity !== 0 && camId !== 'passport-id') {
-          const profile = PROFILES[camId] || PROFILES['fuji-quicksnap'];
-          const grainAmt = (profile.grain ? profile.grain.amount : 0.035) * (options.grainIntensity !== undefined ? options.grainIntensity : 1.0);
+          const grainAmt = (profile.grain ? profile.grain.amount : 0.14) * (options.grainIntensity !== undefined ? options.grainIntensity : 1.0);
           if (grainAmt > 0.005) {
             const data = imgData.data;
             const len = data.length;
@@ -1250,8 +1278,8 @@
     const contrastVal = (tone.contrast || 0) / 100.0;
     // Dynamic Range Protected S-Curve: prevents crushing dynamic range into flat grey mush
     const contrastFactor = contrastVal >= 0
-      ? 1.0 + contrastVal * 0.55
-      : Math.max(0.72, 1.0 + contrastVal * 0.32);
+      ? 1.0 + contrastVal * 0.85
+      : Math.max(0.65, 1.0 + contrastVal * 0.45);
 
     const hiVal = (tone.highlights || 0) / 100.0;
     const whVal = (tone.whites || 0) / 100.0;
@@ -1261,9 +1289,9 @@
     const tempVal = (color.temp || 0) / 100.0;
     const tintVal = (color.tint || 0) / 100.0;
 
-    const rTemp = 1.0 + tempVal * 0.12 + tintVal * 0.05;
-    const gTemp = 1.0 - tintVal * 0.10;
-    const bTemp = 1.0 - tempVal * 0.12 + tintVal * 0.04;
+    const rTemp = 1.0 + tempVal * 0.38 + tintVal * 0.18;
+    const gTemp = 1.0 - tintVal * 0.28;
+    const bTemp = 1.0 - tempVal * 0.38 + tintVal * 0.12;
 
     const vibVal = (color.vibrance || 0) / 100.0;
     const satVal = (color.saturation || 0) / 100.0;
@@ -1309,7 +1337,7 @@
       if (lum > 0.40) {
         const hiWeight = Math.min(1.0, (lum - 0.40) / 0.60);
         const whWeight = lum > 0.70 ? Math.min(1.0, (lum - 0.70) / 0.30) : 0.0;
-        const hiComp = 1.0 + (hiVal * 0.18 * hiWeight) + (whVal * 0.10 * whWeight);
+        const hiComp = 1.0 + (hiVal * 0.28 * hiWeight) + (whVal * 0.16 * whWeight);
         r *= hiComp;
         g *= hiComp;
         b *= hiComp;
@@ -1319,7 +1347,7 @@
       if (lum < 0.60) {
         const shWeight = Math.max(0.0, (0.60 - lum) / 0.60);
         const blWeight = lum < 0.25 ? Math.max(0.0, (0.25 - lum) / 0.25) : 0.0;
-        const lift = (shVal * 0.10 * shWeight) + (blVal * 0.06 * blWeight);
+        const lift = (shVal * 0.18 * shWeight) + (blVal * 0.12 * blWeight);
         r += lift;
         g += lift;
         b += lift;
@@ -1450,12 +1478,16 @@
       const t = recipe.tone || {};
       const c = recipe.color || {};
       const ev = t.exposure || 0;
-      const contrast = 1.0 + (t.contrast || 0) / 180.0;
+      const isMono = (c.saturation <= -98);
+      const contrast = isMono
+        ? (1.0 + (t.contrast || 0) / 70.0)
+        : (1.0 + (t.contrast || 0) / 85.0);
       const bright = Math.pow(2, ev * 0.42);
-      const sat = Math.max(0.0, 1.0 + (c.saturation || 0) / 100.0 + (c.vibrance || 0) / 200.0);
-      const sepia = (c.temp || 0) > 0 ? (c.temp / 100.0) * 0.12 : 0;
-      const hueRotate = (c.tint || 0) * -0.22;
-      return `brightness(${bright.toFixed(3)}) contrast(${contrast.toFixed(3)}) saturate(${sat.toFixed(3)}) sepia(${sepia.toFixed(3)}) hue-rotate(${hueRotate.toFixed(1)}deg)`;
+      const sat = Math.max(0.0, 1.0 + (c.saturation || 0) / 75.0 + (c.vibrance || 0) / 150.0);
+      const sepia = (c.temp || 0) > 0 ? Math.min(0.35, (c.temp / 100.0) * 0.80) : 0;
+      const hueRotate = (c.tint || 0) * -1.8 + ((c.temp || 0) < 0 ? (c.temp / 100.0) * 20.0 : 0);
+      const monoCss = isMono ? 'grayscale(1) ' : '';
+      return `${monoCss}brightness(${bright.toFixed(3)}) contrast(${contrast.toFixed(3)}) saturate(${sat.toFixed(3)}) sepia(${sepia.toFixed(3)}) hue-rotate(${hueRotate.toFixed(1)}deg)`.trim();
     }
   };
 

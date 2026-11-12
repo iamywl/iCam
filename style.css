@@ -1265,14 +1265,26 @@ body.native-mobile-device .fluid-device-pill {
    [Mode 1] Vintage / Film Overlays
    ========================================================================== */
 
-/* Film Grain Overlay: High-Performance GPU-Tiled Texture (Zero iOS WebKit Composite Stalls) */
+/* Optical Lens Radial Vignette Overlay: Authentic 35mm optical fall-off framing */
+.viewfinder-vignette-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 11;
+  pointer-events: none;
+  background: radial-gradient(circle at 50% 50%, transparent 58%, rgba(0, 0, 0, 0.40) 100%);
+  opacity: 0.90;
+  transition: opacity 0.3s ease;
+}
+
+/* Film Grain Overlay: High-Performance GPU-Tiled Organic Emulsion Texture */
 .film-grain-layer {
   position: absolute;
   inset: 0;
   z-index: 12;
   pointer-events: none;
-  opacity: 0.12;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.22'/%3E%3C/svg%3E");
+  opacity: 0.32;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.48'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 140px 140px;
   display: block;
