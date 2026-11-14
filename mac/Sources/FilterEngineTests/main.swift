@@ -11,7 +11,7 @@ struct FilterEngineTestsRunner {
         print("=== FilterEngine Optical & Metal Shader Verification ===")
         let processor = try MetalFilterProcessor()
         let catalog = try RecipeLoader.loadCatalog()
-        assertEqual(catalog.aesthetics.count, 8, "Expected 8 flagship aesthetics")
+        assertEqual(catalog.aesthetics.count, 15, "Expected 15 curated aesthetics")
         print("[PASS] Loaded \(catalog.aesthetics.count) recipes from shared/recipes.json on Metal GPU: \(processor.device.name)")
 
         // 1. Create calibrated synthetic scene (180x180) with distinct photographic regions:
@@ -50,8 +50,16 @@ struct FilterEngineTestsRunner {
             let haloRing = samplePixel(px, width: w, x: 142, y: 150) // 2px outside bright night lamp edge!
 
             if recipe.monochrome.enabled {
-                assertTrue(skin.r == skin.g && skin.g == skin.b, "\(recipe.id): Mono must have R==G==B, got \(skin)")
-                assertTrue(skin.r > sky.r + 25, "\(recipe.id): Orange-filter mono should lift skin above blue sky (skin=\(skin.r), sky=\(sky.r))")
+                if recipe.id == "07_pure_monochrome" {
+                    assertTrue(skin.r == skin.g && skin.g == skin.b, "\(recipe.id): Pure mono must have R==G==B, got \(skin)")
+                    assertTrue(skin.r > sky.r + 25, "\(recipe.id): Orange-filter mono should lift skin above blue sky (skin=\(skin.r), sky=\(sky.r))")
+                } else if recipe.id == "12_platinum_print" {
+                    assertTrue(Int(collar.r) >= Int(collar.b) && Int(collar.r) - Int(collar.b) <= 22, "12 Platinum warm fiber white without sepia mud: collar=\(collar)")
+                    assertTrue(skin.r > 135, "12 Platinum skin luminousity too dark: skin=\(skin)")
+                } else if recipe.id == "15_wet_plate_ortho" {
+                    assertTrue(sky.b > skin.b + 10 || sky.r > skin.r + 10, "15 Wet-Plate ortho should lift sky above shadowed orange skin (sky=\(sky), skin=\(skin))")
+                    assertTrue(skin.r >= 105, "15 Wet-Plate ortho must keep skin dignified above murky crush: skin=\(skin)")
+                }
             } else {
                 // Skin Tone Dignity: Red must remain dominant over Green & Blue on healthy peach skin
                 assertTrue(skin.r > skin.g + 12 && skin.g > skin.b - 6, "\(recipe.id): Unhealthy skin hue cast! got \(skin)")
@@ -96,6 +104,33 @@ struct FilterEngineTestsRunner {
                 assertTrue(abs(Int(collar.r) - Int(collar.b)) <= 2 && abs(Int(collar.r) - Int(collar.g)) <= 2, "06 Editorial white collar must stay strictly neutral! collar=\(collar)")
             }
 
+            if recipe.id == "09_slide_reversal" {
+                assertTrue(nightBg.r <= 24 && nightBg.g <= 26, "09 Slide Reversal should maintain deep velvety blacks: night=\(nightBg)")
+                assertTrue(abs(Int(collar.r) - Int(collar.b)) <= 14, "09 Slide Reversal white collar must stay crisp: collar=\(collar)")
+            }
+
+            if recipe.id == "10_chrome_mute" {
+                let greenChroma = abs(Int(green.g) - Int(green.r))
+                assertTrue(greenChroma < 62, "10 Chrome Mute foliage should look restrained vs stock (green=\(green))")
+            }
+
+            if recipe.id == "11_bleach_enr" {
+                let greenSpread = max(green.r, green.g, green.b) - min(green.r, green.g, green.b)
+                assertTrue(greenSpread < 65, "11 Bleach ENR must show silver-retained desaturation (green=\(green))")
+                assertTrue(Int(skin.r) > Int(skin.g) + 12, "11 Bleach ENR must preserve living skin warmth (skin=\(skin))")
+            }
+
+            if recipe.id == "13_daylight_cinema" {
+                assertTrue(Int(collar.r) - Int(collar.b) < 20, "13 50D Cine white collar stays daylight clean (collar=\(collar))")
+                assertTrue(Int(haloRing.r) > Int(haloRing.b) + 12, "13 50D Cine missing crisp daylight point-source halation (ring=\(haloRing))")
+            }
+
+            if recipe.id == "14_candle_chiaroscuro" {
+                assertTrue(nightBg.b <= 28, "14 Candle 2700 must anchor deep mahogany/obsidian blacks (night=\(nightBg))")
+                assertTrue(Int(collar.r) - Int(collar.b) < 34, "14 Candle 2700 collar must avoid dirty Cheeto stain (collar=\(collar))")
+                assertTrue(Int(haloRing.r) > Int(haloRing.b) + 16, "14 Candle 2700 missing warm candle halation (ring=\(haloRing))")
+            }
+
             print("[PASS] \(recipe.shortLabel) -> skin=\(skin) collar=\(collar) green=\(green) night=\(nightBg) halo=\(haloRing)")
         }
 
@@ -106,12 +141,12 @@ struct FilterEngineTestsRunner {
         assertEqual(rowCount, 4 + 17 * 17 * 17, "Unexpected LUT row count")
         print("[PASS] 3D .cube LUT exporter validated (\(rowCount) lines)")
 
-        // 4. Write a clean 3x3 calibration sheet PNG into scratch dir for optional visual inspection
+        // 4. Write a clean 4x4 calibration sheet PNG into scratch dir for visual inspection
         let sheetURL = URL(fileURLWithPath: FileManager.default.currentDirectoryPath)
             .appendingPathComponent(".build/calibration_sheet.png")
         try FileManager.default.createDirectory(at: sheetURL.deletingLastPathComponent(), withIntermediateDirectories: true)
         try writeContactSheetPNG(frames: renderedFrames, cellSize: w, to: sheetURL)
-        print("[PASS] Rendered 3x3 calibration contact sheet at \(sheetURL.path)")
+        print("[PASS] Rendered \(renderedFrames.count)-up calibration contact sheet at \(sheetURL.path)")
     }
 
     static func makeCalibrationScene(width: Int, height: Int) -> CGImage {
@@ -186,8 +221,10 @@ struct FilterEngineTestsRunner {
 
     static func writeContactSheetPNG(frames: [(String, CGImage)], cellSize: Int, to url: URL) throws {
         let gap = 12
-        let sheetW = cellSize * 3 + gap * 4
-        let sheetH = cellSize * 3 + gap * 4
+        let cols = frames.count <= 9 ? 3 : 4
+        let rows = max(1, (frames.count + cols - 1) / cols)
+        let sheetW = cellSize * cols + gap * (cols + 1)
+        let sheetH = cellSize * rows + gap * (rows + 1)
         let ctx = CGContext(
             data: nil, width: sheetW, height: sheetH, bitsPerComponent: 8, bytesPerRow: sheetW * 4,
             space: CGColorSpace(name: CGColorSpace.sRGB)!,
@@ -197,9 +234,9 @@ struct FilterEngineTestsRunner {
         ctx.setFillColor(CGColor(srgbRed: 24.0 / 255.0, green: 24.0 / 255.0, blue: 24.0 / 255.0, alpha: 1.0))
         ctx.fill(CGRect(x: 0, y: 0, width: sheetW, height: sheetH))
 
-        for (i, item) in frames.prefix(9).enumerated() {
-            let col = i % 3
-            let row = i / 3
+        for (i, item) in frames.enumerated() {
+            let col = i % cols
+            let row = i / cols
             let x = gap + col * (cellSize + gap)
             // CGContext y=0 is bottom-left
             let y = sheetH - gap - (row + 1) * cellSize - row * gap

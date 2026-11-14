@@ -28,7 +28,7 @@ struct FilterLabApp: App {
                     .keyboardShortcut("v", modifiers: .command)
             }
             CommandMenu("Darkroom View") {
-                Button("9-Up Contact Grid") { store.viewMode = .grid }
+                Button("Contact Grid") { store.viewMode = .grid }
                     .keyboardShortcut("1", modifiers: .command)
                 Button("1:1 Split Compare") { store.viewMode = .compare }
                     .keyboardShortcut("2", modifiers: .command)
@@ -47,7 +47,7 @@ struct FilterLabApp: App {
             CommandMenu("Export & Spec") {
                 Button("Export Full-Resolution Photo…") { store.exportFullResActiveImage() }
                     .keyboardShortcut("e", modifiers: .command)
-                Button("Export 9-Up Contact Sheet…") { store.exportContactSheetPNG() }
+                Button("Export Contact Sheet…") { store.exportContactSheetPNG() }
                     .keyboardShortcut("e", modifiers: [.command, .shift])
                 Button("Save Changes to shared/recipes.json") { store.saveCatalogToCanonicalSharedJSON() }
                     .keyboardShortcut("s", modifiers: .command)
@@ -133,7 +133,7 @@ struct FilterLabRootView: View {
 
             Spacer()
 
-            // Quick keyboard parity strip (0 Stock, 1..8 Aesthetics)
+            // Quick keyboard parity strip (0 Stock, 1..15 Aesthetics)
             HStack(spacing: 3) {
                 quickKeyChip(label: "0", active: store.isBypassed) {
                     store.selectAestheticByIndex(0)

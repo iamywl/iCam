@@ -43,6 +43,23 @@ public struct MonochromeParameters: Codable, Sendable, Equatable, Hashable {
     public var rgbWeights: [Float]
     public var skinLumBoost: Float
     public var skyLumPull: Float
+    public var monoSplitToneStrength: Float?
+
+    public var effectiveMonoSplitToneStrength: Float { monoSplitToneStrength ?? 0 }
+
+    public init(
+        enabled: Bool,
+        rgbWeights: [Float],
+        skinLumBoost: Float,
+        skyLumPull: Float,
+        monoSplitToneStrength: Float? = nil
+    ) {
+        self.enabled = enabled
+        self.rgbWeights = rgbWeights
+        self.skinLumBoost = skinLumBoost
+        self.skyLumPull = skyLumPull
+        self.monoSplitToneStrength = monoSplitToneStrength
+    }
 }
 
 public struct ColorScienceParameters: Codable, Sendable, Equatable, Hashable {
@@ -58,13 +75,33 @@ public struct ColorScienceParameters: Codable, Sendable, Equatable, Hashable {
     public var greenLumDelta: Float
     public var blueHueShiftDeg: Float
     public var blueSatDelta: Float
+    public var blueLumDelta: Float?
+    public var redHueShiftDeg: Float?
     public var redSatDelta: Float
+    public var redLumDelta: Float?
     public var vibrance: Float
     public var saturation: Float
     public var shadowTintRGB: [Float]
     public var shadowTintStrength: Float
+    public var shadowTintBalance: Float?
     public var highlightTintRGB: [Float]
     public var highlightTintStrength: Float
+    public var bleachBypassAmount: Float?
+    public var colorMatrix: [Float]?
+    public var colorMatrixBlend: Float?
+    public var skinMatrixShield: Float?
+
+    public var effectiveBlueLumDelta: Float { blueLumDelta ?? 0 }
+    public var effectiveRedHueShiftDeg: Float { redHueShiftDeg ?? 0 }
+    public var effectiveRedLumDelta: Float { redLumDelta ?? 0 }
+    public var effectiveShadowTintBalance: Float { shadowTintBalance ?? 0 }
+    public var effectiveBleachBypassAmount: Float { bleachBypassAmount ?? 0 }
+    public var effectiveColorMatrixBlend: Float { colorMatrixBlend ?? 0 }
+    public var effectiveSkinMatrixShield: Float { skinMatrixShield ?? 1 }
+    public var effectiveColorMatrix: [Float] {
+        if let m = colorMatrix, m.count == 9 { return m }
+        return [1, 0, 0, 0, 1, 0, 0, 0, 1]
+    }
 }
 
 public struct HalationParameters: Codable, Sendable, Equatable, Hashable {
@@ -106,6 +143,7 @@ public struct AestheticRecipe: Codable, Sendable, Identifiable, Equatable, Hasha
     public var koreanName: String
     public var moodCue: String
     public var persona: String
+    public var category: String?
     public var intensity: Float?
     public var tone: ToneParameters
     public var monochrome: MonochromeParameters
@@ -118,6 +156,13 @@ public struct AestheticRecipe: Codable, Sendable, Identifiable, Equatable, Hasha
         intensity ?? 1.0
     }
 
+    public var effectiveCategory: String {
+        if let category { return category }
+        if monochrome.enabled { return "mono" }
+        if halation.enabled || opticsAndGrain.flashCenterBoost > 0.01 { return "mood" }
+        return "film"
+    }
+
     public static let stockBaseline = AestheticRecipe(
         id: "00_stock_original",
         shortLabel: "00 STOCK",
@@ -125,6 +170,7 @@ public struct AestheticRecipe: Codable, Sendable, Identifiable, Equatable, Hasha
         koreanName: "원본 (기카)",
         moodCue: "Unmodified Reference",
         persona: "Reference Baseline",
+        category: "all",
         intensity: 1.0,
         tone: ToneParameters(
             exposureEV: 0,
@@ -141,7 +187,8 @@ public struct AestheticRecipe: Codable, Sendable, Identifiable, Equatable, Hasha
             enabled: false,
             rgbWeights: [0.2126, 0.7152, 0.0722],
             skinLumBoost: 0,
-            skyLumPull: 0
+            skyLumPull: 0,
+            monoSplitToneStrength: 0
         ),
         colorScience: ColorScienceParameters(
             skinCenterDeg: 25,
@@ -156,13 +203,21 @@ public struct AestheticRecipe: Codable, Sendable, Identifiable, Equatable, Hasha
             greenLumDelta: 0,
             blueHueShiftDeg: 0,
             blueSatDelta: 0,
+            blueLumDelta: 0,
+            redHueShiftDeg: 0,
             redSatDelta: 0,
+            redLumDelta: 0,
             vibrance: 0,
             saturation: 1,
             shadowTintRGB: [0, 0, 0],
             shadowTintStrength: 0,
+            shadowTintBalance: 0,
             highlightTintRGB: [1, 1, 1],
-            highlightTintStrength: 0
+            highlightTintStrength: 0,
+            bleachBypassAmount: 0,
+            colorMatrix: [1, 0, 0, 0, 1, 0, 0, 0, 1],
+            colorMatrixBlend: 0,
+            skinMatrixShield: 1
         ),
         halation: HalationParameters(
             enabled: false,

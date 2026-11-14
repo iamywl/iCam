@@ -244,7 +244,7 @@ struct InspectorSidebarView: View {
                 Button("Export Image (⌘E)") { store.exportFullResActiveImage() }
                     .buttonStyle(.bordered)
                     .controlSize(.small)
-                Button("9-Up Sheet") { store.exportContactSheetPNG() }
+                Button("Contact Sheet") { store.exportContactSheetPNG() }
                     .buttonStyle(.bordered)
                     .controlSize(.small)
             }

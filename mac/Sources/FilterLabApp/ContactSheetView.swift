@@ -5,11 +5,10 @@ import FilterEngine
 struct ContactSheetView: View {
     @ObservedObject var store: FilterLabStore
 
-    private let columns = [
-        GridItem(.flexible(), spacing: 14),
-        GridItem(.flexible(), spacing: 14),
-        GridItem(.flexible(), spacing: 14)
-    ]
+    private var columns: [GridItem] {
+        let count = store.gridTiles.count > 9 ? 4 : 3
+        return Array(repeating: GridItem(.flexible(), spacing: 14), count: count)
+    }
 
     var body: some View {
         ScrollView {

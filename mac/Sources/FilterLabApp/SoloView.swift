@@ -183,7 +183,7 @@ struct SoloView: View {
                     )
             }
             .buttonStyle(.plain)
-            .help("실시간 카메라 스냅샷을 9-Up 테스트 랩으로 전송")
+            .help("실시간 카메라 스냅샷을 Contact Grid 테스트 랩으로 전송")
 
             Text("Capture Snapshot to Lab")
                 .font(.system(size: 11, design: .monospaced))

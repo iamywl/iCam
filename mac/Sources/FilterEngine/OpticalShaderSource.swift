@@ -21,6 +21,10 @@ public struct MetalRecipeUniforms {
     public var opticsParams1: simd_float4    // (grainAmount, grainSizeNorm, grainChromaRatio, vignetteStrength)
     public var opticsParams2: simd_float4    // (vignettePower, flashCenterBoost, lightLeakStrength, seed)
     public var renderParams: simd_float4     // (debugMaskMode, encodeSRGB, splitX, splitActive)
+    public var colorMatrix0: simd_float4     // (m00, m01, m02, colorMatrixBlend)
+    public var colorMatrix1: simd_float4     // (m10, m11, m12, skinMatrixShield)
+    public var colorMatrix2: simd_float4     // (m20, m21, m22, bleachBypassAmount)
+    public var extraBands0: simd_float4      // (blueLumDelta, redHueShiftDeg, redLumDelta, unused)
 
     public init(recipe: AestheticRecipe, seed: UInt32, debugMaskMode: DebugMaskMode = .normal, encodeSRGB: Bool = true) {
         let bf = recipe.tone.blackFloor
@@ -28,16 +32,17 @@ public struct MetalRecipeUniforms {
         let st = recipe.colorScience.shadowTintRGB
         let ht = recipe.colorScience.highlightTintRGB
         let hlt = recipe.halation.tintRGB
+        let cm = recipe.colorScience.effectiveColorMatrix
 
         toneParams0 = simd_float4(recipe.tone.exposureEV, recipe.tone.wbTempShift, recipe.tone.wbTintShift, recipe.tone.toeSoftness)
         toneParams1 = simd_float4(recipe.tone.midContrast, recipe.tone.shoulderStart, recipe.tone.shoulderSoftness, recipe.tone.highlightDesat)
         blackFloor = simd_float4(bf.count > 0 ? bf[0] : 0, bf.count > 1 ? bf[1] : 0, bf.count > 2 ? bf[2] : 0, recipe.effectiveIntensity)
         monoParams = simd_float4(recipe.monochrome.enabled ? 1.0 : 0.0, recipe.monochrome.skinLumBoost, recipe.monochrome.skyLumPull, 0)
-        monoWeights = simd_float4(mw.count > 0 ? mw[0] : 0.5, mw.count > 1 ? mw[1] : 0.36, mw.count > 2 ? mw[2] : 0.14, 0)
+        monoWeights = simd_float4(mw.count > 0 ? mw[0] : 0.5, mw.count > 1 ? mw[1] : 0.36, mw.count > 2 ? mw[2] : 0.14, recipe.monochrome.effectiveMonoSplitToneStrength)
         skinParams0 = simd_float4(recipe.colorScience.skinCenterDeg, recipe.colorScience.skinWidthDeg, recipe.colorScience.skinHueShiftDeg, recipe.colorScience.skinSatDelta)
         skinParams1 = simd_float4(recipe.colorScience.skinLumDelta, recipe.colorScience.skinTintShield, recipe.colorScience.skinChromaSmooth, recipe.colorScience.vibrance)
         hueBands0 = simd_float4(recipe.colorScience.greenHueShiftDeg, recipe.colorScience.greenSatDelta, recipe.colorScience.greenLumDelta, recipe.colorScience.blueHueShiftDeg)
-        hueBands1 = simd_float4(recipe.colorScience.blueSatDelta, recipe.colorScience.redSatDelta, recipe.colorScience.saturation, 0)
+        hueBands1 = simd_float4(recipe.colorScience.blueSatDelta, recipe.colorScience.redSatDelta, recipe.colorScience.saturation, recipe.colorScience.effectiveShadowTintBalance)
         shadowTint = simd_float4(st.count > 0 ? st[0] : 0, st.count > 1 ? st[1] : 0, st.count > 2 ? st[2] : 0, recipe.colorScience.shadowTintStrength)
         highlightTint = simd_float4(ht.count > 0 ? ht[0] : 1, ht.count > 1 ? ht[1] : 1, ht.count > 2 ? ht[2] : 1, recipe.colorScience.highlightTintStrength)
         halationParams = simd_float4(recipe.halation.enabled ? 1.0 : 0.0, recipe.halation.threshold, recipe.halation.knee, recipe.halation.strength)
@@ -47,6 +52,10 @@ public struct MetalRecipeUniforms {
         opticsParams1 = simd_float4(recipe.opticsAndGrain.grainAmount, recipe.opticsAndGrain.grainSizeNorm, recipe.opticsAndGrain.grainChromaRatio, recipe.opticsAndGrain.vignetteStrength)
         opticsParams2 = simd_float4(recipe.opticsAndGrain.vignettePower, recipe.opticsAndGrain.flashCenterBoost, recipe.opticsAndGrain.lightLeakStrength, Float(seed % 10000))
         renderParams = simd_float4(Float(debugMaskMode.rawValue), encodeSRGB ? 1.0 : 0.0, 0.0, 0.0)
+        colorMatrix0 = simd_float4(cm[0], cm[1], cm[2], recipe.colorScience.effectiveColorMatrixBlend)
+        colorMatrix1 = simd_float4(cm[3], cm[4], cm[5], recipe.colorScience.effectiveSkinMatrixShield)
+        colorMatrix2 = simd_float4(cm[6], cm[7], cm[8], recipe.colorScience.effectiveBleachBypassAmount)
+        extraBands0 = simd_float4(recipe.colorScience.effectiveBlueLumDelta, recipe.colorScience.effectiveRedHueShiftDeg, recipe.colorScience.effectiveRedLumDelta, 0.0)
     }
 }
 
@@ -61,11 +70,11 @@ public enum OpticalShaderSource {
         float4 toneParams1;      // midContrast, shoulderStart, shoulderSoftness, highlightDesat
         float4 blackFloor;       // r, g, b, intensity
         float4 monoParams;       // enabled, skinLumBoost, skyLumPull, unused
-        float4 monoWeights;      // rW, gW, bW, unused
+        float4 monoWeights;      // rW, gW, bW, monoSplitToneStrength
         float4 skinParams0;      // centerDeg, widthDeg, hueShiftDeg, satDelta
         float4 skinParams1;      // lumDelta, tintShield, chromaSmooth, vibrance
         float4 hueBands0;        // greenHueShift, greenSatDelta, greenLumDelta, blueHueShift
-        float4 hueBands1;        // blueSatDelta, redSatDelta, saturation, unused
+        float4 hueBands1;        // blueSatDelta, redSatDelta, saturation, shadowTintBalance
         float4 shadowTint;       // r, g, b, strength
         float4 highlightTint;    // r, g, b, strength
         float4 halationParams;   // enabled, threshold, knee, strength
@@ -75,6 +84,10 @@ public enum OpticalShaderSource {
         float4 opticsParams1;    // grainAmount, grainSizeNorm, grainChromaRatio, vignetteStrength
         float4 opticsParams2;    // vignettePower, flashCenterBoost, lightLeakStrength, seed
         float4 renderParams;     // debugMaskMode, encodeSRGB, splitX, splitActive
+        float4 colorMatrix0;     // m00, m01, m02, matrixBlend
+        float4 colorMatrix1;     // m10, m11, m12, skinMatrixShield
+        float4 colorMatrix2;     // m20, m21, m22, bleachBypassAmount
+        float4 extraBands0;      // blueLumDelta, redHueShiftDeg, redLumDelta, unused
     };
 
     struct BlurUniforms {
@@ -258,14 +271,25 @@ public enum OpticalShaderSource {
             halMask = rawMask * skinProtect;
         }
 
-        // Handle Pure Silver Monochrome Weighted Mixer (Stage 1B) before tone curve
+        // Handle Linear 3x3 Cross-Talk Matrix (Stage 1A) & Monochrome Mixer (Stage 1B) before tone curve
         bool isMono = u.monoParams.x > 0.5f;
+        float matBlend = u.colorMatrix0.w;
+        if (!isMono && matBlend > 0.001f) {
+            float3 matOut = float3(
+                dot(u.colorMatrix0.xyz, c1),
+                dot(u.colorMatrix1.xyz, c1),
+                dot(u.colorMatrix2.xyz, c1)
+            );
+            float mW = matBlend * (1.0f - clamp(u.colorMatrix1.w, 0.0f, 1.0f) * skinMask);
+            c1 = max(mix(c1, matOut, clamp(mW, 0.0f, 1.0f)), 0.0f);
+        }
+
         if (isMono) {
             float lBase = dot(c1, u.monoWeights.rgb);
             float skyDH = hueDistDeg(preHSL.x, 218.0f);
             float skyMask = exp(-(skyDH * skyDH) / (2.0f * 36.0f * 36.0f)) * smoothstep(0.10f, 0.35f, preHSL.y);
             float monoDelta = skinMask * u.monoParams.y * 0.30f - skyMask * u.monoParams.z * 0.32f;
-            float finalMono = max(lBase * (1.0f + monoDelta), 0.0f);
+            float finalMono = max(lBase * max(1.0f + monoDelta, 0.42f), 0.0f);
             c1 = float3(finalMono);
         }
 
@@ -286,9 +310,10 @@ public enum OpticalShaderSource {
         curved = mix(curved, float3(yCurve), clamp(hiSatRoll, 0.0f, 0.85f));
         curved = clamp(curved, 0.0f, 1.0f);
 
-        // --- Stage 3: Skin-Protected Selective Color Calibration & Split Toning ---
+        // --- Stage 3: Skin-Protected Selective Color Calibration, Bleach Bypass & Split Toning ---
         float3 graded = curved;
         float mSkin = skinMask;
+        float preSplitSat = 0.0f;
         if (!isMono) {
             float3 hsl = rgbToHSL(curved);
             float h = hsl.x;
@@ -310,7 +335,8 @@ public enum OpticalShaderSource {
             float hOut = h
                 + u.skinParams0.z * mSkin
                 + u.hueBands0.x * mGreen
-                + u.hueBands0.w * mBlue;
+                + u.hueBands0.w * mBlue
+                + u.extraBands0.y * mRed;
 
             float sOut = s
                 + u.skinParams0.w * mSkin
@@ -322,21 +348,46 @@ public enum OpticalShaderSource {
             float chromaPresent = smoothstep(0.02f, 0.12f, s);
             float vibAmount = u.skinParams1.w * (1.0f - s) * (1.0f - 0.65f * mSkin) * chromaPresent;
             sOut = (sOut + vibAmount) * mix(u.hueBands1.z, 1.0f, 0.35f * mSkin);
+            preSplitSat = clamp(sOut, 0.0f, 1.0f);
 
             float lOut = l
                 + u.skinParams1.x * mSkin
-                + u.hueBands0.z * mGreen;
+                + u.hueBands0.z * mGreen
+                + u.extraBands0.x * mBlue
+                + u.extraBands0.z * mRed;
 
-            graded = hslToRGB(float3(hOut, clamp(sOut, 0.0f, 1.0f), clamp(lOut, 0.0f, 1.0f)));
+            graded = hslToRGB(float3(hOut, preSplitSat, clamp(lOut, 0.0f, 1.0f)));
 
-            // 3E. Skin-Shielded Shadow & Highlight Split Toning
+            // 3D-2. Silver-Retention Bleach Bypass Overlay (chromatic steels + high contrast)
+            float bleachAmt = u.colorMatrix2.w;
+            if (bleachAmt > 0.001f) {
+                float yS = clamp(luma709(graded), 0.0f, 1.0f);
+                float3 silverDesat = mix(graded, float3(yS), 0.52f);
+                float3 ovLow = 2.0f * silverDesat * yS;
+                float3 ovHigh = 1.0f - 2.0f * (1.0f - silverDesat) * (1.0f - yS);
+                float3 bleached = (yS < 0.5f) ? ovLow : ovHigh;
+                float bW = clamp(bleachAmt * (1.0f - 0.30f * mSkin), 0.0f, 0.90f);
+                graded = mix(graded, clamp(bleached, 0.0f, 1.0f), bW);
+            }
+        }
+
+        // 3E. Skin-Shielded Shadow & Highlight Split Toning (supports both color & split-toned monochrome prints)
+        float splitGain = isMono ? clamp(u.monoWeights.w, 0.0f, 1.0f) : 1.0f;
+        if (!isMono || splitGain > 0.001f) {
             float postLuma = luma709(graded);
-            float shWeight = pow(max(1.0f - smoothstep(0.0f, 0.56f, postLuma), 0.0f), 1.55f) * (1.0f - u.skinParams1.y * mSkin);
-            float hiWeight = pow(smoothstep(0.42f, 0.98f, postLuma), 1.45f) * (1.0f - 0.70f * u.skinParams1.y * mSkin);
+            float skinShield = u.skinParams1.y * mSkin;
+            float shWeight = pow(max(1.0f - smoothstep(0.0f, 0.56f, postLuma), 0.0f), 1.55f) * (1.0f - skinShield) * splitGain;
+            float hiWeight = pow(smoothstep(0.42f, 0.98f, postLuma), 1.45f) * (1.0f - 0.70f * skinShield) * splitGain;
 
-            graded = mix(graded, graded + u.shadowTint.rgb * 0.45f, clamp(u.shadowTint.w * shWeight, 0.0f, 0.85f));
-            // Highlight tint softly warms/cools brights without staining neutral pure white muddy
-            float hiPureWhiteGuard = 1.0f - smoothstep(0.92f, 0.995f, postLuma) * (1.0f - hsl.y);
+            float bal = clamp(u.hueBands1.w, 0.0f, 1.0f);
+            float3 shAdditive = graded + u.shadowTint.rgb * 0.45f;
+            float3 shBalanced = clamp(graded * (float3(0.55f) + u.shadowTint.rgb * 0.85f), 0.0f, 1.0f);
+            float3 shTarget = mix(shAdditive, shBalanced, bal);
+            graded = mix(graded, shTarget, clamp(u.shadowTint.w * shWeight, 0.0f, 0.85f));
+
+            float hiPureWhiteGuard = isMono
+                ? (1.0f - smoothstep(0.95f, 1.0f, postLuma) * 0.45f)
+                : (1.0f - smoothstep(0.92f, 0.995f, postLuma) * (1.0f - preSplitSat));
             graded = mix(graded, graded * u.highlightTint.rgb, clamp(u.highlightTint.w * hiWeight * hiPureWhiteGuard, 0.0f, 0.75f));
         }
 

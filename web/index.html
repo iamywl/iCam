@@ -17,7 +17,7 @@
       </div>
 
       <nav class="mode-tabs" aria-label="Workspace modes">
-        <button class="mode-btn active" data-mode="grid" type="button">3×3 Grid</button>
+        <button class="mode-btn active" data-mode="grid" type="button">Contact</button>
         <button class="mode-btn" data-mode="studio" type="button">Studio</button>
         <button class="mode-btn" data-mode="split" type="button">Split</button>
         <button class="mode-btn" data-mode="camera" type="button">Camera</button>
@@ -27,7 +27,7 @@
         <button id="openPhotosBtn" class="chip-btn primary-chip" type="button">+ Open Photos</button>
         <input id="photoInput" type="file" accept="image/*" multiple hidden />
         <button id="saveFullResBtn" class="chip-btn" type="button">Save Full-Res</button>
-        <button id="exportSheetBtn" class="chip-btn" type="button">9-Up Sheet</button>
+        <button id="exportSheetBtn" class="chip-btn" type="button">Contact Sheet</button>
         <button id="importJsonBtn" class="chip-btn" type="button">Import JSON</button>
         <input id="jsonInput" type="file" accept=".json,application/json" hidden />
       </div>
@@ -40,8 +40,17 @@
 
     <!-- Primary Darkroom Stage -->
     <main class="stage-area">
-      <!-- 1. 3x3 Contact Sheet View (Default Landing) -->
-      <section id="gridView" class="view-pane active" aria-label="3x3 Contact Sheet">
+      <!-- 1. 4x4 Contact Sheet View (Default Landing) -->
+      <section id="gridView" class="view-pane active" aria-label="4x4 Contact Sheet">
+        <div class="grid-scope-bar">
+          <div id="gridScopeTabs" class="scope-tabs" role="tablist" aria-label="Aesthetic families">
+            <button class="scope-btn active" data-scope="all" type="button" role="tab" aria-selected="true">ALL</button>
+            <button class="scope-btn" data-scope="film" type="button" role="tab" aria-selected="false">FILM</button>
+            <button class="scope-btn" data-scope="mood" type="button" role="tab" aria-selected="false">MOOD</button>
+            <button class="scope-btn" data-scope="mono" type="button" role="tab" aria-selected="false">MONO</button>
+          </div>
+          <span id="gridCountHint" class="mono-dim">16 TILES · ALL</span>
+        </div>
         <div class="grid-scroll">
           <div id="contactGrid" class="contact-grid"></div>
         </div>
@@ -54,7 +63,12 @@
             <div class="studio-mat">
               <canvas id="studioCanvas" class="studio-canvas"></canvas>
             </div>
-            <nav id="studioFilmDial" class="film-dial" aria-label="Film Aesthetic Dial"></nav>
+            <div class="dial-dock">
+              <div class="dial-stock-wrap">
+                <button id="studioStockBtn" class="dial-pill" type="button">00 STOCK</button>
+              </div>
+              <nav id="studioFilmDial" class="film-dial" aria-label="Film Aesthetic Dial"></nav>
+            </div>
           </div>
 
           <aside class="studio-inspector" aria-label="Optical Tuning Controls">
@@ -186,7 +200,12 @@
           </div>
         </div>
 
-        <nav id="cameraFilmDial" class="film-dial" aria-label="Camera Film Dial"></nav>
+        <div class="dial-dock">
+          <div class="dial-stock-wrap">
+            <button id="cameraStockBtn" class="dial-pill" type="button">00 STOCK</button>
+          </div>
+          <nav id="cameraFilmDial" class="film-dial" aria-label="Camera Film Dial"></nav>
+        </div>
 
         <footer class="shutter-deck">
           <button id="camCaptureThumb" class="thumb-slot" type="button" title="Develop in Studio">

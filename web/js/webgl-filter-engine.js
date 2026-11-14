@@ -147,11 +147,11 @@ uniform vec4 uToneParams0;      // exposureEV, wbTempShift, wbTintShift, toeSoft
 uniform vec4 uToneParams1;      // midContrast, shoulderStart, shoulderSoftness, highlightDesat
 uniform vec4 uBlackFloor;       // r, g, b, intensity
 uniform vec4 uMonoParams;       // enabled, skinLumBoost, skyLumPull, mirrorX
-uniform vec4 uMonoWeights;      // rW, gW, bW, unused
+uniform vec4 uMonoWeights;      // rW, gW, bW, monoSplitToneStrength
 uniform vec4 uSkinParams0;      // centerDeg, widthDeg, hueShiftDeg, satDelta
 uniform vec4 uSkinParams1;      // lumDelta, tintShield, chromaSmooth, vibrance
 uniform vec4 uHueBands0;        // greenHueShift, greenSatDelta, greenLumDelta, blueHueShift
-uniform vec4 uHueBands1;        // blueSatDelta, redSatDelta, saturation, unused
+uniform vec4 uHueBands1;        // blueSatDelta, redSatDelta, saturation, shadowTintBalance
 uniform vec4 uShadowTint;       // r, g, b, strength
 uniform vec4 uHighlightTint;    // r, g, b, strength
 uniform vec4 uHalationParams;   // enabled, threshold, knee, strength
@@ -161,6 +161,10 @@ uniform vec4 uOpticsParams0;    // mistVeil, microContrast, edgeSoftness, ccdMod
 uniform vec4 uOpticsParams1;    // grainAmount, grainSizeNorm, grainChromaRatio, vignetteStrength
 uniform vec4 uOpticsParams2;    // vignettePower, flashCenterBoost, lightLeakStrength, seed
 uniform vec4 uRenderParams;     // debugMaskMode, encodeSRGB, mirrorX, unused
+uniform vec4 uColorMatrix0;     // m00, m01, m02, matrixBlend
+uniform vec4 uColorMatrix1;     // m10, m11, m12, skinMatrixShield
+uniform vec4 uColorMatrix2;     // m20, m21, m22, bleachBypassAmount
+uniform vec4 uExtraBands0;      // blueLumDelta, redHueShiftDeg, redLumDelta, unused
 `;
 
 // Pre-pass outputs graded + glowSrc to MRT (layout location 0, 1) AND optional flipped original linear
@@ -207,12 +211,23 @@ void main() {
   }
 
   bool isMono = uMonoParams.x > 0.5;
+  float matBlend = uColorMatrix0.w;
+  if (!isMono && matBlend > 0.001) {
+    vec3 matOut = vec3(
+      dot(uColorMatrix0.xyz, c1),
+      dot(uColorMatrix1.xyz, c1),
+      dot(uColorMatrix2.xyz, c1)
+    );
+    float mW = matBlend * (1.0 - clamp(uColorMatrix1.w, 0.0, 1.0) * skinMask);
+    c1 = max(mix(c1, matOut, clamp(mW, 0.0, 1.0)), 0.0);
+  }
+
   if (isMono) {
     float lBase = dot(c1, uMonoWeights.rgb);
     float skyDH = hueDistDeg(preHSL.x, 218.0);
     float skyMask = exp(-(skyDH * skyDH) / (2.0 * 36.0 * 36.0)) * smoothstep(0.10, 0.35, preHSL.y);
     float monoDelta = skinMask * uMonoParams.y * 0.30 - skyMask * uMonoParams.z * 0.32;
-    float finalMono = max(lBase * (1.0 + monoDelta), 0.0);
+    float finalMono = max(lBase * max(1.0 + monoDelta, 0.42), 0.0);
     c1 = vec3(finalMono);
   }
 
@@ -227,6 +242,7 @@ void main() {
 
   vec3 graded = curved;
   float mSkin = skinMask;
+  float preSplitSat = 0.0;
   if (!isMono) {
     vec3 hsl = rgbToHSL(curved);
     float h = hsl.x;
@@ -241,22 +257,45 @@ void main() {
     float rDist = hueDistDeg(h, 355.0);
     float mRed = exp(-(rDist * rDist) / (2.0 * 16.0 * 16.0)) * smoothstep(0.14, 0.35, s) * (1.0 - mSkin);
 
-    float hOut = h + uSkinParams0.z * mSkin + uHueBands0.x * mGreen + uHueBands0.w * mBlue;
+    float hOut = h + uSkinParams0.z * mSkin + uHueBands0.x * mGreen + uHueBands0.w * mBlue + uExtraBands0.y * mRed;
     float sOut = s + uSkinParams0.w * mSkin + uHueBands0.y * mGreen + uHueBands1.x * mBlue + uHueBands1.y * mRed;
 
     float chromaPresent = smoothstep(0.02, 0.12, s);
     float vibAmount = uSkinParams1.w * (1.0 - s) * (1.0 - 0.65 * mSkin) * chromaPresent;
     sOut = (sOut + vibAmount) * mix(uHueBands1.z, 1.0, 0.35 * mSkin);
+    preSplitSat = clamp(sOut, 0.0, 1.0);
 
-    float lOut = l + uSkinParams1.x * mSkin + uHueBands0.z * mGreen;
-    graded = hslToRGB(vec3(hOut, clamp(sOut, 0.0, 1.0), clamp(lOut, 0.0, 1.0)));
+    float lOut = l + uSkinParams1.x * mSkin + uHueBands0.z * mGreen + uExtraBands0.x * mBlue + uExtraBands0.z * mRed;
+    graded = hslToRGB(vec3(hOut, preSplitSat, clamp(lOut, 0.0, 1.0)));
 
+    float bleachAmt = uColorMatrix2.w;
+    if (bleachAmt > 0.001) {
+      float yS = clamp(luma709(graded), 0.0, 1.0);
+      vec3 silverDesat = mix(graded, vec3(yS), 0.52);
+      vec3 ovLow = 2.0 * silverDesat * yS;
+      vec3 ovHigh = 1.0 - 2.0 * (1.0 - silverDesat) * (1.0 - yS);
+      vec3 bleached = (yS < 0.5) ? ovLow : ovHigh;
+      float bW = clamp(bleachAmt * (1.0 - 0.30 * mSkin), 0.0, 0.90);
+      graded = mix(graded, clamp(bleached, 0.0, 1.0), bW);
+    }
+  }
+
+  float splitGain = isMono ? clamp(uMonoWeights.w, 0.0, 1.0) : 1.0;
+  if (!isMono || splitGain > 0.001) {
     float postLuma = luma709(graded);
-    float shWeight = pow(max(1.0 - smoothstep(0.0, 0.56, postLuma), 0.0), 1.55) * (1.0 - uSkinParams1.y * mSkin);
-    float hiWeight = pow(smoothstep(0.42, 0.98, postLuma), 1.45) * (1.0 - 0.70 * uSkinParams1.y * mSkin);
+    float skinShield = uSkinParams1.y * mSkin;
+    float shWeight = pow(max(1.0 - smoothstep(0.0, 0.56, postLuma), 0.0), 1.55) * (1.0 - skinShield) * splitGain;
+    float hiWeight = pow(smoothstep(0.42, 0.98, postLuma), 1.45) * (1.0 - 0.70 * skinShield) * splitGain;
 
-    graded = mix(graded, graded + uShadowTint.rgb * 0.45, clamp(uShadowTint.w * shWeight, 0.0, 0.85));
-    float hiPureWhiteGuard = 1.0 - smoothstep(0.92, 0.995, postLuma) * (1.0 - hsl.y);
+    float bal = clamp(uHueBands1.w, 0.0, 1.0);
+    vec3 shAdditive = graded + uShadowTint.rgb * 0.45;
+    vec3 shBalanced = clamp(graded * (vec3(0.55) + uShadowTint.rgb * 0.85), 0.0, 1.0);
+    vec3 shTarget = mix(shAdditive, shBalanced, bal);
+    graded = mix(graded, shTarget, clamp(uShadowTint.w * shWeight, 0.0, 0.85));
+
+    float hiPureWhiteGuard = isMono
+      ? (1.0 - smoothstep(0.95, 1.0, postLuma) * 0.45)
+      : (1.0 - smoothstep(0.92, 0.995, postLuma) * (1.0 - preSplitSat));
     graded = mix(graded, graded * uHighlightTint.rgb, clamp(uHighlightTint.w * hiWeight * hiPureWhiteGuard, 0.0, 0.75));
   }
 
@@ -673,15 +712,19 @@ export class WebGLFilterEngine {
       if (loc) gl.uniform4f(loc, x, y, z, w);
     };
 
+    const cm = Array.isArray(c.colorMatrix) && c.colorMatrix.length === 9
+      ? c.colorMatrix
+      : [1, 0, 0, 0, 1, 0, 0, 0, 1];
+
     u4("uToneParams0", t.exposureEV, t.wbTempShift, t.wbTintShift, t.toeSoftness);
     u4("uToneParams1", t.midContrast, t.shoulderStart, t.shoulderSoftness, t.highlightDesat);
     u4("uBlackFloor", t.blackFloor[0] ?? 0, t.blackFloor[1] ?? 0, t.blackFloor[2] ?? 0, recipe.intensity ?? 1.0);
     u4("uMonoParams", m.enabled ? 1.0 : 0.0, m.skinLumBoost, m.skyLumPull, mirrorX);
-    u4("uMonoWeights", m.rgbWeights[0] ?? 0.5, m.rgbWeights[1] ?? 0.36, m.rgbWeights[2] ?? 0.14, 0.0);
+    u4("uMonoWeights", m.rgbWeights[0] ?? 0.5, m.rgbWeights[1] ?? 0.36, m.rgbWeights[2] ?? 0.14, m.monoSplitToneStrength ?? 0.0);
     u4("uSkinParams0", c.skinCenterDeg, c.skinWidthDeg, c.skinHueShiftDeg, c.skinSatDelta);
     u4("uSkinParams1", c.skinLumDelta, c.skinTintShield, c.skinChromaSmooth, c.vibrance);
     u4("uHueBands0", c.greenHueShiftDeg, c.greenSatDelta, c.greenLumDelta, c.blueHueShiftDeg);
-    u4("uHueBands1", c.blueSatDelta, c.redSatDelta, c.saturation, 0.0);
+    u4("uHueBands1", c.blueSatDelta, c.redSatDelta, c.saturation, c.shadowTintBalance ?? 0.0);
     u4("uShadowTint", c.shadowTintRGB[0] ?? 0, c.shadowTintRGB[1] ?? 0, c.shadowTintRGB[2] ?? 0, c.shadowTintStrength);
     u4("uHighlightTint", c.highlightTintRGB[0] ?? 1, c.highlightTintRGB[1] ?? 1, c.highlightTintRGB[2] ?? 1, c.highlightTintStrength);
     u4("uHalationParams", h.enabled ? 1.0 : 0.0, h.threshold, h.knee, h.strength);
@@ -691,6 +734,10 @@ export class WebGLFilterEngine {
     u4("uOpticsParams1", og.grainAmount, og.grainSizeNorm, og.grainChromaRatio, og.vignetteStrength);
     u4("uOpticsParams2", og.vignettePower, og.flashCenterBoost, og.lightLeakStrength, seed);
     u4("uRenderParams", debugMaskMode, 1.0, mirrorX, 0.0);
+    u4("uColorMatrix0", cm[0], cm[1], cm[2], c.colorMatrixBlend ?? 0.0);
+    u4("uColorMatrix1", cm[3], cm[4], cm[5], c.skinMatrixShield ?? 1.0);
+    u4("uColorMatrix2", cm[6], cm[7], cm[8], c.bleachBypassAmount ?? 0.0);
+    u4("uExtraBands0", c.blueLumDelta ?? 0.0, c.redHueShiftDeg ?? 0.0, c.redLumDelta ?? 0.0, 0.0);
   }
 
   #ensureRenderTargets(w, h) {
@@ -758,6 +805,15 @@ export class WebGLFilterEngine {
     gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT1, gl.TEXTURE_2D, mistA.tex, 0);
     gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT2, gl.TEXTURE_2D, lowA.tex, 0);
     gl.drawBuffers([gl.COLOR_ATTACHMENT0, gl.COLOR_ATTACHMENT1, gl.COLOR_ATTACHMENT2]);
+
+    if (gl.checkFramebufferStatus(gl.FRAMEBUFFER) !== gl.FRAMEBUFFER_COMPLETE && this.useFloatFBO) {
+      this.useFloatFBO = false;
+      [preFBO, downFBO, halA.fbo, halB.fbo, mistA.fbo, mistB.fbo, lowA.fbo, lowB.fbo].forEach((f) => f && gl.deleteFramebuffer(f));
+      [gradedTex, glowSrcTex, halA.tex, halB.tex, mistA.tex, mistB.tex, lowA.tex, lowB.tex].forEach((tx) => tx && gl.deleteTexture(tx));
+      gl.bindFramebuffer(gl.FRAMEBUFFER, null);
+      this.#ensureRenderTargets(w, h);
+      return;
+    }
 
     gl.bindFramebuffer(gl.FRAMEBUFFER, null);
     this.targets = { halfW, halfH, preFBO, downFBO, gradedTex, glowSrcTex, halA, halB, mistA, mistB, lowA, lowB };

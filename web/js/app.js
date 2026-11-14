@@ -5,7 +5,7 @@ import { CameraController } from "./camera-controller.js";
 const PREVIEW_MAX_EDGE = 1440;
 const GRID_THUMB_MAX_EDGE = 420;
 const FILMSTRIP_THUMB_EDGE = 96;
-const SHEET_TILE_MAX_EDGE = 760;
+const SHEET_TILE_MAX_EDGE = 540;
 
 const els = {
   syncBadge: document.getElementById("syncBadge"),
@@ -22,11 +22,14 @@ const els = {
   batchThumbList: document.getElementById("batchThumbList"),
 
   gridView: document.getElementById("gridView"),
+  gridScopeBtns: Array.from(document.querySelectorAll(".scope-btn")),
+  gridCountHint: document.getElementById("gridCountHint"),
   contactGrid: document.getElementById("contactGrid"),
 
   studioView: document.getElementById("studioView"),
   studioMat: document.querySelector(".studio-mat"),
   studioCanvas: document.getElementById("studioCanvas"),
+  studioStockBtn: document.getElementById("studioStockBtn"),
   studioFilmDial: document.getElementById("studioFilmDial"),
   studioCodeTitle: document.getElementById("studioCodeTitle"),
   studioModifiedTag: document.getElementById("studioModifiedTag"),
@@ -73,6 +76,7 @@ const els = {
   ratioBtn: document.getElementById("ratioBtn"),
   flipBtn: document.getElementById("flipBtn"),
   pauseBtn: document.getElementById("pauseBtn"),
+  cameraStockBtn: document.getElementById("cameraStockBtn"),
   cameraFilmDial: document.getElementById("cameraFilmDial"),
   shutterBtn: document.getElementById("shutterBtn"),
   camCaptureThumb: document.getElementById("camCaptureThumb"),
@@ -93,6 +97,7 @@ const RATIOS = [
 const state = {
   catalog: structuredClone(EMBEDDED_DEFAULT_CATALOG),
   mode: "grid",
+  gridScope: "all",
   activeId: "01_vintage_35mm",
   bypass: false,
   debugMask: 0,
@@ -177,6 +182,25 @@ function getTunedRecipeById(id) {
   return tuned;
 }
 
+const CATEGORY_ORDER = ["film", "mood", "mono"];
+
+function getRecipeCategory(recipe) {
+  if (!recipe || recipe.id === STOCK_BASELINE.id || recipe.id === "stock") return "all";
+  if (recipe.category && CATEGORY_ORDER.includes(recipe.category)) return recipe.category;
+  if (recipe.monochrome?.enabled) return "mono";
+  if (recipe.halation?.enabled || (recipe.opticsAndGrain?.flashCenterBoost ?? 0) > 0.01) return "mood";
+  return "film";
+}
+
+function getDialOrderedRecipes() {
+  const groups = { film: [], mood: [], mono: [] };
+  for (const r of state.catalog.aesthetics) {
+    const cat = getRecipeCategory(r);
+    (groups[cat] || groups.film).push(r);
+  }
+  return [STOCK_BASELINE, ...groups.film, ...groups.mood, ...groups.mono];
+}
+
 function getEffectiveActiveRecipe() {
   return state.bypass ? STOCK_BASELINE : getTunedRecipeById(state.activeId);
 }
@@ -185,7 +209,7 @@ function getActivePhoto() {
   return state.photos.find((p) => p.id === state.activePhotoId) || state.photos[0];
 }
 
-// Synthetic studio calibration portrait so 3x3 Grid & Studio work offline immediately
+// Synthetic studio calibration portrait so Contact Grid & Studio work offline immediately
 function createCalibrationFallbackCanvas(w = 600, h = 800) {
   const canvas = document.createElement("canvas");
   canvas.width = w;
@@ -337,21 +361,28 @@ function syncStageGeometries() {
 
 function buildDialButtons(dialEl) {
   dialEl.innerHTML = "";
-  const all = [STOCK_BASELINE, ...state.catalog.aesthetics];
-  for (const r of all) {
-    const isStock = r.id === STOCK_BASELINE.id;
-    const isActive = isStock ? state.bypass : (!state.bypass && state.activeId === r.id);
+  const ordered = getDialOrderedRecipes().filter((r) => r.id !== STOCK_BASELINE.id);
+  let prevCat = null;
+
+  for (const r of ordered) {
+    const cat = getRecipeCategory(r);
+    if (prevCat !== null && cat !== prevCat) {
+      const divider = document.createElement("span");
+      divider.className = "dial-divider";
+      divider.setAttribute("aria-hidden", "true");
+      dialEl.appendChild(divider);
+    }
+    prevCat = cat;
+
+    const isActive = !state.bypass && state.activeId === r.id;
     const btn = document.createElement("button");
     btn.type = "button";
+    btn.dataset.recipeId = r.id;
     btn.className = "dial-pill" + (isActive ? " active" : "");
     btn.textContent = r.shortLabel;
     btn.addEventListener("click", () => {
-      if (isStock) {
-        state.bypass = true;
-      } else {
-        state.bypass = false;
-        state.activeId = r.id;
-      }
+      state.bypass = false;
+      state.activeId = r.id;
       refreshActiveUI();
     });
     dialEl.appendChild(btn);
@@ -471,15 +502,21 @@ function updatePhotoMetaBadge() {
   els.photoMetaBadge.textContent = `${label} · ${photo.fullWidth}×${photo.fullHeight}`;
 }
 
-function refreshDialHighlight(dialEl) {
-  const all = [STOCK_BASELINE, ...state.catalog.aesthetics];
+function refreshDialHighlight(dialEl, stockBtnEl) {
+  if (stockBtnEl) {
+    stockBtnEl.classList.toggle("active", state.bypass);
+  }
   const pills = dialEl.querySelectorAll(".dial-pill");
-  pills.forEach((p, idx) => {
-    const rec = all[idx];
-    if (!rec) return;
-    const active = idx === 0 ? state.bypass : (!state.bypass && state.activeId === rec.id);
+  let activeBtn = null;
+  pills.forEach((p) => {
+    const recId = p.dataset.recipeId;
+    const active = !state.bypass && state.activeId === recId;
     p.classList.toggle("active", active);
+    if (active) activeBtn = p;
   });
+  if (activeBtn && dialEl.offsetParent !== null) {
+    activeBtn.scrollIntoView({ behavior: "auto", inline: "center", block: "nearest" });
+  }
 }
 
 function refreshActiveUI() {
@@ -489,8 +526,8 @@ function refreshActiveUI() {
   els.camCodeLabel.textContent = r.shortLabel;
   els.camMoodLabel.textContent = r.moodCue;
 
-  refreshDialHighlight(els.studioFilmDial);
-  refreshDialHighlight(els.cameraFilmDial);
+  refreshDialHighlight(els.studioFilmDial, els.studioStockBtn);
+  refreshDialHighlight(els.cameraFilmDial, els.cameraStockBtn);
   syncStudioSlidersUI();
   updatePhotoMetaBadge();
 
@@ -530,7 +567,17 @@ function renderContactGrid() {
   if (!gridThumbEngine || !photo) return;
   const src = photo.gridThumbCanvas;
   els.contactGrid.innerHTML = "";
-  const all = [STOCK_BASELINE, ...state.catalog.aesthetics];
+  const isScoped = state.gridScope !== "all";
+  els.contactGrid.classList.toggle("scope-filtered", isScoped);
+
+  const filtered = isScoped
+    ? state.catalog.aesthetics.filter((a) => getRecipeCategory(a) === state.gridScope)
+    : state.catalog.aesthetics;
+  const all = [STOCK_BASELINE, ...filtered];
+
+  if (els.gridCountHint) {
+    els.gridCountHint.textContent = `${all.length} TILES · ${state.gridScope.toUpperCase()}`;
+  }
 
   all.forEach((baseRecipe, idx) => {
     const recipe = idx === 0 ? STOCK_BASELINE : getTunedRecipeById(baseRecipe.id);
@@ -669,6 +716,7 @@ function setMode(mode) {
   } else if (mode === "split") {
     renderSplitView();
   } else if (mode === "camera") {
+    refreshDialHighlight(els.cameraFilmDial, els.cameraStockBtn);
     ensureCameraStarted();
   }
 }
@@ -685,7 +733,7 @@ async function ensureCameraStarted() {
   } else {
     els.cameraNotice.hidden = false;
     els.cameraNoticeText.textContent = cameraCtrl.error || "Camera unavailable or permission denied.";
-    setStatus("Camera permission denied or unavailable. You can still open/drop photos in 3×3 Grid & Studio.");
+    setStatus("Camera permission denied or unavailable. You can still open/drop photos in Contact & Studio.");
   }
 }
 
@@ -887,12 +935,14 @@ async function exportContactSheetPNG() {
   try {
     tileEngine = new WebGLFilterEngine(tileCanvas);
     const src = photo.previewCanvas;
-    const tileScale = Math.min(1.0, SHEET_TILE_MAX_EDGE / Math.max(src.width, src.height));
+    const all = [STOCK_BASELINE, ...state.catalog.aesthetics];
+    const cols = all.length <= 9 ? 3 : 4;
+    const rows = Math.max(1, Math.ceil(all.length / cols));
+    const tileEdge = all.length <= 9 ? 760 : SHEET_TILE_MAX_EDGE;
+    const tileScale = Math.min(1.0, tileEdge / Math.max(src.width, src.height));
     const tileW = Math.max(2, Math.round(src.width * tileScale));
     const tileH = Math.max(2, Math.round(src.height * tileScale));
 
-    const cols = 3;
-    const rows = 3;
     const padOuter = 44;
     const gap = 28;
     const captionH = 44;
@@ -913,9 +963,8 @@ async function exportContactSheetPNG() {
     // Subtle header
     ctx.fillStyle = "#e4e4e7";
     ctx.font = "600 22px ui-monospace, 'SF Mono', Menlo, monospace";
-    ctx.fillText(`FILTERLAB CONTACT SHEET · ${photo.name} (${photo.fullWidth}×${photo.fullHeight})`, padOuter, 52);
+    ctx.fillText(`FILTERLAB CONTACT SHEET (${cols}×${rows}) · ${photo.name} (${photo.fullWidth}×${photo.fullHeight})`, padOuter, 52);
 
-    const all = [STOCK_BASELINE, ...state.catalog.aesthetics];
     all.forEach((baseRecipe, idx) => {
       const col = idx % cols;
       const row = Math.floor(idx / cols);
@@ -948,11 +997,11 @@ async function exportContactSheetPNG() {
     const blob = await new Promise((resolve) => sheet.toBlob(resolve, "image/png"));
     if (!blob) throw new Error("Contact sheet encoding failed");
     const baseName = photo.name.replace(/\.[^.]+$/, "").replace(/[^a-zA-Z0-9_-]+/g, "_");
-    const filename = `${baseName}_9up_sheet.png`;
+    const filename = `${baseName}_contact_sheet.png`;
     downloadBlob(blob, filename);
-    setStatus(`Exported 9-Up Contact Sheet ${filename} (${sheetW}×${sheetH}).`);
+    setStatus(`Exported ${cols}×${rows} Contact Sheet ${filename} (${sheetW}×${sheetH}).`);
   } catch (err) {
-    setStatus(`9-Up export failed: ${err.message}`);
+    setStatus(`Contact Sheet export failed: ${err.message}`);
   } finally {
     if (tileEngine) tileEngine.dispose();
     els.exportSheetBtn.disabled = false;
@@ -1023,8 +1072,47 @@ function bindSliderEvents() {
   });
 }
 
+function stepActiveDial(delta) {
+  const ordered = getDialOrderedRecipes();
+  if (!ordered.length) return;
+  const currentId = state.bypass ? STOCK_BASELINE.id : state.activeId;
+  const idx = Math.max(0, ordered.findIndex((r) => r.id === currentId));
+  const nextIdx = (idx + delta + ordered.length) % ordered.length;
+  const next = ordered[nextIdx];
+  if (next.id === STOCK_BASELINE.id) {
+    state.bypass = true;
+  } else {
+    state.bypass = false;
+    state.activeId = next.id;
+  }
+  refreshActiveUI();
+}
+
 function bindUI() {
   els.modeBtns.forEach((btn) => btn.addEventListener("click", () => setMode(btn.dataset.mode)));
+  if (els.studioStockBtn) {
+    els.studioStockBtn.addEventListener("click", () => {
+      state.bypass = true;
+      refreshActiveUI();
+    });
+  }
+  if (els.cameraStockBtn) {
+    els.cameraStockBtn.addEventListener("click", () => {
+      state.bypass = true;
+      refreshActiveUI();
+    });
+  }
+  els.gridScopeBtns.forEach((btn) =>
+    btn.addEventListener("click", () => {
+      state.gridScope = btn.dataset.scope || "all";
+      els.gridScopeBtns.forEach((b) => {
+        const active = b === btn;
+        b.classList.toggle("active", active);
+        b.setAttribute("aria-selected", active ? "true" : "false");
+      });
+      renderContactGrid();
+    })
+  );
 
   els.openPhotosBtn.addEventListener("click", () => els.photoInput.click());
   els.photoInput.addEventListener("change", async (e) => {
@@ -1167,13 +1255,27 @@ function bindUI() {
     }
   });
 
-  // Spacebar hold-to-compare Original in Studio
+  // Spacebar hold-to-compare Original in Studio + [/] / Arrow stepping along Film Dial
   window.addEventListener("keydown", (e) => {
-    if (e.code === "Space" && state.mode === "studio" && !e.repeat && document.activeElement?.tagName !== "INPUT") {
+    const tag = document.activeElement?.tagName;
+    if (tag === "INPUT" || tag === "SELECT" || tag === "TEXTAREA") return;
+
+    if (e.code === "Space" && state.mode === "studio" && !e.repeat) {
       e.preventDefault();
       if (!state.bypass) {
         state.bypass = true;
         refreshActiveUI();
+      }
+      return;
+    }
+
+    if ((state.mode === "studio" || state.mode === "camera") && !e.metaKey && !e.ctrlKey && !e.altKey) {
+      if (e.key === "[" || e.key === "ArrowLeft") {
+        e.preventDefault();
+        stepActiveDial(-1);
+      } else if (e.key === "]" || e.key === "ArrowRight") {
+        e.preventDefault();
+        stepActiveDial(1);
       }
     }
   });

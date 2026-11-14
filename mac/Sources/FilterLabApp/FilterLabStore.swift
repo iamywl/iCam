@@ -15,7 +15,7 @@ enum LabViewMode: Int, CaseIterable, Identifiable {
 
     var title: String {
         switch self {
-        case .grid: return "1 · 9-Up Grid"
+        case .grid: return "1 · Contact Grid"
         case .compare: return "2 · Split"
         case .solo: return "3 · Solo"
         case .camera: return "4 · Live Cam"
@@ -94,7 +94,7 @@ final class FilterLabStore: ObservableObject {
         do {
             self.catalog = try RecipeLoader.loadCatalog()
         } catch {
-            self.catalog = RecipeCatalog(schemaVersion: 1, updatedAt: "", aesthetics: [.stockBaseline])
+            self.catalog = RecipeCatalog(schemaVersion: 2, updatedAt: "", aesthetics: [.stockBaseline])
             self.statusBanner = "recipes.json 로드 실패: \(error.localizedDescription)"
         }
 
@@ -366,13 +366,13 @@ final class FilterLabStore: ObservableObject {
         guard let photo = selectedPhoto else { return }
         let panel = NSSavePanel()
         panel.allowedContentTypes = [.png]
-        panel.nameFieldStringValue = "\(sanitizedBaseName(photo.name))_9up_sheet.png"
+        panel.nameFieldStringValue = "\(sanitizedBaseName(photo.name))_contact_sheet.png"
         guard panel.runModal() == .OK, let url = panel.url else { return }
 
         let all = [("00 STOCK", AestheticRecipe.stockBaseline)] + catalog.aesthetics.map { ($0.shortLabel, $0) }
-        let cellW = 540
+        let cellW = all.count <= 9 ? 540 : 440
         let aspect = photo.aspectRatio
-        let cellH = max(220, Int((Double(cellW) / Double(aspect)).rounded()))
+        let cellH = max(200, Int((Double(cellW) / Double(aspect)).rounded()))
 
         do {
             var images: [(String, CGImage)] = []
@@ -381,7 +381,7 @@ final class FilterLabStore: ObservableObject {
                 images.append((label, cg))
             }
             try renderContactSheetImage(tiles: images, cellW: cellW, cellH: cellH, to: url)
-            statusBanner = "9-Up 밀착 시트 저장 완료: \(url.lastPathComponent)"
+            statusBanner = "밀착 시트 저장 완료 (\(images.count)장): \(url.lastPathComponent)"
         } catch {
             statusBanner = "시트 저장 실패: \(error.localizedDescription)"
         }
@@ -508,10 +508,13 @@ final class FilterLabStore: ObservableObject {
     }
 
     private func renderContactSheetImage(tiles: [(String, CGImage)], cellW: Int, cellH: Int, to url: URL) throws {
+        guard !tiles.isEmpty else { return }
         let pad = 22
         let labelH = 26
-        let sheetW = pad + 3 * (cellW + pad)
-        let sheetH = pad + 3 * (cellH + labelH + pad)
+        let cols = tiles.count <= 9 ? 3 : 4
+        let rows = Int(ceil(Double(tiles.count) / Double(cols)))
+        let sheetW = pad + cols * (cellW + pad)
+        let sheetH = pad + rows * (cellH + labelH + pad)
         let cs = CGColorSpace(name: CGColorSpace.sRGB)!
         guard let ctx = CGContext(
             data: nil,
@@ -529,9 +532,9 @@ final class FilterLabStore: ObservableObject {
         let font = CTFontCreateWithName("Menlo-Regular" as CFString, 13, nil)
         let textColor = CGColor(srgbRed: 0.85, green: 0.85, blue: 0.88, alpha: 1.0)
 
-        for (idx, item) in tiles.prefix(9).enumerated() {
-            let col = idx % 3
-            let row = idx / 3
+        for (idx, item) in tiles.enumerated() {
+            let col = idx % cols
+            let row = idx / cols
             let x = CGFloat(pad + col * (cellW + pad))
             // CoreGraphics origin is bottom-left
             let topY = CGFloat(sheetH - pad - row * (cellH + labelH + pad))
