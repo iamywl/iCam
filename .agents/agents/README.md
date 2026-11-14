@@ -1,6 +1,8 @@
 # 에이전트 시스템 아키텍처 (Rebuilt Agent Collective)
 
-이전 개발 사이클의 실패 원인("개발자가 임의로 엉터리 필터와 조종석 UI를 만들고, 숫자 테스트만 통과시키던 구조")을 폐기하고, **사진작가·감성 큐레이터 에이전트를 정점에 둔 14인 에이전트 체계**로 새롭게 구축했습니다.
+이전 개발 사이클의 실패 원인("개발자가 임의로 엉터리 필터와 조종석 UI를 만들고, 숫자 테스트만 통과시키던 구조")을 폐기하고, **사진작가·감성 큐레이터 에이전트를 정점에 둔 14인 에이전트 체계**로 구축했습니다.
+
+> **현재 적용 범위**: `AESTHETICS.md`의 8대 감성 기둥을 기반으로 확장된 **[`shared/recipes.json`](../../shared/recipes.json) (`schemaVersion: 2` · `15`종 카탈로그: `01..15`, `FILM · MOOD · MONO`)** 및 **[`mac/`](../../mac) (Metal `FilterLab`) · [`web/`](../../web) (WebGL2 Darkroom Studio)** 듀얼 파이프라인 전체가 아래 거버넌스와 VETO 게이트의 통제를 받습니다.
 
 ---
 
@@ -36,7 +38,7 @@
 
 | 에이전트 | 역할 | 권한 & 원칙 | 파일 |
 | :--- | :--- | :--- | :--- |
-| **`CameraArchitectAgent`** | **시스템 아키텍트** | **감성/디자인 승인 후에만** GPU 기반 클린 모듈 구현 | [`CameraArchitectAgent/agent.md`](./CameraArchitectAgent/agent.md) |
+| **`CameraArchitectAgent`** | **시스템 아키텍트** | **감성/디자인 승인 후에만** `mac/`(Metal) & `web/`(WebGL2) 1:1 GPU 모듈 구현 | [`CameraArchitectAgent/agent.md`](./CameraArchitectAgent/agent.md) |
 | **`VisualCriticAgent`** | **비주얼 비평가** (`10`) | DOM 수치가 아니라 **실제 결과 사진·기카 비교·UI 미감**으로 VETO | [`VisualCriticAgent/agent.md`](./VisualCriticAgent/agent.md) |
 
 ---

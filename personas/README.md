@@ -2,7 +2,9 @@
 
 > **"좋은 카메라 앱은 엔지니어가 만든 필터 목록이 아니라, 서로 다른 눈을 가진 사진작가들의 암실이 한 손 안에 들어온 것이다."**
 
-이 폴더는 단순한 역할극용 메모가 아니라, 향후 카메라 앱의 모든 **색채 과학(Color Science), 뷰파인더 경험, UI 절제, 셔터 감각**을 심사하고 거부권(VETO)을 행사할 수 있는 **11인의 크리에이티브 페르소나 정의서**입니다.
+이 폴더는 단순한 역할극용 메모가 아니라, **웹 다크룸 스튜디오(`web/`) 및 macOS Metal 랩(`mac/`)** 의 모든 **색채 과학(Color Science), 뷰파인더 경험, UI 절제, 셔터 감각**을 심사하고 거부권(VETO)을 행사할 수 있는 **11인의 크리에이티브 페르소나 정의서**입니다.
+
+> 8대 핵심 사진 감성 기둥(`01..08`)을 바탕으로 확장된 **15종 공식 카탈로그([`shared/recipes.json`](../shared/recipes.json), `09..15` 포함 `FILM · MOOD · MONO`)** 역시 동일한 작가별 톤 커브·피부 존엄성·광학 결함 기준 아래 심사됩니다.
 
 ---
 
@@ -16,7 +18,7 @@
 - [`10-tactile-camera-craftsman.md`](./10-tactile-camera-craftsman.md) — **윤하늘 (촉각 디자이너 & 냉혹한 사용자 비평가)**  
   "기카랑 뭐가 달라?", "쓸데없는 광택 빼", "버튼 너무 많아"를 외치는 **최종 사용자 대변인 및 VETO 권한자**.
 
-### 2. 8대 감성 전담 사진작가 페르소나 (Aesthetic Photographers)
+### 2. 8대 감성 기둥 전담 사진작가 페르소나 (Aesthetic Photographers · `01..15` 카탈로그 수호)
 1. [`01-vintage-analog-archivist.md`](./01-vintage-analog-archivist.md) — **최은우** · *Classic Vintage 35mm (정통 빈티지 필름)*
 2. [`02-airy-summer-poet.md`](./02-airy-summer-poet.md) — **하루카 미즈노** · *Airy Japanese Summer (청량 여름 & 도자기 파스텔)*
 3. [`03-y2k-flash-chronicler.md`](./03-y2k-flash-chronicler.md) — **김채린** · *Y2K CCD & Direct Flash (2000년대 디카 & 직광 플래시)*
