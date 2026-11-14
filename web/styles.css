@@ -24,6 +24,7 @@ body {
   margin: 0;
   padding: 0;
   width: 100%;
+  max-width: 100vw;
   height: 100%;
   background: var(--chrome-bg);
   color: var(--text-primary);
@@ -36,11 +37,13 @@ body {
   display: flex;
   flex-direction: column;
   width: 100%;
+  max-width: 100vw;
   height: 100dvh;
   background: var(--chrome-bg);
+  overflow: hidden;
 }
 
-/* Top bar */
+/* Top Bar */
 .top-bar {
   display: flex;
   align-items: center;
@@ -56,6 +59,7 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
+  min-width: 0;
 }
 
 .brand-mark {
@@ -64,9 +68,11 @@ body {
   font-weight: 700;
   letter-spacing: 0.14em;
   color: var(--text-primary);
+  white-space: nowrap;
 }
 
-.sync-pill {
+.sync-pill,
+.meta-pill {
   font-family: ui-monospace, "SF Mono", Menlo, monospace;
   font-size: 10px;
   padding: 2px 7px;
@@ -74,6 +80,13 @@ body {
   background: var(--surface-bg);
   border: 1px solid var(--hairline);
   color: var(--text-secondary);
+  white-space: nowrap;
+}
+
+.meta-pill {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 180px;
 }
 
 .sync-pill.live {
@@ -90,6 +103,7 @@ body {
   border-radius: 5px;
   padding: 2px;
   gap: 2px;
+  flex-shrink: 0;
 }
 
 .mode-btn {
@@ -98,9 +112,10 @@ body {
   color: var(--text-secondary);
   font-size: 11px;
   font-weight: 500;
-  padding: 5px 11px;
+  padding: 5px 10px;
   border-radius: 3px;
   cursor: pointer;
+  white-space: nowrap;
 }
 
 .mode-btn.active {
@@ -115,7 +130,6 @@ body {
   gap: 6px;
 }
 
-.action-btn,
 .chip-btn {
   display: inline-flex;
   align-items: center;
@@ -128,10 +142,18 @@ body {
   border: 1px solid var(--hairline);
   color: var(--text-primary);
   cursor: pointer;
+  white-space: nowrap;
+}
+
+.chip-btn.primary-chip {
+  background: var(--silver-accent);
+  color: var(--chrome-bg);
+  border-color: var(--silver-accent);
+  font-weight: 600;
 }
 
 .chip-btn:disabled {
-  opacity: 0.35;
+  opacity: 0.38;
   cursor: default;
 }
 
@@ -150,6 +172,88 @@ body {
   font-family: ui-monospace, "SF Mono", Menlo, monospace;
   font-size: 10.5px;
   padding: 4px 7px;
+}
+
+/* Batch Filmstrip */
+.batch-strip {
+  background: var(--surface-bg);
+  border-bottom: 1px solid var(--hairline);
+  padding: 6px 14px;
+  flex-shrink: 0;
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+
+.batch-strip::-webkit-scrollbar {
+  display: none;
+}
+
+.batch-thumb-list {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.batch-item {
+  flex: 0 0 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 3px 8px 3px 3px;
+  background: var(--chrome-bg);
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+  color: var(--text-secondary);
+  cursor: pointer;
+}
+
+.batch-item.active {
+  border-color: var(--silver-accent);
+  color: var(--text-primary);
+}
+
+.batch-thumb-img {
+  width: 30px;
+  height: 30px;
+  border-radius: 2px;
+  object-fit: cover;
+  background: var(--darkroom-mat);
+  display: block;
+}
+
+.batch-item-meta {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  line-height: 1.25;
+}
+
+.batch-item-name {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 10px;
+  max-width: 110px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.batch-item-dims {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 9px;
+  color: var(--text-muted);
+}
+
+.batch-remove-btn {
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 12px;
+  padding: 0 2px;
+  cursor: pointer;
+}
+
+.batch-remove-btn:hover {
+  color: var(--text-primary);
 }
 
 /* Primary Stage */
@@ -171,13 +275,362 @@ body {
   display: flex;
 }
 
-/* Camera View */
-.viewfinder-mat {
+/* 1. 3x3 Contact Grid */
+.grid-scroll {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 14px 16px;
+  background: var(--darkroom-mat);
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px 14px;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.grid-card {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+}
+
+.grid-frame {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: var(--chrome-bg);
+  border: 1px solid var(--hairline);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.grid-card.active .grid-frame {
+  border: 1.5px solid var(--silver-accent);
+}
+
+.grid-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.grid-meta {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 0 2px;
+}
+
+/* 2. Studio View */
+.studio-workspace {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) 296px;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.studio-stage-col {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+}
+
+.studio-mat {
   flex: 1;
   min-height: 0;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 14px;
+  background: var(--darkroom-mat);
+  overflow: hidden;
+}
+
+.studio-canvas {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  display: block;
+  border: 1px solid var(--hairline);
+  background: var(--chrome-bg);
+}
+
+.studio-inspector {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px;
+  background: var(--chrome-bg);
+  border-left: 1px solid var(--hairline);
+  overflow-y: auto;
+  min-height: 0;
+}
+
+.inspector-head {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.inspector-title-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.inspector-quick-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.inspector-quick-row .chip-btn,
+.inspector-quick-row .mask-select {
+  flex: 1;
+  min-width: 0;
+}
+
+.sliders-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 11px;
+  flex: 1;
+}
+
+.slider-row {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.slider-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mono-val {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 10.5px;
+  color: var(--text-primary);
+  font-variant-numeric: tabular-nums;
+}
+
+.slider-row input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.16);
+  border-radius: 2px;
+  outline: none;
+  margin: 4px 0;
+}
+
+.slider-row input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--silver-accent);
+  border: 1px solid var(--chrome-bg);
+  cursor: pointer;
+}
+
+.slider-row input[type="range"]::-moz-range-thumb {
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+  background: var(--silver-accent);
+  border: 1px solid var(--chrome-bg);
+  cursor: pointer;
+}
+
+.inspector-footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding-top: 10px;
+  border-top: 1px solid var(--hairline);
+}
+
+.inspector-footer .chip-btn {
+  flex: 1 1 auto;
+}
+
+/* Film Dial */
+.film-dial {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  overflow-x: auto;
+  background: var(--chrome-bg);
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+  flex-shrink: 0;
+  scrollbar-width: none;
+}
+
+.film-dial::-webkit-scrollbar {
+  display: none;
+}
+
+.dial-pill {
+  flex: 0 0 auto;
+  padding: 6px 11px;
+  border-radius: 4px;
+  background: var(--surface-bg);
+  border: 1px solid var(--hairline);
+  color: var(--text-secondary);
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 10.5px;
+  cursor: pointer;
+}
+
+.dial-pill.active {
+  background: var(--silver-accent);
+  color: var(--chrome-bg);
+  border-color: var(--silver-accent);
+  font-weight: 700;
+}
+
+/* Common Typography */
+.mono-tag {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--silver-accent);
+  white-space: nowrap;
+}
+
+.mono-dim {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.mood-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 3. Split Lab View */
+.split-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 14px;
+  background: var(--surface-bg);
+  border-bottom: 1px solid var(--hairline);
+  flex-shrink: 0;
+  flex-wrap: wrap;
+}
+
+.split-pickers,
+.blind-status,
+.split-actions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.split-mat {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 14px;
+  gap: 8px;
+  background: var(--darkroom-mat);
+}
+
+.split-stage {
+  position: relative;
+  width: 360px;
+  height: 480px;
+  max-width: 100%;
+  max-height: 100%;
+  background: var(--chrome-bg);
+  border: 1px solid var(--hairline);
+  overflow: hidden;
+  touch-action: none;
+  cursor: ew-resize;
+}
+
+#splitCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.split-divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.82);
+  pointer-events: none;
+  transform: translateX(-1px);
+}
+
+.split-handle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--chrome-bg);
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+  color: var(--text-primary);
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.split-captions {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 820px;
+  flex-shrink: 0;
+}
+
+/* 4. Opt-in Camera View */
+.viewfinder-mat {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   padding: 12px;
   background: var(--darkroom-mat);
 }
@@ -214,6 +667,16 @@ body {
   object-fit: contain;
 }
 
+.camera-notice {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 6px 12px;
+  background: var(--surface-bg);
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+}
+
 .camera-meta-strip {
   display: flex;
   align-items: center;
@@ -222,7 +685,6 @@ body {
   padding: 7px 14px;
   background: var(--surface-bg);
   border-top: 1px solid var(--hairline);
-  border-bottom: 1px solid var(--hairline);
   flex-shrink: 0;
 }
 
@@ -233,83 +695,24 @@ body {
   min-width: 0;
 }
 
-.mono-tag {
-  font-family: ui-monospace, "SF Mono", Menlo, monospace;
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--silver-accent);
-  white-space: nowrap;
-}
-
-.mono-dim {
-  font-family: ui-monospace, "SF Mono", Menlo, monospace;
-  font-size: 10px;
-  color: var(--text-muted);
-}
-
-.mood-label {
-  font-size: 11px;
-  color: var(--text-secondary);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 .camera-mini-controls {
   display: flex;
   align-items: center;
   gap: 6px;
 }
 
-/* Film Dial */
-.film-dial {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 8px 12px;
-  overflow-x: auto;
-  background: var(--chrome-bg);
-  border-bottom: 1px solid var(--hairline);
-  flex-shrink: 0;
-  scrollbar-width: none;
-}
-
-.film-dial::-webkit-scrollbar {
-  display: none;
-}
-
-.dial-pill {
-  flex: 0 0 auto;
-  padding: 6px 11px;
-  border-radius: 4px;
-  background: var(--surface-bg);
-  border: 1px solid var(--hairline);
-  color: var(--text-secondary);
-  font-family: ui-monospace, "SF Mono", Menlo, monospace;
-  font-size: 10.5px;
-  cursor: pointer;
-}
-
-.dial-pill.active {
-  background: var(--silver-accent);
-  color: var(--chrome-bg);
-  border-color: var(--silver-accent);
-  font-weight: 700;
-}
-
-/* Matte Tactile Shutter Deck (Zero glossy plastic sheen) */
 .shutter-deck {
   display: grid;
   grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  padding: 12px 18px calc(12px + env(safe-area-inset-bottom));
+  padding: 10px 18px calc(10px + env(safe-area-inset-bottom));
   background: var(--chrome-bg);
   flex-shrink: 0;
 }
 
 .thumb-slot {
-  width: 44px;
-  height: 44px;
+  width: 42px;
+  height: 42px;
   border-radius: 4px;
   border: 1px solid var(--hairline);
   background: var(--surface-bg);
@@ -339,8 +742,8 @@ body {
 }
 
 .shutter-btn {
-  width: 66px;
-  height: 66px;
+  width: 62px;
+  height: 62px;
   border-radius: 50%;
   background: transparent;
   border: 2px solid var(--silver-accent);
@@ -370,151 +773,30 @@ body {
   gap: 6px;
 }
 
-/* 3x3 Contact Grid */
-.grid-scroll {
-  flex: 1;
-  overflow-y: auto;
-  padding: 16px;
-  background: var(--darkroom-mat);
-}
-
-.contact-grid {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 14px;
-  max-width: 1120px;
-  margin: 0 auto;
-}
-
-@media (max-width: 720px) {
-  .contact-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    gap: 10px;
-  }
-}
-
-.grid-card {
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  cursor: pointer;
-}
-
-.grid-frame {
-  width: 100%;
-  aspect-ratio: 4 / 3;
-  background: var(--chrome-bg);
-  border: 1px solid var(--hairline);
-  overflow: hidden;
+/* Drop Zone Overlay */
+.drop-overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(14, 15, 18, 0.88);
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 20px;
+  z-index: 40;
 }
 
-.grid-card.active .grid-frame {
-  border: 1.5px solid var(--silver-accent);
-}
-
-.grid-frame img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-
-.grid-meta {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 6px;
-  padding: 0 2px;
-}
-
-/* Split Lab View */
-.split-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px;
-  padding: 8px 14px;
+.drop-box {
+  border: 1px dashed var(--silver-accent);
   background: var(--surface-bg);
-  border-bottom: 1px solid var(--hairline);
-  flex-shrink: 0;
-}
-
-.split-pickers,
-.blind-status,
-.split-actions {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-}
-
-.split-mat {
-  flex: 1;
-  min-height: 0;
+  padding: 28px 34px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: 16px;
-  gap: 10px;
-  background: var(--darkroom-mat);
+  gap: 8px;
+  text-align: center;
 }
 
-.split-stage {
-  position: relative;
-  height: 100%;
-  max-height: 100%;
-  max-width: 100%;
-  aspect-ratio: 3 / 4;
-  background: var(--chrome-bg);
-  border: 1px solid var(--hairline);
-  overflow: hidden;
-  touch-action: none;
-  cursor: ew-resize;
-}
-
-#splitCanvas {
-  width: 100%;
-  height: 100%;
-  display: block;
-}
-
-.split-divider {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 50%;
-  width: 2px;
-  background: rgba(255, 255, 255, 0.8);
-  pointer-events: none;
-  transform: translateX(-1px);
-}
-
-.split-handle {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  background: var(--chrome-bg);
-  border: 1.5px solid rgba(255, 255, 255, 0.85);
-  color: var(--text-primary);
-  font-size: 11px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.split-captions {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-  max-width: 960px;
-}
-
+/* Status Bar */
 .status-bar {
   padding: 5px 14px;
   font-family: ui-monospace, "SF Mono", Menlo, monospace;
@@ -523,4 +805,103 @@ body {
   background: var(--chrome-bg);
   border-top: 1px solid var(--hairline);
   flex-shrink: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Responsive Layout for Mobile & Compact Viewports */
+@media (max-width: 820px) {
+  .studio-workspace {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    width: 100%;
+  }
+
+  .studio-stage-col {
+    flex: 1 1 52%;
+    min-height: 180px;
+    width: 100%;
+  }
+
+  .studio-mat {
+    padding: 10px;
+  }
+
+  .studio-inspector {
+    flex: 0 1 48%;
+    width: 100%;
+    min-width: 0;
+    border-left: none;
+    border-top: 1px solid var(--hairline);
+    padding: 10px 12px;
+    gap: 8px;
+  }
+
+  .sliders-stack {
+    gap: 7px;
+  }
+}
+
+@media (max-width: 720px) {
+  .top-bar {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 7px 10px;
+    gap: 6px;
+  }
+
+  .brand-block {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .meta-pill {
+    max-width: 150px;
+  }
+
+  .mode-tabs {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .mode-btn {
+    padding: 5px 4px;
+    text-align: center;
+    font-size: 10.5px;
+  }
+
+  .top-actions {
+    width: 100%;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 5px;
+  }
+
+  .top-actions .chip-btn {
+    padding: 5px 4px;
+    font-size: 9.5px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .grid-scroll {
+    padding: 10px;
+  }
+
+  .contact-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px;
+  }
+
+  .grid-meta .mood-label {
+    display: none;
+  }
+
+  .split-toolbar {
+    padding: 6px 10px;
+    gap: 6px;
+  }
 }

@@ -1,132 +1,220 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <title>FilterLab Web Camera — Persona Optical Mirror</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>FilterLab — Film Darkroom Studio</title>
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
   <div class="app-shell">
-    <!-- Top Matte Obsidian Control Strip (zero glass gloss / zero text overlays on photo) -->
+    <!-- Top Darkroom Studio Bar -->
     <header class="top-bar">
       <div class="brand-block">
         <span class="brand-mark">FILTERLAB</span>
-        <span class="sync-pill" id="syncBadge">PUBLIC HTTPS</span>
+        <span id="syncBadge" class="sync-pill">DARKROOM</span>
+        <span id="photoMetaBadge" class="meta-pill">SAMPLE · 480×640</span>
       </div>
 
-      <nav class="mode-tabs" aria-label="Workspace mode">
-        <button class="mode-btn active" data-mode="camera">Camera</button>
-        <button class="mode-btn" data-mode="grid">3×3 Grid</button>
-        <button class="mode-btn" data-mode="split">Split Lab</button>
+      <nav class="mode-tabs" aria-label="Workspace modes">
+        <button class="mode-btn active" data-mode="grid" type="button">3×3 Grid</button>
+        <button class="mode-btn" data-mode="studio" type="button">Studio</button>
+        <button class="mode-btn" data-mode="split" type="button">Split</button>
+        <button class="mode-btn" data-mode="camera" type="button">Camera</button>
       </nav>
 
       <div class="top-actions">
-        <label class="action-btn" for="photoUploadInput">Open Photo</label>
-        <input id="photoUploadInput" type="file" accept="image/*" hidden />
-        <label class="action-btn" for="recipeUploadInput">Import JSON</label>
-        <input id="recipeUploadInput" type="file" accept="application/json,.json" hidden />
+        <button id="openPhotosBtn" class="chip-btn primary-chip" type="button">+ Open Photos</button>
+        <input id="photoInput" type="file" accept="image/*" multiple hidden />
+        <button id="saveFullResBtn" class="chip-btn" type="button">Save Full-Res</button>
+        <button id="exportSheetBtn" class="chip-btn" type="button">9-Up Sheet</button>
+        <button id="importJsonBtn" class="chip-btn" type="button">Import JSON</button>
+        <input id="jsonInput" type="file" accept=".json,application/json" hidden />
       </div>
     </header>
 
-    <!-- Primary Darkroom Stage (#181818 R=G=B Neutral Mat) -->
+    <!-- Batch Filmstrip (appears when user photos are loaded or captured) -->
+    <section id="batchStrip" class="batch-strip" aria-label="Loaded Photos" hidden>
+      <div id="batchThumbList" class="batch-thumb-list"></div>
+    </section>
+
+    <!-- Primary Darkroom Stage -->
     <main class="stage-area">
-      <!-- Mode 1: Mirrored Live Optical Web Camera -->
-      <section class="view-pane active" id="cameraView">
-        <div class="viewfinder-mat">
-          <div class="viewfinder-frame ratio-3x4" id="viewfinderFrame">
-            <canvas id="liveCanvas"></canvas>
-          </div>
-        </div>
-
-        <!-- Outside viewfinder border: aesthetic cue & optical deck -->
-        <div class="camera-meta-strip">
-          <div class="active-title-row">
-            <span class="mono-tag" id="activeShortTag">01 VINTAGE</span>
-            <span class="mood-label" id="activeMoodLabel">Portra 400 · Golden Hour</span>
-          </div>
-          <div class="camera-mini-controls">
-            <button class="chip-btn" id="aspectRatioBtn" type="button">3:4</button>
-            <button class="chip-btn" id="bypassHoldBtn" type="button" title="Hold for Stock Original">BYPASS</button>
-            <button class="chip-btn" id="flipLensBtn" type="button">FLIP</button>
-            <select class="mask-select" id="debugMaskSelect" aria-label="Debug Mask">
-              <option value="0">Normal</option>
-              <option value="1">Skin Mask</option>
-              <option value="2">Halation</option>
-              <option value="3">Black Mist</option>
-              <option value="4">Grain Bell</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Aesthetic Film Dial -->
-        <div class="film-dial" id="filmDial" role="tablist" aria-label="Film Aesthetics"></div>
-
-        <!-- Tactile Matte Shutter Deck -->
-        <div class="shutter-deck">
-          <button class="thumb-slot" id="lastShotThumbBtn" type="button" title="Send latest still to 3×3 Grid / Split">
-            <img id="lastShotThumbImg" alt="" />
-            <span class="thumb-empty" id="lastShotEmpty">NO SHOT</span>
-          </button>
-
-          <button class="shutter-btn" id="shutterBtn" type="button" aria-label="Capture Photo">
-            <span class="shutter-core"></span>
-          </button>
-
-          <div class="deck-right-actions">
-            <button class="chip-btn" id="downloadShotBtn" type="button" disabled>SAVE</button>
-          </div>
-        </div>
-      </section>
-
-      <!-- Mode 2: 3x3 Darkroom Contact Grid (00 STOCK + 01..08) -->
-      <section class="view-pane" id="gridView">
+      <!-- 1. 3x3 Contact Sheet View (Default Landing) -->
+      <section id="gridView" class="view-pane active" aria-label="3x3 Contact Sheet">
         <div class="grid-scroll">
-          <div class="contact-grid" id="contactGrid"></div>
+          <div id="contactGrid" class="contact-grid"></div>
         </div>
       </section>
 
-      <!-- Mode 3: 1:1 Split Compare + Blind A/B Test -->
-      <section class="view-pane" id="splitView">
-        <div class="split-toolbar">
-          <div class="split-pickers" id="splitPickers">
-            <span class="mono-dim">L</span>
-            <select id="splitLeftSelect" class="mask-select"></select>
-            <span class="mono-dim">VS</span>
-            <select id="splitRightSelect" class="mask-select"></select>
+      <!-- 2. Studio View (Single Photo Fine-Tuning & Export) -->
+      <section id="studioView" class="view-pane" aria-label="Darkroom Studio Editor">
+        <div class="studio-workspace">
+          <div class="studio-stage-col">
+            <div class="studio-mat">
+              <canvas id="studioCanvas" class="studio-canvas"></canvas>
+            </div>
+            <nav id="studioFilmDial" class="film-dial" aria-label="Film Aesthetic Dial"></nav>
           </div>
-          <div class="blind-status" id="blindStatusBar" hidden>
-            <span class="mono-tag">BLIND A/B</span>
-            <span id="blindAnswerText">Sample A vs Sample B</span>
-            <button class="chip-btn" id="blindRevealBtn" type="button">Reveal</button>
+
+          <aside class="studio-inspector" aria-label="Optical Tuning Controls">
+            <div class="inspector-head">
+              <div class="inspector-title-row">
+                <span id="studioCodeTitle" class="mono-tag">01 VINTAGE</span>
+                <span id="studioModifiedTag" class="sync-pill" hidden>MODIFIED</span>
+              </div>
+              <div id="studioMoodSubtitle" class="mood-label">Portra 400 · 따스한 크림 &amp; 피치</div>
+            </div>
+
+            <div class="inspector-quick-row">
+              <button id="bypassBtn" class="chip-btn" type="button" aria-pressed="false">Compare Original</button>
+              <select id="debugMaskSelect" class="mask-select" aria-label="Debug Mask">
+                <option value="0">Final Render</option>
+                <option value="1">Skin Mask</option>
+                <option value="2">Halation Emitter</option>
+                <option value="3">Mist Diffusion</option>
+              </select>
+            </div>
+
+            <div class="sliders-stack">
+              <label class="slider-row">
+                <div class="slider-head">
+                  <span>Intensity</span>
+                  <span id="valIntensity" class="mono-val">100%</span>
+                </div>
+                <input id="sliderIntensity" type="range" min="0" max="100" step="1" value="100" />
+              </label>
+
+              <label class="slider-row">
+                <div class="slider-head">
+                  <span>Exposure Trim</span>
+                  <span id="valExposure" class="mono-val">+0.00 EV</span>
+                </div>
+                <input id="sliderExposure" type="range" min="-1" max="1" step="0.05" value="0" />
+              </label>
+
+              <label class="slider-row">
+                <div class="slider-head">
+                  <span>Temp Trim</span>
+                  <span id="valTemp" class="mono-val">0</span>
+                </div>
+                <input id="sliderTemp" type="range" min="-30" max="30" step="1" value="0" />
+              </label>
+
+              <label class="slider-row">
+                <div class="slider-head">
+                  <span>Contrast Trim</span>
+                  <span id="valContrast" class="mono-val">+0.00</span>
+                </div>
+                <input id="sliderContrast" type="range" min="-0.35" max="0.35" step="0.02" value="0" />
+              </label>
+
+              <label class="slider-row">
+                <div class="slider-head">
+                  <span>Grain Scale</span>
+                  <span id="valGrain" class="mono-val">100%</span>
+                </div>
+                <input id="sliderGrain" type="range" min="0" max="200" step="5" value="100" />
+              </label>
+            </div>
+
+            <div class="inspector-footer">
+              <button id="resetTuningBtn" class="chip-btn" type="button">Reset</button>
+              <button id="exportRecipeJsonBtn" class="chip-btn" type="button">Export JSON</button>
+              <button id="studioSaveBtn" class="chip-btn primary-chip" type="button">Save Full-Res</button>
+            </div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- 3. Split & Blind A/B View -->
+      <section id="splitView" class="view-pane" aria-label="Split and Blind A/B">
+        <div class="split-toolbar">
+          <div id="splitPickers" class="split-pickers">
+            <label class="mono-dim">L
+              <select id="splitLeftSelect" class="mask-select"></select>
+            </label>
+            <label class="mono-dim">R
+              <select id="splitRightSelect" class="mask-select"></select>
+            </label>
+          </div>
+          <div id="blindStatus" class="blind-status" hidden>
+            <span class="mono-tag">BLIND A vs B (RANDOMIZED)</span>
           </div>
           <div class="split-actions">
-            <button class="chip-btn" id="blindToggleBtn" type="button">Blind Test</button>
+            <button id="blindToggleBtn" class="chip-btn" type="button">Blind A/B</button>
+            <button id="blindRevealBtn" class="chip-btn" type="button" hidden>Reveal</button>
           </div>
         </div>
 
         <div class="split-mat">
-          <div class="split-stage" id="splitStage">
+          <div id="splitStage" class="split-stage">
             <canvas id="splitCanvas"></canvas>
-            <div class="split-divider" id="splitDivider">
-              <div class="split-handle">⇆</div>
+            <div id="splitDivider" class="split-divider">
+              <span class="split-handle">↔</span>
             </div>
           </div>
           <div class="split-captions">
-            <span class="mono-tag" id="splitLeftCaption">00 STOCK</span>
-            <span class="mono-tag" id="splitRightCaption">01 VINTAGE</span>
+            <span id="splitLeftLabel" class="mono-tag">00 STOCK</span>
+            <span id="splitRightLabel" class="mono-tag">04 NOCTURNE</span>
           </div>
         </div>
       </section>
+
+      <!-- 4. Opt-in Camera Viewfinder (No permission requested until user opens Camera tab) -->
+      <section id="cameraView" class="view-pane" aria-label="Opt-in Camera Viewfinder">
+        <div class="viewfinder-mat">
+          <div id="viewfinderFrame" class="viewfinder-frame ratio-3x4">
+            <video id="cameraVideo" playsinline autoplay muted hidden></video>
+            <canvas id="liveCanvas"></canvas>
+          </div>
+          <div id="cameraNotice" class="camera-notice" hidden>
+            <p id="cameraNoticeText" class="mono-dim">Camera permission is only requested in this tab.</p>
+            <button id="cameraRetryBtn" class="chip-btn" type="button">Enable Camera</button>
+          </div>
+        </div>
+
+        <div class="camera-meta-strip">
+          <div class="active-title-row">
+            <span id="camCodeLabel" class="mono-tag">01 VINTAGE</span>
+            <span id="camMoodLabel" class="mood-label">Portra 400 · 따스한 크림 &amp; 피치</span>
+          </div>
+          <div class="camera-mini-controls">
+            <button id="ratioBtn" class="chip-btn" type="button">3:4</button>
+            <button id="flipBtn" class="chip-btn" type="button">Flip</button>
+            <button id="pauseBtn" class="chip-btn" type="button">Pause Live</button>
+          </div>
+        </div>
+
+        <nav id="cameraFilmDial" class="film-dial" aria-label="Camera Film Dial"></nav>
+
+        <footer class="shutter-deck">
+          <button id="camCaptureThumb" class="thumb-slot" type="button" title="Develop in Studio">
+            <img id="lastThumbImg" alt="Last Capture" />
+            <span id="lastThumbEmpty" class="thumb-empty">LAB</span>
+          </button>
+
+          <button id="shutterBtn" class="shutter-btn" type="button" aria-label="Capture to Darkroom">
+            <span class="shutter-core"></span>
+          </button>
+
+          <div class="deck-right-actions">
+            <button id="openStudioFromCamBtn" class="chip-btn" type="button">To Studio →</button>
+          </div>
+        </footer>
+      </section>
+
+      <!-- Full-stage Drag & Drop Zone Indicator -->
+      <div id="dropOverlay" class="drop-overlay" hidden>
+        <div class="drop-box">
+          <span class="mono-tag">DROP PHOTOS TO DEVELOP</span>
+          <span class="mono-dim">JPEG · PNG · WebP · Batch supported · Processed 100% on your GPU</span>
+        </div>
+      </div>
     </main>
 
-    <footer class="status-bar" id="statusBar">
-      WebGL2 8-Stage Linear Optical Engine · Public static HTTPS mode
-    </footer>
+    <footer id="statusBar" class="status-bar">Darkroom ready. Drop or open photos to develop in 8 film aesthetics.</footer>
   </div>
-
-  <!-- Hidden camera video & capture scratch nodes -->
-  <video id="cameraVideo" playsinline autoplay muted hidden></video>
 
   <script type="module" src="./js/app.js"></script>
 </body>

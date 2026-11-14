@@ -81,7 +81,7 @@ public enum OpticalShaderSource {
         float sigma;
         float texelStepX;
         float texelStepY;
-        float unused;
+        float tapStep;
     };
 
     inline float srgbToLinearChan(float c) {
@@ -395,49 +395,53 @@ public enum OpticalShaderSource {
         dstLowFreqTex.write(gAvg, gid);
     }
 
-    // Kernel 3A: Separable Horizontal Gaussian Blur
+    // Kernel 3A: Separable Horizontal Gaussian Blur (scale-invariant via dynamic tapStep)
     kernel void blurHorizontalKernel(
-        texture2d<float, access::read> src [[texture(0)]],
+        texture2d<float, access::sample> src [[texture(0)]],
         texture2d<float, access::write> dst [[texture(1)]],
         constant BlurUniforms &bu [[buffer(0)]],
         uint2 gid [[thread_position_in_grid]]
     ) {
         if (gid.x >= dst.get_width() || gid.y >= dst.get_height()) return;
-        int w = int(src.get_width());
+        constexpr sampler pxSampler(coord::pixel, address::clamp_to_edge, filter::linear);
         float sigma = max(bu.sigma, 0.5f);
-        int radius = min(28, max(1, int(ceil(sigma * 2.5f))));
+        float step = max(bu.tapStep, 1.0f);
+        int radius = min(28, max(1, int(ceil((sigma * 2.5f) / step))));
         float invTwoSigmaSq = 1.0f / (2.0f * sigma * sigma);
 
         float4 sum = float4(0.0f);
         float wSum = 0.0f;
+        float cy = float(gid.y) + 0.5f;
         for (int dx = -radius; dx <= radius; ++dx) {
-            int sx = clamp(int(gid.x) + dx, 0, w - 1);
-            float wt = exp(-float(dx * dx) * invTwoSigmaSq);
-            sum += src.read(uint2(uint(sx), gid.y)) * wt;
+            float dist = float(dx) * step;
+            float wt = exp(-(dist * dist) * invTwoSigmaSq);
+            sum += src.sample(pxSampler, float2(float(gid.x) + 0.5f + dist, cy)) * wt;
             wSum += wt;
         }
         dst.write(sum / max(wSum, 1e-5f), gid);
     }
 
-    // Kernel 3B: Separable Vertical Gaussian Blur
+    // Kernel 3B: Separable Vertical Gaussian Blur (scale-invariant via dynamic tapStep)
     kernel void blurVerticalKernel(
-        texture2d<float, access::read> src [[texture(0)]],
+        texture2d<float, access::sample> src [[texture(0)]],
         texture2d<float, access::write> dst [[texture(1)]],
         constant BlurUniforms &bu [[buffer(0)]],
         uint2 gid [[thread_position_in_grid]]
     ) {
         if (gid.x >= dst.get_width() || gid.y >= dst.get_height()) return;
-        int h = int(src.get_height());
+        constexpr sampler pxSampler(coord::pixel, address::clamp_to_edge, filter::linear);
         float sigma = max(bu.sigma, 0.5f);
-        int radius = min(28, max(1, int(ceil(sigma * 2.5f))));
+        float step = max(bu.tapStep, 1.0f);
+        int radius = min(28, max(1, int(ceil((sigma * 2.5f) / step))));
         float invTwoSigmaSq = 1.0f / (2.0f * sigma * sigma);
 
         float4 sum = float4(0.0f);
         float wSum = 0.0f;
+        float cx = float(gid.x) + 0.5f;
         for (int dy = -radius; dy <= radius; ++dy) {
-            int sy = clamp(int(gid.y) + dy, 0, h - 1);
-            float wt = exp(-float(dy * dy) * invTwoSigmaSq);
-            sum += src.read(uint2(gid.x, uint(sy))) * wt;
+            float dist = float(dy) * step;
+            float wt = exp(-(dist * dist) * invTwoSigmaSq);
+            sum += src.sample(pxSampler, float2(cx, float(gid.y) + 0.5f + dist)) * wt;
             wSum += wt;
         }
         dst.write(sum / max(wSum, 1e-5f), gid);

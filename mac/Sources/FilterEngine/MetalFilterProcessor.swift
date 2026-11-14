@@ -8,7 +8,7 @@ private struct BlurUniforms {
     var sigma: Float
     var texelStepX: Float
     var texelStepY: Float
-    var unused: Float = 0
+    var tapStep: Float
 }
 
 /// Thread-safe, iOS-portable Metal GPU pipeline for 16-bit half-float scene-referred film & optical processing.
@@ -287,8 +287,10 @@ public final class MetalFilterProcessor: @unchecked Sendable {
     ) {
         let w = src.width
         let h = src.height
-        var buX = BlurUniforms(sigma: sigmaX, texelStepX: 1.0 / Float(w), texelStepY: 0)
-        var buY = BlurUniforms(sigma: sigmaY, texelStepX: 0, texelStepY: 1.0 / Float(h))
+        let stepX = max(Float(1.0), (sigmaX * 2.5) / 28.0)
+        let stepY = max(Float(1.0), (sigmaY * 2.5) / 28.0)
+        var buX = BlurUniforms(sigma: sigmaX, texelStepX: 1.0 / Float(w), texelStepY: 0, tapStep: stepX)
+        var buY = BlurUniforms(sigma: sigmaY, texelStepX: 0, texelStepY: 1.0 / Float(h), tapStep: stepY)
 
         if let enc = commandBuffer.makeComputeCommandEncoder() {
             enc.setComputePipelineState(blurHPSO)

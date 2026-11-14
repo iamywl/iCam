@@ -315,19 +315,22 @@ in vec2 vUV;
 uniform sampler2D uTex;
 uniform vec2 uDirectionStep; // (texelStepX, 0) or (0, texelStepY)
 uniform float uSigma;
+uniform float uTapStep;
 uniform int uRadius;
 
 out vec4 outColor;
 
 void main() {
   float sigma = max(uSigma, 0.5);
+  float stepPx = max(uTapStep, 1.0);
   float invTwoSigmaSq = 1.0 / (2.0 * sigma * sigma);
   vec4 sum = vec4(0.0);
   float wSum = 0.0;
   for (int i = -28; i <= 28; ++i) {
     if (i < -uRadius || i > uRadius) continue;
-    float wt = exp(-float(i * i) * invTwoSigmaSq);
-    sum += texture(uTex, clamp(vUV + uDirectionStep * float(i), 0.0, 1.0)) * wt;
+    float pxOffset = float(i) * stepPx;
+    float wt = exp(-(pxOffset * pxOffset) * invTwoSigmaSq);
+    sum += texture(uTex, clamp(vUV + uDirectionStep * pxOffset, 0.0, 1.0)) * wt;
     wSum += wt;
   }
   outColor = sum / max(wSum, 1e-5);
@@ -527,6 +530,23 @@ export class WebGLFilterEngine {
     this.allocH = 0;
   }
 
+  getMaxTextureSize() {
+    const hwMax = this.gl.getParameter(this.gl.MAX_TEXTURE_SIZE) || 4096;
+    return Math.min(hwMax, 6144);
+  }
+
+  dispose() {
+    const gl = this.gl;
+    this.#disposeTargets();
+    if (this.srcTex) gl.deleteTexture(this.srcTex);
+    if (this.quadVBO) gl.deleteBuffer(this.quadVBO);
+    [this.prePassProg, this.downsampleProg, this.blurProg, this.compositeProg].forEach((p) => {
+      if (p) gl.deleteProgram(p);
+    });
+    const ext = gl.getExtension("WEBGL_lose_context");
+    if (ext) ext.loseContext();
+  }
+
   render(source, recipe, options = {}) {
     const gl = this.gl;
     const srcW = source.videoWidth || source.naturalWidth || source.width;
@@ -615,22 +635,26 @@ export class WebGLFilterEngine {
     gl.useProgram(this.blurProg);
 
     // Horizontal pass A -> B
-    const radX = Math.min(28, Math.max(1, Math.ceil(sigmaX * 2.5)));
+    const stepX = Math.max(1.0, (sigmaX * 2.5) / 28.0);
+    const radX = Math.min(28, Math.max(1, Math.ceil((sigmaX * 2.5) / stepX)));
     gl.bindFramebuffer(gl.FRAMEBUFFER, pairB.fbo);
     gl.viewport(0, 0, w, h);
     this.#bindTextureUnit(this.blurProg, "uTex", pairA.tex, 0);
     gl.uniform2f(gl.getUniformLocation(this.blurProg, "uDirectionStep"), 1.0 / w, 0.0);
     gl.uniform1f(gl.getUniformLocation(this.blurProg, "uSigma"), sigmaX);
+    gl.uniform1f(gl.getUniformLocation(this.blurProg, "uTapStep"), stepX);
     gl.uniform1i(gl.getUniformLocation(this.blurProg, "uRadius"), radX);
     this.#drawQuad(this.blurProg);
 
     // Vertical pass B -> A
-    const radY = Math.min(28, Math.max(1, Math.ceil(sigmaY * 2.5)));
+    const stepY = Math.max(1.0, (sigmaY * 2.5) / 28.0);
+    const radY = Math.min(28, Math.max(1, Math.ceil((sigmaY * 2.5) / stepY)));
     gl.bindFramebuffer(gl.FRAMEBUFFER, pairA.fbo);
     gl.viewport(0, 0, w, h);
     this.#bindTextureUnit(this.blurProg, "uTex", pairB.tex, 0);
     gl.uniform2f(gl.getUniformLocation(this.blurProg, "uDirectionStep"), 0.0, 1.0 / h);
     gl.uniform1f(gl.getUniformLocation(this.blurProg, "uSigma"), sigmaY);
+    gl.uniform1f(gl.getUniformLocation(this.blurProg, "uTapStep"), stepY);
     gl.uniform1i(gl.getUniformLocation(this.blurProg, "uRadius"), radY);
     this.#drawQuad(this.blurProg);
   }

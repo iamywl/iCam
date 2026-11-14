@@ -1,76 +1,126 @@
-import { loadCanonicalCatalog, STOCK_BASELINE } from "./recipes.js";
+import { STOCK_BASELINE, EMBEDDED_DEFAULT_CATALOG, loadCanonicalCatalog } from "./recipes.js";
 import { WebGLFilterEngine } from "./webgl-filter-engine.js";
 import { CameraController } from "./camera-controller.js";
 
-const RATIOS = [
-  { key: "3x4", label: "3:4", value: 3 / 4 },
-  { key: "4x3", label: "4:3", value: 4 / 3 },
-  { key: "16x9", label: "16:9", value: 16 / 9 }
-];
-
-const state = {
-  catalog: null,
-  activeId: "01_vintage_35mm",
-  mode: "camera", // 'camera' | 'grid' | 'split'
-  bypass: false,
-  debugMask: 0,
-  ratioIndex: 0,
-  testImage: null, // HTMLCanvasElement or HTMLImageElement used for grid/split & fallback
-  testImageSeed: 17,
-  lastShotDataUrl: null,
-  lastShotFilename: null,
-  splitX: 0.5,
-  splitLeftId: "stock",
-  splitRightId: "01_vintage_35mm",
-  blindEnabled: false,
-  blindRevealed: false,
-  blindPair: { left: "stock", right: "01_vintage_35mm" }
-};
+const PREVIEW_MAX_EDGE = 1440;
+const GRID_THUMB_MAX_EDGE = 420;
+const FILMSTRIP_THUMB_EDGE = 96;
+const SHEET_TILE_MAX_EDGE = 760;
 
 const els = {
   syncBadge: document.getElementById("syncBadge"),
+  photoMetaBadge: document.getElementById("photoMetaBadge"),
   modeBtns: Array.from(document.querySelectorAll(".mode-btn")),
-  panes: {
-    camera: document.getElementById("cameraView"),
-    grid: document.getElementById("gridView"),
-    split: document.getElementById("splitView")
-  },
-  photoInput: document.getElementById("photoUploadInput"),
-  recipeInput: document.getElementById("recipeUploadInput"),
-  viewfinderFrame: document.getElementById("viewfinderFrame"),
-  liveCanvas: document.getElementById("liveCanvas"),
-  activeShortTag: document.getElementById("activeShortTag"),
-  activeMoodLabel: document.getElementById("activeMoodLabel"),
-  aspectRatioBtn: document.getElementById("aspectRatioBtn"),
-  bypassHoldBtn: document.getElementById("bypassHoldBtn"),
-  flipLensBtn: document.getElementById("flipLensBtn"),
-  debugMaskSelect: document.getElementById("debugMaskSelect"),
-  filmDial: document.getElementById("filmDial"),
-  lastShotThumbBtn: document.getElementById("lastShotThumbBtn"),
-  lastShotThumbImg: document.getElementById("lastShotThumbImg"),
-  lastShotEmpty: document.getElementById("lastShotEmpty"),
-  shutterBtn: document.getElementById("shutterBtn"),
-  downloadShotBtn: document.getElementById("downloadShotBtn"),
+  openPhotosBtn: document.getElementById("openPhotosBtn"),
+  photoInput: document.getElementById("photoInput"),
+  saveFullResBtn: document.getElementById("saveFullResBtn"),
+  exportSheetBtn: document.getElementById("exportSheetBtn"),
+  importJsonBtn: document.getElementById("importJsonBtn"),
+  jsonInput: document.getElementById("jsonInput"),
+
+  batchStrip: document.getElementById("batchStrip"),
+  batchThumbList: document.getElementById("batchThumbList"),
+
+  gridView: document.getElementById("gridView"),
   contactGrid: document.getElementById("contactGrid"),
+
+  studioView: document.getElementById("studioView"),
+  studioMat: document.querySelector(".studio-mat"),
+  studioCanvas: document.getElementById("studioCanvas"),
+  studioFilmDial: document.getElementById("studioFilmDial"),
+  studioCodeTitle: document.getElementById("studioCodeTitle"),
+  studioModifiedTag: document.getElementById("studioModifiedTag"),
+  studioMoodSubtitle: document.getElementById("studioMoodSubtitle"),
+  bypassBtn: document.getElementById("bypassBtn"),
+  debugMaskSelect: document.getElementById("debugMaskSelect"),
+  sliderIntensity: document.getElementById("sliderIntensity"),
+  sliderExposure: document.getElementById("sliderExposure"),
+  sliderTemp: document.getElementById("sliderTemp"),
+  sliderContrast: document.getElementById("sliderContrast"),
+  sliderGrain: document.getElementById("sliderGrain"),
+  valIntensity: document.getElementById("valIntensity"),
+  valExposure: document.getElementById("valExposure"),
+  valTemp: document.getElementById("valTemp"),
+  valContrast: document.getElementById("valContrast"),
+  valGrain: document.getElementById("valGrain"),
+  resetTuningBtn: document.getElementById("resetTuningBtn"),
+  exportRecipeJsonBtn: document.getElementById("exportRecipeJsonBtn"),
+  studioSaveBtn: document.getElementById("studioSaveBtn"),
+
+  splitView: document.getElementById("splitView"),
   splitPickers: document.getElementById("splitPickers"),
   splitLeftSelect: document.getElementById("splitLeftSelect"),
   splitRightSelect: document.getElementById("splitRightSelect"),
-  blindStatusBar: document.getElementById("blindStatusBar"),
-  blindAnswerText: document.getElementById("blindAnswerText"),
-  blindRevealBtn: document.getElementById("blindRevealBtn"),
+  blindStatus: document.getElementById("blindStatus"),
   blindToggleBtn: document.getElementById("blindToggleBtn"),
+  blindRevealBtn: document.getElementById("blindRevealBtn"),
+  splitMat: document.querySelector(".split-mat"),
   splitStage: document.getElementById("splitStage"),
   splitCanvas: document.getElementById("splitCanvas"),
   splitDivider: document.getElementById("splitDivider"),
-  splitLeftCaption: document.getElementById("splitLeftCaption"),
-  splitRightCaption: document.getElementById("splitRightCaption"),
+  splitLeftLabel: document.getElementById("splitLeftLabel"),
+  splitRightLabel: document.getElementById("splitRightLabel"),
+
+  cameraView: document.getElementById("cameraView"),
+  viewfinderFrame: document.getElementById("viewfinderFrame"),
   cameraVideo: document.getElementById("cameraVideo"),
+  liveCanvas: document.getElementById("liveCanvas"),
+  cameraNotice: document.getElementById("cameraNotice"),
+  cameraNoticeText: document.getElementById("cameraNoticeText"),
+  cameraRetryBtn: document.getElementById("cameraRetryBtn"),
+  camCodeLabel: document.getElementById("camCodeLabel"),
+  camMoodLabel: document.getElementById("camMoodLabel"),
+  ratioBtn: document.getElementById("ratioBtn"),
+  flipBtn: document.getElementById("flipBtn"),
+  pauseBtn: document.getElementById("pauseBtn"),
+  cameraFilmDial: document.getElementById("cameraFilmDial"),
+  shutterBtn: document.getElementById("shutterBtn"),
+  camCaptureThumb: document.getElementById("camCaptureThumb"),
+  lastThumbImg: document.getElementById("lastThumbImg"),
+  lastThumbEmpty: document.getElementById("lastThumbEmpty"),
+  openStudioFromCamBtn: document.getElementById("openStudioFromCamBtn"),
+
+  dropOverlay: document.getElementById("dropOverlay"),
   statusBar: document.getElementById("statusBar")
 };
 
-let liveEngine = null;
-let offscreenEngine = null;
+const RATIOS = [
+  { label: "3:4", className: "ratio-3x4", aspect: 3 / 4 },
+  { label: "4:3", className: "ratio-4x3", aspect: 4 / 3 },
+  { label: "16:9", className: "ratio-16x9", aspect: 16 / 9 }
+];
+
+const state = {
+  catalog: structuredClone(EMBEDDED_DEFAULT_CATALOG),
+  mode: "grid",
+  activeId: "01_vintage_35mm",
+  bypass: false,
+  debugMask: 0,
+  trims: {}, // recipeId -> { intensityPct, exposureDelta, tempSteps, contrastDelta, grainPct }
+
+  photos: [], // array of { id, name, fullSource, fullWidth, fullHeight, previewCanvas, gridThumbCanvas, thumbUrl, objectUrl }
+  activePhotoId: null,
+
+  seedBase: 1337,
+  splitX: 0.5,
+  splitLeftId: "stock",
+  splitRightId: "04_nocturne_cinema",
+  blindEnabled: false,
+  blindRevealed: false,
+  blindPair: { left: "stock", right: "04_nocturne_cinema" },
+
+  ratioIdx: 0,
+  pausedLive: false,
+  cameraStartedOnce: false,
+  lastCapturedPhotoId: null,
+  isExporting: false,
+  dragDepth: 0
+};
+
+let studioEngine = null;
 let splitEngine = null;
+let liveEngine = null;
+let gridThumbEngine = null;
 let cameraCtrl = null;
 let rafId = null;
 
@@ -78,17 +128,65 @@ function setStatus(msg) {
   els.statusBar.textContent = msg;
 }
 
-function getRecipeById(id) {
+function clamp(v, min, max) {
+  return Math.min(max, Math.max(min, v));
+}
+
+function getDefaultTrim() {
+  return {
+    intensityPct: 100,
+    exposureDelta: 0,
+    tempSteps: 0,
+    contrastDelta: 0,
+    grainPct: 100
+  };
+}
+
+function getTrim(id) {
+  if (id === "stock" || id === "00_stock_original") return getDefaultTrim();
+  if (!state.trims[id]) state.trims[id] = getDefaultTrim();
+  return state.trims[id];
+}
+
+function isTrimModified(id) {
+  const t = getTrim(id);
+  return (
+    t.intensityPct !== 100 ||
+    Math.abs(t.exposureDelta) > 0.001 ||
+    t.tempSteps !== 0 ||
+    Math.abs(t.contrastDelta) > 0.001 ||
+    t.grainPct !== 100
+  );
+}
+
+function getRawRecipeById(id) {
   if (id === "stock" || id === "00_stock_original") return STOCK_BASELINE;
   return state.catalog.aesthetics.find((a) => a.id === id) || state.catalog.aesthetics[0] || STOCK_BASELINE;
 }
 
-function getEffectiveActiveRecipe() {
-  return state.bypass ? STOCK_BASELINE : getRecipeById(state.activeId);
+function getTunedRecipeById(id) {
+  const base = getRawRecipeById(id);
+  if (base.id === STOCK_BASELINE.id) return base;
+  const trim = getTrim(base.id);
+  const tuned = structuredClone(base);
+  tuned.intensity = clamp((base.intensity ?? 1.0) * (trim.intensityPct / 100), 0.0, 1.0);
+  tuned.tone.exposureEV = clamp(tuned.tone.exposureEV + trim.exposureDelta, -2.5, 2.5);
+  tuned.tone.wbTempShift = clamp(tuned.tone.wbTempShift + trim.tempSteps * 0.008, -0.5, 0.5);
+  tuned.tone.midContrast = clamp(tuned.tone.midContrast + trim.contrastDelta, 0.55, 1.55);
+  tuned.opticsAndGrain.grainAmount = clamp(tuned.opticsAndGrain.grainAmount * (trim.grainPct / 100), 0.0, 0.35);
+  return tuned;
 }
 
-// Synthetic studio calibration portrait so Grid/Split/Preview work instantaneously even without camera
-function createCalibrationFallbackCanvas(w = 720, h = 960) {
+function getEffectiveActiveRecipe() {
+  return state.bypass ? STOCK_BASELINE : getTunedRecipeById(state.activeId);
+}
+
+function getActivePhoto() {
+  return state.photos.find((p) => p.id === state.activePhotoId) || state.photos[0];
+}
+
+// Synthetic studio calibration portrait so 3x3 Grid & Studio work offline immediately
+function createCalibrationFallbackCanvas(w = 600, h = 800) {
   const canvas = document.createElement("canvas");
   canvas.width = w;
   canvas.height = h;
@@ -160,9 +258,9 @@ function createCalibrationFallbackCanvas(w = 720, h = 960) {
       }
 
       const i = (y * w + x) * 4;
-      d[i] = Math.max(0, Math.min(255, r));
-      d[i + 1] = Math.max(0, Math.min(255, g));
-      d[i + 2] = Math.max(0, Math.min(255, b));
+      d[i] = clamp(r, 0, 255);
+      d[i + 1] = clamp(g, 0, 255);
+      d[i + 2] = clamp(b, 0, 255);
       d[i + 3] = 255;
     }
   }
@@ -170,152 +268,298 @@ function createCalibrationFallbackCanvas(w = 720, h = 960) {
   return canvas;
 }
 
-function buildFilmDialAndSelectors() {
-  els.filmDial.innerHTML = "";
-  const items = [{ id: "stock", shortLabel: "00 STOCK", moodCue: "Unmodified Reference" }, ...state.catalog.aesthetics];
+function downsampleCanvasFromSource(src, maxEdge) {
+  const srcW = src.naturalWidth || src.videoWidth || src.width;
+  const srcH = src.naturalHeight || src.videoHeight || src.height;
+  const scale = Math.min(1.0, maxEdge / Math.max(srcW, srcH));
+  const outW = Math.max(2, Math.round(srcW * scale));
+  const outH = Math.max(2, Math.round(srcH * scale));
+  const canvas = document.createElement("canvas");
+  canvas.width = outW;
+  canvas.height = outH;
+  const ctx = canvas.getContext("2d");
+  ctx.imageSmoothingEnabled = true;
+  ctx.imageSmoothingQuality = "high";
+  ctx.drawImage(src, 0, 0, outW, outH);
+  return canvas;
+}
 
-  items.forEach((item) => {
+function makePhotoEntry({ id, name, fullSource, objectUrl = null, isSample = false }) {
+  const fullWidth = fullSource.naturalWidth || fullSource.videoWidth || fullSource.width;
+  const fullHeight = fullSource.naturalHeight || fullSource.videoHeight || fullSource.height;
+  const previewCanvas = downsampleCanvasFromSource(fullSource, PREVIEW_MAX_EDGE);
+  const gridThumbCanvas = downsampleCanvasFromSource(previewCanvas, GRID_THUMB_MAX_EDGE);
+  const tinyCanvas = downsampleCanvasFromSource(gridThumbCanvas, FILMSTRIP_THUMB_EDGE);
+  return {
+    id,
+    name,
+    isSample,
+    fullSource,
+    fullWidth,
+    fullHeight,
+    previewCanvas,
+    gridThumbCanvas,
+    thumbUrl: tinyCanvas.toDataURL("image/jpeg", 0.8),
+    objectUrl
+  };
+}
+
+function initCalibrationSample() {
+  const sampleCanvas = createCalibrationFallbackCanvas(600, 800);
+  const entry = makePhotoEntry({
+    id: "sample_calibration",
+    name: "SAMPLE",
+    fullSource: sampleCanvas,
+    isSample: true
+  });
+  state.photos = [entry];
+  state.activePhotoId = entry.id;
+}
+
+function fitAspectBox(matEl, targetEl, srcW, srcH, verticalReserve = 0) {
+  if (!matEl || !targetEl || !srcW || !srcH) return;
+  const cs = getComputedStyle(matEl);
+  const padX = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+  const padY = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
+  const availW = Math.max(80, matEl.clientWidth - padX);
+  const availH = Math.max(80, matEl.clientHeight - padY - verticalReserve);
+  const scale = Math.min(availW / srcW, availH / srcH);
+  targetEl.style.width = `${Math.max(40, Math.floor(srcW * scale))}px`;
+  targetEl.style.height = `${Math.max(40, Math.floor(srcH * scale))}px`;
+}
+
+function syncStageGeometries() {
+  const photo = getActivePhoto();
+  if (!photo) return;
+  fitAspectBox(els.studioMat, els.studioCanvas, photo.previewCanvas.width, photo.previewCanvas.height, 0);
+  fitAspectBox(els.splitMat, els.splitStage, photo.previewCanvas.width, photo.previewCanvas.height, 26);
+}
+
+function buildDialButtons(dialEl) {
+  dialEl.innerHTML = "";
+  const all = [STOCK_BASELINE, ...state.catalog.aesthetics];
+  for (const r of all) {
+    const isStock = r.id === STOCK_BASELINE.id;
+    const isActive = isStock ? state.bypass : (!state.bypass && state.activeId === r.id);
     const btn = document.createElement("button");
     btn.type = "button";
-    btn.className = "dial-pill" + ((item.id === "stock" ? state.bypass : (!state.bypass && state.activeId === item.id)) ? " active" : "");
-    btn.textContent = item.shortLabel;
+    btn.className = "dial-pill" + (isActive ? " active" : "");
+    btn.textContent = r.shortLabel;
     btn.addEventListener("click", () => {
-      if (item.id === "stock") {
+      if (isStock) {
         state.bypass = true;
       } else {
         state.bypass = false;
-        state.activeId = item.id;
-        state.splitRightId = item.id;
-        els.splitRightSelect.value = item.id;
+        state.activeId = r.id;
       }
       refreshActiveUI();
     });
-    els.filmDial.appendChild(btn);
-  });
+    dialEl.appendChild(btn);
+  }
+}
 
-  const fillSelect = (sel, selected) => {
-    sel.innerHTML = "";
-    items.forEach((it) => {
-      const opt = document.createElement("option");
-      opt.value = it.id;
-      opt.textContent = it.shortLabel;
-      sel.appendChild(opt);
+function buildFilmDialsAndSelectors() {
+  buildDialButtons(els.studioFilmDial);
+  buildDialButtons(els.cameraFilmDial);
+
+  const prevLeft = els.splitLeftSelect.value || state.splitLeftId;
+  const prevRight = els.splitRightSelect.value || state.splitRightId;
+  els.splitLeftSelect.innerHTML = "";
+  els.splitRightSelect.innerHTML = "";
+
+  const all = [STOCK_BASELINE, ...state.catalog.aesthetics];
+  for (const r of all) {
+    const val = r.id === STOCK_BASELINE.id ? "stock" : r.id;
+    const optL = document.createElement("option");
+    optL.value = val;
+    optL.textContent = r.shortLabel;
+    els.splitLeftSelect.appendChild(optL);
+
+    const optR = document.createElement("option");
+    optR.value = val;
+    optR.textContent = r.shortLabel;
+    els.splitRightSelect.appendChild(optR);
+  }
+  els.splitLeftSelect.value = prevLeft;
+  els.splitRightSelect.value = prevRight;
+}
+
+function syncStudioSlidersUI() {
+  const recipe = getEffectiveActiveRecipe();
+  const trim = getTrim(recipe.id);
+  const disabled = recipe.id === STOCK_BASELINE.id;
+
+  els.sliderIntensity.disabled = disabled;
+  els.sliderExposure.disabled = disabled;
+  els.sliderTemp.disabled = disabled;
+  els.sliderContrast.disabled = disabled;
+  els.sliderGrain.disabled = disabled;
+  els.resetTuningBtn.disabled = disabled || !isTrimModified(recipe.id);
+
+  els.sliderIntensity.value = String(trim.intensityPct);
+  els.sliderExposure.value = String(trim.exposureDelta);
+  els.sliderTemp.value = String(trim.tempSteps);
+  els.sliderContrast.value = String(trim.contrastDelta);
+  els.sliderGrain.value = String(trim.grainPct);
+
+  els.valIntensity.textContent = `${trim.intensityPct}%`;
+  const evSign = trim.exposureDelta > 0.001 ? "+" : "";
+  els.valExposure.textContent = `${evSign}${trim.exposureDelta.toFixed(2)} EV`;
+  const tempSign = trim.tempSteps > 0 ? "+" : "";
+  els.valTemp.textContent = `${tempSign}${trim.tempSteps}`;
+  const ctrSign = trim.contrastDelta > 0.001 ? "+" : "";
+  els.valContrast.textContent = `${ctrSign}${trim.contrastDelta.toFixed(2)}`;
+  els.valGrain.textContent = `${trim.grainPct}%`;
+
+  els.studioModifiedTag.hidden = disabled || !isTrimModified(recipe.id);
+  els.bypassBtn.classList.toggle("active", state.bypass);
+  els.bypassBtn.setAttribute("aria-pressed", state.bypass ? "true" : "false");
+  els.bypassBtn.textContent = state.bypass ? "Viewing Original (Stock)" : "Compare Original";
+}
+
+function refreshBatchStrip() {
+  const hasUserPhotos = state.photos.some((p) => !p.isSample);
+  els.batchStrip.hidden = !hasUserPhotos;
+  els.batchThumbList.innerHTML = "";
+
+  for (const photo of state.photos) {
+    const item = document.createElement("div");
+    item.className = "batch-item" + (photo.id === state.activePhotoId ? " active" : "");
+    item.addEventListener("click", (ev) => {
+      if (ev.target.closest(".batch-remove-btn")) return;
+      selectPhoto(photo.id);
     });
-    sel.value = selected;
-  };
-  fillSelect(els.splitLeftSelect, state.splitLeftId);
-  fillSelect(els.splitRightSelect, state.splitRightId);
+
+    const img = document.createElement("img");
+    img.className = "batch-thumb-img";
+    img.src = photo.thumbUrl;
+    img.alt = photo.name;
+
+    const meta = document.createElement("div");
+    meta.className = "batch-item-meta";
+    const nameEl = document.createElement("span");
+    nameEl.className = "batch-item-name";
+    nameEl.textContent = photo.name;
+    const dimsEl = document.createElement("span");
+    dimsEl.className = "batch-item-dims";
+    dimsEl.textContent = `${photo.fullWidth}×${photo.fullHeight}`;
+    meta.append(nameEl, dimsEl);
+
+    item.append(img, meta);
+
+    if (!photo.isSample) {
+      const rmBtn = document.createElement("button");
+      rmBtn.type = "button";
+      rmBtn.className = "batch-remove-btn";
+      rmBtn.title = "Remove photo";
+      rmBtn.textContent = "×";
+      rmBtn.addEventListener("click", (ev) => {
+        ev.stopPropagation();
+        removePhoto(photo.id);
+      });
+      item.appendChild(rmBtn);
+    }
+
+    els.batchThumbList.appendChild(item);
+  }
+}
+
+function updatePhotoMetaBadge() {
+  const photo = getActivePhoto();
+  if (!photo) return;
+  const label = photo.isSample ? "SAMPLE" : photo.name.replace(/\.[^.]+$/, "").slice(0, 14);
+  els.photoMetaBadge.textContent = `${label} · ${photo.fullWidth}×${photo.fullHeight}`;
+}
+
+function refreshDialHighlight(dialEl) {
+  const all = [STOCK_BASELINE, ...state.catalog.aesthetics];
+  const pills = dialEl.querySelectorAll(".dial-pill");
+  pills.forEach((p, idx) => {
+    const rec = all[idx];
+    if (!rec) return;
+    const active = idx === 0 ? state.bypass : (!state.bypass && state.activeId === rec.id);
+    p.classList.toggle("active", active);
+  });
 }
 
 function refreshActiveUI() {
-  const active = getEffectiveActiveRecipe();
-  els.activeShortTag.textContent = state.bypass ? "00 STOCK (BYPASS)" : active.shortLabel;
-  els.activeMoodLabel.textContent = state.bypass ? "Original Unfiltered" : active.moodCue;
-  els.bypassHoldBtn.classList.toggle("active", state.bypass);
+  const r = getEffectiveActiveRecipe();
+  els.studioCodeTitle.textContent = r.shortLabel;
+  els.studioMoodSubtitle.textContent = r.moodCue;
+  els.camCodeLabel.textContent = r.shortLabel;
+  els.camMoodLabel.textContent = r.moodCue;
 
-  Array.from(els.filmDial.children).forEach((btn, idx) => {
-    const isStock = idx === 0;
-    const rec = isStock ? null : state.catalog.aesthetics[idx - 1];
-    const selected = isStock ? state.bypass : (!state.bypass && rec && rec.id === state.activeId);
-    btn.classList.toggle("active", Boolean(selected));
-  });
+  refreshDialHighlight(els.studioFilmDial);
+  refreshDialHighlight(els.cameraFilmDial);
+  syncStudioSlidersUI();
+  updatePhotoMetaBadge();
 
-  if (state.mode === "split") {
-    renderSplitView();
-  }
-  if (!cameraCtrl?.isActive && state.mode === "camera") {
-    renderLiveFrameOnce();
-  }
+  if (state.mode === "studio") renderStudioView();
+  if (state.mode === "split") renderSplitView();
 }
 
-function setMode(mode) {
-  state.mode = mode;
-  els.modeBtns.forEach((b) => b.classList.toggle("active", b.dataset.mode === mode));
-  Object.entries(els.panes).forEach(([k, pane]) => pane.classList.toggle("active", k === mode));
+function selectPhoto(photoId) {
+  state.activePhotoId = photoId;
+  refreshBatchStrip();
+  updatePhotoMetaBadge();
+  syncStageGeometries();
+  if (state.mode === "grid") renderContactGrid();
+  if (state.mode === "studio") renderStudioView();
+  if (state.mode === "split") renderSplitView();
+}
 
-  if (mode === "grid") {
-    renderContactGrid();
-  } else if (mode === "split") {
-    renderSplitView();
-  } else {
-    if (!cameraCtrl.isActive) {
-      renderLiveFrameOnce();
-    }
+function removePhoto(photoId) {
+  const idx = state.photos.findIndex((p) => p.id === photoId);
+  if (idx === -1) return;
+  const [removed] = state.photos.splice(idx, 1);
+  if (removed?.objectUrl) URL.revokeObjectURL(removed.objectUrl);
+  if (state.activePhotoId === photoId) {
+    const fallback = state.photos[Math.max(0, idx - 1)] || state.photos[0];
+    state.activePhotoId = fallback ? fallback.id : null;
   }
-}
-
-function renderLiveFrameOnce() {
-  if (!liveEngine) return;
-  const source = cameraCtrl?.isActive && els.cameraVideo.readyState >= 2 ? els.cameraVideo : state.testImage;
-  if (!source) return;
-
-  const srcW = source.videoWidth || source.width;
-  const srcH = source.videoHeight || source.height;
-  if (!srcW || !srcH) return;
-
-  // Render preview scaled sensibly up to 1280px long edge for crisp 60fps
-  const scale = Math.min(1.0, 1280 / Math.max(srcW, srcH));
-  const outW = Math.max(2, Math.round(srcW * scale));
-  const outH = Math.max(2, Math.round(srcH * scale));
-
-  liveEngine.render(source, getEffectiveActiveRecipe(), {
-    width: outW,
-    height: outH,
-    seed: state.testImageSeed,
-    debugMaskMode: state.debugMask,
-    mirrorX: cameraCtrl?.isActive ? cameraCtrl.shouldMirror : false
-  });
-}
-
-function startRenderLoop() {
-  const tick = () => {
-    if (state.mode === "camera" && cameraCtrl?.isActive && els.cameraVideo.readyState >= 2) {
-      renderLiveFrameOnce();
-    }
-    rafId = requestAnimationFrame(tick);
-  };
-  rafId = requestAnimationFrame(tick);
+  refreshBatchStrip();
+  updatePhotoMetaBadge();
+  syncStageGeometries();
+  if (state.mode === "grid") renderContactGrid();
+  if (state.mode === "studio") renderStudioView();
+  if (state.mode === "split") renderSplitView();
 }
 
 function renderContactGrid() {
-  if (!offscreenEngine || !state.testImage) return;
-  const src = state.testImage;
-  const srcW = src.width || src.naturalWidth || 720;
-  const srcH = src.height || src.naturalHeight || 960;
-  const scale = Math.min(1.0, 420 / Math.max(srcW, srcH));
-  const tw = Math.max(2, Math.round(srcW * scale));
-  const th = Math.max(2, Math.round(srcH * scale));
-
+  const photo = getActivePhoto();
+  if (!gridThumbEngine || !photo) return;
+  const src = photo.gridThumbCanvas;
   els.contactGrid.innerHTML = "";
-  const items = [STOCK_BASELINE, ...state.catalog.aesthetics];
+  const all = [STOCK_BASELINE, ...state.catalog.aesthetics];
 
-  items.forEach((recipe, idx) => {
-    offscreenEngine.render(src, recipe, {
-      width: tw,
-      height: th,
-      seed: state.testImageSeed,
+  all.forEach((baseRecipe, idx) => {
+    const recipe = idx === 0 ? STOCK_BASELINE : getTunedRecipeById(baseRecipe.id);
+    gridThumbEngine.render(src, recipe, {
+      width: src.width,
+      height: src.height,
+      seed: state.seedBase,
       debugMaskMode: state.debugMask
     });
-    const dataUrl = offscreenEngine.canvas.toDataURL("image/jpeg", 0.92);
+    const dataUrl = gridThumbEngine.canvas.toDataURL("image/jpeg", 0.91);
 
     const card = document.createElement("div");
-    card.className = "grid-card" + ((idx === 0 ? state.bypass : (!state.bypass && state.activeId === recipe.id)) ? " active" : "");
+    card.className = "grid-card" + ((idx === 0 ? state.bypass : (!state.bypass && state.activeId === baseRecipe.id)) ? " active" : "");
 
     const frame = document.createElement("div");
     frame.className = "grid-frame";
     const img = document.createElement("img");
     img.src = dataUrl;
-    img.alt = recipe.shortLabel;
+    img.alt = baseRecipe.shortLabel;
     frame.appendChild(img);
 
     const meta = document.createElement("div");
     meta.className = "grid-meta";
     const tag = document.createElement("span");
     tag.className = "mono-tag";
-    tag.textContent = recipe.shortLabel;
+    tag.textContent = baseRecipe.shortLabel;
     const cue = document.createElement("span");
     cue.className = "mood-label";
-    cue.textContent = recipe.moodCue;
+    cue.textContent = baseRecipe.moodCue;
     meta.append(tag, cue);
 
     card.append(frame, meta);
@@ -324,52 +568,53 @@ function renderContactGrid() {
         state.bypass = true;
       } else {
         state.bypass = false;
-        state.activeId = recipe.id;
-        state.splitRightId = recipe.id;
-        els.splitRightSelect.value = recipe.id;
+        state.activeId = baseRecipe.id;
+        state.splitRightId = baseRecipe.id;
+        els.splitRightSelect.value = baseRecipe.id;
       }
-      refreshActiveUI();
-      renderContactGrid();
+      setMode("studio");
     });
-    card.addEventListener("dblclick", () => {
-      if (idx > 0) {
-        state.bypass = false;
-        state.activeId = recipe.id;
-        state.splitLeftId = "stock";
-        state.splitRightId = recipe.id;
-        setMode("split");
-      }
-    });
+
     els.contactGrid.appendChild(card);
   });
 }
 
+function renderStudioView() {
+  const photo = getActivePhoto();
+  if (!studioEngine || !photo) return;
+  const src = photo.previewCanvas;
+  syncStageGeometries();
+  studioEngine.render(src, getEffectiveActiveRecipe(), {
+    width: src.width,
+    height: src.height,
+    seed: state.seedBase,
+    debugMaskMode: state.debugMask
+  });
+}
+
 function renderSplitView() {
-  if (!splitEngine || !state.testImage) return;
-  const src = state.testImage;
-  const srcW = src.width || src.naturalWidth || 720;
-  const srcH = src.height || src.naturalHeight || 960;
-  const scale = Math.min(1.0, 1120 / Math.max(srcW, srcH));
-  const outW = Math.max(2, Math.round(srcW * scale));
-  const outH = Math.max(2, Math.round(srcH * scale));
-  els.splitStage.style.aspectRatio = `${outW} / ${outH}`;
+  const photo = getActivePhoto();
+  if (!splitEngine || !photo) return;
+  const src = photo.previewCanvas;
+  const outW = src.width;
+  const outH = src.height;
+  syncStageGeometries();
 
   const leftId = state.blindEnabled ? state.blindPair.left : state.splitLeftId;
   const rightId = state.blindEnabled ? state.blindPair.right : state.splitRightId;
   const splitPx = Math.max(1, Math.min(outW - 1, Math.round(outW * state.splitX)));
 
-  splitEngine.render(src, getRecipeById(leftId), {
+  splitEngine.render(src, getTunedRecipeById(leftId), {
     width: outW,
     height: outH,
-    seed: state.testImageSeed,
-    debugMaskMode: state.debugMask,
-    scissor: { x: 0, y: 0, w: splitPx, h: outH }
+    seed: state.seedBase,
+    debugMaskMode: state.debugMask
   });
 
-  splitEngine.render(src, getRecipeById(rightId), {
+  splitEngine.render(src, getTunedRecipeById(rightId), {
     width: outW,
     height: outH,
-    seed: state.testImageSeed,
+    seed: state.seedBase,
     debugMaskMode: state.debugMask,
     scissor: { x: splitPx, y: 0, w: outW - splitPx, h: outH }
   });
@@ -377,227 +622,460 @@ function renderSplitView() {
   els.splitDivider.style.left = `${(state.splitX * 100).toFixed(2)}%`;
 
   if (state.blindEnabled && !state.blindRevealed) {
-    els.splitLeftCaption.textContent = "SAMPLE A";
-    els.splitRightCaption.textContent = "SAMPLE B";
-    els.blindAnswerText.textContent = "Compare A vs B — Which feels richer?";
-    els.blindRevealBtn.textContent = "Reveal";
+    els.splitLeftLabel.textContent = "A (BLIND)";
+    els.splitRightLabel.textContent = "B (BLIND)";
   } else {
-    els.splitLeftCaption.textContent = getRecipeById(leftId).shortLabel;
-    els.splitRightCaption.textContent = getRecipeById(rightId).shortLabel;
-    if (state.blindEnabled) {
-      els.blindAnswerText.textContent = `${getRecipeById(leftId).shortLabel}  |  ${getRecipeById(rightId).shortLabel}`;
-      els.blindRevealBtn.textContent = "New Pair";
-    }
+    els.splitLeftLabel.textContent = getRawRecipeById(leftId).shortLabel;
+    els.splitRightLabel.textContent = getRawRecipeById(rightId).shortLabel;
   }
 }
 
-function captureStillFromViewfinder() {
-  if (!offscreenEngine) return;
-  const source = cameraCtrl?.isActive && els.cameraVideo.readyState >= 2 ? els.cameraVideo : state.testImage;
-  if (!source) return;
+function triggerBlindAB() {
+  state.blindEnabled = !state.blindEnabled;
+  state.blindRevealed = false;
 
-  const srcW = source.videoWidth || source.width;
-  const srcH = source.videoHeight || source.height;
-  const active = getEffectiveActiveRecipe();
-  const stamp = new Date().toISOString().replace(/[:.]/g, "").slice(0, 15);
-  const filename = `FilterLab_${active.id}_${stamp}.jpg`;
-
-  offscreenEngine.render(source, active, {
-    width: srcW,
-    height: srcH,
-    seed: Date.now() % 10000,
-    debugMaskMode: state.debugMask,
-    mirrorX: cameraCtrl?.isActive ? cameraCtrl.shouldMirror : false
-  });
-
-  const dataUrl = offscreenEngine.canvas.toDataURL("image/jpeg", 0.94);
-  state.lastShotDataUrl = dataUrl;
-  state.lastShotFilename = filename;
-  els.lastShotThumbImg.src = dataUrl;
-  els.lastShotThumbImg.classList.add("ready");
-  els.lastShotEmpty.style.display = "none";
-  els.downloadShotBtn.disabled = false;
-
-  // Also grab unfiltered frame into testImage so user can immediately inspect it in 3x3 Grid & Split!
-  const rawCanvas = document.createElement("canvas");
-  rawCanvas.width = srcW;
-  rawCanvas.height = srcH;
-  const rctx = rawCanvas.getContext("2d");
-  if (cameraCtrl?.isActive && cameraCtrl.shouldMirror) {
-    rctx.translate(srcW, 0);
-    rctx.scale(-1, 1);
+  if (state.blindEnabled) {
+    const compareId = state.activeId || "04_nocturne_cinema";
+    const swap = Math.random() >= 0.5;
+    state.blindPair = swap ? { left: compareId, right: "stock" } : { left: "stock", right: compareId };
   }
-  rctx.drawImage(source, 0, 0, srcW, srcH);
-  state.testImage = rawCanvas;
-  state.testImageSeed = Math.floor(Math.random() * 9000) + 1;
 
-  setStatus(`Captured ${filename} (${srcW}×${srcH}) — Ready to save or inspect in 3×3 Grid`);
+  els.blindToggleBtn.classList.toggle("active", state.blindEnabled);
+  els.splitPickers.hidden = state.blindEnabled;
+  els.blindStatus.hidden = !state.blindEnabled;
+  els.blindRevealBtn.hidden = !state.blindEnabled;
+  els.blindRevealBtn.classList.remove("active");
+  renderSplitView();
 }
 
-function loadPhotoFile(file) {
-  const url = URL.createObjectURL(file);
-  const img = new Image();
-  img.onload = () => {
-    const maxEdge = 1600;
-    const scale = Math.min(1.0, maxEdge / Math.max(img.naturalWidth, img.naturalHeight));
-    const canvas = document.createElement("canvas");
-    canvas.width = Math.max(2, Math.round(img.naturalWidth * scale));
-    canvas.height = Math.max(2, Math.round(img.naturalHeight * scale));
-    const ctx = canvas.getContext("2d");
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-    URL.revokeObjectURL(url);
+function setMode(mode) {
+  const prevMode = state.mode;
+  state.mode = mode;
 
-    state.testImage = canvas;
-    state.testImageSeed = Math.floor(Math.random() * 9000) + 1;
-    setStatus(`Loaded test photo: ${file.name} (${img.naturalWidth}×${img.naturalHeight})`);
-    if (state.mode === "grid") renderContactGrid();
-    else if (state.mode === "split") renderSplitView();
-    else if (!cameraCtrl?.isActive) renderLiveFrameOnce();
-  };
-  img.src = url;
-}
+  els.modeBtns.forEach((b) => b.classList.toggle("active", b.dataset.mode === mode));
+  els.gridView.classList.toggle("active", mode === "grid");
+  els.studioView.classList.toggle("active", mode === "studio");
+  els.splitView.classList.toggle("active", mode === "split");
+  els.cameraView.classList.toggle("active", mode === "camera");
 
-function applyURLRecipeOverrides() {
-  const params = new URLSearchParams(window.location.search);
-  const requestedId = params.get("aesthetic");
-  if (requestedId) {
-    if (requestedId === "stock") {
-      state.bypass = true;
-    } else if (state.catalog.aesthetics.some((a) => a.id === requestedId)) {
-      state.bypass = false;
-      state.activeId = requestedId;
-      state.splitRightId = requestedId;
-    }
+  if (prevMode === "camera" && mode !== "camera") {
+    stopCameraSession();
   }
 
-  const hash = window.location.hash || "";
-  if (hash.startsWith("#recipe=")) {
-    try {
-      const b64url = hash.slice("#recipe=".length).trim();
-      const b64 = b64url.replace(/-/g, "+").replace(/_/g, "/") + "=".repeat((4 - (b64url.length % 4)) % 4);
-      const bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
-      const jsonText = new TextDecoder().decode(bytes);
-      const customRecipe = JSON.parse(jsonText);
-      if (customRecipe && customRecipe.id && customRecipe.tone && customRecipe.colorScience) {
-        const idx = state.catalog.aesthetics.findIndex((a) => a.id === customRecipe.id);
-        if (idx >= 0) {
-          state.catalog.aesthetics[idx] = customRecipe;
-        } else {
-          state.catalog.aesthetics.push(customRecipe);
-        }
-        state.bypass = false;
-        state.activeId = customRecipe.id;
-        state.splitRightId = customRecipe.id;
-        els.syncBadge.textContent = "URL RECIPE";
-        els.syncBadge.classList.add("live");
-        setStatus(`Loaded tuned recipe from Mac link: ${customRecipe.shortLabel}`);
-      }
-    } catch {
-      // Ignore malformed fragment
-    }
-  }
-}
-
-async function init() {
-  state.catalog = await loadCanonicalCatalog();
-  state.testImage = createCalibrationFallbackCanvas(720, 960);
-
-  liveEngine = new WebGLFilterEngine(els.liveCanvas);
-  const offCanvas = document.createElement("canvas");
-  offscreenEngine = new WebGLFilterEngine(offCanvas);
-  splitEngine = new WebGLFilterEngine(els.splitCanvas);
-
-  applyURLRecipeOverrides();
-  buildFilmDialAndSelectors();
-  refreshActiveUI();
-
-  cameraCtrl = new CameraController(els.cameraVideo);
-  const camStarted = await cameraCtrl.start();
-  if (camStarted) {
-    setStatus("WebGL2 Live Optical Camera active · 1:1 parity with Mac Metal Engine");
-  } else {
-    renderLiveFrameOnce();
-    setStatus(cameraCtrl.error || "Using Studio Calibration sample — Open Photo or allow camera access");
-  }
-
-  startRenderLoop();
-  window.addEventListener("hashchange", () => {
-    applyURLRecipeOverrides();
-    buildFilmDialAndSelectors();
+  if (mode === "grid") {
+    renderContactGrid();
+  } else if (mode === "studio") {
     refreshActiveUI();
-    if (state.mode === "grid") renderContactGrid();
+  } else if (mode === "split") {
+    renderSplitView();
+  } else if (mode === "camera") {
+    ensureCameraStarted();
+  }
+}
+
+async function ensureCameraStarted() {
+  if (!cameraCtrl) return;
+  if (cameraCtrl.isActive) return;
+  els.cameraNotice.hidden = true;
+  setStatus("Starting opt-in viewfinder camera...");
+  const ok = await cameraCtrl.start();
+  if (ok) {
+    state.cameraStartedOnce = true;
+    setStatus("Camera viewfinder active.");
+  } else {
+    els.cameraNotice.hidden = false;
+    els.cameraNoticeText.textContent = cameraCtrl.error || "Camera unavailable or permission denied.";
+    setStatus("Camera permission denied or unavailable. You can still open/drop photos in 3×3 Grid & Studio.");
+  }
+}
+
+function stopCameraSession() {
+  if (cameraCtrl && cameraCtrl.isActive) {
+    cameraCtrl.stop();
+  }
+}
+
+function renderLiveLoop() {
+  if (state.mode === "camera" && liveEngine && cameraCtrl && cameraCtrl.isActive && !state.pausedLive) {
+    const v = els.cameraVideo;
+    if (v.readyState >= 2 && v.videoWidth > 0) {
+      const targetAspect = RATIOS[state.ratioIdx].aspect;
+      const vw = v.videoWidth;
+      const vh = v.videoHeight;
+      let outW = vw;
+      let outH = Math.round(vw / targetAspect);
+      if (outH > vh) {
+        outH = vh;
+        outW = Math.round(vh * targetAspect);
+      }
+      const scale = Math.min(1.0, 1280 / Math.max(outW, outH));
+      liveEngine.render(v, getEffectiveActiveRecipe(), {
+        width: Math.max(2, Math.round(outW * scale)),
+        height: Math.max(2, Math.round(outH * scale)),
+        seed: 42,
+        debugMaskMode: state.debugMask,
+        mirrorX: cameraCtrl.shouldMirror
+      });
+    }
+  }
+  rafId = requestAnimationFrame(renderLiveLoop);
+}
+
+function captureCameraToDarkroom() {
+  if (!liveEngine || !cameraCtrl?.isActive) {
+    setStatus("Enable camera first or drop a photo into the studio.");
+    return;
+  }
+  const v = els.cameraVideo;
+  const srcW = v.videoWidth || 1280;
+  const srcH = v.videoHeight || 960;
+  const targetAspect = RATIOS[state.ratioIdx].aspect;
+
+  let cropW = srcW;
+  let cropH = Math.round(srcW / targetAspect);
+  if (cropH > srcH) {
+    cropH = srcH;
+    cropW = Math.round(srcH * targetAspect);
+  }
+  const cropX = Math.floor((srcW - cropW) / 2);
+  const cropY = Math.floor((srcH - cropH) / 2);
+
+  const rawCanvas = document.createElement("canvas");
+  rawCanvas.width = cropW;
+  rawCanvas.height = cropH;
+  const rCtx = rawCanvas.getContext("2d");
+  if (cameraCtrl.shouldMirror) {
+    rCtx.translate(cropW, 0);
+    rCtx.scale(-1, 1);
+  }
+  rCtx.drawImage(v, cropX, cropY, cropW, cropH, 0, 0, cropW, cropH);
+
+  const id = `cam_${Date.now()}`;
+  const entry = makePhotoEntry({
+    id,
+    name: `CAM_${new Date().toTimeString().slice(0, 8).replace(/:/g, "")}`,
+    fullSource: rawCanvas
+  });
+  state.photos.push(entry);
+  state.lastCapturedPhotoId = id;
+
+  // Update shutter deck thumbnail with developed preview
+  liveEngine.render(entry.gridThumbCanvas, getEffectiveActiveRecipe(), {
+    width: entry.gridThumbCanvas.width,
+    height: entry.gridThumbCanvas.height,
+    seed: state.seedBase
+  });
+  els.lastThumbImg.src = liveEngine.canvas.toDataURL("image/jpeg", 0.85);
+  els.lastThumbImg.classList.add("ready");
+  els.lastThumbEmpty.hidden = true;
+
+  selectPhoto(id);
+  setStatus(`Captured ${cropW}×${cropH} raw frame to Darkroom batch.`);
+}
+
+async function ingestImageFiles(fileList) {
+  const files = Array.from(fileList || []).filter((f) => f.type.startsWith("image/") || /\.(jpe?g|png|webp|avif|heic|heif)$/i.test(f.name));
+  if (files.length === 0) {
+    setStatus("No supported image files found.");
+    return;
+  }
+
+  setStatus(`Loading ${files.length} photo(s)...`);
+  let firstNewId = null;
+  let failed = 0;
+
+  for (const file of files) {
+    const objectUrl = URL.createObjectURL(file);
+    try {
+      const img = new Image();
+      img.src = objectUrl;
+      await img.decode();
+      const id = `img_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`;
+      const entry = makePhotoEntry({
+        id,
+        name: file.name,
+        fullSource: img,
+        objectUrl
+      });
+      state.photos.push(entry);
+      if (!firstNewId) firstNewId = id;
+    } catch {
+      URL.revokeObjectURL(objectUrl);
+      failed += 1;
+    }
+  }
+
+  if (firstNewId) {
+    selectPhoto(firstNewId);
+    const active = getActivePhoto();
+    const failNote = failed > 0 ? ` (${failed} unsupported format skipped)` : "";
+    setStatus(`Loaded ${files.length - failed} photo(s) · Active: ${active.name} (${active.fullWidth}×${active.fullHeight})${failNote}`);
+  } else {
+    setStatus("Could not decode image file(s) in this browser. Try JPEG, PNG, or WebP.");
+  }
+}
+
+function downloadBlob(blob, filename) {
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = filename;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1500);
+}
+
+async function exportFullResJPEG() {
+  const photo = getActivePhoto();
+  if (!photo || state.isExporting) return;
+
+  state.isExporting = true;
+  els.saveFullResBtn.disabled = true;
+  els.studioSaveBtn.disabled = true;
+  const prevText = els.saveFullResBtn.textContent;
+  els.saveFullResBtn.textContent = "Exporting...";
+
+  const exportCanvas = document.createElement("canvas");
+  let exportEngine = null;
+
+  try {
+    exportEngine = new WebGLFilterEngine(exportCanvas);
+    const maxTex = exportEngine.getMaxTextureSize();
+    const scale = Math.min(1.0, maxTex / Math.max(photo.fullWidth, photo.fullHeight));
+    const outW = Math.max(2, Math.round(photo.fullWidth * scale));
+    const outH = Math.max(2, Math.round(photo.fullHeight * scale));
+
+    const recipe = getEffectiveActiveRecipe();
+    exportEngine.render(photo.fullSource, recipe, {
+      width: outW,
+      height: outH,
+      seed: state.seedBase,
+      debugMaskMode: 0
+    });
+
+    const blob = await new Promise((resolve) => exportCanvas.toBlob(resolve, "image/jpeg", 0.95));
+    if (!blob) throw new Error("JPEG encoding failed");
+
+    const baseName = photo.name.replace(/\.[^.]+$/, "").replace(/[^a-zA-Z0-9_-]+/g, "_");
+    const safeTag = recipe.shortLabel.replace(/[^a-zA-Z0-9_-]+/g, "_");
+    const filename = `${baseName}_${safeTag}.jpg`;
+    downloadBlob(blob, filename);
+
+    const clampNote = scale < 0.999 ? ` (clamped to WebGL max ${maxTex}px)` : " (native 1:1)";
+    setStatus(`Saved ${filename} · ${outW}×${outH}${clampNote}`);
+  } catch (err) {
+    setStatus(`Full-res export failed: ${err.message}`);
+  } finally {
+    if (exportEngine) exportEngine.dispose();
+    els.saveFullResBtn.textContent = prevText;
+    els.saveFullResBtn.disabled = false;
+    els.studioSaveBtn.disabled = false;
+    state.isExporting = false;
+  }
+}
+
+async function exportContactSheetPNG() {
+  const photo = getActivePhoto();
+  if (!photo || state.isExporting) return;
+
+  state.isExporting = true;
+  els.exportSheetBtn.disabled = true;
+  const tileCanvas = document.createElement("canvas");
+  let tileEngine = null;
+
+  try {
+    tileEngine = new WebGLFilterEngine(tileCanvas);
+    const src = photo.previewCanvas;
+    const tileScale = Math.min(1.0, SHEET_TILE_MAX_EDGE / Math.max(src.width, src.height));
+    const tileW = Math.max(2, Math.round(src.width * tileScale));
+    const tileH = Math.max(2, Math.round(src.height * tileScale));
+
+    const cols = 3;
+    const rows = 3;
+    const padOuter = 44;
+    const gap = 28;
+    const captionH = 44;
+    const headerH = 68;
+
+    const sheetW = padOuter * 2 + cols * tileW + (cols - 1) * gap;
+    const sheetH = headerH + padOuter + rows * (tileH + captionH) + (rows - 1) * gap + padOuter;
+
+    const sheet = document.createElement("canvas");
+    sheet.width = sheetW;
+    sheet.height = sheetH;
+    const ctx = sheet.getContext("2d");
+
+    // Neutral darkroom mat (#181818 R=G=B)
+    ctx.fillStyle = "#181818";
+    ctx.fillRect(0, 0, sheetW, sheetH);
+
+    // Subtle header
+    ctx.fillStyle = "#e4e4e7";
+    ctx.font = "600 22px ui-monospace, 'SF Mono', Menlo, monospace";
+    ctx.fillText(`FILTERLAB CONTACT SHEET · ${photo.name} (${photo.fullWidth}×${photo.fullHeight})`, padOuter, 52);
+
+    const all = [STOCK_BASELINE, ...state.catalog.aesthetics];
+    all.forEach((baseRecipe, idx) => {
+      const col = idx % cols;
+      const row = Math.floor(idx / cols);
+      const x = padOuter + col * (tileW + gap);
+      const y = headerH + padOuter / 2 + row * (tileH + captionH + gap);
+
+      const recipe = idx === 0 ? STOCK_BASELINE : getTunedRecipeById(baseRecipe.id);
+      tileEngine.render(src, recipe, {
+        width: tileW,
+        height: tileH,
+        seed: state.seedBase,
+        debugMaskMode: 0
+      });
+
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.14)";
+      ctx.lineWidth = 2;
+      ctx.strokeRect(x - 1, y - 1, tileW + 2, tileH + 2);
+      ctx.drawImage(tileEngine.canvas, x, y, tileW, tileH);
+
+      ctx.fillStyle = "#d4d4d8";
+      ctx.font = "700 18px ui-monospace, 'SF Mono', Menlo, monospace";
+      ctx.fillText(baseRecipe.shortLabel, x, y + tileH + 28);
+
+      ctx.fillStyle = "#8e8e93";
+      ctx.font = "400 15px -apple-system, BlinkMacSystemFont, sans-serif";
+      const labelW = ctx.measureText(baseRecipe.shortLabel).width;
+      ctx.fillText(` · ${baseRecipe.moodCue}`, x + labelW + 4, y + tileH + 28);
+    });
+
+    const blob = await new Promise((resolve) => sheet.toBlob(resolve, "image/png"));
+    if (!blob) throw new Error("Contact sheet encoding failed");
+    const baseName = photo.name.replace(/\.[^.]+$/, "").replace(/[^a-zA-Z0-9_-]+/g, "_");
+    const filename = `${baseName}_9up_sheet.png`;
+    downloadBlob(blob, filename);
+    setStatus(`Exported 9-Up Contact Sheet ${filename} (${sheetW}×${sheetH}).`);
+  } catch (err) {
+    setStatus(`9-Up export failed: ${err.message}`);
+  } finally {
+    if (tileEngine) tileEngine.dispose();
+    els.exportSheetBtn.disabled = false;
+    state.isExporting = false;
+  }
+}
+
+function exportActiveCatalogJSON() {
+  const tunedCatalog = structuredClone(state.catalog);
+  tunedCatalog.aesthetics = tunedCatalog.aesthetics.map((a) => getTunedRecipeById(a.id));
+  const payload = JSON.stringify(tunedCatalog, null, 2);
+  const blob = new Blob([payload], { type: "application/json" });
+  downloadBlob(blob, "filterlab_recipes_tuned.json");
+  setStatus("Exported tuned recipes JSON.");
+}
+
+function parseUrlTuningPayload() {
+  const hash = window.location.hash || "";
+  const match = hash.match(/recipe=([A-Za-z0-9\-_]+)/);
+  if (match) {
+    try {
+      const b64 = match[1].replace(/-/g, "+").replace(/_/g, "/");
+      const bin = atob(b64);
+      const bytes = new Uint8Array(bin.length);
+      for (let i = 0; i < bin.length; i++) bytes[i] = bin.charCodeAt(i);
+      const jsonStr = new TextDecoder().decode(bytes);
+      const payload = JSON.parse(jsonStr);
+      if (payload && payload.id && payload.tone) return payload;
+    } catch {
+      return null;
+    }
+  }
+  const params = new URLSearchParams(window.location.search);
+  const qAesthetic = params.get("aesthetic");
+  const qMode = params.get("mode");
+  if (qAesthetic || qMode) {
+    return {
+      idOnly: qAesthetic || null,
+      modeOnly: ["grid", "studio", "split"].includes(qMode) ? qMode : null
+    };
+  }
+  return null;
+}
+
+function bindSliderEvents() {
+  const onSliderChange = () => {
+    const r = getRawRecipeById(state.activeId);
+    if (r.id === STOCK_BASELINE.id) return;
+    const trim = getTrim(r.id);
+    trim.intensityPct = Number(els.sliderIntensity.value);
+    trim.exposureDelta = Number(els.sliderExposure.value);
+    trim.tempSteps = Number(els.sliderTemp.value);
+    trim.contrastDelta = Number(els.sliderContrast.value);
+    trim.grainPct = Number(els.sliderGrain.value);
+    syncStudioSlidersUI();
+    renderStudioView();
+  };
+
+  [els.sliderIntensity, els.sliderExposure, els.sliderTemp, els.sliderContrast, els.sliderGrain].forEach((input) => {
+    input.addEventListener("input", onSliderChange);
   });
 
-  // Wire UI Events
+  els.resetTuningBtn.addEventListener("click", () => {
+    const r = getRawRecipeById(state.activeId);
+    state.trims[r.id] = getDefaultTrim();
+    refreshActiveUI();
+    setStatus(`Reset ${r.shortLabel} optical trims to calibrated studio default.`);
+  });
+}
+
+function bindUI() {
   els.modeBtns.forEach((btn) => btn.addEventListener("click", () => setMode(btn.dataset.mode)));
 
-  els.aspectRatioBtn.addEventListener("click", () => {
-    state.ratioIndex = (state.ratioIndex + 1) % RATIOS.length;
-    const r = RATIOS[state.ratioIndex];
-    els.aspectRatioBtn.textContent = r.label;
-    els.viewfinderFrame.className = `viewfinder-frame ratio-${r.key}`;
-  });
-
-  els.flipLensBtn.addEventListener("click", async () => {
-    await cameraCtrl.flipLens();
-  });
-
-  const setBypass = (val) => {
-    state.bypass = val;
-    refreshActiveUI();
-  };
-  els.bypassHoldBtn.addEventListener("pointerdown", () => setBypass(true));
-  els.bypassHoldBtn.addEventListener("pointerup", () => setBypass(false));
-  els.bypassHoldBtn.addEventListener("pointerleave", () => {
-    if (state.bypass && els.bypassHoldBtn.matches(":active")) setBypass(false);
-  });
-
-  els.debugMaskSelect.addEventListener("change", (e) => {
-    state.debugMask = parseInt(e.target.value, 10) || 0;
-    refreshActiveUI();
-    if (state.mode === "grid") renderContactGrid();
-  });
-
-  els.shutterBtn.addEventListener("click", captureStillFromViewfinder);
-
-  els.lastShotThumbBtn.addEventListener("click", () => {
-    setMode("grid");
-  });
-
-  els.downloadShotBtn.addEventListener("click", () => {
-    if (!state.lastShotDataUrl) return;
-    const a = document.createElement("a");
-    a.href = state.lastShotDataUrl;
-    a.download = state.lastShotFilename || "FilterLab_Capture.jpg";
-    a.click();
-  });
-
-  els.photoInput.addEventListener("change", (e) => {
-    const file = e.target.files?.[0];
-    if (file) loadPhotoFile(file);
+  els.openPhotosBtn.addEventListener("click", () => els.photoInput.click());
+  els.photoInput.addEventListener("change", async (e) => {
+    await ingestImageFiles(e.target.files);
     e.target.value = "";
   });
 
-  els.recipeInput.addEventListener("change", async (e) => {
+  els.saveFullResBtn.addEventListener("click", exportFullResJPEG);
+  els.studioSaveBtn.addEventListener("click", exportFullResJPEG);
+  els.exportSheetBtn.addEventListener("click", exportContactSheetPNG);
+  els.exportRecipeJsonBtn.addEventListener("click", exportActiveCatalogJSON);
+
+  els.importJsonBtn.addEventListener("click", () => els.jsonInput.click());
+  els.jsonInput.addEventListener("change", async (e) => {
     const file = e.target.files?.[0];
     if (!file) return;
     try {
       const text = await file.text();
       const parsed = JSON.parse(text);
-      if (parsed && Array.isArray(parsed.aesthetics) && parsed.aesthetics.length > 0) {
+      if (parsed && Array.isArray(parsed.aesthetics)) {
         state.catalog = parsed;
-        buildFilmDialAndSelectors();
+        state.trims = {};
+        if (!state.catalog.aesthetics.some((a) => a.id === state.activeId)) {
+          state.activeId = state.catalog.aesthetics[0]?.id || "stock";
+        }
+        buildFilmDialsAndSelectors();
         refreshActiveUI();
         if (state.mode === "grid") renderContactGrid();
-        setStatus(`Imported custom recipes from ${file.name}`);
+        setStatus(`Imported custom catalog (${parsed.aesthetics.length} aesthetics).`);
+      } else {
+        setStatus("Invalid recipes JSON schema.");
       }
     } catch (err) {
-      setStatus(`JSON parse error: ${err.message}`);
+      setStatus("Failed to parse JSON: " + err.message);
+    } finally {
+      e.target.value = "";
     }
-    e.target.value = "";
   });
 
-  // Split controls & Blind A/B
+  els.bypassBtn.addEventListener("click", () => {
+    state.bypass = !state.bypass;
+    refreshActiveUI();
+  });
+
+  els.debugMaskSelect.addEventListener("change", (e) => {
+    state.debugMask = Number(e.target.value) || 0;
+    if (state.mode === "studio") renderStudioView();
+    if (state.mode === "grid") renderContactGrid();
+    if (state.mode === "split") renderSplitView();
+  });
+
   els.splitLeftSelect.addEventListener("change", (e) => {
     state.splitLeftId = e.target.value;
     renderSplitView();
@@ -607,71 +1085,175 @@ async function init() {
     renderSplitView();
   });
 
-  const randomizeBlind = () => {
-    state.blindRevealed = false;
-    state.blindPair = Math.random() < 0.5
-      ? { left: "stock", right: state.activeId }
-      : { left: state.activeId, right: "stock" };
-    renderSplitView();
-  };
-
-  els.blindToggleBtn.addEventListener("click", () => {
-    state.blindEnabled = !state.blindEnabled;
-    els.blindToggleBtn.classList.toggle("active", state.blindEnabled);
-    els.splitPickers.hidden = state.blindEnabled;
-    els.blindStatusBar.hidden = !state.blindEnabled;
-    if (state.blindEnabled) {
-      randomizeBlind();
-    } else {
-      renderSplitView();
-    }
-  });
-
+  els.blindToggleBtn.addEventListener("click", triggerBlindAB);
   els.blindRevealBtn.addEventListener("click", () => {
-    if (!state.blindRevealed) {
-      state.blindRevealed = true;
-      renderSplitView();
-    } else {
-      randomizeBlind();
-    }
+    state.blindRevealed = !state.blindRevealed;
+    els.blindRevealBtn.classList.toggle("active", state.blindRevealed);
+    renderSplitView();
   });
 
+  // Interactive pointer drag for Split wipe
   let draggingSplit = false;
-  const updateSplitFromPointer = (ev) => {
+  const updateSplitFromClientX = (clientX) => {
     const rect = els.splitStage.getBoundingClientRect();
     if (rect.width <= 0) return;
-    state.splitX = Math.max(0.03, Math.min(0.97, (ev.clientX - rect.left) / rect.width));
+    state.splitX = clamp((clientX - rect.left) / rect.width, 0.04, 0.96);
     renderSplitView();
   };
-  els.splitStage.addEventListener("pointerdown", (ev) => {
+  els.splitStage.addEventListener("pointerdown", (e) => {
     draggingSplit = true;
-    els.splitStage.setPointerCapture(ev.pointerId);
-    updateSplitFromPointer(ev);
+    els.splitStage.setPointerCapture(e.pointerId);
+    updateSplitFromClientX(e.clientX);
   });
-  els.splitStage.addEventListener("pointermove", (ev) => {
-    if (draggingSplit) updateSplitFromPointer(ev);
+  els.splitStage.addEventListener("pointermove", (e) => {
+    if (draggingSplit) updateSplitFromClientX(e.clientX);
   });
-  els.splitStage.addEventListener("pointerup", () => { draggingSplit = false; });
+  els.splitStage.addEventListener("pointerup", () => {
+    draggingSplit = false;
+  });
+  els.splitStage.addEventListener("pointercancel", () => {
+    draggingSplit = false;
+  });
 
-  // Keyboard shortcuts (0 = Bypass, 1..8 = Aesthetics, Space = Capture or Toggle)
-  window.addEventListener("keydown", (ev) => {
-    if (ev.target && (ev.target.tagName === "INPUT" || ev.target.tagName === "SELECT")) return;
-    if (ev.key === "0") {
-      state.bypass = !state.bypass;
-      refreshActiveUI();
-    } else if (/^[1-8]$/.test(ev.key)) {
-      const idx = parseInt(ev.key, 10) - 1;
-      const target = state.catalog.aesthetics[idx];
-      if (target) {
-        state.bypass = false;
-        state.activeId = target.id;
-        state.splitRightId = target.id;
+  // Camera controls (opt-in tab only)
+  els.cameraRetryBtn.addEventListener("click", ensureCameraStarted);
+  els.ratioBtn.addEventListener("click", () => {
+    state.ratioIdx = (state.ratioIdx + 1) % RATIOS.length;
+    const r = RATIOS[state.ratioIdx];
+    els.ratioBtn.textContent = r.label;
+    els.viewfinderFrame.className = `viewfinder-frame ${r.className}`;
+  });
+  els.flipBtn.addEventListener("click", async () => {
+    if (cameraCtrl) await cameraCtrl.flipLens();
+  });
+  els.pauseBtn.addEventListener("click", () => {
+    state.pausedLive = !state.pausedLive;
+    els.pauseBtn.classList.toggle("active", state.pausedLive);
+    els.pauseBtn.textContent = state.pausedLive ? "Resume Live" : "Pause Live";
+  });
+  els.shutterBtn.addEventListener("click", captureCameraToDarkroom);
+  els.camCaptureThumb.addEventListener("click", () => {
+    if (state.lastCapturedPhotoId) selectPhoto(state.lastCapturedPhotoId);
+    setMode("studio");
+  });
+  els.openStudioFromCamBtn.addEventListener("click", () => {
+    if (state.lastCapturedPhotoId) selectPhoto(state.lastCapturedPhotoId);
+    setMode("studio");
+  });
+
+  // Full-window Drag & Drop photo loading
+  window.addEventListener("dragenter", (e) => {
+    if (e.dataTransfer?.types?.includes("Files")) {
+      e.preventDefault();
+      state.dragDepth += 1;
+      els.dropOverlay.hidden = false;
+    }
+  });
+  window.addEventListener("dragover", (e) => {
+    if (e.dataTransfer?.types?.includes("Files")) {
+      e.preventDefault();
+    }
+  });
+  window.addEventListener("dragleave", () => {
+    state.dragDepth = Math.max(0, state.dragDepth - 1);
+    if (state.dragDepth === 0) els.dropOverlay.hidden = true;
+  });
+  window.addEventListener("drop", async (e) => {
+    e.preventDefault();
+    state.dragDepth = 0;
+    els.dropOverlay.hidden = true;
+    if (e.dataTransfer?.files?.length) {
+      await ingestImageFiles(e.dataTransfer.files);
+    }
+  });
+
+  // Spacebar hold-to-compare Original in Studio
+  window.addEventListener("keydown", (e) => {
+    if (e.code === "Space" && state.mode === "studio" && !e.repeat && document.activeElement?.tagName !== "INPUT") {
+      e.preventDefault();
+      if (!state.bypass) {
+        state.bypass = true;
         refreshActiveUI();
       }
     }
   });
+  window.addEventListener("keyup", (e) => {
+    if (e.code === "Space" && state.mode === "studio" && state.bypass) {
+      e.preventDefault();
+      state.bypass = false;
+      refreshActiveUI();
+    }
+  });
+
+  bindSliderEvents();
+
+  const ro = new ResizeObserver(() => syncStageGeometries());
+  if (els.studioMat) ro.observe(els.studioMat);
+  if (els.splitMat) ro.observe(els.splitMat);
 }
 
-init().catch((err) => {
-  setStatus(`Initialization error: ${err.message}`);
+async function boot() {
+  try {
+    studioEngine = new WebGLFilterEngine(els.studioCanvas);
+    splitEngine = new WebGLFilterEngine(els.splitCanvas);
+    liveEngine = new WebGLFilterEngine(els.liveCanvas);
+    gridThumbEngine = new WebGLFilterEngine(document.createElement("canvas"));
+  } catch (err) {
+    setStatus(err.message);
+    return;
+  }
+
+  initCalibrationSample();
+
+  const loadedCatalog = await loadCanonicalCatalog();
+  state.catalog = loadedCatalog;
+  cameraCtrl = new CameraController(els.cameraVideo);
+
+  // Client-side Mac handoff (#recipe=...) OR deep-link ?aesthetic=... / ?mode=...
+  const urlPayload = parseUrlTuningPayload();
+  let startMode = "grid";
+  if (urlPayload) {
+    if ("idOnly" in urlPayload) {
+      if (urlPayload.idOnly && state.catalog.aesthetics.some((a) => a.id === urlPayload.idOnly)) {
+        state.activeId = urlPayload.idOnly;
+        startMode = urlPayload.modeOnly || "studio";
+      } else if (urlPayload.modeOnly) {
+        startMode = urlPayload.modeOnly;
+      }
+      els.syncBadge.textContent = "CANONICAL GPU";
+    } else {
+      const idx = state.catalog.aesthetics.findIndex((a) => a.id === urlPayload.id);
+      if (idx >= 0) state.catalog.aesthetics[idx] = urlPayload;
+      else state.catalog.aesthetics.unshift(urlPayload);
+      state.activeId = urlPayload.id;
+      state.bypass = false;
+      startMode = "studio";
+      els.syncBadge.textContent = "MAC LINK";
+      els.syncBadge.classList.add("live");
+    }
+  } else {
+    els.syncBadge.textContent = "CANONICAL GPU";
+  }
+
+  buildFilmDialsAndSelectors();
+  bindUI();
+  refreshBatchStrip();
+  refreshActiveUI();
+
+  if (startMode !== "grid") {
+    setMode(startMode);
+    setStatus(`Loaded ${getEffectiveActiveRecipe().shortLabel} (${startMode}).`);
+  } else {
+    setMode("grid");
+    setStatus("Darkroom ready · Click a film to edit in Studio, or open/drop real phone photos.");
+  }
+
+  rafId = requestAnimationFrame(renderLiveLoop);
+}
+
+window.addEventListener("beforeunload", () => {
+  if (rafId) cancelAnimationFrame(rafId);
+  stopCameraSession();
 });
+
+boot();
