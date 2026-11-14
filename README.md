@@ -9,6 +9,25 @@
 
 ---
 
+## 한눈에 보기 (Visual Tour)
+
+> 기본 카메라 사진을 WebGL2 다크룸에 올린 실제 동작 화면입니다. 기카 원본(`00 STOCK`)과 15종 필름·무드·흑백 프리셋을 한 번에 비교하고, 1:1 분할 비교와 세부 현상 후 풀해상도 JPEG / 4×4 밀착 시트로 저장할 수 있습니다.
+
+### 1. `4×4` Contact Grid — 기카 원본(`00 STOCK`) + 15종 감성 한눈에 비교 (`ALL · FILM · MOOD · MONO`)
+![FilterLab 4x4 Contact Grid](./docs/screenshots/01_contact_grid_desktop.png)
+
+### 2. 기카 vs 필름 1:1 분할 비교(`Split`) & 세부 현상(`Studio`)
+| `Split` — 기카(`00 STOCK`) vs `04 NOCTURNE` 드래그 비교 | `Studio` — 점광원 할레이션 · 슬라이더 튜닝 · 풀해상도 저장 |
+| :---: | :---: |
+| ![Split Compare](./docs/screenshots/02_split_compare_desktop.png) | ![Studio Editor](./docs/screenshots/03_studio_editor_desktop.png) |
+
+### 3. 모바일 웹 다크룸 (`390×844` 반응형) & macOS Metal GPU 광학 검증
+| 모바일 다크룸 (`Contact` 3열 & `Studio` 터치 편집) | macOS `FilterEngineTests` Metal GPU 16-up 캘리브레이션 |
+| :---: | :---: |
+| ![Mobile Darkroom](./docs/screenshots/04_mobile_darkroom.png) | ![Metal Calibration Sheet](./docs/screenshots/05_metal_calibration_sheet.png) |
+
+---
+
 ## 핵심 아키텍처 (Single Source of Truth)
 
 ```text
@@ -83,6 +102,8 @@ macOS 14+ 환경에서 SwiftPM으로 빌드되는 네이티브 다크룸/캘리�
 ├── DEVELOPMENT_PLAN.md                 # Metal + WebGL2 통합 아키텍처 및 8단계 파이프라인 설계
 ├── shared/
 │   └── recipes.json                    # schemaVersion 2 · 15종 공식 광학 레시피 단일 소스
+├── docs/
+│   └── screenshots/                    # README 시각 투어용 실동작 Web/Metal 캡처 이미지 (5종)
 ├── web/                                # GitHub Pages 배포용 무의존성 WebGL2 다크룸 스튜디오
 │   ├── index.html
 │   ├── styles.css
