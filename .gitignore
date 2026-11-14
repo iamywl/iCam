@@ -1,23 +1,9 @@
-# Swift / SPM build artifacts
-.build/
-.swiftpm/
-Package.resolved
-
-# OS generated files
+# OS & Editor artifacts
 .DS_Store
 Thumbs.db
+*.swp
+*.swo
 
-# Xcode
-xcuserdata/
-*.xcworkspace
-*.xcuserstate
-*.moved-aside
-DerivedData/
-
-# Node / Scratch
-node_modules/
-.user_uploaded/
-*.ipa
-iCam-iOS-Sideloadly-IPA/
-*screenshot*.png
-*diag*.png
+# Temporary & scratch files
+.tmp/
+*.log
