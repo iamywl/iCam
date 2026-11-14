@@ -21,10 +21,6 @@ cp "$BIN_PATH" "${MACOS_DIR}/FilterLab"
 chmod +x "${MACOS_DIR}/FilterLab"
 
 cp "${REPO_ROOT}/shared/recipes.json" "${RESOURCES_DIR}/recipes.json"
-if [[ -d "${REPO_ROOT}/web" ]]; then
-  rm -rf "${RESOURCES_DIR}/web"
-  cp -R "${REPO_ROOT}/web" "${RESOURCES_DIR}/web"
-fi
 
 cat > "${CONTENTS_DIR}/Info.plist" << 'PLIST'
 <?xml version="1.0" encoding="UTF-8"?>

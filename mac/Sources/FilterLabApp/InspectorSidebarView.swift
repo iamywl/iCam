@@ -260,68 +260,37 @@ struct InspectorSidebarView: View {
 
             dividerLine.padding(.vertical, 4)
 
-            HStack {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("WEB MIRROR SYNC")
-                        .font(.system(size: 10.5, weight: .semibold, design: .monospaced))
-                        .foregroundColor(DarkroomTheme.textSecondary)
-                    Text("OFF by default · On-demand only")
-                        .font(.system(size: 9.5))
-                        .foregroundColor(DarkroomTheme.textMuted)
-                }
-                Spacer()
-                Toggle("", isOn: Binding(
-                    get: { store.isLiveSyncEnabled },
-                    set: { enabled in
-                        if enabled { store.startLiveSync() } else { store.stopLiveSync() }
-                    }
-                ))
-                .toggleStyle(.switch)
-                .controlSize(.small)
-                .labelsHidden()
-            }
+            VStack(alignment: .leading, spacing: 6) {
+                Text("PUBLIC WEB CAMERA")
+                    .font(.system(size: 10.5, weight: .semibold, design: .monospaced))
+                    .foregroundColor(DarkroomTheme.textSecondary)
+                Text("GitHub Pages HTTPS · Zero local server")
+                    .font(.system(size: 9.5))
+                    .foregroundColor(DarkroomTheme.textMuted)
+                Text(FilterLabStore.publicWebCameraURL)
+                    .font(.system(size: 9.5, design: .monospaced))
+                    .foregroundColor(DarkroomTheme.silverAccent)
+                    .textSelection(.enabled)
 
-            if store.isLiveSyncEnabled {
-                VStack(alignment: .leading, spacing: 6) {
-                    let localURL = "http://localhost:\(store.liveSyncPort)/?sync=ws://localhost:\(store.liveSyncPort)"
-                    Text("Safari WebCam (Mac): \(localURL)")
-                        .font(.system(size: 9.5, design: .monospaced))
-                        .foregroundColor(DarkroomTheme.silverAccent)
-                        .textSelection(.enabled)
-
-                    if let ip = store.liveSyncLocalIP {
-                        Text("LAN Preview: http://\(ip):\(store.liveSyncPort)/?sync=ws://\(ip):\(store.liveSyncPort)")
-                            .font(.system(size: 9.5, design: .monospaced))
-                            .foregroundColor(DarkroomTheme.textSecondary)
-                            .textSelection(.enabled)
-                    }
-
-                    Text("Connected Web Clients: \(store.liveSyncClientCount)")
-                        .font(.system(size: 10, design: .monospaced))
-                        .foregroundColor(DarkroomTheme.textSecondary)
-
-                    Button("Open Mirrored Web Camera") {
-                        store.openWebCameraInBrowser()
+                HStack(spacing: 6) {
+                    Button("Open Web Cam") {
+                        store.openPublicWebCamera(shareCurrentTuning: false)
                     }
                     .buttonStyle(.borderedProminent)
                     .controlSize(.small)
+
+                    Button("Send Tuning URL") {
+                        store.openPublicWebCamera(shareCurrentTuning: true)
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
                 }
-                .padding(8)
-                .background(DarkroomTheme.chromeBg)
-                .cornerRadius(5)
-                .overlay(RoundedRectangle(cornerRadius: 5).strokeBorder(DarkroomTheme.hairline, lineWidth: 0.75))
-            } else {
-                Button("Launch Web Camera Sync") {
-                    store.openWebCameraInBrowser()
+
+                Button("Copy Tuning URL (iPhone/Safari)") {
+                    store.copyPublicWebCameraURL(shareCurrentTuning: true)
                 }
                 .buttonStyle(.bordered)
                 .controlSize(.small)
-            }
-
-            if let err = store.liveSyncError {
-                Text(err)
-                    .font(.system(size: 10))
-                    .foregroundColor(.red.opacity(0.85))
             }
         }
     }

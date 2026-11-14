@@ -1,0 +1,68 @@
+name: Deploy Web Camera to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  validate-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Validate Web JS Syntax & shared/recipes.json Parity
+        run: |
+          node --check web/js/recipes.js web/js/webgl-filter-engine.js web/js/camera-controller.js web/js/app.js
+          node --input-type=module -e "
+            import fs from 'fs';
+            import { EMBEDDED_DEFAULT_CATALOG } from './web/js/recipes.js';
+            const canonical = JSON.parse(fs.readFileSync('./shared/recipes.json', 'utf8'));
+            if (JSON.stringify(EMBEDDED_DEFAULT_CATALOG) !== JSON.stringify(canonical)) {
+              console.error('Parity mismatch between web/js/recipes.js and shared/recipes.json');
+              process.exit(1);
+            }
+          "
+
+      - name: Assemble Static GitHub Pages Artifact
+        run: |
+          rm -rf _site
+          mkdir -p _site/shared
+          cp -R web/* _site/
+          cp shared/recipes.json _site/recipes.json
+          cp shared/recipes.json _site/shared/recipes.json
+          touch _site/.nojekyll
+
+      - name: Configure Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '_site'
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    needs: validate-and-build
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

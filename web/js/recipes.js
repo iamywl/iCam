@@ -440,7 +440,7 @@ export const EMBEDDED_DEFAULT_CATALOG = {
 
 export async function loadCanonicalCatalog() {
   if (typeof window !== "undefined" && window.location && window.location.protocol !== "file:") {
-    const candidates = ["/api/catalog", "./recipes.json", "../shared/recipes.json"];
+    const candidates = ["./recipes.json", "../shared/recipes.json"];
     for (const url of candidates) {
       try {
         const res = await fetch(url, { cache: "no-store" });

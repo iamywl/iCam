@@ -12,3 +12,4 @@ Thumbs.db
 mac/.build/
 mac/.swiftpm/
 *.xcuserdata/
+_site/

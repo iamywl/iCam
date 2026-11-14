@@ -52,10 +52,10 @@ Metal(`MSL`)과 WebGL2(`GLSL`)가 **동일한 수식, 동일 순서, 동일 정�
 ### Phase 2: macOS Native `FilterLab` (`mac/`)
 - **모듈**: `FilterEngine` (iOS 100% 재사용 가능한 순수 Metal/CoreImage 엔진) + `FilterLabApp` (SwiftUI/AppKit 다크룸 UI).
 - **기능**: 사진 Drag & Drop / `⌘O` / `⌘V`, **실시간 웹캠 & iPhone 연속성 카메라(`AVCaptureSession`) 뷰파인더**, 3×3 콘택트 시트(`1`), 드래그 스플릿 + 동기화 100%/200% 루페(`2`), 솔로(`3`), `Space` 0ms 원본 비교, 블라인드 셔플, 마스크 디버그 오버레이, 우측 감성별 튜닝 슬라이더, 풀해상도 이미지/비교 스트립/`recipes.json`/`.cube` LUT 내보내기.
-- **리소스 원칙**: `Network.framework` 기반 웹 동기화 브릿지는 **기본 OFF**이며 사용자가 UI에서 켤 때만 동작 (상주 백그라운드 데몬 제로).
+- **리소스 원칙**: 로컬 HTTP/WebSocket 서버는 일절 열지 않으며(상주 백그라운드 데몬 제로), 퍼블릭 GitHub Pages HTTPS URL(`#recipe=` 클라이언트 해시 전달) 및 `shared/recipes.json` 파일로 연동합니다.
 
 ### Phase 3: 1:1 Mirrored Web Camera (`web/`)
-- **모듈**: WebGL2 멀티패스 셰이더 (`RGBA16F` FBO), `getUserMedia` 카메라 촬영(전/후면 전환, 3:4 뷰파인더, 0ms 셔터 캡처 & 다운로드), 파일 업로드 3×3 시트 & 스플릿 비교, `recipes.json` 실시간 임포트/맥 싱크 수신.
+- **모듈**: WebGL2 멀티패스 셰이더 (`RGBA16F` FBO), `getUserMedia` 카메라 촬영(전/후면 전환, 3:4 뷰파인더, 0ms 셔터 캡처 & 다운로드), 파일 업로드 3×3 시트 & 스플릿 비교, `shared/recipes.json` 로드 및 `#recipe=` URL 해시 / JSON 파일 임포트.
 - **UI 원칙**: `#181818` 무채색 다크룸 매트 / `#0E0F12` 매트 크롬, 가짜 광택(`sheen`)·조종석 배지 제로.
 
 ### Phase 4: 자동화 컬러·광학 검증 & 시각 검수

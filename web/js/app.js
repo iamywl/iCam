@@ -24,8 +24,7 @@ const state = {
   splitRightId: "01_vintage_35mm",
   blindEnabled: false,
   blindRevealed: false,
-  blindPair: { left: "stock", right: "01_vintage_35mm" },
-  ws: null
+  blindPair: { left: "stock", right: "01_vintage_35mm" }
 };
 
 const els = {
@@ -52,7 +51,6 @@ const els = {
   lastShotEmpty: document.getElementById("lastShotEmpty"),
   shutterBtn: document.getElementById("shutterBtn"),
   downloadShotBtn: document.getElementById("downloadShotBtn"),
-  pushMacBtn: document.getElementById("pushMacBtn"),
   contactGrid: document.getElementById("contactGrid"),
   splitPickers: document.getElementById("splitPickers"),
   splitLeftSelect: document.getElementById("splitLeftSelect"),
@@ -433,9 +431,6 @@ function captureStillFromViewfinder() {
   state.testImage = rawCanvas;
   state.testImageSeed = Math.floor(Math.random() * 9000) + 1;
 
-  if (state.ws && state.ws.readyState === WebSocket.OPEN) {
-    els.pushMacBtn.hidden = false;
-  }
   setStatus(`Captured ${filename} (${srcW}×${srcH}) — Ready to save or inspect in 3×3 Grid`);
 }
 
@@ -462,49 +457,44 @@ function loadPhotoFile(file) {
   img.src = url;
 }
 
-function connectLiveSyncIfRequested() {
+function applyURLRecipeOverrides() {
   const params = new URLSearchParams(window.location.search);
-  const syncUrl = params.get("sync");
-  if (!syncUrl) return;
+  const requestedId = params.get("aesthetic");
+  if (requestedId) {
+    if (requestedId === "stock") {
+      state.bypass = true;
+    } else if (state.catalog.aesthetics.some((a) => a.id === requestedId)) {
+      state.bypass = false;
+      state.activeId = requestedId;
+      state.splitRightId = requestedId;
+    }
+  }
 
-  try {
-    const ws = new WebSocket(syncUrl);
-    state.ws = ws;
-    els.syncBadge.textContent = "SYNCING…";
-
-    ws.onopen = () => {
-      els.syncBadge.textContent = "MAC LIVE SYNC";
-      els.syncBadge.classList.add("live");
-      setStatus(`Connected to Mac FilterLab live bridge (${syncUrl})`);
-      if (state.lastShotDataUrl) {
-        els.pushMacBtn.hidden = false;
-      }
-    };
-
-    ws.onmessage = (ev) => {
-      try {
-        const msg = JSON.parse(ev.data);
-        if (msg.type === "syncCatalog" && msg.catalog && Array.isArray(msg.catalog.aesthetics)) {
-          state.catalog = msg.catalog;
-          if (msg.activeId) state.activeId = msg.activeId;
-          if (msg.compareLeftId) state.splitLeftId = msg.compareLeftId;
-          if (msg.compareRightId) state.splitRightId = msg.compareRightId;
-          buildFilmDialAndSelectors();
-          refreshActiveUI();
-          if (state.mode === "grid") renderContactGrid();
+  const hash = window.location.hash || "";
+  if (hash.startsWith("#recipe=")) {
+    try {
+      const b64url = hash.slice("#recipe=".length).trim();
+      const b64 = b64url.replace(/-/g, "+").replace(/_/g, "/") + "=".repeat((4 - (b64url.length % 4)) % 4);
+      const bytes = Uint8Array.from(atob(b64), (c) => c.charCodeAt(0));
+      const jsonText = new TextDecoder().decode(bytes);
+      const customRecipe = JSON.parse(jsonText);
+      if (customRecipe && customRecipe.id && customRecipe.tone && customRecipe.colorScience) {
+        const idx = state.catalog.aesthetics.findIndex((a) => a.id === customRecipe.id);
+        if (idx >= 0) {
+          state.catalog.aesthetics[idx] = customRecipe;
+        } else {
+          state.catalog.aesthetics.push(customRecipe);
         }
-      } catch {
-        // Ignore non-JSON frame
+        state.bypass = false;
+        state.activeId = customRecipe.id;
+        state.splitRightId = customRecipe.id;
+        els.syncBadge.textContent = "URL RECIPE";
+        els.syncBadge.classList.add("live");
+        setStatus(`Loaded tuned recipe from Mac link: ${customRecipe.shortLabel}`);
       }
-    };
-
-    ws.onclose = () => {
-      els.syncBadge.textContent = "STANDALONE";
-      els.syncBadge.classList.remove("live");
-      els.pushMacBtn.hidden = true;
-    };
-  } catch {
-    // Fallback quietly to standalone
+    } catch {
+      // Ignore malformed fragment
+    }
   }
 }
 
@@ -517,6 +507,7 @@ async function init() {
   offscreenEngine = new WebGLFilterEngine(offCanvas);
   splitEngine = new WebGLFilterEngine(els.splitCanvas);
 
+  applyURLRecipeOverrides();
   buildFilmDialAndSelectors();
   refreshActiveUI();
 
@@ -530,7 +521,12 @@ async function init() {
   }
 
   startRenderLoop();
-  connectLiveSyncIfRequested();
+  window.addEventListener("hashchange", () => {
+    applyURLRecipeOverrides();
+    buildFilmDialAndSelectors();
+    refreshActiveUI();
+    if (state.mode === "grid") renderContactGrid();
+  });
 
   // Wire UI Events
   els.modeBtns.forEach((btn) => btn.addEventListener("click", () => setMode(btn.dataset.mode)));
@@ -574,17 +570,6 @@ async function init() {
     a.href = state.lastShotDataUrl;
     a.download = state.lastShotFilename || "FilterLab_Capture.jpg";
     a.click();
-  });
-
-  els.pushMacBtn.addEventListener("click", () => {
-    if (state.ws && state.ws.readyState === WebSocket.OPEN && state.lastShotDataUrl) {
-      state.ws.send(JSON.stringify({
-        type: "snapshot",
-        filename: state.lastShotFilename || "WebCam_Capture.jpg",
-        dataUrl: state.lastShotDataUrl
-      }));
-      setStatus("Sent captured photo to Mac FilterLab workbench!");
-    }
   });
 
   els.photoInput.addEventListener("change", (e) => {

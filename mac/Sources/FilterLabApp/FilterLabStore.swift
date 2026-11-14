@@ -53,15 +53,9 @@ struct GridTileRender: Identifiable {
 @MainActor
 final class FilterLabStore: ObservableObject {
     @Published var catalog: RecipeCatalog
-    @Published var activeId: String = "01_vintage_35mm" {
-        didSet { pushLiveSyncIfNeeded() }
-    }
-    @Published var compareLeftId: String = "stock" {
-        didSet { pushLiveSyncIfNeeded() }
-    }
-    @Published var compareRightId: String = "01_vintage_35mm" {
-        didSet { pushLiveSyncIfNeeded() }
-    }
+    @Published var activeId: String = "01_vintage_35mm"
+    @Published var compareLeftId: String = "stock"
+    @Published var compareRightId: String = "01_vintage_35mm"
     @Published var viewMode: LabViewMode = .grid
     @Published var compareLayout: CompareLayout = .splitCurtain
     @Published var splitFraction: CGFloat = 0.5
@@ -82,16 +76,10 @@ final class FilterLabStore: ObservableObject {
     @Published var liveCameraFrame: CIImage?
     @Published var statusBanner: String?
 
-    // Live Sync Server — strictly OFF by default per AGENTS.md Zero-Daemon rule
-    @Published var isLiveSyncEnabled: Bool = false
-    @Published var liveSyncPort: UInt16 = 51920
-    @Published var liveSyncLocalIP: String?
-    @Published var liveSyncClientCount: Int = 0
-    @Published var liveSyncError: String?
+    static let publicWebCameraURL = "https://iamywl.github.io/iCam/"
 
     let processor: MetalFilterProcessor
     let cameraService = CameraCaptureService()
-    private var syncServer: LiveSyncServer?
     private var gridRenderTask: Task<Void, Never>?
     private var gridDebounceTask: Task<Void, Never>?
     private var liveFramePending = false
@@ -144,7 +132,6 @@ final class FilterLabStore: ObservableObject {
                 if let idx = self.catalog.aesthetics.firstIndex(where: { $0.id == updated.id }) {
                     self.catalog.aesthetics[idx] = updated
                     self.scheduleGridRefresh()
-                    self.pushLiveSyncIfNeeded()
                 }
             }
         )
@@ -443,84 +430,40 @@ final class FilterLabStore: ObservableObject {
         }
     }
 
-    // MARK: - Live Sync Bridge (OFF by default)
+    // MARK: - Public Web Camera (GitHub Pages HTTPS — Zero Local Server)
 
-    func toggleLiveSync() {
-        if isLiveSyncEnabled {
-            stopLiveSync()
-        } else {
-            startLiveSync()
+    func buildPublicWebCameraURL(shareCurrentTuning: Bool) -> URL? {
+        guard !isBypassed else {
+            return URL(string: Self.publicWebCameraURL + "?aesthetic=stock")
         }
+        guard shareCurrentTuning else {
+            return URL(string: Self.publicWebCameraURL + "?aesthetic=\(activeId)")
+        }
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.withoutEscapingSlashes]
+        guard let data = try? encoder.encode(activeRecipe) else {
+            return URL(string: Self.publicWebCameraURL)
+        }
+        let b64url = data.base64EncodedString()
+            .replacingOccurrences(of: "+", with: "-")
+            .replacingOccurrences(of: "/", with: "_")
+            .replacingOccurrences(of: "=", with: "")
+        return URL(string: "\(Self.publicWebCameraURL)#recipe=\(b64url)")
     }
 
-    func startLiveSync() {
-        liveSyncError = nil
-        let initial = LiveSyncServer.PayloadState(
-            catalog: catalog,
-            activeId: activeId,
-            compareLeftId: compareLeftId,
-            compareRightId: compareRightId
-        )
-        let server = LiveSyncServer(initialState: initial)
-        server.onClientCountChanged = { [weak self] count in
-            Task { @MainActor [weak self] in
-                self?.liveSyncClientCount = count
-            }
-        }
-        server.onSnapshotReceived = { [weak self] data, filename in
-            Task { @MainActor [weak self] in
-                guard let self, let ci = CIImage(data: data, options: [.applyOrientationProperty: true]) else { return }
-                self.addCIImage(ci, name: filename)
-            }
-        }
-        self.syncServer = server
-        self.liveSyncLocalIP = LiveSyncServer.localIPv4Address()
-
-        server.start(preferredPort: 51920) { [weak self] result in
-            Task { @MainActor [weak self] in
-                guard let self else { return }
-                switch result {
-                case .success(let port):
-                    self.liveSyncPort = port
-                    self.isLiveSyncEnabled = true
-                    self.statusBanner = "Web Live Sync 켜짐 — http://localhost:\(port)/"
-                case .failure(let err):
-                    self.isLiveSyncEnabled = false
-                    self.liveSyncError = err.localizedDescription
-                }
-            }
-        }
+    func openPublicWebCamera(shareCurrentTuning: Bool) {
+        guard let url = buildPublicWebCameraURL(shareCurrentTuning: shareCurrentTuning) else { return }
+        NSWorkspace.shared.open(url)
+        statusBanner = shareCurrentTuning
+            ? "퍼블릭 웹 카메라에 현재 튜닝 레시피 전달됨 (\(activeRecipe.shortLabel))"
+            : "퍼블릭 웹 카메라 열림: \(Self.publicWebCameraURL)"
     }
 
-    func stopLiveSync() {
-        syncServer?.stop()
-        syncServer = nil
-        isLiveSyncEnabled = false
-        liveSyncClientCount = 0
-        statusBanner = "Web Live Sync 중지됨 (리소스 해제 완료)"
-    }
-
-    func openWebCameraInBrowser() {
-        if !isLiveSyncEnabled {
-            startLiveSync()
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { [weak self] in
-            guard let self else { return }
-            let urlStr = "http://localhost:\(self.liveSyncPort)/?sync=ws://localhost:\(self.liveSyncPort)"
-            if let url = URL(string: urlStr) {
-                NSWorkspace.shared.open(url)
-            }
-        }
-    }
-
-    private func pushLiveSyncIfNeeded() {
-        guard isLiveSyncEnabled, let syncServer else { return }
-        syncServer.updateState(LiveSyncServer.PayloadState(
-            catalog: catalog,
-            activeId: activeId,
-            compareLeftId: compareLeftId,
-            compareRightId: compareRightId
-        ))
+    func copyPublicWebCameraURL(shareCurrentTuning: Bool) {
+        guard let url = buildPublicWebCameraURL(shareCurrentTuning: shareCurrentTuning) else { return }
+        NSPasteboard.general.clearContents()
+        NSPasteboard.general.setString(url.absoluteString, forType: .string)
+        statusBanner = "퍼블릭 웹 카메라 링크 복사 완료 (iPhone/브라우저에서 바로 열기 가능)"
     }
 
     // MARK: - Helpers

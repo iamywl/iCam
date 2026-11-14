@@ -15,7 +15,6 @@ struct FilterLabApp: App {
                 .frame(minWidth: 1060, minHeight: 700)
                 .onAppear {
                     appDelegate.onTerminate = {
-                        store.stopLiveSync()
                         store.cameraService.stop()
                     }
                 }
