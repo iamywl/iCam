@@ -7,3 +7,8 @@ Thumbs.db
 # Temporary & scratch files
 .tmp/
 *.log
+
+# SwiftPM & Mac app build outputs
+mac/.build/
+mac/.swiftpm/
+*.xcuserdata/

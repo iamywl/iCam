@@ -1,0 +1,526 @@
+:root {
+  --chrome-bg: #0e0f12;
+  --surface-bg: #141519;
+  --darkroom-mat: #181818;
+  --hairline: rgba(255, 255, 255, 0.09);
+  --hairline-bright: rgba(255, 255, 255, 0.34);
+  --silver-accent: #d4d4d8;
+  --text-primary: #f4f4f5;
+  --text-secondary: #8e8e93;
+  --text-muted: #636366;
+}
+
+* {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--chrome-bg);
+  color: var(--text-primary);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Pretendard", system-ui, sans-serif;
+  overflow: hidden;
+  user-select: none;
+}
+
+.app-shell {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100dvh;
+  background: var(--chrome-bg);
+}
+
+/* Top bar */
+.top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 14px;
+  background: var(--chrome-bg);
+  border-bottom: 1px solid var(--hairline);
+  flex-shrink: 0;
+}
+
+.brand-block {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.brand-mark {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  color: var(--text-primary);
+}
+
+.sync-pill {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 10px;
+  padding: 2px 7px;
+  border-radius: 3px;
+  background: var(--surface-bg);
+  border: 1px solid var(--hairline);
+  color: var(--text-secondary);
+}
+
+.sync-pill.live {
+  color: #141519;
+  background: var(--silver-accent);
+  border-color: var(--silver-accent);
+  font-weight: 600;
+}
+
+.mode-tabs {
+  display: inline-flex;
+  background: var(--surface-bg);
+  border: 1px solid var(--hairline);
+  border-radius: 5px;
+  padding: 2px;
+  gap: 2px;
+}
+
+.mode-btn {
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 11px;
+  font-weight: 500;
+  padding: 5px 11px;
+  border-radius: 3px;
+  cursor: pointer;
+}
+
+.mode-btn.active {
+  background: var(--silver-accent);
+  color: var(--chrome-bg);
+  font-weight: 600;
+}
+
+.top-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.action-btn,
+.chip-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 10.5px;
+  padding: 5px 9px;
+  border-radius: 4px;
+  background: var(--surface-bg);
+  border: 1px solid var(--hairline);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+
+.chip-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.chip-btn.active {
+  background: var(--silver-accent);
+  color: var(--chrome-bg);
+  border-color: var(--silver-accent);
+  font-weight: 600;
+}
+
+.mask-select {
+  background: var(--surface-bg);
+  color: var(--text-primary);
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 10.5px;
+  padding: 4px 7px;
+}
+
+/* Primary Stage */
+.stage-area {
+  flex: 1;
+  min-height: 0;
+  background: var(--darkroom-mat);
+  position: relative;
+}
+
+.view-pane {
+  display: none;
+  width: 100%;
+  height: 100%;
+  flex-direction: column;
+}
+
+.view-pane.active {
+  display: flex;
+}
+
+/* Camera View */
+.viewfinder-mat {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  background: var(--darkroom-mat);
+}
+
+.viewfinder-frame {
+  position: relative;
+  height: 100%;
+  max-height: 100%;
+  max-width: 100%;
+  background: var(--chrome-bg);
+  border: 1px solid var(--hairline);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.viewfinder-frame.ratio-3x4 {
+  aspect-ratio: 3 / 4;
+}
+
+.viewfinder-frame.ratio-4x3 {
+  aspect-ratio: 4 / 3;
+}
+
+.viewfinder-frame.ratio-16x9 {
+  aspect-ratio: 16 / 9;
+}
+
+#liveCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: contain;
+}
+
+.camera-meta-strip {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 7px 14px;
+  background: var(--surface-bg);
+  border-top: 1px solid var(--hairline);
+  border-bottom: 1px solid var(--hairline);
+  flex-shrink: 0;
+}
+
+.active-title-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-width: 0;
+}
+
+.mono-tag {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--silver-accent);
+  white-space: nowrap;
+}
+
+.mono-dim {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.mood-label {
+  font-size: 11px;
+  color: var(--text-secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.camera-mini-controls {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Film Dial */
+.film-dial {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  overflow-x: auto;
+  background: var(--chrome-bg);
+  border-bottom: 1px solid var(--hairline);
+  flex-shrink: 0;
+  scrollbar-width: none;
+}
+
+.film-dial::-webkit-scrollbar {
+  display: none;
+}
+
+.dial-pill {
+  flex: 0 0 auto;
+  padding: 6px 11px;
+  border-radius: 4px;
+  background: var(--surface-bg);
+  border: 1px solid var(--hairline);
+  color: var(--text-secondary);
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 10.5px;
+  cursor: pointer;
+}
+
+.dial-pill.active {
+  background: var(--silver-accent);
+  color: var(--chrome-bg);
+  border-color: var(--silver-accent);
+  font-weight: 700;
+}
+
+/* Matte Tactile Shutter Deck (Zero glossy plastic sheen) */
+.shutter-deck {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  padding: 12px 18px calc(12px + env(safe-area-inset-bottom));
+  background: var(--chrome-bg);
+  flex-shrink: 0;
+}
+
+.thumb-slot {
+  width: 44px;
+  height: 44px;
+  border-radius: 4px;
+  border: 1px solid var(--hairline);
+  background: var(--surface-bg);
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.thumb-slot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: none;
+}
+
+.thumb-slot img.ready {
+  display: block;
+}
+
+.thumb-empty {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 8px;
+  color: var(--text-muted);
+}
+
+.shutter-btn {
+  width: 66px;
+  height: 66px;
+  border-radius: 50%;
+  background: transparent;
+  border: 2px solid var(--silver-accent);
+  padding: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 80ms ease;
+}
+
+.shutter-btn:active {
+  transform: scale(0.94);
+}
+
+.shutter-core {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--silver-accent);
+}
+
+.deck-right-actions {
+  justify-self: end;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* 3x3 Contact Grid */
+.grid-scroll {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  background: var(--darkroom-mat);
+}
+
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+@media (max-width: 720px) {
+  .contact-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+}
+
+.grid-card {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  cursor: pointer;
+}
+
+.grid-frame {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  background: var(--chrome-bg);
+  border: 1px solid var(--hairline);
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.grid-card.active .grid-frame {
+  border: 1.5px solid var(--silver-accent);
+}
+
+.grid-frame img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.grid-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 6px;
+  padding: 0 2px;
+}
+
+/* Split Lab View */
+.split-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 8px 14px;
+  background: var(--surface-bg);
+  border-bottom: 1px solid var(--hairline);
+  flex-shrink: 0;
+}
+
+.split-pickers,
+.blind-status,
+.split-actions {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+}
+
+.split-mat {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  gap: 10px;
+  background: var(--darkroom-mat);
+}
+
+.split-stage {
+  position: relative;
+  height: 100%;
+  max-height: 100%;
+  max-width: 100%;
+  aspect-ratio: 3 / 4;
+  background: var(--chrome-bg);
+  border: 1px solid var(--hairline);
+  overflow: hidden;
+  touch-action: none;
+  cursor: ew-resize;
+}
+
+#splitCanvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.split-divider {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.8);
+  pointer-events: none;
+  transform: translateX(-1px);
+}
+
+.split-handle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--chrome-bg);
+  border: 1.5px solid rgba(255, 255, 255, 0.85);
+  color: var(--text-primary);
+  font-size: 11px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.split-captions {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 960px;
+}
+
+.status-bar {
+  padding: 5px 14px;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 10px;
+  color: var(--text-secondary);
+  background: var(--chrome-bg);
+  border-top: 1px solid var(--hairline);
+  flex-shrink: 0;
+}

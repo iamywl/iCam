@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>FilterLab Web Camera — Persona Optical Mirror</title>
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <!-- Top Matte Obsidian Control Strip (zero glass gloss / zero text overlays on photo) -->
+    <header class="top-bar">
+      <div class="brand-block">
+        <span class="brand-mark">FILTERLAB</span>
+        <span class="sync-pill" id="syncBadge">STANDALONE</span>
+      </div>
+
+      <nav class="mode-tabs" aria-label="Workspace mode">
+        <button class="mode-btn active" data-mode="camera">Camera</button>
+        <button class="mode-btn" data-mode="grid">3×3 Grid</button>
+        <button class="mode-btn" data-mode="split">Split Lab</button>
+      </nav>
+
+      <div class="top-actions">
+        <label class="action-btn" for="photoUploadInput">Open Photo</label>
+        <input id="photoUploadInput" type="file" accept="image/*" hidden />
+        <label class="action-btn" for="recipeUploadInput">Import JSON</label>
+        <input id="recipeUploadInput" type="file" accept="application/json,.json" hidden />
+      </div>
+    </header>
+
+    <!-- Primary Darkroom Stage (#181818 R=G=B Neutral Mat) -->
+    <main class="stage-area">
+      <!-- Mode 1: Mirrored Live Optical Web Camera -->
+      <section class="view-pane active" id="cameraView">
+        <div class="viewfinder-mat">
+          <div class="viewfinder-frame ratio-3x4" id="viewfinderFrame">
+            <canvas id="liveCanvas"></canvas>
+          </div>
+        </div>
+
+        <!-- Outside viewfinder border: aesthetic cue & optical deck -->
+        <div class="camera-meta-strip">
+          <div class="active-title-row">
+            <span class="mono-tag" id="activeShortTag">01 VINTAGE</span>
+            <span class="mood-label" id="activeMoodLabel">Portra 400 · Golden Hour</span>
+          </div>
+          <div class="camera-mini-controls">
+            <button class="chip-btn" id="aspectRatioBtn" type="button">3:4</button>
+            <button class="chip-btn" id="bypassHoldBtn" type="button" title="Hold for Stock Original">BYPASS</button>
+            <button class="chip-btn" id="flipLensBtn" type="button">FLIP</button>
+            <select class="mask-select" id="debugMaskSelect" aria-label="Debug Mask">
+              <option value="0">Normal</option>
+              <option value="1">Skin Mask</option>
+              <option value="2">Halation</option>
+              <option value="3">Black Mist</option>
+              <option value="4">Grain Bell</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Aesthetic Film Dial -->
+        <div class="film-dial" id="filmDial" role="tablist" aria-label="Film Aesthetics"></div>
+
+        <!-- Tactile Matte Shutter Deck -->
+        <div class="shutter-deck">
+          <button class="thumb-slot" id="lastShotThumbBtn" type="button" title="Send latest still to 3×3 Grid / Split">
+            <img id="lastShotThumbImg" alt="" />
+            <span class="thumb-empty" id="lastShotEmpty">NO SHOT</span>
+          </button>
+
+          <button class="shutter-btn" id="shutterBtn" type="button" aria-label="Capture Photo">
+            <span class="shutter-core"></span>
+          </button>
+
+          <div class="deck-right-actions">
+            <button class="chip-btn" id="downloadShotBtn" type="button" disabled>SAVE</button>
+            <button class="chip-btn" id="pushMacBtn" type="button" hidden>→ MAC LAB</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Mode 2: 3x3 Darkroom Contact Grid (00 STOCK + 01..08) -->
+      <section class="view-pane" id="gridView">
+        <div class="grid-scroll">
+          <div class="contact-grid" id="contactGrid"></div>
+        </div>
+      </section>
+
+      <!-- Mode 3: 1:1 Split Compare + Blind A/B Test -->
+      <section class="view-pane" id="splitView">
+        <div class="split-toolbar">
+          <div class="split-pickers" id="splitPickers">
+            <span class="mono-dim">L</span>
+            <select id="splitLeftSelect" class="mask-select"></select>
+            <span class="mono-dim">VS</span>
+            <select id="splitRightSelect" class="mask-select"></select>
+          </div>
+          <div class="blind-status" id="blindStatusBar" hidden>
+            <span class="mono-tag">BLIND A/B</span>
+            <span id="blindAnswerText">Sample A vs Sample B</span>
+            <button class="chip-btn" id="blindRevealBtn" type="button">Reveal</button>
+          </div>
+          <div class="split-actions">
+            <button class="chip-btn" id="blindToggleBtn" type="button">Blind Test</button>
+          </div>
+        </div>
+
+        <div class="split-mat">
+          <div class="split-stage" id="splitStage">
+            <canvas id="splitCanvas"></canvas>
+            <div class="split-divider" id="splitDivider">
+              <div class="split-handle">⇆</div>
+            </div>
+          </div>
+          <div class="split-captions">
+            <span class="mono-tag" id="splitLeftCaption">00 STOCK</span>
+            <span class="mono-tag" id="splitRightCaption">01 VINTAGE</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="status-bar" id="statusBar">
+      WebGL2 8-Stage Linear Optical Engine ready · Zero-daemon local mode
+    </footer>
+  </div>
+
+  <!-- Hidden camera video & capture scratch nodes -->
+  <video id="cameraVideo" playsinline autoplay muted hidden></video>
+
+  <script type="module" src="./js/app.js"></script>
+</body>
+</html>
